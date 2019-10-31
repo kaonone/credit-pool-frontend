@@ -1,5 +1,5 @@
 import { colors } from 'utils/styles/colors';
-import { Theme, makeStyles } from 'shared/styles';
+import { Theme, makeStyles } from 'utils/styles';
 
 const bottomBorder = `0px 1px 0px rgba(0, 0, 0, 0.1)`;
 

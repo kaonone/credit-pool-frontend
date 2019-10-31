@@ -1,7 +1,9 @@
 import React from 'react';
 import cn from 'classnames';
-import getEnvParams from 'core/getEnvParams';
-import { attachStaticFields } from 'shared/helpers';
+
+import { attachStaticFields } from 'utils/object/attachStaticFields';
+import { filterChildrenByComponent } from 'utils/react/filterChildrenByComponent';
+
 import { useStyles } from './Table.style';
 
 interface IColumnProps {
@@ -83,15 +85,6 @@ function Table<T>(props: ITableProps<T>) {
         ))}
       </tbody>
     </table>
-  );
-}
-
-function filterChildrenByComponent<Props>(child: React.ReactNode, Component: React.ComponentType<Props>) {
-  const { withHot } = getEnvParams();
-  return React.Children.toArray(child).filter(
-    (item): item is React.ReactElement<Props, any> =>
-      React.isValidElement(item) &&
-      (withHot ? (item.type as any).displayName === Component.name : item.type === Component),
   );
 }
 
