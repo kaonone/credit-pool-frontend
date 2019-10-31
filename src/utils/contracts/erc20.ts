@@ -1,4 +1,5 @@
 import { makeContractCreator, getOutput, getInput } from 'utils/ethereum/makeContractCreator';
+
 import erc20 from './erc20.abi.json';
 
 export const createErc20 = makeContractCreator(
@@ -21,10 +22,18 @@ export const createErc20 = makeContractCreator(
     },
     events: {
       Transfer: {
-        inputs: [getInput('_from', 'address'), getInput('_to', 'address'), getInput('_value', 'uint256')],
+        inputs: [
+          getInput('_from', 'address'),
+          getInput('_to', 'address'),
+          getInput('_value', 'uint256'),
+        ],
       },
       Approval: {
-        inputs: [getInput('_owner', 'address'), getInput('_spender', 'address'), getInput('_value', 'uint256')],
+        inputs: [
+          getInput('_owner', 'address'),
+          getInput('_spender', 'address'),
+          getInput('_value', 'uint256'),
+        ],
       },
     },
   } as const,

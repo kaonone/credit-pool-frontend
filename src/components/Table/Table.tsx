@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import cn from 'classnames';
 
-import { attachStaticFields } from 'utils/object/attachStaticFields';
-import { filterChildrenByComponent } from 'utils/react/filterChildrenByComponent';
+import { attachStaticFields } from 'utils/object';
+import { filterChildrenByComponent } from 'utils/react';
 
 import { useStyles } from './Table.style';
 
@@ -32,7 +33,7 @@ interface ITableProps<T> {
   onClick?(): void;
 }
 
-function Table<T>(props: ITableProps<T>) {
+function TableComponent<T>(props: ITableProps<T>) {
   const classes = useStyles();
   const { children, className, separated, data } = props;
 
@@ -41,7 +42,10 @@ function Table<T>(props: ITableProps<T>) {
     cellProps?: ICellProps<T>;
   }
 
-  const columns: IAggregatedColumn[] = filterChildrenByComponent<IColumnProps>(children, Column).map(column => ({
+  const columns: IAggregatedColumn[] = filterChildrenByComponent<IColumnProps>(
+    children,
+    Column,
+  ).map(column => ({
     headProps: (filterChildrenByComponent(column.props.children, Head)[0] || {}).props,
     cellProps: (filterChildrenByComponent(column.props.children, Cell)[0] || {}).props,
   }));
@@ -100,11 +104,10 @@ function Cell<T>(_props: ICellProps<T>) {
   return <noscript />;
 }
 
-type MakeTableType<T> = React.FunctionComponent<ITableProps<T>> & {
+export type MakeTableType<T> = React.FunctionComponent<ITableProps<T>> & {
   Column: React.FunctionComponent<IColumnProps>;
   Head: React.FunctionComponent<IHeadProps>;
   Cell: React.FunctionComponent<ICellProps<T>>;
 };
 
-export { Table, MakeTableType };
-export default attachStaticFields(Table, { Column, Head, Cell });
+export const Table = attachStaticFields(TableComponent, { Column, Head, Cell });

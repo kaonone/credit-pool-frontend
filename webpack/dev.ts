@@ -1,8 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import path from 'path';
 import merge from 'webpack-merge';
+
 import common from './common';
 
+// eslint-disable-next-line import/no-default-export
 export default merge(common, {
   mode: 'development',
   devtool: 'inline-source-map',
