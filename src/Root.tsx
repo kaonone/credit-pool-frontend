@@ -4,6 +4,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 import Web3 from 'web3';
 
 import { Api, ApiContext } from 'services/api';
+import { ApolloProvider } from 'services/apollo';
 import { ErrorBoundary } from 'components';
 import App from './app/App';
 
@@ -20,7 +21,9 @@ function Root(): React.ReactElement<{}> {
         <BrowserRouter>
           <MuiThemeProvider theme={theme}>
             <ApiContext.Provider value={api}>
-              <App />
+              <ApolloProvider>
+                <App />
+              </ApolloProvider>
             </ApiContext.Provider>
           </MuiThemeProvider>
         </BrowserRouter>

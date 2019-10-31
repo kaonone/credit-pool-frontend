@@ -1,0 +1,11 @@
+query Users($first: Int!) @compound {
+  users(first: $first) {
+    id
+    cTokens {
+      id
+      cTokenBalance
+    }
+    totalSupplyInEth
+    totalBorrowInEth
+  }
+}
