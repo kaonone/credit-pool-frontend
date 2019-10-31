@@ -1,14 +1,13 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import { MuiThemeProvider } from '@material-ui/core';
 import Web3 from 'web3';
 
 import { Api, ApiContext } from 'services/api';
 import { ApolloProvider } from 'services/apollo';
 import { ErrorBoundary } from 'components';
+import { theme } from 'utils/styles';
 import App from './app/App';
-
-const theme = createMuiTheme();
 
 function Root(): React.ReactElement<{}> {
   // Detect if Web3 is found, if not, ask the user to install Metamask
