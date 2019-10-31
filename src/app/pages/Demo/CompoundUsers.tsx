@@ -4,9 +4,7 @@ import BN from 'bn.js';
 import { useUsersQuery } from 'generated/compaund-graphql';
 import { Loading, Typography } from 'components';
 
-interface IProps {}
-
-function CompoundUsers(_props: IProps) {
+export function CompoundUsers() {
   const { data, error, loading } = useUsersQuery({ variables: { first: 5 } });
   return (
     <Loading meta={{ error: error ? error.message : null, loaded: !loading }}>
@@ -17,7 +15,10 @@ function CompoundUsers(_props: IProps) {
               {'\t'}
               cTokens:{' '}
               {item.cTokens
-                .reduce<BN>((acc, cur) => acc.add(new BN(cur.cTokenBalance.replace(/^(\d+)\.?.*$/, '$1'))), new BN(0))
+                .reduce<BN>(
+                  (acc, cur) => acc.add(new BN(cur.cTokenBalance.replace(/^(\d+)\.?.*$/, '$1'))),
+                  new BN(0),
+                )
                 .toString()}
             </Typography>
           ))
@@ -25,5 +26,3 @@ function CompoundUsers(_props: IProps) {
     </Loading>
   );
 }
-
-export default CompoundUsers;

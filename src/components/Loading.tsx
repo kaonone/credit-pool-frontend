@@ -46,7 +46,11 @@ export function Loading(props: IProps) {
     <>
       {!loaded && (
         <Wrapper>
-          {progressVariant === 'circle' ? <CircularProgress /> : <LinearProgress className={classes.linearProgress} />}
+          {progressVariant === 'circle' ? (
+            <CircularProgress />
+          ) : (
+            <LinearProgress className={classes.linearProgress} />
+          )}
         </Wrapper>
       )}
       {loaded && !!error && (

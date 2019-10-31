@@ -1,7 +1,6 @@
-import BN from 'bn.js';
 import { Observable } from 'rxjs';
 import { A, B } from 'ts-toolbelt';
-
+import BN from 'bn.js';
 import Web3 from 'web3';
 import PromiEvent from 'web3/promiEvent';
 import { Callback, EventLog as Web3EventLog, TransactionReceipt } from 'web3/types';
@@ -57,7 +56,9 @@ interface RequestByABIDataType {
   bool: boolean;
 }
 
-type InferTypeProp<T> = T extends Input<infer Name, infer Type> ? { [key in Name]: RequestByABIDataType[Type] } : never;
+type InferTypeProp<T> = T extends Input<infer Name, infer Type>
+  ? { [key in Name]: RequestByABIDataType[Type] }
+  : never;
 type InputsToArg<T> = MergeTupleMembers<{ [P in keyof T]: InferTypeProp<T[P]> }>;
 type MaybeInputsToArgs<S> = S extends readonly any[]
   ? A.Equals<S, readonly []> extends B.True
@@ -103,11 +104,15 @@ type ContractWrapper<D extends GenericDescriptor> = {
   getPastEvents: Contract['getPastEvents'];
 };
 
-type EventsForReload<Events extends Record<string, EventDescriptor> = Record<string, EventDescriptor>> =
+type EventsForReload<
+  Events extends Record<string, EventDescriptor> = Record<string, EventDescriptor>
+> =
   | 'none'
   | 'all'
   | {
-      [key in keyof Events]?: SubscribeEventOptions<Events[key]> | Array<SubscribeEventOptions<Events[key]>>;
+      [key in keyof Events]?:
+        | SubscribeEventOptions<Events[key]>
+        | Array<SubscribeEventOptions<Events[key]>>;
     };
 
 export function getInput<N extends string, T extends ABIDataType>(name: N, type: T): Input<N, T> {
@@ -118,19 +123,26 @@ export function getOutput<T extends Output>(type: T): T {
   return type;
 }
 
-const toRequest: { [key in ABIDataType]: (input: RequestByABIDataType[key]) => string | boolean } = {
+const toRequest: {
+  [key in ABIDataType]: (input: RequestByABIDataType[key]) => string | boolean;
+} = {
   address: value => value,
   bool: value => value,
   uint256: value => value.toString(),
 };
 
-const fromResponse: { [key in ABIDataType]: (input: string | boolean | BN) => RequestByABIDataType[key] } = {
+const fromResponse: {
+  [key in ABIDataType]: (input: string | boolean | BN) => RequestByABIDataType[key];
+} = {
   address: value => String(value),
   bool: value => Boolean(value),
   uint256: value => new BN(value as string | BN),
 };
 
-export function makeContractCreator<D extends GenericDescriptor>(_abi: ABIDefinition[], _descriptor: D) {
+export function makeContractCreator<D extends GenericDescriptor>(
+  _abi: ABIDefinition[],
+  _descriptor: D,
+) {
   return (web3: Web3, address: string): ContractWrapper<D> => {
     const baseContract = new web3.eth.Contract(_abi, address);
 
@@ -143,11 +155,15 @@ export function makeContractCreator<D extends GenericDescriptor>(_abi: ABIDefini
 
           if (callMethodDescriptor) {
             const { inputs = [], output } = callMethodDescriptor;
-            return (input: Record<string, BN | string | boolean>, eventsForReload?: EventsForReload) => {
+            return (
+              input: Record<string, BN | string | boolean>,
+              eventsForReload?: EventsForReload,
+            ) => {
               return getContractData$(baseContract, prop, {
                 args: inputs.map(({ name, type }) => (toRequest[type] as any)(input[name])),
                 eventsForReload,
-                convert: (value: string | boolean | BN) => (output ? fromResponse[output](value) : value),
+                convert: (value: string | boolean | BN) =>
+                  output ? fromResponse[output](value) : value,
               });
             };
           }
@@ -159,7 +175,9 @@ export function makeContractCreator<D extends GenericDescriptor>(_abi: ABIDefini
               const basePromiEvent = baseContract.methods[prop](
                 ...inputs.map(({ name, type }) => (toRequest[type] as any)(input[name])),
               ).send(tx);
-              const resultPromiEvent = basePromiEvent.then(value => (output ? fromResponse[output](value) : value));
+              const resultPromiEvent = basePromiEvent.then(value =>
+                output ? fromResponse[output](value) : value,
+              );
 
               type PromiEventKeys = keyof typeof basePromiEvent;
 
@@ -212,4 +230,6 @@ type MergeOnePlus<T, K extends string> = {
 
 type IntoSignature<T extends readonly unknown[]> = (...args: T) => void;
 
-type MergeTupleMembers<T extends readonly unknown[] | {}> = MergeArguments<IntoSignature<T extends unknown[] ? T : []>>;
+type MergeTupleMembers<T extends readonly unknown[] | {}> = MergeArguments<
+  IntoSignature<T extends unknown[] ? T : []>
+>;

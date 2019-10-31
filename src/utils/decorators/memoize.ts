@@ -11,11 +11,20 @@ export function memoize(by?: (...args: any[]) => string) {
     if (typeof descriptor.get === 'function') {
       return memoizeGetter(target, name, descriptor.get, descriptor);
     }
-    throw new Error(`@memoize decorator can be applied to methods or getters, got ${String(descriptor.value)} instead`);
+    throw new Error(
+      `@memoize decorator can be applied to methods or getters, got ${String(
+        descriptor.value,
+      )} instead`,
+    );
   };
 }
 
-function memoizeGetter(target: any, name: string, getter: () => any, descriptor: PropertyDescriptor) {
+function memoizeGetter(
+  target: any,
+  name: string,
+  getter: () => any,
+  descriptor: PropertyDescriptor,
+) {
   const memoizedName = Symbol(`_memoized_${name}`);
   target[memoizedName] = initial;
 

@@ -33,7 +33,12 @@ export function getContractData$<IV, RV>(
   method: string,
   options: IOptions<IV, RV> = {},
 ): Observable<RV> {
-  const { eventsForReload = 'none', reloadTrigger$ = empty(), args = [], convert = identity } = options;
+  const {
+    eventsForReload = 'none',
+    reloadTrigger$ = empty(),
+    args = [],
+    convert = identity,
+  } = options;
 
   const load = async () => {
     const data = await contract.methods[method](...args).call();

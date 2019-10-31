@@ -5,6 +5,4 @@ const rawTree = {
   home: null,
 };
 
-const routes = build(rawTree);
-
-export default routes;
+export const routes = build(rawTree);

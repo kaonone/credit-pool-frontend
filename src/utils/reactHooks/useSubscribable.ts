@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Subscribable } from 'rxjs';
+
 import { getErrorMsg } from '../getErrorMsg';
 
 interface IMeta {
@@ -12,7 +13,11 @@ type Result<T> = [T, IMeta];
 
 function useSubscribable<T>(getTarget: () => Subscribable<T>, deps: any[]): Result<T | undefined>;
 function useSubscribable<T>(getTarget: () => Subscribable<T>, deps: any[], fallback: T): Result<T>;
-function useSubscribable<T>(getTarget: () => Subscribable<T>, deps: any[], fallback?: T): Result<T | undefined> {
+function useSubscribable<T>(
+  getTarget: () => Subscribable<T>,
+  deps: any[],
+  fallback?: T,
+): Result<T | undefined> {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [updatedAt, setUpdatedAt] = useState(() => Date.now());

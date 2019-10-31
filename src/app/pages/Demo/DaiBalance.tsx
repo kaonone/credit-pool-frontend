@@ -5,13 +5,15 @@ import { useApi } from 'services/api';
 import { Loading, Typography } from 'components';
 import { useSubscribable } from 'utils/reactHooks';
 
-interface IProps {}
-
-function DaiBalance(_props: IProps) {
+export function DaiBalance() {
   const api = useApi();
   const [account, accountMeta] = useSubscribable(() => api.getEthAccount$(), []);
 
-  return <Loading meta={accountMeta}>{account ? <Balance account={account} /> : 'Account is not found'}</Loading>;
+  return (
+    <Loading meta={accountMeta}>
+      {account ? <Balance account={account} /> : 'Account is not found'}
+    </Loading>
+  );
 }
 
 interface BalanceProp {
@@ -23,10 +25,9 @@ function Balance({ account }: BalanceProp) {
   return (
     <Loading meta={{ error: error ? error.message : null, loaded: !loading }}>
       <Typography>
-        Balance for {account} is {data && data.balances.length ? `${data.balances[0].wad} DAI` : 'not found'}
+        Balance for {account} is{' '}
+        {data && data.balances.length ? `${data.balances[0].wad} DAI` : 'not found'}
       </Typography>
     </Loading>
   );
 }
-
-export default DaiBalance;

@@ -1,10 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import path from 'path';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import FileManagerWebpackPlugin from 'filemanager-webpack-plugin';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
-import FileManagerWebpackPlugin from 'filemanager-webpack-plugin';
 
 const forGhPages = true;
 const pageTitle = 'Ethereum starter kit';
@@ -64,7 +64,7 @@ const config: webpack.Configuration = {
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: 'index.html',
+      template: 'core/index.html',
       chunksSortMode: sortChunks,
       title: pageTitle,
     }),
@@ -80,7 +80,7 @@ const config: webpack.Configuration = {
           // http://www.backalleycoder.com/2016/05/13/sghpa-the-single-page-app-hack-for-github-pages/
           new HtmlWebpackPlugin({
             filename: '404.html',
-            template: 'index.html',
+            template: 'core/index.html',
             chunksSortMode: sortChunks,
             title: pageTitle,
           }),
@@ -112,4 +112,5 @@ const config: webpack.Configuration = {
   },
 };
 
+// eslint-disable-next-line import/no-default-export
 export default config;

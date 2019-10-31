@@ -50,7 +50,9 @@ const link = new ApolloLink(operation => {
     'operation' in definition &&
     definition.directives &&
     definition.directives.length &&
-    definition.directives.find(item => allowedDirectives.includes(item.name.value as DirectiveName));
+    definition.directives.find(item =>
+      allowedDirectives.includes(item.name.value as DirectiveName),
+    );
   const directive: DirectiveName | 'default' = foundedDirective
     ? (foundedDirective.name.value as DirectiveName)
     : 'default';
@@ -63,7 +65,9 @@ export const apolloClient = new ApolloClient({
     onError(({ graphQLErrors, networkError }) => {
       if (graphQLErrors) {
         graphQLErrors.map(({ message, locations, path }) =>
-          console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`),
+          console.error(
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+          ),
         );
       }
       if (networkError) {

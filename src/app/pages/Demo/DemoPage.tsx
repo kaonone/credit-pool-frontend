@@ -1,16 +1,14 @@
-import * as React from 'react';
 import { empty } from 'rxjs';
+import * as React from 'react';
 
 import { useApi } from 'services/api';
 import { Typography, Loading } from 'components';
 import { useSubscribable } from 'utils/reactHooks';
 
-import DaiBalance from './DaiBalance';
-import CompoundUsers from './CompoundUsers';
+import { DaiBalance } from './DaiBalance';
+import { CompoundUsers } from './CompoundUsers';
 
-interface IProps {}
-
-function DemoPage(_props: IProps) {
+export function DemoPage() {
   const api = useApi();
   const [account, accountMeta] = useSubscribable(() => api.getEthAccount$(), []);
   const [balance, balanceMeta] = useSubscribable(() => {
@@ -42,5 +40,3 @@ function DemoPage(_props: IProps) {
     </div>
   );
 }
-
-export default DemoPage;

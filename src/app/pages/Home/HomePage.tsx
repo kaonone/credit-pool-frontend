@@ -1,14 +1,11 @@
 import * as React from 'react';
+
 import { Typography } from 'components';
 
-interface IProps {}
-
-function HomePage(_props: IProps) {
+export function HomePage() {
   return (
     <div>
       <Typography>Home page</Typography>
     </div>
   );
 }
-
-export default HomePage;
