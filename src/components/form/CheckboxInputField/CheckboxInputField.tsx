@@ -9,7 +9,8 @@ import { CheckboxInput } from 'elements';
 type IProps = GetProps<typeof CheckboxInput> & FieldRenderProps<any, HTMLElement>;
 
 function CheckboxFieldComponent(props: IProps) {
-  const { input, meta, ...rest } = props;
+  const { input, meta, type, ...rest } = props;
+  const { type: inputType, ...restInput } = input;
   const { t } = useTranslate();
   const error =
     typeof rest.error === 'boolean'
@@ -17,7 +18,13 @@ function CheckboxFieldComponent(props: IProps) {
       : meta.touched && meta.error && t(meta.error);
   const value = typeof input.value === 'boolean' ? undefined : input.value;
   return (
-    <CheckboxInput {...rest} helperText={error} error={Boolean(error)} {...input} value={value} />
+    <CheckboxInput
+      {...rest}
+      helperText={error}
+      error={Boolean(error)}
+      {...restInput}
+      value={value}
+    />
   );
 }
 
