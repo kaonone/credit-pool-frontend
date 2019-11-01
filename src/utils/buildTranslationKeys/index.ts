@@ -19,11 +19,11 @@ type TranslationKeysTree<T> = {
 };
 
 export function buildTranslationKeys<T extends ITree>(messagesTree: T): TranslationKeysTree<T> {
-  return (function loop(tree: T, path: string[] = []): TranslationKeysTree<T> {
+  return (function loop<IT extends ITree>(tree: IT, path: string[] = []): TranslationKeysTree<IT> {
     return Object.keys(tree)
-      .map(key => [key, tree[key]])
-      .reduce<TranslationKeysTree<T>>(
-        (acc: TranslationKeysTree<T>, [key, value]: [string, T]) => {
+      .map<[string, string | ITree]>(key => [key, tree[key]])
+      .reduce<TranslationKeysTree<IT>>(
+        (acc, [key, value]) => {
           const xPath = [...path, key];
 
           const routeData: IGetKey & IConcatKey = {
@@ -34,14 +34,14 @@ export function buildTranslationKeys<T extends ITree>(messagesTree: T): Translat
             return { ...(acc as any), [key]: routeData };
           }
           return {
-            ...(acc as any),
+            ...acc,
             [key]: {
-              ...(loop(value, xPath) as any),
+              ...loop(value, xPath),
               ...routeData,
             },
           };
         },
-        {} as TranslationKeysTree<T>,
+        {} as TranslationKeysTree<IT>,
       );
   })(messagesTree);
 }
