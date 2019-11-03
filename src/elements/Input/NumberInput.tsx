@@ -63,7 +63,7 @@ class NumberInput extends React.PureComponent<IProps> {
             decimalSeparator,
             allowNegative,
             decimalScale,
-          }),
+          }) as any,
         }}
       />
     );

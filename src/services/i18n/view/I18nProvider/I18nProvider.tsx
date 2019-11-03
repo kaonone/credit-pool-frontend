@@ -1,13 +1,11 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router';
 import Polyglot from 'node-polyglot';
+import { bind } from 'decko';
 
-import { IAppReduxState } from 'utils/types/app';
 import { withProps } from 'utils/react';
 
 import { ITranslateFunction, Lang, ITranslateKey } from '../../namespace';
-import * as selectors from '../../redux/selectors';
 import { DEFAULT_LANGUAGE, TContext, tKeys } from '../../constants';
 import { phrasesByLocale as phrases } from '../../locales';
 
@@ -15,11 +13,11 @@ interface IOwnProps {
   phrasesByLocale: typeof phrases;
 }
 
-interface IStateProps {
+interface IState {
   locale: Lang;
 }
 
-type IProps = IStateProps & IOwnProps & RouteComponentProps;
+type IProps = IOwnProps & RouteComponentProps;
 
 class I18nProviderComponent extends React.Component<IProps> {
   public polyglot: Polyglot = new Polyglot({
@@ -27,11 +25,16 @@ class I18nProviderComponent extends React.Component<IProps> {
     phrases: this.props.phrasesByLocale[DEFAULT_LANGUAGE],
   });
 
-  public state = { translator: makeTranslator(this.polyglot) };
+  public state = {
+    translator: makeTranslator(this.polyglot),
+    locale: DEFAULT_LANGUAGE,
+  };
 
-  public componentDidUpdate(prevProps: IProps) {
-    const { locale, phrasesByLocale } = this.props;
-    if (prevProps.locale !== locale || prevProps.phrasesByLocale !== phrasesByLocale) {
+  public componentDidUpdate(prevProps: IProps, prevState: IState) {
+    const { phrasesByLocale } = this.props;
+    const { locale } = this.state;
+
+    if (prevState.locale !== locale || prevProps.phrasesByLocale !== phrasesByLocale) {
       this.polyglot.locale(locale);
       this.polyglot.replace(phrasesByLocale[locale]);
       // eslint-disable-next-line react/no-did-update-set-state
@@ -40,11 +43,20 @@ class I18nProviderComponent extends React.Component<IProps> {
   }
 
   public render() {
-    const { children, locale } = this.props;
-    const { translator } = this.state;
+    const { children } = this.props;
+    const { translator, locale } = this.state;
     return (
-      <TContext.Provider value={{ t: translator, locale, tKeys }}>{children}</TContext.Provider>
+      <TContext.Provider
+        value={{ t: translator, locale, tKeys, changeLanguage: this.changeLanguage }}
+      >
+        {children}
+      </TContext.Provider>
     );
+  }
+
+  @bind
+  public changeLanguage(locale: Lang) {
+    this.setState({ locale });
   }
 }
 
@@ -60,13 +72,7 @@ function makeTranslator(polyglot: Polyglot): ITranslateFunction {
   };
 }
 
-function mapState(state: IAppReduxState) {
-  return {
-    locale: selectors.selectCurrentLocale(state),
-  };
-}
-
 export const I18nProvider = withRouter(
   // needed for rerendering on route change
-  withProps(connect(mapState)(I18nProviderComponent), { phrasesByLocale: phrases }),
+  withProps(I18nProviderComponent, { phrasesByLocale: phrases }),
 );

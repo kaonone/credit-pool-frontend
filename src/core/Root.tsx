@@ -6,6 +6,7 @@ import Web3 from 'web3';
 import { App } from 'app/App';
 import { Api, ApiContext } from 'services/api';
 import { ApolloProvider } from 'services/apollo';
+import { I18nProvider } from 'services/i18n';
 import { ErrorBoundary } from 'components';
 import { theme } from 'utils/styles';
 
@@ -18,13 +19,15 @@ export function Root(): React.ReactElement<{}> {
     return (
       <ErrorBoundary>
         <BrowserRouter>
-          <MuiThemeProvider theme={theme}>
-            <ApiContext.Provider value={api}>
-              <ApolloProvider>
-                <App />
-              </ApolloProvider>
-            </ApiContext.Provider>
-          </MuiThemeProvider>
+          <I18nProvider>
+            <MuiThemeProvider theme={theme}>
+              <ApiContext.Provider value={api}>
+                <ApolloProvider>
+                  <App />
+                </ApolloProvider>
+              </ApiContext.Provider>
+            </MuiThemeProvider>
+          </I18nProvider>
         </BrowserRouter>
       </ErrorBoundary>
     );

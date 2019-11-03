@@ -1,7 +1,5 @@
 import Polyglot from 'node-polyglot';
 
-import { IAction } from 'utils/types/redux';
-
 import { tKeys } from './constants';
 
 export interface IReduxState {
@@ -25,8 +23,5 @@ export interface ITranslateProps {
   locale: Lang;
   tKeys: typeof tKeys;
   t: ITranslateFunction;
+  changeLanguage: null | ((locale: Lang) => void);
 }
-
-export type IChangeLanguage = IAction<'I18N_SERVICE:CHANGE_LANGUAGE', Lang>;
-
-export type Action = IChangeLanguage;
