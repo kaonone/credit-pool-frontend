@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { bind } from 'decko';
+import { autobind } from 'core-decorators';
 import { MarkAsPartial, SubSet } from '_helpers';
 import TextField, { TextFieldProps } from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
@@ -70,7 +70,7 @@ class TextInput extends React.PureComponent<IProps, IState> {
     return <></>;
   }
 
-  @bind
+  @autobind
   private handleClickShowPassword() {
     this.setState(state => ({
       type: state.type === 'password' ? 'text' : 'password',

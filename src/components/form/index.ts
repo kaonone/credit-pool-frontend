@@ -1,5 +1,4 @@
 export { CheckboxField } from './CheckboxInputField/CheckboxInputField';
-export { DatePickerField } from './DatePickerField/DatePickerField';
 export { MaskedInputField } from './MaskedInputField/MaskedInputField';
 export { NumberInputField } from './NumberInputField/NumberInputField';
 export { RadioGroupInputField } from './RadioGroupInputField/RadioGroupInputField';

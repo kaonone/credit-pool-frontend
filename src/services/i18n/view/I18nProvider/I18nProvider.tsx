@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 import Polyglot from 'node-polyglot';
-import { bind } from 'decko';
+import { autobind } from 'core-decorators';
 
 import { withProps } from 'utils/react';
 
@@ -54,7 +54,7 @@ class I18nProviderComponent extends React.Component<IProps> {
     );
   }
 
-  @bind
+  @autobind
   public changeLanguage(locale: Lang) {
     this.setState({ locale });
   }

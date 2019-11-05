@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { GetProps } from '_helpers';
 import BN from 'bn.js';
-import { formatBalance } from '@polkadot/util';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
+import { formatBalance } from 'utils/bn/formatBalance';
 import { TextInput } from 'elements/Input/TextInput';
 import { fromBaseUnit, calculateNumberFromDecimals } from 'utils/bn';
 import { useOnChangeState } from 'utils/react';
@@ -83,7 +83,7 @@ function DecimalsInput(props: IProps) {
 
   const options = React.useMemo(
     () =>
-      formatBalance.getOptions().map(
+      formatBalance.getOptions(baseDecimals).map(
         ({ power, text }): IOption<number> => ({
           value: power,
           text,

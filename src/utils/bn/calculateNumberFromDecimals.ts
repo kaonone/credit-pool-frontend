@@ -1,4 +1,4 @@
-import { toBaseUnit } from 'utils/bn';
+import { toBaseUnit } from 'utils/bn/toBaseUnit';
 
 export const calculateNumberFromDecimals = (
   amount: string,
