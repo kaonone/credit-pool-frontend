@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { TContext } from 'services/i18n/constants';
 
-import { Lang } from '../../namespace';
+import { Lang } from '../../types';
 
 interface IOption {
   value: Lang;

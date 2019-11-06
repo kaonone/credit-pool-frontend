@@ -1,8 +1,7 @@
 import BN from 'bn.js';
 
 import { ToBn } from 'utils/types';
-
-import { isToBn } from './isToBn';
+import { isToBn } from 'utils/bn';
 
 function getValue<ExtToBn extends ToBn>(value?: BN | ExtToBn | Date | number | null): number {
   if (value) {

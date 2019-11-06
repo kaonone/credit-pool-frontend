@@ -1,7 +1,8 @@
 import BN from 'bn.js';
 
-import { SI, findSi, calcSi } from './si';
-import { bnToBn } from './bnToBn';
+import { bnToBn } from 'utils/bn/bnToBn';
+
+import { SI, calcSi } from './si';
 import { formatDecimal } from './formatDecimal';
 
 interface IFormatBalanceOptions {
@@ -32,11 +33,12 @@ export function formatBalance({
   const prefix = balanceString.substr(0, mid);
   const padding = mid < 0 ? 0 - mid : 0;
 
-  const postfix = `${`${new Array(padding + 1).join('0')}${balanceString}`.substr(
-    mid < 0 ? 0 : mid,
-  )}000`.substr(0, 3);
+  const postfix = `${`${'0'.repeat(padding)}${balanceString}`.substr(mid < 0 ? 0 : mid)}000`.substr(
+    0,
+    3,
+  );
 
-  const units = si.value === '-' ? ` ${si.text}` : `${si.value} ${findSi(tokenSymbol).text}`;
+  const units = si.value === '-' ? ` ${tokenSymbol}` : `${si.value} ${tokenSymbol}`;
 
   return `${isNegative ? '-' : ''}${formatDecimal(prefix || '0')}.${postfix}${units}`;
 }

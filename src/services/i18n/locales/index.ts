@@ -1,6 +1,6 @@
 import { SubSet } from '_helpers';
 
-import { Lang } from '../namespace';
+import { Lang } from '../types';
 import { en } from './en';
 import { ru } from './ru';
 

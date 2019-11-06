@@ -3,7 +3,7 @@ import Polyglot from 'node-polyglot';
 
 import { buildTranslationKeys } from 'utils/buildTranslationKeys';
 
-import { Lang, ITranslateFunction, ITranslateProps } from './namespace';
+import { Lang, ITranslateFunction, ITranslateProps } from './types';
 import { en, phrasesByLocale } from './locales';
 
 export const LANGUAGES: Lang[] = Object.keys(phrasesByLocale) as Lang[];

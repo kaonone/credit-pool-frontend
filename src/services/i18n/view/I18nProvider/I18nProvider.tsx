@@ -5,7 +5,7 @@ import { autobind } from 'core-decorators';
 
 import { withProps } from 'utils/react';
 
-import { ITranslateFunction, Lang, ITranslateKey } from '../../namespace';
+import { ITranslateFunction, Lang, ITranslateKey } from '../../types';
 import { DEFAULT_LANGUAGE, TContext, tKeys } from '../../constants';
 import { phrasesByLocale as phrases } from '../../locales';
 

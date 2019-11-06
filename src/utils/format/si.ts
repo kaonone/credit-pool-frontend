@@ -84,10 +84,14 @@ export const SI = [
     value: 'Y',
     text: 'Yotta',
   },
-];
+] as const;
 
 export function findSi(tokenSymbol: string) {
   return SI.find(siItem => siItem.text === tokenSymbol) || SI[0];
+}
+
+export function getSiMidIndex() {
+  return SI.findIndex(siItem => siItem.value === '-');
 }
 
 export function calcSi(text: string, decimals: number, forceUnit?: string) {
@@ -95,7 +99,7 @@ export function calcSi(text: string, decimals: number, forceUnit?: string) {
     return findSi(forceUnit);
   }
 
-  const mid = (SI.length - 1) / 2;
+  const mid = getSiMidIndex() - 1;
 
   const siDefIndex = mid + Math.ceil((text.length - decimals) / 3);
 
