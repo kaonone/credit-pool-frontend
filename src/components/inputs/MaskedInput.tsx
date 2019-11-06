@@ -3,9 +3,9 @@ import * as R from 'ramda';
 import { GetProps } from '_helpers';
 import ReactTextMask from 'react-text-mask';
 import { InputBaseComponentProps } from '@material-ui/core/InputBase';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
-import { MoneyIcon } from '../Icons';
-import { InputAdornment } from '../InputAdornment/InputAdornment';
+import { MoneyIcon } from '../icons';
 import { TextInput, IProps as ITextInputProps } from './TextInput';
 
 type MaskType = 'visa';

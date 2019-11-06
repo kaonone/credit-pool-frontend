@@ -4,7 +4,8 @@ import { GetProps } from '_helpers';
 
 import { useTranslate } from 'services/i18n';
 import { getFieldWithComponent } from 'utils/react';
-import { MaskedInput } from 'elements';
+
+import { MaskedInput } from '../inputs';
 
 type IProps = Omit<GetProps<typeof MaskedInput>, 'ref'> & FieldRenderProps<any, HTMLElement>;
 

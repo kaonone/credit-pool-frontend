@@ -1,6 +1,10 @@
 import React from 'react';
-import { Paper, LinearProgress, CircularProgress, Typography } from '@material-ui/core';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+
+import { Hint } from './Hint/Hint';
 
 interface IMeta {
   loaded: boolean;
@@ -10,7 +14,7 @@ interface IMeta {
 interface IProps {
   children: React.ReactNode;
   meta: IMeta | IMeta[];
-  variant?: 'paper';
+  variant?: 'hint';
   progressVariant?: 'linear' | 'circle';
 }
 
@@ -20,18 +24,6 @@ const useStyles = makeStyles({
   },
 });
 
-const StyledPaper = withStyles(theme => ({
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: theme.spacing(6),
-    padding: theme.spacing(1.5),
-    borderRadius: '0.25rem',
-    textAlign: 'center',
-  },
-}))(Paper);
-
 export function Loading(props: IProps) {
   const classes = useStyles();
   const { children, variant, progressVariant, meta } = props;
@@ -40,7 +32,7 @@ export function Loading(props: IProps) {
   const loaded = metas.every(value => value.loaded);
   const { error } = metas.find(value => value.error) || { error: null };
 
-  const Wrapper = variant === 'paper' ? StyledPaper : React.Fragment;
+  const Wrapper = variant === 'hint' ? Hint : React.Fragment;
 
   return (
     <>

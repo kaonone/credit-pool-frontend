@@ -4,7 +4,8 @@ import { GetProps } from '_helpers';
 
 import { useTranslate } from 'services/i18n';
 import { getFieldWithComponent } from 'utils/react';
-import { RadioGroupInput } from 'elements';
+
+import { RadioGroupInput } from '../inputs';
 
 type IProps = GetProps<typeof RadioGroupInput> & FieldRenderProps<any, HTMLElement>;
 

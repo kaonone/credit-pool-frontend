@@ -4,7 +4,8 @@ import { GetProps } from '_helpers';
 
 import { useTranslate } from 'services/i18n';
 import { getFieldWithComponent } from 'utils/react';
-import { TextInput } from 'elements';
+
+import { TextInput } from '../inputs';
 
 type IProps = Omit<GetProps<typeof TextInput>, 'ref'> & FieldRenderProps<any, HTMLElement>;
 

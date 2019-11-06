@@ -66,6 +66,7 @@ module.exports = {
         overrides: { arrow: { before: true, after: true } },
       },
     ],
+    'no-restricted-imports': ['error', '@material-ui/core', '@material-ui/icons'],
     'no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
     'no-console': ['error', { allow: ['info', 'warn', 'error'] }],
     'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
