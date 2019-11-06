@@ -3,8 +3,7 @@ import { CheckIdentity } from '_helpers';
 import FormControl, { FormControlProps } from '@material-ui/core/FormControl';
 import FormHelperText, { FormHelperTextProps } from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-
-import { CheckboxProps, Checkbox } from '../Checkbox/Checkbox';
+import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 
 type IProps = CheckboxProps &
   Pick<FormControlProps, 'error' | 'required' | 'fullWidth'> & {
