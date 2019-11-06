@@ -3,9 +3,9 @@ import { autobind } from 'core-decorators';
 import { MarkAsPartial, SubSet } from '_helpers';
 import TextField, { TextFieldProps } from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
-import { EyeIcon } from '../Icons';
-import { InputAdornment } from '../InputAdornment/InputAdornment';
+import { EyeIcon } from '../icons';
 
 // crutch for types :)
 type PartialProps = SubSet<

@@ -5,7 +5,8 @@ import { FieldRenderProps } from 'react-final-form';
 
 import { useTranslate } from 'services/i18n';
 import { getFieldWithComponent } from 'utils/react';
-import { TextInput, DecimalsInput } from 'elements';
+
+import { TextInput, DecimalsInput } from '../inputs';
 
 interface IOwnProps {
   baseDecimals: number;

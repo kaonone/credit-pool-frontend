@@ -1,12 +1,10 @@
 import { empty } from 'rxjs';
 import * as React from 'react';
 import { Form } from 'react-final-form';
-import { Grid, Button } from '@material-ui/core';
 
 import { useApi } from 'services/api';
 import { DecimalsField, TextInputField } from 'components/form';
-import { Typography, Loading } from 'components';
-import { Hint, CircleProgressBar } from 'elements';
+import { Typography, Loading, CircularProgress, Hint, Button, Grid } from 'components';
 import { useSubscribable } from 'utils/reactHooks';
 import { composeValidators, validateInteger, validatePositiveNumber } from 'utils/validators';
 
@@ -88,7 +86,7 @@ export function DemoPage() {
                       fullWidth
                       disabled={submitting}
                     >
-                      {submitting ? <CircleProgressBar size={24} /> : 'submit'}
+                      {submitting ? <CircularProgress size={24} /> : 'submit'}
                     </Button>
                   </Grid>
                 </Grid>

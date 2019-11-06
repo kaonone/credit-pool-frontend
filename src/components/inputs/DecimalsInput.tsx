@@ -6,10 +6,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-import { TextInput } from 'elements/Input/TextInput';
 import { fromBaseUnit, toBaseUnit } from 'utils/bn';
 import { formatBalance } from 'utils/format';
 import { useOnChangeState } from 'utils/react';
+
+import { TextInput } from './TextInput';
 
 interface IOwnProps {
   baseDecimals: number;

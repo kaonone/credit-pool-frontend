@@ -4,7 +4,8 @@ import { GetProps } from '_helpers';
 
 import { useTranslate } from 'services/i18n';
 import { getFieldWithComponent } from 'utils/react';
-import { CheckboxInput } from 'elements';
+
+import { CheckboxInput } from '../inputs';
 
 type IProps = GetProps<typeof CheckboxInput> & FieldRenderProps<any, HTMLElement>;
 

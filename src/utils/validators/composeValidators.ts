@@ -1,10 +1,11 @@
 import { ITranslateKey } from 'services/i18n';
 
-type Validator<T> = (value: T) => string | ITranslateKey | undefined;
+type ValidationError = string | ITranslateKey;
+type Validator<T> = (value: T) => ValidationError | undefined;
 
 export function composeValidators<T>(...validators: Array<Validator<T>>) {
   return (value: T) =>
-    validators.reduce<string | ITranslateKey | undefined>(
+    validators.reduce<ValidationError | undefined>(
       (error, validator) => error || validator(value),
       undefined,
     );
