@@ -17,8 +17,8 @@ function NumberInputFieldComponent(props: IProps) {
       : meta.touched && meta.error && t(meta.error);
 
   const onChange: GetProps<typeof NumberInput>['onChange'] = useCallback(
-    value => props.input.onChange(value.floatValue),
-    [props],
+    value => input.onChange(value.floatValue),
+    [input.onChange],
   );
 
   return (

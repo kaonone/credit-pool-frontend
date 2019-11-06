@@ -6,9 +6,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-import { formatBalance } from 'utils/bn/formatBalance';
 import { TextInput } from 'elements/Input/TextInput';
-import { fromBaseUnit, calculateNumberFromDecimals } from 'utils/bn';
+import { fromBaseUnit, toBaseUnit } from 'utils/bn';
+import { formatBalance } from 'utils/format';
 import { useOnChangeState } from 'utils/react';
 
 interface IOwnProps {
@@ -57,14 +57,19 @@ function DecimalsInput(props: IProps) {
 
   const handleInputChange = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      const inputValidationRegExp = new RegExp(`^$|^\\d+?\\.?\\d{0,${baseDecimals + siPrefix}}$`);
+      const maxFractionLength = baseDecimals + siPrefix;
+      const inputValidationRegExp = new RegExp(
+        `^$|^\\d+?${maxFractionLength > 0 ? `(\\.?\\d{0,${maxFractionLength}})` : ''}$`,
+      );
 
       if (inputValidationRegExp.test(event.target.value)) {
-        const suffixRegExp = event.target.value.match(/^.+?(\.?0*)$/);
+        const suffixMatch = event.target.value.match(/^.+?((\.|\.0*)|(\.[1-9]*(0*)))$/);
 
-        if (suffixRegExp) {
-          const [, currentSuffix] = suffixRegExp;
-          setSuffix(currentSuffix);
+        if (suffixMatch) {
+          const [, , dotWithZeros, , zerosAfterDot] = suffixMatch;
+          setSuffix(dotWithZeros || zerosAfterDot || '');
+        } else {
+          setSuffix('');
         }
 
         onChange(
@@ -152,5 +157,10 @@ function getRoundedValue(value: string, baseDecimals: number, siPrefix: number):
 
   return value;
 }
+
+const calculateNumberFromDecimals = (amount: string, decimals: number, baseDecimals: number) => {
+  const totalDecimals = baseDecimals + decimals;
+  return toBaseUnit(amount, totalDecimals).toString();
+};
 
 export { DecimalsInput };

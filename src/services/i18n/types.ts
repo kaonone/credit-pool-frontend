@@ -2,12 +2,6 @@ import Polyglot from 'node-polyglot';
 
 import { tKeys } from './constants';
 
-export interface IReduxState {
-  data: {
-    currentLocale: Lang;
-  };
-}
-
 type CustomTranslateFunction = (phrase: ITranslateKey) => string;
 interface IPhraseWithOptions {
   key: string;
