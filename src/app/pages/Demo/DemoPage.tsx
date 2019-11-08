@@ -1,6 +1,7 @@
 import { empty } from 'rxjs';
 import * as React from 'react';
 import { Form } from 'react-final-form';
+import BN from 'bn.js';
 
 import { useApi } from 'services/api';
 import { DecimalsField, TextInputField } from 'components/form';
@@ -32,9 +33,12 @@ export function DemoPage() {
   }, []);
 
   const onSubmit = React.useCallback(
-    // eslint-disable-next-line no-console
-    (values: { amount: string; name: string; surname: string }) => console.log(values),
-    [],
+    async (values: { amount: string; name: string; surname: string }) => {
+      account && (await api.transferDai$(account, account, new BN(0)));
+      // eslint-disable-next-line no-console
+      console.log(values);
+    },
+    [account],
   );
 
   return (

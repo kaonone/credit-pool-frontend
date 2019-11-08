@@ -19,6 +19,10 @@ export const createErc20 = makeContractCreator(
         inputs: [getInput('_spender', 'address'), getInput('_value', 'uint256')],
         output: getOutput('bool'),
       },
+      transfer: {
+        inputs: [getInput('_to', 'address'), getInput('_value', 'uint256')],
+        output: getOutput('bool'),
+      },
     },
     events: {
       Transfer: {

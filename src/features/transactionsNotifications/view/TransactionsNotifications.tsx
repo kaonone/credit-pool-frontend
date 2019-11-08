@@ -1,19 +1,22 @@
 import React from 'react';
 import { useSnackbar } from 'notistack';
-import { empty } from 'rxjs';
 
 import { useSubscribable } from 'utils/react';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { ISubmittedTransaction } from 'services/api/types';
+import { useApi } from 'services/api';
+import { IGenericSubmittedTransaction, SubmittedTransactionType } from 'services/api/types';
 
 function TransactionsNotifications() {
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.notifications;
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const [transaction] = useSubscribable<ISubmittedTransaction>(() => empty(), []);
+  const api = useApi();
+  const [transaction] = useSubscribable<
+    IGenericSubmittedTransaction<SubmittedTransactionType, any>
+  >(() => api.getSubmittedTransactions$(), []);
 
   const showNotifications = React.useCallback(
-    async (submittedTransaction: ISubmittedTransaction) => {
+    async (submittedTransaction: IGenericSubmittedTransaction<SubmittedTransactionType, any>) => {
       const { type } = submittedTransaction;
       const pendingNotificationKey = enqueueSnackbar(t(tKeys[type].pending.getKey()), {
         persist: true,
@@ -21,7 +24,7 @@ function TransactionsNotifications() {
       });
 
       try {
-        await submittedTransaction.promise;
+        await submittedTransaction.promiEvent;
         enqueueSnackbar(t(tKeys[type].success.getKey()), { variant: 'success' });
       } catch {
         enqueueSnackbar(t(tKeys[type].error.getKey()), { variant: 'error' });

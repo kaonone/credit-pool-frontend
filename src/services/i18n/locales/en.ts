@@ -2,10 +2,15 @@
 const en = {
   features: {
     notifications: {
-      someTransactionName: {
-        pending: 'Some transaction pending',
-        success: 'Some transaction succeeded',
-        error: 'Some transaction failed',
+      'dai.transfer': {
+        pending: 'dai.transfer transaction pending',
+        success: 'dai.transfer transaction succeeded',
+        error: 'dai.transfer transaction failed',
+      },
+      'dai.approve': {
+        pending: 'dai.approve transaction pending',
+        success: 'dai.approve transaction succeeded',
+        error: 'dai.approve transaction failed',
       },
     },
   },
