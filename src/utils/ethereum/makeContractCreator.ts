@@ -1,16 +1,18 @@
 import { Observable } from 'rxjs';
-import { A, B } from 'ts-toolbelt';
+import { A, B, O } from 'ts-toolbelt';
 import BN from 'bn.js';
 import Web3 from 'web3';
 import PromiEvent from 'web3/promiEvent';
 import { Callback, EventLog as Web3EventLog, TransactionReceipt } from 'web3/types';
 import { ABIDefinition } from 'web3/eth/abi';
 import Contract from 'web3/eth/contract';
-import { BlockType, Tx } from 'web3/eth/types';
+import { BlockType, Tx as Web3TX } from 'web3/eth/types';
 
 import { getContractData$ } from './getContractData$';
 
 /* ***** OVERRIDE WEB3 TYPES ***** */
+
+type Tx = O.Required<Web3TX, 'from'>;
 
 type EventLog<T> = Omit<Web3EventLog, 'returnValues'> & { returnValues: T };
 
@@ -75,7 +77,7 @@ type CallMethod<M extends MethodDescriptor, E extends Record<string, EventDescri
 
 type SendMethod<M extends MethodDescriptor> = (
   input: MaybeInputsToArgs<M['inputs']>,
-  tx?: Tx,
+  tx: Tx,
 ) => PromiEvent<RequestByABIDataType[NonNullable<M['output']>]>;
 
 type EventMethod<E extends EventDescriptor> = (
@@ -230,6 +232,6 @@ type MergeOnePlus<T, K extends string> = {
 
 type IntoSignature<T extends readonly unknown[]> = (...args: T) => void;
 
-type MergeTupleMembers<T extends readonly unknown[] | {}> = MergeArguments<
-  IntoSignature<T extends unknown[] ? T : []>
->;
+type MergeTupleMembers<T extends readonly unknown[] | {}> = T extends readonly unknown[]
+  ? MergeArguments<IntoSignature<T>>
+  : never;

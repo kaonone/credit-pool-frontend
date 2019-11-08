@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useBalancesByAddressQuery } from 'generated/dai-graphql';
 import { useApi } from 'services/api';
 import { Loading, Typography } from 'components';
-import { useSubscribable } from 'utils/reactHooks';
+import { useSubscribable } from 'utils/react';
 
 export function DaiBalance() {
   const api = useApi();

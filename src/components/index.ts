@@ -6,3 +6,4 @@ export { default as Typography } from '@material-ui/core/Typography';
 export * from './ErrorBoundary';
 export * from './Hint/Hint';
 export * from './Loading';
+export * from './Snackbar/Snackbar';

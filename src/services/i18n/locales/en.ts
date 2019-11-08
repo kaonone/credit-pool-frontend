@@ -1,5 +1,19 @@
 // tslint:disable:max-line-length
 const en = {
+  features: {
+    notifications: {
+      'dai.transfer': {
+        pending: 'dai.transfer transaction pending',
+        success: 'dai.transfer transaction succeeded',
+        error: 'dai.transfer transaction failed',
+      },
+      'dai.approve': {
+        pending: 'dai.approve transaction pending',
+        success: 'dai.approve transaction succeeded',
+        error: 'dai.approve transaction failed',
+      },
+    },
+  },
   utils: {
     validation: {
       isRequired: 'Field is required',

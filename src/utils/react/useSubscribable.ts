@@ -35,7 +35,7 @@ function useSubscribable<T>(
   useEffect(() => {
     resetState();
 
-    const subscribtion = target.subscribe({
+    const subscription = target.subscribe({
       next: nextValue => {
         setLoaded(true);
         setError(null);
@@ -48,7 +48,7 @@ function useSubscribable<T>(
       },
     });
 
-    return () => subscribtion.unsubscribe();
+    return () => subscription.unsubscribe();
   }, [target]);
 
   const meta: IMeta = useMemo(
