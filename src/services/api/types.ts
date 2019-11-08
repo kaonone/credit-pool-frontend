@@ -4,7 +4,7 @@ import BN from 'bn.js';
 export type SubmittedTransaction =
   | IGenericSubmittedTransaction<
       'dai.transfer',
-      { fromAddress: string; address: string; value: BN }
+      { fromAddress: string; toAddress: string; value: BN }
     >
   | IGenericSubmittedTransaction<
       'dai.approve',

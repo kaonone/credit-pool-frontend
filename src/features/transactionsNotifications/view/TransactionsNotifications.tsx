@@ -3,20 +3,20 @@ import { useSnackbar } from 'notistack';
 
 import { useSubscribable } from 'utils/react';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { useApi } from 'services/api';
-import { IGenericSubmittedTransaction, SubmittedTransactionType } from 'services/api/types';
+import { useApi, SubmittedTransaction } from 'services/api';
 
 function TransactionsNotifications() {
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.notifications;
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const api = useApi();
-  const [transaction] = useSubscribable<
-    IGenericSubmittedTransaction<SubmittedTransactionType, any>
-  >(() => api.getSubmittedTransactions$(), []);
+  const [transaction] = useSubscribable<SubmittedTransaction>(
+    () => api.getSubmittedTransaction$(),
+    [],
+  );
 
   const showNotifications = React.useCallback(
-    async (submittedTransaction: IGenericSubmittedTransaction<SubmittedTransactionType, any>) => {
+    async (submittedTransaction: SubmittedTransaction) => {
       const { type } = submittedTransaction;
       const pendingNotificationKey = enqueueSnackbar(t(tKeys[type].pending.getKey()), {
         persist: true,

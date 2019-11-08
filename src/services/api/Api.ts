@@ -10,7 +10,7 @@ import { getAccount } from 'utils/ethereum';
 import { memoize } from 'utils/decorators';
 
 import {
-  IGenericSubmittedTransaction,
+  SubmittedTransaction,
   SubmittedTransactionType,
   ExtractSubmittedTransaction,
 } from './types';
@@ -18,9 +18,7 @@ import {
 export class Api {
   private dai = createErc20(this.web3, '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea');
 
-  private submittedTransactions = new ReplaySubject<
-    IGenericSubmittedTransaction<SubmittedTransactionType, any>
-  >();
+  private submittedTransaction = new ReplaySubject<SubmittedTransaction>();
 
   constructor(private web3: Web3) {}
 
@@ -31,18 +29,22 @@ export class Api {
     );
   }
 
-  public async transferDai$(fromAddress: string, address: string, value: BN): Promise<void> {
+  public async transferDai$(fromAddress: string, toAddress: string, value: BN): Promise<void> {
     const promiEvent = this.dai.methods.transfer(
-      { _to: address, _value: value },
+      { _to: toAddress, _value: value },
       { from: fromAddress },
     );
 
-    this.pushToSubmittedTransactions$('dai.transfer', promiEvent, { fromAddress, address, value });
+    this.pushToSubmittedTransactions$('dai.transfer', promiEvent, {
+      fromAddress,
+      toAddress,
+      value,
+    });
 
     await promiEvent;
   }
 
-  public async approveDai$(spender: string, fromAddress: string, value: BN): Promise<void> {
+  public async approveDai$(fromAddress: string, spender: string, value: BN): Promise<void> {
     const promiEvent = this.dai.methods.approve(
       { _spender: spender, _value: value },
       { from: fromAddress },
@@ -53,8 +55,8 @@ export class Api {
     await promiEvent;
   }
 
-  public getSubmittedTransactions$() {
-    return this.submittedTransactions;
+  public getSubmittedTransaction$() {
+    return this.submittedTransaction;
   }
 
   @memoize(R.identity)
@@ -70,7 +72,15 @@ export class Api {
     promiEvent: PromiEvent<boolean>,
     payload: ExtractSubmittedTransaction<T>['payload'],
   ) {
-    const promise: Promise<string> = new Promise(() => promiEvent.on('transactionHash', tx => tx));
-    this.submittedTransactions.next({ type: transactionName, tx: promise, promiEvent, payload });
+    const promise = new Promise<string>(resolve =>
+      promiEvent.on('transactionHash', tx => resolve(tx)),
+    );
+
+    this.submittedTransaction.next({
+      type: transactionName as 'dai.transfer',
+      tx: promise,
+      promiEvent,
+      payload,
+    });
   }
 }

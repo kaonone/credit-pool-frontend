@@ -6,7 +6,7 @@ import BN from 'bn.js';
 import { useApi } from 'services/api';
 import { DecimalsField, TextInputField } from 'components/form';
 import { Typography, Loading, CircularProgress, Hint, Button, Grid } from 'components';
-import { useSubscribable } from 'utils/reactHooks';
+import { useSubscribable } from 'utils/react';
 import { composeValidators, validateInteger, validatePositiveNumber } from 'utils/validators';
 
 import { DaiBalance } from './DaiBalance';
