@@ -4,6 +4,8 @@ import { colors } from 'utils/styles/colors';
 
 export { Theme };
 
+const defaultTheme = createMuiTheme();
+
 export const theme: Theme = createMuiTheme({
   palette: {
     primary: {
@@ -17,6 +19,16 @@ export const theme: Theme = createMuiTheme({
       light: colors.white,
       dark: colors.white,
       contrastText: colors.royalPurple,
+    },
+  },
+  overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        '#walletconnect-wrapper': {
+          zIndex: defaultTheme.zIndex.modal,
+          position: 'relative',
+        },
+      },
     },
   },
 });

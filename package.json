@@ -1,7 +1,7 @@
 {
-  "name": "github-actions-test-gh-pages",
+  "name": "ethereum-dapp-starter-kit",
   "version": "0.0.1",
-  "description": "Settings for deploy to gh-pages with GitHub Actions",
+  "description": "Frontend starter kit for Ethereum DApps",
   "main": "index.js",
   "scripts": {
     "node": "node --max_old_space_size=4096 ./node_modules/.bin/cross-env TS_NODE_PROJECT=\"webpack/tsconfig.json\"",
@@ -16,21 +16,13 @@
     "codegen": "graphql-codegen --config codegen.yml",
     "postinstall": "npm run codegen"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/in19farkt/github-actions-test-gh-pages.git"
-  },
   "author": "Serdtsev Dmitriy",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/in19farkt/github-actions-test-gh-pages/issues"
-  },
-  "homepage": "https://github.com/in19farkt/github-actions-test-gh-pages#readme",
   "dependencies": {
     "@apollo/react-common": "^3.1.3",
     "@apollo/react-hooks": "^3.1.3",
-    "@material-ui/icons": "^4.5.1",
     "@material-ui/core": "^4.6.0",
+    "@material-ui/icons": "^4.5.1",
     "@material-ui/styles": "^4.6.0",
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-client": "^2.6.4",
@@ -59,8 +51,9 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.3",
     "subscriptions-transport-ws": "^0.9.16",
-    "ts-toolbelt": "^4.8.4",
-    "web3": "^1.2.1"
+    "ts-toolbelt": "^4.10.0",
+    "web3": "^1.2.1",
+    "web3-wallets-kit": "0.0.14"
   },
   "devDependencies": {
     "@date-io/core": "^1.3.11",

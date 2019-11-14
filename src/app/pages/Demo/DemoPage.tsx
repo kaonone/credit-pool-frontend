@@ -4,6 +4,7 @@ import { Form } from 'react-final-form';
 import BN from 'bn.js';
 
 import { useApi } from 'services/api';
+import { AuthButton } from 'features/auth';
 import { DecimalsField, TextInputField } from 'components/form';
 import { Typography, Loading, CircularProgress, Hint, Button, Grid } from 'components';
 import { useSubscribable } from 'utils/react';
@@ -14,7 +15,7 @@ import { CompoundUsers } from './CompoundUsers';
 
 export function DemoPage() {
   const api = useApi();
-  const [account, accountMeta] = useSubscribable(() => api.getEthAccount$(), []);
+  const [account, accountMeta] = useSubscribable(() => api.getEthAccount$(), [], null);
   const [balance, balanceMeta] = useSubscribable(() => {
     return account ? api.getDaiBalance$(account) : empty();
   }, [account]);
@@ -43,6 +44,7 @@ export function DemoPage() {
 
   return (
     <div>
+      <AuthButton />
       <Typography variant="h4" gutterBottom>
         Page for developers
       </Typography>

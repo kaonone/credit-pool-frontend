@@ -59,9 +59,7 @@ const config: webpack.Configuration = {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['build'],
-    }),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'core/index.html',
@@ -74,6 +72,16 @@ const config: webpack.Configuration = {
       failOnError: true,
     }),
     new webpack.HotModuleReplacementPlugin(),
+    new FileManagerWebpackPlugin({
+      onEnd: {
+        copy: [
+          {
+            source: `node_modules/web3-wallets-kit/assets/bitski/bitski-callback.html`,
+            destination: `build/bitski-callback.html`,
+          },
+        ],
+      },
+    }),
   ].concat(
     forGhPages
       ? [
