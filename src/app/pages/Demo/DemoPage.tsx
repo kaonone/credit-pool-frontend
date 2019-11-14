@@ -60,6 +60,7 @@ export function DemoPage() {
                     <DecimalsField
                       validate={validate}
                       baseDecimals={0}
+                      baseUnitName="DAI"
                       name="amount"
                       placeholder="amount"
                     />

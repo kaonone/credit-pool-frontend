@@ -14,6 +14,7 @@ import { TextInput } from './TextInput';
 
 interface IOwnProps {
   baseDecimals: number;
+  baseUnitName?: string;
   value: string;
   maxValue?: BN;
   onChange: (value: string) => void;
@@ -27,7 +28,7 @@ interface IOption<T> {
 type IProps = IOwnProps & Omit<GetProps<typeof TextInput>, 'ref'>;
 
 function DecimalsInput(props: IProps) {
-  const { onChange, baseDecimals, value, maxValue, ...restInputProps } = props;
+  const { onChange, baseDecimals, value, maxValue, baseUnitName, ...restInputProps } = props;
 
   const [siPrefix, setSiPrefix] = React.useState(getInitialPrefix(value, baseDecimals));
   const [suffix, setSuffix] = React.useState('');
@@ -89,7 +90,7 @@ function DecimalsInput(props: IProps) {
 
   const options = React.useMemo(
     () =>
-      formatBalance.getOptions(baseDecimals).map(
+      formatBalance.getOptions(baseDecimals, baseUnitName).map(
         ({ power, text }): IOption<number> => ({
           value: power,
           text,
