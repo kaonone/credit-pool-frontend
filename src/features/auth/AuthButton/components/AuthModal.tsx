@@ -36,13 +36,13 @@ export function AuthModal(props: AuthModalProps) {
       <Loading component={DialogContent} communication={connectCommunication} />
       {isLogged && (
         <DialogContent>
-          <Hint size="small">
+          <Hint>
             <Typography>Connected wallet is {account}.</Typography>
           </Hint>
         </DialogContent>
       )}
       <DialogContent>
-        <Hint size="small">
+        <Hint>
           <Typography>By connecting to the wallet you accept Terms of Service.</Typography>
         </Hint>
       </DialogContent>
