@@ -11,7 +11,6 @@ import { useSubscribable } from 'utils/react';
 import { composeValidators, validateInteger, validatePositiveNumber } from 'utils/validators';
 
 import { DaiBalance } from './DaiBalance';
-import { CompoundUsers } from './CompoundUsers';
 
 export function DemoPage() {
   const api = useApi();
@@ -117,8 +116,6 @@ export function DemoPage() {
       </Loading>
       <Typography variant="h5">DAI balance from GraphQL</Typography>
       <DaiBalance />
-      <Typography variant="h5">Compound users from GraphQL</Typography>
-      <CompoundUsers />
     </div>
   );
 }

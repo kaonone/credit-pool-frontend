@@ -19,25 +19,11 @@ const daiKovanLink = makeEndpointLink(
   }),
 );
 
-const compoundLink = makeEndpointLink(
-  new HttpLink({
-    uri: 'https://api.thegraph.com/subgraphs/name/compound-finance/compound-v2-rinkeby',
-    credentials: 'same-origin',
-  }),
-  new WebSocketLink({
-    uri: 'wss://api.thegraph.com/subgraphs/name/compound-finance/compound-v2-rinkeby',
-    options: {
-      reconnect: true,
-    },
-  }),
-);
-
-const allowedDirectives = ['dai', 'compound'] as const;
-type DirectiveName = (typeof allowedDirectives)[number];
+const allowedDirectives = ['dai'] as const;
+type DirectiveName = typeof allowedDirectives[number];
 
 const linkByDirective: Record<DirectiveName | 'default', ApolloLink> = {
   dai: daiKovanLink,
-  compound: compoundLink,
   default: daiKovanLink,
 };
 
@@ -53,6 +39,13 @@ const link = new ApolloLink(operation => {
     definition.directives.find(item =>
       allowedDirectives.includes(item.name.value as DirectiveName),
     );
+
+  if (!foundedDirective && definition.directives?.length) {
+    console.error('Directive is not found in allowedDirectives', {
+      definitionDerictives: definition.directives,
+    });
+  }
+
   const directive: DirectiveName | 'default' = foundedDirective
     ? (foundedDirective.name.value as DirectiveName)
     : 'default';

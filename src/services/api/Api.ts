@@ -5,8 +5,8 @@ import * as R from 'ramda';
 import PromiEvent from 'web3/promiEvent';
 import { Web3WalletsManager } from 'web3-wallets-kit';
 
-import { createErc20 } from 'utils/contracts';
 import { memoize } from 'utils/decorators';
+import { createErc20 } from 'generated/contracts/createErc20';
 
 import {
   SubmittedTransaction,
