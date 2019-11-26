@@ -1,21 +1,30 @@
 import React from 'react';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import LinearProgress, { LinearProgressProps } from '@material-ui/core/LinearProgress';
+import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { Hint } from './Hint/Hint';
+import { CommunicationState } from 'utils/react';
 
 interface IMeta {
   loaded: boolean;
   error: string | null;
 }
 
-interface IProps {
-  children: React.ReactNode;
-  meta: IMeta | IMeta[];
-  variant?: 'hint';
-  progressVariant?: 'linear' | 'circle';
+type MaybeArray<T> = T | T[];
+type ProgressType = 'linear' | 'circle';
+
+interface IProps<V extends ProgressType> {
+  children?: React.ReactNode;
+  meta?: MaybeArray<IMeta>;
+  communication?: MaybeArray<CommunicationState<any, any>>;
+  component?: React.ComponentType;
+  progressVariant?: V;
+  progressProps?: {
+    linear: LinearProgressProps;
+    circle: CircularProgressProps;
+  }[V];
+  ignoreError?: boolean;
 }
 
 const useStyles = makeStyles({
@@ -24,33 +33,55 @@ const useStyles = makeStyles({
   },
 });
 
-export function Loading(props: IProps) {
+export function Loading<T extends ProgressType>(props: IProps<T>) {
   const classes = useStyles();
-  const { children, variant, progressVariant, meta } = props;
+  const {
+    children,
+    progressVariant,
+    progressProps,
+    component,
+    ignoreError,
+    meta = [],
+    communication = [],
+  } = props;
   const metas = Array.isArray(meta) ? meta : [meta];
+  const communications = Array.isArray(communication) ? communication : [communication];
 
-  const loaded = metas.every(value => value.loaded);
-  const { error } = metas.find(value => value.error) || { error: null };
+  const loadedMetas = metas.every(value => value.loaded);
+  const { error: metasError } = metas.find(value => value.error) || { error: null };
 
-  const Wrapper = variant === 'hint' ? Hint : React.Fragment;
+  const loadedCommunications = communications.every(value => value.status !== 'pending');
+  const { error: communicationsError } = communications.find(value => value.error) || {
+    error: null,
+  };
+
+  const loaded = loadedMetas && loadedCommunications;
+  const error = metasError || communicationsError;
+
+  const Wrapper = component || React.Fragment;
+
+  const needToShowError = !!error && !ignoreError;
 
   return (
     <>
       {!loaded && (
         <Wrapper>
           {progressVariant === 'circle' ? (
-            <CircularProgress />
+            <CircularProgress {...(progressProps as CircularProgressProps)} />
           ) : (
-            <LinearProgress className={classes.linearProgress} />
+            <LinearProgress
+              className={classes.linearProgress}
+              {...(progressProps as LinearProgressProps)}
+            />
           )}
         </Wrapper>
       )}
-      {loaded && !!error && (
+      {loaded && needToShowError && (
         <Wrapper>
           <Typography color="error">{error}</Typography>
         </Wrapper>
       )}
-      {loaded && !error && children}
+      {loaded && !needToShowError && children}
     </>
   );
 }
