@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { WalletType } from 'web3-wallets-kit';
+import { WalletType, ConnectionStatus } from 'web3-wallets-kit';
 
 import { CommunicationState } from 'utils/react';
 import {
@@ -11,6 +11,7 @@ import {
   DialogContent,
   Hint,
   Typography,
+  Box,
 } from 'components';
 
 const walletTypes: WalletType[] = ['bitski', 'metamask', 'wallet-connect'];
@@ -19,25 +20,43 @@ interface AuthModalProps {
   isOpened: boolean;
   connectCommunication: CommunicationState<any, any>;
   account: string | null | undefined;
+  status: ConnectionStatus;
+  connectedWallet: WalletType | null;
   onClose(): void;
   connect(wallet: 'wallet-connect' | 'bitski' | 'metamask'): void;
   disconnect(): void;
 }
 
 export function AuthModal(props: AuthModalProps) {
-  const { isOpened, onClose, connectCommunication, connect, account, disconnect } = props;
-  const isLogged: boolean = !!account;
+  const {
+    isOpened,
+    onClose,
+    connectCommunication,
+    connect,
+    account,
+    disconnect,
+    status,
+    connectedWallet,
+  } = props;
+  const isLogged: boolean = !!account && !!connectedWallet;
 
   return (
     <Dialog open={isOpened} onClose={onClose}>
       <DialogTitle>
         {isLogged ? 'Choose another wallet or disconnect:' : 'Choose your wallet:'}
       </DialogTitle>
-      <Loading component={DialogContent} communication={connectCommunication} />
+      <Loading
+        component={DialogContent}
+        meta={{ loaded: status !== 'pending', error: null }}
+        communication={connectCommunication}
+      />
       {isLogged && (
         <DialogContent>
           <Hint>
-            <Typography>Connected wallet is {account}.</Typography>
+            <Box>
+              <Typography>Your wallet provider: &quot;{connectedWallet}&quot;.</Typography>
+              <Typography>Your wallet address: {account}.</Typography>
+            </Box>
           </Hint>
         </DialogContent>
       )}

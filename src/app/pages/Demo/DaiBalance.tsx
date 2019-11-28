@@ -7,7 +7,7 @@ import { useSubscribable } from 'utils/react';
 
 export function DaiBalance() {
   const api = useApi();
-  const [account, accountMeta] = useSubscribable(() => api.getEthAccount$(), []);
+  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
   return (
     <Loading meta={accountMeta}>

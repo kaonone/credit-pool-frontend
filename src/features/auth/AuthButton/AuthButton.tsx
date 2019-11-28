@@ -12,14 +12,16 @@ export function AuthButton() {
   const [isOpened, setIsOpened] = React.useState(false);
   const api = useApi();
 
-  const [account, accountMeta] = useSubscribable(() => api.getEthAccount$(), []);
+  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
+  const [status] = useSubscribable(() => api.web3Manager.status, [], 'pending');
+  const [connectedWallet] = useSubscribable(() => api.web3Manager.wallet, [], null);
 
-  const connectCommunication = useCommunication(api.connectToWallet, []);
+  const connectCommunication = useCommunication(api.web3Manager.connect, []);
 
   const toggleIsOpened = React.useCallback(() => setIsOpened(!isOpened), [isOpened]);
 
   const handleDisconnectClick = React.useCallback(() => {
-    api.disconnectFromWallet();
+    api.web3Manager.disconnect();
     connectCommunication.reset();
   }, [connectCommunication.reset]);
 
@@ -28,12 +30,13 @@ export function AuthButton() {
       <Button
         color="primary"
         variant="outlined"
-        disabled={!accountMeta.loaded}
+        disabled={!accountMeta.loaded || status === 'pending'}
         onClick={toggleIsOpened}
       >
         <Loading meta={accountMeta}>{account || 'Connect to wallet'}</Loading>
         <Loading
           ignoreError
+          meta={{ loaded: status !== 'pending', error: null }}
           communication={connectCommunication}
           progressVariant="circle"
           component={CustomBox}
@@ -43,6 +46,8 @@ export function AuthButton() {
         />
       </Button>
       <AuthModal
+        status={status}
+        connectedWallet={connectedWallet}
         isOpened={isOpened}
         onClose={toggleIsOpened}
         account={account}

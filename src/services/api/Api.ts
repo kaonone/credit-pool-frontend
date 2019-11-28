@@ -25,7 +25,21 @@ function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNulla
 }
 
 export class Api {
-  private web3Manager = new Web3WalletsManager();
+  public web3Manager = new Web3WalletsManager({
+    network: 'kovan',
+    infuraAccessToken: '6d0d9f2e41224239b3dce04146c256df',
+    walletConfigs: {
+      'wallet-connect': {
+        bridge: 'https://bridge.walletconnect.org',
+        rpc: {},
+        chainId: 42,
+      },
+      bitski: {
+        clientId: '45e6d1b2-f059-4ebd-8afc-3c1cfa0262a4',
+        redirectUri: 'http://localhost:8080/bitski-callback.html',
+      },
+    },
+  });
 
   private dai = createErc20(this.web3Manager.web3, '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea');
   private txDai = new BehaviorSubject<ReturnType<typeof createErc20> | null>(null);
@@ -38,18 +52,6 @@ export class Api {
         map(txWeb3 => txWeb3 && createErc20(txWeb3, '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea')),
       )
       .subscribe(this.txDai);
-  }
-
-  public getEthAccount$(): Observable<string | null> {
-    return this.web3Manager.account;
-  }
-
-  get connectToWallet() {
-    return this.web3Manager.connect;
-  }
-
-  get disconnectFromWallet() {
-    return this.web3Manager.disconnect;
   }
 
   public async transferDai$(fromAddress: string, toAddress: string, value: BN): Promise<void> {

@@ -14,7 +14,7 @@ import { DaiBalance } from './DaiBalance';
 
 export function DemoPage() {
   const api = useApi();
-  const [account, accountMeta] = useSubscribable(() => api.getEthAccount$(), [], null);
+  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, [], null);
   const [balance, balanceMeta] = useSubscribable(() => {
     return account ? api.getDaiBalance$(account) : empty();
   }, [account]);
