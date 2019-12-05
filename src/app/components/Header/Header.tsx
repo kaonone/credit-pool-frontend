@@ -2,7 +2,8 @@ import * as React from 'react';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 
 import { Back } from 'components/icons';
-import { Grid, IconButton, Typography, Box } from 'components';
+import { Grid, IconButton, Typography, Box, MetricsList, IMetric } from 'components';
+import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 
 import { useStyles } from './Header.style';
 
@@ -17,6 +18,28 @@ type IProps = IOwnProps & RouteComponentProps;
 function HeaderComponent(props: IProps) {
   const { title, backRoutePath, additionalContent } = props;
   const classes = useStyles();
+  const { t } = useTranslate();
+  const tKeys = tKeysAll.app.components.header;
+
+  const metrics: IMetric[] = React.useMemo(
+    () => [
+      {
+        title: t(tKeys.balance.getKey()),
+        value: '$2192',
+        profit: '12.81%',
+      },
+      {
+        title: t(tKeys.issued.getKey()),
+        value: '1895.2',
+      },
+      {
+        title: t(tKeys.price.getKey()),
+        value: '$12.15',
+        profit: '12.81%',
+      },
+    ],
+    [t],
+  );
 
   return (
     <div className={classes.root}>
@@ -52,17 +75,7 @@ function HeaderComponent(props: IProps) {
       <Box mt={4}>
         <Grid container alignItems="center" justify="space-between" spacing={2}>
           <Grid item>
-            <Grid container spacing={3} alignItems="center">
-              <Grid item>
-                <div className={classes.metric} />
-              </Grid>
-              <Grid item>
-                <div className={classes.metric} />
-              </Grid>
-              <Grid item>
-                <div className={classes.metric} />
-              </Grid>
-            </Grid>
+            <MetricsList metrics={metrics} />
           </Grid>
           <Grid item>
             <Grid container spacing={2} alignItems="center">
