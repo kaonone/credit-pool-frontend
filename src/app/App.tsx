@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from 'react-router';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 
 import { DemoPage } from './pages/Demo/DemoPage';
-import { OverwiewPage } from './pages/Overwiew/OverwiewPage';
+import { OverviewPage } from './pages/Overview/OverviewPage';
 import { ActivitiesPage } from './pages/Activities/ActivitiesPage';
 import { LoansPage } from './pages/Loans/LoansPage';
 import { KeepersPage } from './pages/Keepers/KeepersPage';
@@ -22,11 +22,11 @@ export function App() {
         {process.env.NODE_ENV !== 'production' && (
           <Route exact path={routes.demo.getRoutePath()} component={DemoPage} />
         )}
-        <Route exact path={routes.overwiew.getRoutePath()} component={OverwiewPage} />
+        <Route exact path={routes.overview.getRoutePath()} component={OverviewPage} />
         <Route exact path={routes.activities.getRoutePath()} component={ActivitiesPage} />
         <Route exact path={routes.loans.getRoutePath()} component={LoansPage} />
         <Route exact path={routes.keepers.getRoutePath()} component={KeepersPage} />
-        <Redirect to={routes.overwiew.getRedirectPath()} />
+        <Redirect to={routes.overview.getRedirectPath()} />
       </Switch>
     </BaseLayout>
   );
