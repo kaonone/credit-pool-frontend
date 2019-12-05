@@ -1,5 +1,9 @@
 // tslint:disable:max-line-length
 const en = {
+  app: {
+    mainTitle: 'Akropolis Pool',
+    pages: {},
+  },
   features: {
     notifications: {
       'dai.transfer': {
