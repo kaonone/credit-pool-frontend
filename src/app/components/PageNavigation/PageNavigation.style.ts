@@ -1,9 +1,14 @@
-import { makeStyles } from 'utils/styles';
+import { makeStyles, colors } from 'utils/styles';
 
 export const useStyles = makeStyles(() => ({
   tab: {
     textTransform: 'none',
     fontSize: '1rem',
-    fontWeight: 600,
+    fontWeight: 500,
+    color: colors.topaz,
+  },
+
+  tabsFlexContainer: {
+    borderBottom: `2px solid ${colors.athensGray}`,
   },
 }));

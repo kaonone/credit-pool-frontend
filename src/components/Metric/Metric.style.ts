@@ -31,6 +31,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
   metricTitle: {
     lineHeight: `${theme.spacing(3.5)}px`,
     textTransform: 'uppercase',
+    opacity: 0.8,
   },
 
   metricValue: {
