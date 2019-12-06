@@ -9,8 +9,12 @@ export { default as DialogContentText } from '@material-ui/core/DialogContentTex
 export { default as DialogTitle } from '@material-ui/core/DialogTitle';
 export { default as Grid } from '@material-ui/core/Grid';
 export { default as Typography } from '@material-ui/core/Typography';
+export { default as IconButton } from '@material-ui/core/IconButton';
+export { default as Tabs } from '@material-ui/core/Tabs';
+export { default as Tab } from '@material-ui/core/Tab';
 
 export * from './ErrorBoundary';
 export * from './Hint/Hint';
 export * from './Loading';
 export * from './Snackbar/Snackbar';
+export * from './RowsLayout/RowsLayout';
