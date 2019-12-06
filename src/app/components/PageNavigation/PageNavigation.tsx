@@ -13,10 +13,15 @@ function PageNavigation() {
   return (
     <Route path="/:page">
       {({ match }: RouteComponentProps<{ page: string }>) => (
-        <Tabs value={match && match.params.page} indicatorColor="primary" textColor="primary">
+        <Tabs
+          value={match && match.params.page}
+          indicatorColor="primary"
+          textColor="primary"
+          classes={{ flexContainer: classes.tabsFlexContainer }}
+        >
           <Tab
             className={classes.tab}
-            label="Co-op Overview"
+            label="Pool Overview"
             component={Link}
             value={routes.overview.getElementKey()}
             to={routes.overview.getRedirectPath()}

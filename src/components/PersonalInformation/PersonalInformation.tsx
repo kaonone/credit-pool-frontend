@@ -46,10 +46,10 @@ function PersonalInformation() {
             {t(tKeys.title.getKey())}
           </Typography>
         </Box>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} className={classes.metrics}>
           {metrics.map(({ title, value, profit }) => (
             <Grid item xs={12}>
-              <Metric title={title} value={value} profit={profit} theme="light" />
+              <Metric title={title} value={value} profit={profit} />
             </Grid>
           ))}
         </Grid>
