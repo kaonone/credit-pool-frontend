@@ -15,6 +15,7 @@ interface IOwnProps {
 
 type IProps = IOwnProps & RouteComponentProps;
 
+// TODO: refactor this
 function HeaderComponent(props: IProps) {
   const { title, backRoutePath, additionalContent } = props;
   const classes = useStyles();

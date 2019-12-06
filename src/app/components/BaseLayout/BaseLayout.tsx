@@ -30,11 +30,15 @@ function BaseLayout(props: IProps) {
   const classes = useStyles();
 
   return (
-    <RowsLayout spacing={4} className={classes.rootRowsLayout}>
+    <RowsLayout spacing={3} className={classes.rootRowsLayout}>
       <RowsLayout.ContentBlock>
         <Header {...headerProps} />
-        {!hidePageNavigation && <PageNavigation />}
       </RowsLayout.ContentBlock>
+      {!hidePageNavigation && (
+        <RowsLayout.ContentBlock>
+          <PageNavigation />
+        </RowsLayout.ContentBlock>
+      )}
       <RowsLayout.ContentBlock fillIn>{children}</RowsLayout.ContentBlock>
     </RowsLayout>
   );
