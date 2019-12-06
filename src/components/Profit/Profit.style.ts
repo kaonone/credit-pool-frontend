@@ -1,10 +1,11 @@
-import { makeStyles, colors } from 'utils/styles';
+import { makeStyles, colors, Theme } from 'utils/styles';
 
-export const useStyles = makeStyles(() => ({
+export const useStyles = makeStyles((theme: Theme) => ({
   icon: {
-    fontSize: '1.3rem',
+    ...theme.typography.h6,
     color: colors.shamrock,
   },
+
   value: {
     color: colors.shamrock,
   },
