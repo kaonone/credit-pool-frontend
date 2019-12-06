@@ -14,7 +14,7 @@ function Profit(props: IProps) {
   const classes = useStyles();
 
   return (
-    <Grid container alignItems="flex-end">
+    <Grid container alignItems="center">
       <Grid item>
         <CallMadeIcon className={classes.icon} />
       </Grid>
