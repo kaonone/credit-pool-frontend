@@ -6,7 +6,7 @@ import { Profit } from 'components/Profit/Profit';
 
 import { useStyles } from './Metric.style';
 
-interface IProps {
+export interface IProps {
   title: string;
   value: React.ReactNode;
   profit?: React.ReactNode;

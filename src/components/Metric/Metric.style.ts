@@ -13,6 +13,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
 
   metricValue: {
     lineHeight: `${theme.spacing(4)}px`,
-    fontWeight: 600,
+    fontWeight: 500,
   },
 }));

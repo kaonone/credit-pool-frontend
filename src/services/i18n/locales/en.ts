@@ -40,6 +40,15 @@ const en = {
       isPositiveNumber: 'Must be positive number',
     },
   },
+  components: {
+    personalInformation: {
+      title: 'Personal Information',
+      deposit: 'deposit',
+      liquid: 'liquid ptk',
+      staked: 'staked ptk',
+      credit: 'credit',
+    },
+  },
 };
 
 export { en };

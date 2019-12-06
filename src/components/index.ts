@@ -19,3 +19,4 @@ export * from './Loading';
 export * from './Snackbar/Snackbar';
 export * from './RowsLayout/RowsLayout';
 export * from './MetricsList/MetricsList';
+export * from './PersonalInformation/PersonalInformation';
