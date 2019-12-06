@@ -3,6 +3,13 @@ const en = {
   app: {
     mainTitle: 'Akropolis Pool',
     pages: {},
+    components: {
+      header: {
+        balance: 'balance',
+        issued: 'issued ptk',
+        price: 'ptk price',
+      },
+    },
   },
   features: {
     notifications: {

@@ -18,3 +18,4 @@ export * from './Hint/Hint';
 export * from './Loading';
 export * from './Snackbar/Snackbar';
 export * from './RowsLayout/RowsLayout';
+export * from './MetricsList/MetricsList';
