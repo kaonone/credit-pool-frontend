@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { Hint } from 'components';
+import { ActivitiesCard } from 'components';
 
 export function ActivitiesPage() {
-  return <Hint>Coming soon</Hint>;
+  return <ActivitiesCard />;
 }

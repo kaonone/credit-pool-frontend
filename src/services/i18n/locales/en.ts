@@ -48,6 +48,15 @@ const en = {
       staked: 'staked ptk',
       credit: 'credit',
     },
+    activitiesCard: {
+      lend: 'lend',
+      to: 'to',
+      apr: 'apr',
+      staked: 'staked',
+      collateral: 'Collateral',
+      timeLeft: 'Time left',
+      expansionPanelTitle: 'Reason',
+    },
   },
 };
 
