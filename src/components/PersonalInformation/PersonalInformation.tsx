@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { IProps as IMetric, Metric } from 'components/Metric/Metric';
+import { CashMetric } from 'components/CashMetric/CashMetric';
 
 import { useStyles } from './PersonalInformation.style';
 
@@ -15,24 +15,28 @@ function PersonalInformation() {
   const { t } = useTranslate();
   const tKeys = tKeysAll.components.personalInformation;
 
-  const metrics: IMetric[] = React.useMemo(
+  const metrics = React.useMemo(
     () => [
       {
         title: t(tKeys.deposit.getKey()),
-        value: '185.34 DAI',
+        value: '18534000000000000',
+        symbol: 'DAI',
       },
       {
         title: t(tKeys.liquid.getKey()),
-        value: '185.34 PTK',
-        profit: '$285.34',
+        value: '18534000000000000',
+        symbol: 'PTK',
+        profit: 285.34,
       },
       {
         title: t(tKeys.staked.getKey()),
-        value: '185.34 PTK',
+        value: '18534000000000000',
+        symbol: 'PTK',
       },
       {
         title: t(tKeys.credit.getKey()),
-        value: '280 DAI',
+        value: '280000000000000000',
+        symbol: 'DAI',
       },
     ],
     [t],
@@ -47,9 +51,9 @@ function PersonalInformation() {
           </Typography>
         </Box>
         <Grid container spacing={2} className={classes.metrics}>
-          {metrics.map(({ title, value, profit }) => (
-            <Grid item xs={12}>
-              <Metric title={title} value={value} profit={profit} />
+          {metrics.map(({ title, value, symbol, profit }, index) => (
+            <Grid key={index} item xs={12}>
+              <CashMetric title={title} value={value} symbol={symbol} profit={profit} />
             </Grid>
           ))}
         </Grid>

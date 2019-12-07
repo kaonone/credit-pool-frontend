@@ -56,6 +56,11 @@ const en = {
       collateral: 'Collateral',
       timeLeft: 'Time left',
       expansionPanelTitle: 'Reason',
+      status: {
+        APPROVED: 'approved',
+        DECLINED: 'declined',
+        PENDING: 'pending',
+      },
     },
   },
 };

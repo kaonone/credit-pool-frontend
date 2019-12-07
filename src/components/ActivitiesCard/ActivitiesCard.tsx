@@ -6,9 +6,10 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 
-import { useTranslate, tKeys as tKeysAll, ITranslateKey } from 'services/i18n';
+import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
+import { CashMetric } from 'components/CashMetric/CashMetric';
+import { Metric } from 'components/Metric/Metric';
 import { ShortAddress } from 'components/ShortAddress/ShortAddress';
-import { Loading } from 'components/Loading';
 import {
   LendIcon,
   ContainedCircleArrow,
@@ -16,26 +17,42 @@ import {
   Checked,
   ContainedCross,
 } from 'components/icons';
-import { attachStaticFields } from 'utils/object';
-import { filterChildrenByComponent } from 'utils/react';
 
 import { useStyles } from './ActivitiesCard.style';
-import { Column } from './Column/Column';
 import { Progress } from './Progress/Progress';
 
 const tKeys = tKeysAll.components.activitiesCard;
 
-interface IOwnProps {}
+interface IOwnProps {
+  lendValue: string;
+  address: string;
+  aprValue: number;
+  stakedValue: string;
+  neededValue: string;
+  progress: number;
+  timeLeft: number;
+  expansionPanelDetails: string;
+  status: 'APPROVED' | 'DECLINED' | 'PENDING';
+}
 
 function ActivitiesCard(props: IOwnProps) {
-  const expansionPanelDetails =
-    'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?';
+  const {
+    lendValue,
+    address,
+    aprValue,
+    stakedValue,
+    neededValue,
+    progress,
+    timeLeft,
+    expansionPanelDetails,
+    status,
+  } = props;
 
   const classes = useStyles();
   const { t } = useTranslate();
   const [expanded, setExpanded] = React.useState(false);
 
-  const isOver = false;
+  const isOver = status === 'APPROVED' || status === 'DECLINED';
 
   const handleExpansionPanelChange = (_event: React.ChangeEvent<{}>, isExpanded: boolean) => {
     setExpanded(isExpanded);
@@ -44,28 +61,29 @@ function ActivitiesCard(props: IOwnProps) {
   return (
     <Grid className={classes.root} container wrap="nowrap">
       <Grid item xs={9} className={classes.mainInformation}>
-        <Grid container spacing={3}>
-          <Column
-            xs={2}
-            title={t(tKeys.lend.getKey())}
-            value="120 DAI"
-            icon={<LendIcon style={{ fontSize: '19px' }} />}
-          />
-          <Column
-            xs={3}
-            title={t(tKeys.to.getKey())}
-            value={
-              <ShortAddress address="0x0000000000000000000000000000000000000000000000000000000000000000" />
-            }
-          />
-          <Column xs={2} title={t(tKeys.apr.getKey())} value="15.8%" />
-          <Column
-            xs={4}
-            title={t(tKeys.staked.getKey())}
-            value="170PTK"
-            subValue="~230PTK needed"
-            isHighlighted
-          />
+        <Grid container spacing={3} className={classes.metrics}>
+          <Grid item xs={2}>
+            <CashMetric
+              title={t(tKeys.lend.getKey())}
+              value={lendValue}
+              symbol="DAI"
+              icon={<LendIcon className={classes.lendIcon} />}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <Metric title={t(tKeys.to.getKey())} value={<ShortAddress address={address} />} />
+          </Grid>
+          <Grid item xs={2}>
+            <Metric title={t(tKeys.apr.getKey())} value={`${aprValue}%`} />
+          </Grid>
+          <Grid item xs={5} className={classes.highlightedMetric}>
+            <CashMetric
+              title={t(tKeys.staked.getKey())}
+              value={stakedValue}
+              symbol="PTK"
+              needed={neededValue}
+            />
+          </Grid>
           <Grid item xs={12}>
             <ExpansionPanel
               onChange={handleExpansionPanelChange}
@@ -92,13 +110,19 @@ function ActivitiesCard(props: IOwnProps) {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={3} className={classes.voting}>
+      <Grid item xs={3} className={classes.collateral}>
         {isOver ? (
           <Grid container spacing={3} justify="center" direction="column">
-            <Grid item />
+            <Grid item>
+              <Grid container wrap="nowrap" alignItems="center" justify="center">
+                {status === 'APPROVED' && <Checked className={classes.votingForIcon} />}
+                {status === 'DECLINED' && <ContainedCross className={classes.votingAgainstIcon} />}
+                <Typography variant="h6">{t(tKeys.status[status].getKey())}</Typography>
+              </Grid>
+            </Grid>
           </Grid>
         ) : (
-          <Progress percent={85} timeLeft={15} />
+          <Progress percent={progress} timeLeft={timeLeft} />
         )}
       </Grid>
     </Grid>

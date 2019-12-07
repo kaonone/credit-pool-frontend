@@ -27,7 +27,7 @@ function ShortAddress({ address }: { address: string }) {
       placement="bottom"
     >
       <CopyToClipboard text={address} onCopy={handleCopy}>
-        <span>{shortAddress}</span>
+        <span className={classes.shortAddress}>{shortAddress}</span>
       </CopyToClipboard>
     </Tooltip>
   );

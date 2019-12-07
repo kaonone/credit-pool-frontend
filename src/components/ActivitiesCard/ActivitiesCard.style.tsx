@@ -11,7 +11,20 @@ export const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(2),
   },
 
-  voting: {
+  metrics: {
+    color: colors.haiti,
+  },
+
+  highlightedMetric: {
+    color: colors.royalPurple,
+  },
+
+  lendIcon: {
+    height: theme.spacing(2.5),
+    display: 'block',
+  },
+
+  collateral: {
     borderLeft: `solid ${colors.athensGray} 1px`,
     padding: theme.spacing(2),
   },

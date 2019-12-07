@@ -1,4 +1,4 @@
-import { makeStyles, Theme } from 'utils/styles';
+import { makeStyles, Theme, colors } from 'utils/styles';
 
 export const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -12,7 +12,16 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
 
   metricValue: {
+    display: 'inline-block',
+    verticalAlign: 'baseline',
     lineHeight: `${theme.spacing(4)}px`,
     fontWeight: 500,
+  },
+
+  metricSubValue: {
+    display: 'inline-block',
+    verticalAlign: 'baseline',
+    marginLeft: theme.spacing(1),
+    color: colors.frenchGray,
   },
 }));
