@@ -24,6 +24,16 @@ const en = {
         error: 'dai.approve transaction failed',
       },
     },
+    cashExchange: {
+      cashBuyingForm: {
+        title: 'Buy cash',
+        placeholder: 'Enter sum',
+      },
+      cashSellingForm: {
+        title: 'Sell cash',
+        placeholder: 'Enter sum',
+      },
+    },
   },
   utils: {
     validation: {
