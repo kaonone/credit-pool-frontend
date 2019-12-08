@@ -1,5 +1,4 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
 import CallMadeIcon from '@material-ui/icons/CallMade';
 import Typography from '@material-ui/core/Typography';
 
@@ -14,16 +13,12 @@ function Profit(props: IProps) {
   const classes = useStyles();
 
   return (
-    <Grid container alignItems="center">
-      <Grid item>
-        <CallMadeIcon className={classes.icon} />
-      </Grid>
-      <Grid item>
-        <Typography variant="h6" component="span" className={classes.value}>
-          {value}
-        </Typography>
-      </Grid>
-    </Grid>
+    <div>
+      <CallMadeIcon className={classes.icon} />
+      <Typography variant="h6" component="span" className={classes.value}>
+        {`${value}%`}
+      </Typography>
+    </div>
   );
 }
 

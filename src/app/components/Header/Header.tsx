@@ -25,17 +25,23 @@ function HeaderComponent(props: IProps) {
     () => [
       {
         title: t(tKeys.balance.getKey()),
-        value: '$2192',
-        profit: '12.81%',
+        value: '2192000000000000000',
+        isCashMetric: true,
+        profit: 12.81,
+        symbol: '$',
       },
       {
         title: t(tKeys.issued.getKey()),
-        value: '1895.2',
+        value: '1895200000000000000',
+        isCashMetric: true,
+        symbol: 'PTK',
       },
       {
         title: t(tKeys.price.getKey()),
-        value: '$12.15',
-        profit: '12.81%',
+        value: '12150000000000000',
+        isCashMetric: true,
+        profit: 12.81,
+        symbol: '$',
       },
     ],
     [t],

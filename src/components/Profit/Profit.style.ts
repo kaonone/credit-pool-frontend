@@ -3,7 +3,8 @@ import { makeStyles, colors, Theme } from 'utils/styles';
 export const useStyles = makeStyles((theme: Theme) => ({
   icon: {
     ...theme.typography.h6,
-    display: 'block',
+    position: 'relative',
+    top: '.125em;',
     color: colors.shamrock,
   },
 
