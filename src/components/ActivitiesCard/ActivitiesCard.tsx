@@ -62,7 +62,7 @@ function ActivitiesCard(props: IOwnProps) {
     <Grid className={classes.root} container wrap="nowrap">
       <Grid item xs={9} className={classes.mainInformation}>
         <Grid container spacing={3} className={classes.metrics}>
-          <Grid item xs={2}>
+          <Grid item xs>
             <CashMetric
               title={t(tKeys.lend.getKey())}
               value={lendValue}
@@ -70,13 +70,13 @@ function ActivitiesCard(props: IOwnProps) {
               icon={<LendIcon className={classes.lendIcon} />}
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs>
             <Metric title={t(tKeys.to.getKey())} value={<ShortAddress address={address} />} />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs>
             <Metric title={t(tKeys.apr.getKey())} value={`${aprValue}%`} />
           </Grid>
-          <Grid item xs={5} className={classes.highlightedMetric}>
+          <Grid item xs className={classes.highlightedMetric}>
             <CashMetric
               title={t(tKeys.staked.getKey())}
               value={stakedValue}
@@ -94,16 +94,16 @@ function ActivitiesCard(props: IOwnProps) {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                {expanded && <ContainedCircleArrow className={classes.toggleExpandIcon} />}
-                {!expanded && <OutlinedCircleArrow className={classes.toggleExpandIcon} />}
-                <div className={classes.ellipsisRow}>
-                  <Typography className={classes.showButtonText} component="span" noWrap>
-                    {`${t(tKeys.expansionPanelTitle.getKey())}: `}
+                <Grid item xs className={classes.summaryContent}>
+                  <Typography noWrap>
+                    {expanded && <ContainedCircleArrow className={classes.toggleExpandIcon} />}
+                    {!expanded && <OutlinedCircleArrow className={classes.toggleExpandIcon} />}
+                    <span className={classes.summaryTitle}>
+                      {`${t(tKeys.expansionPanelTitle.getKey())}: `}
+                    </span>
+                    {!expanded && expansionPanelDetails}
                   </Typography>
-                  <Typography className={classes.detailsShortText} component="span" noWrap>
-                    {expansionPanelDetails}
-                  </Typography>
-                </div>
+                </Grid>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>{expansionPanelDetails}</ExpansionPanelDetails>
             </ExpansionPanel>

@@ -10,5 +10,5 @@ export const useStyles = makeStyles(() => {
       cursor: 'pointer',
       borderBottom: '1px dashed',
     },
-  } as const;
+  };
 });

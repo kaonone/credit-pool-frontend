@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { useStyles } from './ProgressBar.style';
 
@@ -23,9 +24,11 @@ function ProgressBar(props: IProps) {
           {`${value}%`}
         </Typography>
       </Grid>
-      <div className={classes.progressBar}>
-        <div className={classes.progressBarValue} style={{ width: `${value.toFixed(2)}%` }} />
-      </div>
+      <LinearProgress
+        value={value}
+        variant="determinate"
+        classes={{ root: classes.progressRoot, barColorPrimary: classes.progressBar }}
+      />
     </div>
   );
 }

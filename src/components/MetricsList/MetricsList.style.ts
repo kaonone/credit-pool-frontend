@@ -1,6 +1,6 @@
-import { makeStyles } from 'utils/styles';
+import { makeStyles, Theme } from 'utils/styles';
 
-export const useStyles = makeStyles(() => {
+export const useStyles = makeStyles((theme: Theme) => {
   return {
     divider: {
       backgroundColor: 'currentColor',
@@ -9,6 +9,10 @@ export const useStyles = makeStyles(() => {
 
     dividerItem: {
       alignSelf: 'stretch',
+    },
+
+    metric: {
+      minWidth: theme.spacing(18),
     },
   };
 });
