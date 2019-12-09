@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 
-import { Back } from 'components/icons';
+import { Back, BuyCashIcon, SellCashIcon } from 'components/icons';
 import { Grid, IconButton, Typography, MetricsList, IMetric } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
+import { CashExchangeButton, CashSellingForm, CashBuyingForm } from 'features/cashExchange';
 
 import { useStyles } from './Header.style';
 
@@ -83,10 +84,18 @@ function HeaderComponent(props: IProps) {
             <Grid item>
               <Grid container spacing={2} alignItems="center">
                 <Grid item>
-                  <div className={classes.button} />
+                  <CashExchangeButton
+                    text="Sell PTK"
+                    icon={<SellCashIcon />}
+                    ModalContent={CashSellingForm}
+                  />
                 </Grid>
                 <Grid item>
-                  <div className={classes.button} />
+                  <CashExchangeButton
+                    text="Buy PTK"
+                    icon={<BuyCashIcon />}
+                    ModalContent={CashBuyingForm}
+                  />
                 </Grid>
               </Grid>
             </Grid>

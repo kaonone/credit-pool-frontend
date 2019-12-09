@@ -25,6 +25,10 @@ const en = {
       },
     },
     cashExchange: {
+      cashExchangeForm: {
+        cancelButtonText: 'Cancel',
+        givenAmountText: 'You get ~%{formattedAmount}',
+      },
       cashBuyingForm: {
         title: 'Buy cash',
         placeholder: 'Enter sum',
@@ -32,6 +36,11 @@ const en = {
       cashSellingForm: {
         title: 'Sell cash',
         placeholder: 'Enter sum',
+      },
+      acceptCashExchangeForm: {
+        confirmMessage: 'Are you sure you want exchange %{givenAmount} on %{receivedAmount}?',
+        no: 'no',
+        yes: 'yes',
       },
     },
   },

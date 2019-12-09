@@ -6,3 +6,5 @@ export { OutlinedCircleArrow } from './OutlinedCircleArrow';
 export { Checked } from './Checked';
 export { ContainedCross } from './ContainedCross';
 export { LendIcon } from './LendIcon';
+export { SellCashIcon } from './SellCashIcon';
+export { BuyCashIcon } from './BuyCashIcon';

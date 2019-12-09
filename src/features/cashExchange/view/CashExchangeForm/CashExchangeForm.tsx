@@ -1,10 +1,10 @@
-import React, { useMemo, useCallback, useState } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import BN from 'bn.js';
-import { Form } from 'react-final-form';
-import R from 'ramda';
+import { Form, FormSpy } from 'react-final-form';
+import * as R from 'ramda';
 
-import { Grid, Hint, Typography, Button, CircularProgress } from 'components';
 import { DecimalsField } from 'components/form';
+import { Grid, Hint, Typography, Button, CircularProgress } from 'components';
 import {
   validateInteger,
   validatePositiveNumber,
@@ -12,6 +12,7 @@ import {
   composeValidators,
 } from 'utils/validators';
 import { formatBalance } from 'utils/format';
+import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 
 export interface IFormData {
   amount: string;
@@ -28,19 +29,41 @@ interface IProps {
   targetSymbol: string;
   placeholder: string;
   onSubmit: (values: IFormData) => void;
+  onCancel: () => void;
   convertCash: (value: string) => string;
 }
 
 function CashExchangeForm(props: IProps) {
-  const { title, maxValue, sourceSymbol, targetSymbol, onSubmit, convertCash, placeholder } = props;
+  const {
+    title,
+    maxValue,
+    sourceSymbol,
+    targetSymbol,
+    onSubmit,
+    onCancel,
+    convertCash,
+    placeholder,
+  } = props;
+
+  const { t } = useTranslate();
+  const tKeys = tKeysAll.features.cashExchange.cashExchangeForm;
+
+  const formatValue = (value: number | BN) => {
+    return formatBalance({
+      amountInBaseUnits: value as BN,
+      baseDecimals: 0,
+      tokenSymbol: targetSymbol,
+    });
+  };
 
   const validateAmount = useMemo(() => {
     return composeValidators(
       validateInteger,
       validatePositiveNumber,
-      R.curry(lessThenOrEqual)(maxValue, R.__, formatBalance),
+      // eslint-disable-next-line no-underscore-dangle
+      R.curry(lessThenOrEqual)(maxValue, R.__, formatValue),
     );
-  }, [maxValue]);
+  }, [maxValue, validateInteger, validatePositiveNumber, R, targetSymbol]);
 
   const initialValues = useMemo<IFormData>(
     () => ({
@@ -49,16 +72,18 @@ function CashExchangeForm(props: IProps) {
     [],
   );
 
-  const [expectedConvertedAmount, setExpectedConvertedAmount] = useState('');
+  const renderCalculatedAmountMessage = useCallback(
+    (value: string) => {
+      const formattedAmount = formatBalance({
+        amountInBaseUnits: convertCash(value),
+        baseDecimals: 0,
+        tokenSymbol: targetSymbol,
+      });
 
-  const handleDecimalsFieldChange = useCallback((value: string) => {
-    const formattedAmount = formatBalance({
-      amountInBaseUnits: convertCash(value),
-      baseDecimals: 0,
-      tokenSymbol: targetSymbol,
-    });
-    setExpectedConvertedAmount(formattedAmount);
-  }, []);
+      return t(tKeys.givenAmountText.getKey(), { formattedAmount });
+    },
+    [formatBalance, convertCash, targetSymbol],
+  );
 
   return (
     <Form
@@ -80,12 +105,20 @@ function CashExchangeForm(props: IProps) {
                 baseUnitName={sourceSymbol}
                 name={fieldNames.amount}
                 placeholder={placeholder}
-                onChange={handleDecimalsFieldChange}
               />
-              <Hint>
-                <Typography>{expectedConvertedAmount}</Typography>
-              </Hint>
             </Grid>
+            <FormSpy subscription={{ values: true }}>
+              {({ values }) =>
+                (values.amount && (
+                  <Grid item xs={12}>
+                    <Hint>
+                      <Typography>{renderCalculatedAmountMessage(values.amount)}</Typography>
+                    </Hint>
+                  </Grid>
+                )) ||
+                null
+              }
+            </FormSpy>
             {!!submitError && (
               <Grid item xs={12}>
                 <Hint>
@@ -93,7 +126,12 @@ function CashExchangeForm(props: IProps) {
                 </Hint>
               </Grid>
             )}
-            <Grid item xs={12}>
+            <Grid item xs={6}>
+              <Button variant="outlined" color="primary" fullWidth onClick={onCancel}>
+                {t(tKeys.cancelButtonText.getKey())}
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
               <Button
                 variant="contained"
                 color="primary"
