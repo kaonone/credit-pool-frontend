@@ -23,6 +23,16 @@ const en = {
         success: 'dai.approve transaction succeeded',
         error: 'dai.approve transaction failed',
       },
+      'dai.sellPtk': {
+        pending: 'dai.sellPtk transaction pending',
+        success: 'dai.sellPtk transaction succeeded',
+        error: 'dai.sellPtk transaction failed',
+      },
+      'dai.buyPtk': {
+        pending: 'dai.buyPtk transaction pending',
+        success: 'dai.buyPtk transaction succeeded',
+        error: 'dai.buyPtk transaction failed',
+      },
     },
     cashExchange: {
       cashExchangeForm: {
@@ -37,7 +47,8 @@ const en = {
         title: 'Sell cash',
         placeholder: 'Enter sum',
       },
-      acceptCashExchangeForm: {
+      confirmCashExchangeForm: {
+        title: 'Confirm exchanging',
         confirmMessage: 'Are you sure you want exchange %{givenAmount} on %{receivedAmount}?',
         no: 'no',
         yes: 'yes',

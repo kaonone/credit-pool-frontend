@@ -16,7 +16,7 @@ interface IProps {
 function ConfirmCashExchangeForm(props: IProps) {
   const { givenAmount, sourceSymbol, targetSymbol, receivedAmount, onCancel, onClick } = props;
   const { t } = useTranslate();
-  const tKeys = tKeysAll.features.cashExchange.acceptCashExchangeForm;
+  const tKeys = tKeysAll.features.cashExchange.confirmCashExchangeForm;
 
   const confirmMessage = t(tKeys.confirmMessage.getKey(), {
     givenAmount: formatBalance({
@@ -34,6 +34,11 @@ function ConfirmCashExchangeForm(props: IProps) {
   return (
     <>
       <Grid container justify="center" spacing={2}>
+        <Grid item xs={12}>
+          <Typography variant="h5" noWrap gutterBottom>
+            {t(tKeys.title.getKey())}
+          </Typography>
+        </Grid>
         <Grid item xs={12}>
           <Hint>
             <Typography>{confirmMessage}</Typography>

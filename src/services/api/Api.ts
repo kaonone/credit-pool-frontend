@@ -84,6 +84,44 @@ export class Api {
     await promiEvent;
   }
 
+  public async sellPtk$(address: string, value: BN): Promise<void> {
+    const promiEvent = new Promise(resolve =>
+      setTimeout(() => {
+        resolve();
+        // eslint-disable-next-line no-console
+        console.log('Sell ptk transaction');
+      }, 1000),
+    );
+
+    (promiEvent as any).on = () => {};
+
+    this.pushToSubmittedTransactions$('dai.sellPtk', promiEvent as PromiEvent<boolean>, {
+      address,
+      value,
+    });
+
+    await promiEvent;
+  }
+
+  public async buyPtk$(address: string, value: BN): Promise<void> {
+    const promiEvent = new Promise(resolve =>
+      setTimeout(() => {
+        resolve();
+        // eslint-disable-next-line no-console
+        console.log('Buy ptk transaction');
+      }, 1000),
+    );
+
+    (promiEvent as any).on = () => {};
+
+    this.pushToSubmittedTransactions$('dai.buyPtk', promiEvent as PromiEvent<boolean>, {
+      address,
+      value,
+    });
+
+    await promiEvent;
+  }
+
   public getSubmittedTransaction$() {
     return this.submittedTransaction;
   }

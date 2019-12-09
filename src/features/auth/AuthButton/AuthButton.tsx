@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ButtonProps } from '@material-ui/core/Button';
 
 import { useApi } from 'services/api';
 import { useSubscribable, useCommunication, withProps } from 'utils/react';
@@ -8,7 +9,8 @@ import { AuthModal } from './components/AuthModal';
 
 const CustomBox = withProps(Box, { ml: 1.5, display: 'flex' });
 
-export function AuthButton() {
+export function AuthButton(props: ButtonProps) {
+  const { color } = props;
   const [isOpened, setIsOpened] = React.useState(false);
   const api = useApi();
 
@@ -28,7 +30,7 @@ export function AuthButton() {
   return (
     <>
       <Button
-        color="primary"
+        color={color}
         variant="outlined"
         disabled={!accountMeta.loaded || status === 'pending'}
         onClick={toggleIsOpened}

@@ -27,7 +27,7 @@ function TransactionsNotifications() {
         await submittedTransaction.promiEvent;
         enqueueSnackbar(t(tKeys[type].success.getKey()), { variant: 'success' });
       } catch {
-        enqueueSnackbar(t(tKeys[type].error.getKey()), { variant: 'error' });
+        enqueueSnackbar(t(tKeys[type].error.getKey()), { persist: true, variant: 'error' });
       } finally {
         pendingNotificationKey && closeSnackbar(pendingNotificationKey);
       }

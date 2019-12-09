@@ -6,10 +6,9 @@ export type SubmittedTransaction =
       'dai.transfer',
       { fromAddress: string; toAddress: string; value: BN }
     >
-  | IGenericSubmittedTransaction<
-      'dai.approve',
-      { spender: string; fromAddress: string; value: BN }
-    >;
+  | IGenericSubmittedTransaction<'dai.approve', { spender: string; fromAddress: string; value: BN }>
+  | IGenericSubmittedTransaction<'dai.sellPtk', { address: string; value: BN }>
+  | IGenericSubmittedTransaction<'dai.buyPtk', { address: string; value: BN }>;
 
 export interface IGenericSubmittedTransaction<T extends string, P = void> {
   type: T;
