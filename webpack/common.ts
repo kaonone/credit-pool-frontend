@@ -6,6 +6,11 @@ import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import autoprefixer from 'autoprefixer';
+import * as postcssSCSS from 'postcss-scss';
+import stylelint from 'stylelint';
+import doiuse from 'doiuse';
 
 const forGhPages = true;
 const pageTitle = 'Ethereum starter kit';
@@ -57,10 +62,48 @@ const config: webpack.Configuration = {
           limit: 10000,
         },
       },
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: () => {
+                return [autoprefixer()];
+              },
+            },
+          },
+          'sass-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              syntax: postcssSCSS,
+              plugins: () => {
+                return [
+                  stylelint,
+                  doiuse({
+                    // https://github.com/browserslist/browserslist
+                    // to view resulting browsers list, use the command in terminal `npx browserslist "defaults, not ie > 0"`
+                    browsers: ['defaults', 'not op_mini all', 'not ie > 0', 'not ie_mob > 0'],
+                    ignore: [],
+                    ignoreFiles: ['**/normalize.css'],
+                  }),
+                ];
+              },
+            },
+          },
+        ],
+      },
     ],
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin({
+      filename: `css/[name].css`,
+      chunkFilename: `css/[id].css`,
+    }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'core/index.html',
