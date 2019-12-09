@@ -34,7 +34,7 @@ function MetricsList(props: IProps) {
               <Divider orientation="vertical" className={classes.divider} />
             </Grid>
           )}
-          <Grid item>
+          <Grid item className={classes.metric}>
             {isCashMetric && symbol ? (
               <CashMetric title={title} value={value} profit={profit} symbol={symbol} />
             ) : (

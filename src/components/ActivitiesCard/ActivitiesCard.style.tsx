@@ -20,7 +20,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
 
   lendIcon: {
-    height: theme.spacing(2.5),
+    fontSize: theme.spacing(2.5),
     display: 'block',
   },
 
@@ -30,9 +30,10 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
 
   toggleExpandIcon: {
+    position: 'relative',
+    top: '0.25em',
     marginRight: theme.spacing(1),
     color: colors.royalPurple,
-    cursor: 'pointer',
   },
 
   expansionPanel: {
@@ -40,23 +41,15 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
 
   expansionPanelSummary: {
-    minWidth: 0,
-    flexWrap: 'nowrap',
     padding: 0,
   },
 
-  ellipsisRow: {
-    maxWidth: theme.spacing(80),
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-  },
-
-  detailsShortText: {
+  summaryContent: {
+    width: 0,
     color: colors.topaz,
   },
 
-  showButtonText: {
+  summaryTitle: {
     color: colors.royalPurple,
   },
 

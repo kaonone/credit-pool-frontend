@@ -12,15 +12,13 @@ export const useStyles = makeStyles((theme: Theme) => ({
     color: colors.shamrock,
   },
 
-  progressBar: {
+  progressRoot: {
     borderRadius: theme.spacing(0.5),
     height: theme.spacing(1),
-    overflow: 'hidden',
     backgroundColor: colors.athensGray,
   },
 
-  progressBarValue: {
-    height: '100%',
+  progressBar: {
     backgroundColor: colors.shamrock,
   },
 }));

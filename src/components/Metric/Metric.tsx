@@ -22,17 +22,17 @@ function Metric(props: IProps) {
           <Grid container spacing={1} alignItems="center">
             {icon && <Grid item>{icon}</Grid>}
             <Grid item>
-              <Typography variant="subtitle2" component="h6" className={classes.metricTitle}>
+              <Typography variant="subtitle2" component="h6" className={classes.title}>
                 {title}
               </Typography>
             </Grid>
           </Grid>
-          <div>
-            <Typography variant="h5" component="span" className={classes.metricValue}>
+          <div className={classes.values}>
+            <Typography variant="h5" component="span" className={classes.value}>
               {value}
             </Typography>
             {subValue && (
-              <Typography variant="subtitle1" component="div" className={classes.metricSubValue}>
+              <Typography variant="subtitle1" component="div" className={classes.subValue}>
                 {subValue}
               </Typography>
             )}
