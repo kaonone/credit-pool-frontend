@@ -54,6 +54,27 @@ const en = {
         yes: 'yes',
       },
     },
+    loans: {
+      loansList: {
+        myLoans: 'My loans',
+        myGuarantees: 'My guarantees',
+        others: 'Others',
+      },
+      loansPanel: {
+        address: 'Address',
+        loan: 'Loan',
+        duePayment: 'Due payment',
+        borrowApr: 'Borrow APR',
+        earn: 'Earn',
+        status: 'Status',
+        myStake: 'My stake',
+        paymentDate: 'Payment date',
+        statuses: {
+          closed: 'closed',
+          opened: 'opened',
+        },
+      },
+    },
   },
   utils: {
     validation: {

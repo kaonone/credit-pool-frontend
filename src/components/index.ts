@@ -12,6 +12,7 @@ export { default as Typography } from '@material-ui/core/Typography';
 export { default as IconButton } from '@material-ui/core/IconButton';
 export { default as Tabs } from '@material-ui/core/Tabs';
 export { default as Tab } from '@material-ui/core/Tab';
+export { default as Badge } from '@material-ui/core/Badge';
 
 export * from './ErrorBoundary';
 export * from './Hint/Hint';
@@ -22,3 +23,5 @@ export * from './MetricsList/MetricsList';
 export * from './PersonalInformation/PersonalInformation';
 export * from './ActivitiesCard/ActivitiesCard';
 export * from './ModalButton/ModalButton';
+export * from './Table/Table';
+export * from './ShortAddress/ShortAddress';
