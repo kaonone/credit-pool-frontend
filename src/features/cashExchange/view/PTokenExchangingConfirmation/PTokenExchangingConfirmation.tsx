@@ -1,4 +1,5 @@
 import React from 'react';
+import BN from 'bn.js';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { Grid, Hint, Typography, Button } from 'components';
@@ -7,13 +8,13 @@ import { formatBalance } from 'utils/format';
 interface IProps {
   givenAmount: string;
   sourceSymbol: string;
-  receivedAmount: string;
+  receivedAmount: BN;
   targetSymbol: string;
   onClick: () => void;
   onCancel: () => void;
 }
 
-function ConfirmCashExchangeForm(props: IProps) {
+function PTokenExchangingConfirmation(props: IProps) {
   const { givenAmount, sourceSymbol, targetSymbol, receivedAmount, onCancel, onClick } = props;
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.cashExchange.confirmCashExchangeForm;
@@ -60,4 +61,4 @@ function ConfirmCashExchangeForm(props: IProps) {
   );
 }
 
-export { ConfirmCashExchangeForm };
+export { PTokenExchangingConfirmation };

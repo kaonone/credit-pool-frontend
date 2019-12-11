@@ -4,7 +4,7 @@ import { Form, FormSpy } from 'react-final-form';
 import * as R from 'ramda';
 
 import { DecimalsField } from 'components/form';
-import { Grid, Hint, Typography, Button, CircularProgress } from 'components';
+import { Grid, Hint, Typography, Button, CircularProgress, Loading } from 'components';
 import {
   validateInteger,
   validatePositiveNumber,
@@ -14,15 +14,22 @@ import {
 import { formatBalance } from 'utils/format';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 
+import { TargetAmountField } from './TargetAmountField';
+
 export interface IFormData {
   amount: string;
+  targetAmount: null | BN;
 }
 
 const fieldNames: { [K in keyof IFormData]: K } = {
   amount: 'amount',
+  targetAmount: 'targetAmount',
 };
 
+export type Direction = 'buy' | 'sell';
+
 interface IProps {
+  direction: Direction;
   title: string;
   maxValue: BN;
   sourceSymbol: string;
@@ -30,23 +37,30 @@ interface IProps {
   placeholder: string;
   onSubmit: (values: IFormData) => void;
   onCancel: () => void;
-  convertCash: (value: string) => string;
 }
 
-function CashExchangeForm(props: IProps) {
+function PTokenExchangingForm(props: IProps) {
   const {
+    direction,
     title,
     maxValue,
     sourceSymbol,
     targetSymbol,
     onSubmit,
     onCancel,
-    convertCash,
     placeholder,
   } = props;
 
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.cashExchange.cashExchangeForm;
+
+  const initialValues = useMemo<IFormData>(
+    () => ({
+      amount: '',
+      targetAmount: null,
+    }),
+    [],
+  );
 
   const formatValue = (value: number | BN) => {
     return formatBalance({
@@ -65,33 +79,26 @@ function CashExchangeForm(props: IProps) {
     );
   }, [maxValue, validateInteger, validatePositiveNumber, R, targetSymbol]);
 
-  const initialValues = useMemo<IFormData>(
-    () => ({
-      amount: '',
-    }),
-    [],
-  );
-
   const renderCalculatedAmountMessage = useCallback(
     (value: string) => {
       const formattedAmount = formatBalance({
-        amountInBaseUnits: convertCash(value),
+        amountInBaseUnits: value,
         baseDecimals: 0,
         tokenSymbol: targetSymbol,
       });
 
       return t(tKeys.givenAmountText.getKey(), { formattedAmount });
     },
-    [formatBalance, convertCash, targetSymbol],
+    [formatBalance, targetSymbol],
   );
 
   return (
     <Form
       onSubmit={onSubmit}
       initialValues={initialValues}
-      subscription={{ submitError: true, submitting: true }}
+      subscription={{ submitError: true, submitting: true, dirtySinceLastSubmit: true }}
     >
-      {({ handleSubmit, submitError, submitting }) => (
+      {({ handleSubmit, submitError, submitting, dirtySinceLastSubmit }) => (
         <form onSubmit={handleSubmit}>
           <Grid container justify="center" spacing={2}>
             <Grid item xs={12}>
@@ -108,18 +115,29 @@ function CashExchangeForm(props: IProps) {
               />
             </Grid>
             <FormSpy subscription={{ values: true }}>
-              {({ values }) =>
-                (values.amount && (
-                  <Grid item xs={12}>
+              {({ values }) => (
+                <Grid item xs={12}>
+                  <TargetAmountField
+                    direction={direction}
+                    sourceAmount={values.amount}
+                    spyFieldName={fieldNames.targetAmount}
+                  />
+                  {(values.targetAmount && (
                     <Hint>
-                      <Typography>{renderCalculatedAmountMessage(values.amount)}</Typography>
+                      <Typography>{renderCalculatedAmountMessage(values.targetAmount)}</Typography>
                     </Hint>
-                  </Grid>
-                )) ||
-                null
-              }
+                  )) || (
+                    <Loading
+                      meta={{
+                        loaded: typeof values.targetAmount !== 'undefined',
+                        error: submitError,
+                      }}
+                    />
+                  )}
+                </Grid>
+              )}
             </FormSpy>
-            {!!submitError && (
+            {!dirtySinceLastSubmit && !!submitError && (
               <Grid item xs={12}>
                 <Hint>
                   <Typography color="error">{submitError}</Typography>
@@ -149,4 +167,4 @@ function CashExchangeForm(props: IProps) {
   );
 }
 
-export { CashExchangeForm };
+export { PTokenExchangingForm };

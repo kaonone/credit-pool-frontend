@@ -1,4 +1,4 @@
-import { Observable, ReplaySubject, BehaviorSubject } from 'rxjs';
+import { Observable, ReplaySubject, BehaviorSubject, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
@@ -95,7 +95,7 @@ export class Api {
 
     (promiEvent as any).on = () => {};
 
-    this.pushToSubmittedTransactions$('dai.sellPtk', promiEvent as PromiEvent<boolean>, {
+    this.pushToSubmittedTransactions$('pull.sellPtk', promiEvent as PromiEvent<boolean>, {
       address,
       value,
     });
@@ -114,7 +114,7 @@ export class Api {
 
     (promiEvent as any).on = () => {};
 
-    this.pushToSubmittedTransactions$('dai.buyPtk', promiEvent as PromiEvent<boolean>, {
+    this.pushToSubmittedTransactions$('pull.buyPtk', promiEvent as PromiEvent<boolean>, {
       address,
       value,
     });
@@ -132,6 +132,18 @@ export class Api {
       { _owner: address },
       { Transfer: [{ filter: { _from: address } }, { filter: { _to: address } }] },
     );
+  }
+
+  @memoize(R.identity)
+  // eslint-disable-next-line class-methods-use-this
+  public getPTokenByDai$(value: BN): Observable<BN> {
+    return of(new BN(value).muln(2));
+  }
+
+  @memoize(R.identity)
+  // eslint-disable-next-line class-methods-use-this
+  public getDaiByPToken$(value: BN): Observable<BN> {
+    return of(new BN(value).muln(0.5));
   }
 
   private pushToSubmittedTransactions$<T extends SubmittedTransactionType>(

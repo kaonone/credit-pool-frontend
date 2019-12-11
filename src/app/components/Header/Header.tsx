@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 
-import { Back, BuyCashIcon, SellCashIcon } from 'components/icons';
+import { Back } from 'components/icons';
 import { Grid, IconButton, Typography, MetricsList, IMetric } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { CashExchangeButton, CashSellingForm, CashBuyingForm } from 'features/cashExchange';
+import { PTokenExchangingButton } from 'features/cashExchange';
 import { AuthButton } from 'features/auth';
 
 import { useStyles } from './Header.style';
@@ -85,17 +85,19 @@ function HeaderComponent(props: IProps) {
             <Grid item>
               <Grid container spacing={2} alignItems="center">
                 <Grid item>
-                  <CashExchangeButton
-                    text="Sell PTK"
-                    icon={<SellCashIcon />}
-                    ModalContent={CashSellingForm}
+                  <PTokenExchangingButton
+                    direction="sell"
+                    size="large"
+                    color="secondary"
+                    variant="contained"
                   />
                 </Grid>
                 <Grid item>
-                  <CashExchangeButton
-                    text="Buy PTK"
-                    icon={<BuyCashIcon />}
-                    ModalContent={CashBuyingForm}
+                  <PTokenExchangingButton
+                    direction="buy"
+                    size="large"
+                    color="secondary"
+                    variant="contained"
                   />
                 </Grid>
               </Grid>
