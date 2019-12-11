@@ -3,12 +3,14 @@ import LinearProgress, { LinearProgressProps } from '@material-ui/core/LinearPro
 import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { QueryResult } from '@apollo/react-common';
 
 import { CommunicationState } from 'utils/react';
 
 interface IMeta {
   loaded: boolean;
-  error: string | null;
+  error?: string | null;
 }
 
 type MaybeArray<T> = T | T[];
@@ -18,6 +20,7 @@ interface IProps<V extends ProgressType> {
   children?: React.ReactNode;
   meta?: MaybeArray<IMeta>;
   communication?: MaybeArray<CommunicationState<any, any>>;
+  gqlResults?: MaybeArray<QueryResult>;
   component?: React.ComponentType;
   progressVariant?: V;
   progressProps?: {
@@ -33,6 +36,24 @@ const useStyles = makeStyles({
   },
 });
 
+function toArray<T>(value: MaybeArray<T>): T[] {
+  return Array.isArray(value) ? value : [value];
+}
+
+function communicationsToMetas(values: MaybeArray<CommunicationState<any, any>>): IMeta[] {
+  return toArray(values).map<IMeta>(value => ({
+    loaded: value.status !== 'pending',
+    error: value.error,
+  }));
+}
+
+function gqlResultsToMetas(values: MaybeArray<QueryResult>): IMeta[] {
+  return toArray(values).map<IMeta>(value => ({
+    loaded: typeof value.data !== 'undefined' || !value.loading,
+    error: value.error?.message,
+  }));
+}
+
 export function Loading<T extends ProgressType>(props: IProps<T>) {
   const classes = useStyles();
   const {
@@ -43,20 +64,16 @@ export function Loading<T extends ProgressType>(props: IProps<T>) {
     ignoreError,
     meta = [],
     communication = [],
+    gqlResults = [],
   } = props;
-  const metas = Array.isArray(meta) ? meta : [meta];
-  const communications = Array.isArray(communication) ? communication : [communication];
+  const metas = [
+    ...toArray(meta),
+    ...communicationsToMetas(communication),
+    ...gqlResultsToMetas(gqlResults),
+  ];
 
-  const loadedMetas = metas.every(value => value.loaded);
-  const { error: metasError } = metas.find(value => value.error) || { error: null };
-
-  const loadedCommunications = communications.every(value => value.status !== 'pending');
-  const { error: communicationsError } = communications.find(value => value.error) || {
-    error: null,
-  };
-
-  const loaded = loadedMetas && loadedCommunications;
-  const error = metasError || communicationsError;
+  const loaded = metas.every(value => value.loaded);
+  const { error } = metas.find(value => value.error) || { error: null };
 
   const Wrapper = component || React.Fragment;
 

@@ -1,0 +1,6 @@
+query Balances($first: Int!, $skip: Int!) {
+  balances(first: $first, skip: $skip) {
+    id
+    wad
+  }
+}
