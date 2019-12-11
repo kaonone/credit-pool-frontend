@@ -77,6 +77,11 @@ const en = {
     },
   },
   components: {
+    pagination: {
+      itemsPerPage: 'Items per page',
+      currentPagination: '%{from} - %{to} of %{total}',
+      currentSubgraphPagination: '%{from} - %{to}',
+    },
     personalInformation: {
       title: 'Personal Information',
       deposit: 'deposit',

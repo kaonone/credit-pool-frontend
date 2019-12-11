@@ -2,6 +2,21 @@ import { createMuiTheme, Theme } from '@material-ui/core/styles';
 
 import { colors } from 'utils/styles/colors';
 
+import {
+  robotoThin,
+  robotoThinItalic,
+  robotoLight,
+  robotoLightItalic,
+  robotoRegular,
+  robotoItalic,
+  robotoMedium,
+  robotoMediumItalic,
+  robotoBold,
+  robotoBoldItalic,
+  robotoBlack,
+  robotoBlackItalic,
+} from './fonts';
+
 export { Theme };
 
 const defaultTheme = createMuiTheme();
@@ -24,12 +39,26 @@ export const theme: Theme = createMuiTheme({
   overrides: {
     MuiCssBaseline: {
       '@global': {
+        '@font-face': [
+          robotoThin,
+          robotoThinItalic,
+          robotoLight,
+          robotoLightItalic,
+          robotoRegular,
+          robotoItalic,
+          robotoMedium,
+          robotoMediumItalic,
+          robotoBold,
+          robotoBoldItalic,
+          robotoBlack,
+          robotoBlackItalic,
+        ],
         html: {
           boxSizing: 'border-box',
           WebkitFontSmoothing: 'antialiased',
           MozOsxFontSmoothing: 'grayscale',
           fontSize: 16,
-          fontFamily: 'OpenSans, sans-serif',
+          fontFamily: 'Roboto, sans-serif',
         },
 
         body: {
