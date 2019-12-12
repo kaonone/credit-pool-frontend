@@ -22,3 +22,4 @@ export * from './MetricsList/MetricsList';
 export * from './PersonalInformation/PersonalInformation';
 export * from './ActivitiesCard/ActivitiesCard';
 export * from './Pagination/Pagination';
+export * from './ShortAddress/ShortAddress';

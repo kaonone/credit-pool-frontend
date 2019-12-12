@@ -12,6 +12,7 @@ import {
   Hint,
   Typography,
   Box,
+  ShortAddress,
 } from 'components';
 
 const walletTypes: WalletType[] = ['bitski', 'metamask', 'wallet-connect'];
@@ -55,7 +56,9 @@ export function AuthModal(props: AuthModalProps) {
           <Hint>
             <Box>
               <Typography>Your wallet provider: &quot;{connectedWallet}&quot;.</Typography>
-              <Typography>Your wallet address: {account}.</Typography>
+              <Typography>
+                Your wallet address: {account && <ShortAddress address={account} />}.
+              </Typography>
             </Box>
           </Hint>
         </DialogContent>
