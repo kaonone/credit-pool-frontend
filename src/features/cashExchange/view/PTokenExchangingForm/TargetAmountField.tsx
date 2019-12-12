@@ -4,6 +4,7 @@ import BN from 'bn.js';
 import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
 import { SpyField } from 'components/form';
+import { Loading } from 'components';
 
 import { Direction } from './PTokenExchangingForm';
 
@@ -17,7 +18,7 @@ function TargetAmountField(props: IProps) {
   const { direction, sourceAmount, spyFieldName } = props;
   const api = useApi();
 
-  const [targetAmount] = useSubscribable(
+  const [targetAmount, targetAmountMeta] = useSubscribable(
     direction === 'buy'
       ? () => api.getPTokenByDai$(new BN(sourceAmount))
       : () => api.getDaiByPToken$(new BN(sourceAmount)),
@@ -29,10 +30,14 @@ function TargetAmountField(props: IProps) {
   };
 
   return (
-    (targetAmount && (
-      <SpyField name={spyFieldName} fieldValue={targetAmount} compare={compareValues as any} />
-    )) ||
-    null
+    <>
+      <SpyField
+        name={spyFieldName}
+        fieldValue={targetAmount || new BN(0)}
+        compare={compareValues}
+      />
+      <Loading meta={targetAmountMeta} />
+    </>
   );
 }
 

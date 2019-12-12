@@ -1,16 +1,17 @@
 import * as React from 'react';
-import { FieldRenderProps } from 'react-final-form';
+import { FieldRenderProps, Field } from 'react-final-form';
 
-import { getFieldWithComponent, useOnChangeState } from 'utils/react';
+import { useOnChangeState } from 'utils/react';
 
 interface IOwnProps<T> {
+  name: string;
   fieldValue: T; // final-form intercepts the 'value' property
   compare?: (prev: T, current: T) => boolean;
 }
 
-type IProps<T> = Omit<FieldRenderProps<any, HTMLElement>, 'value'> & IOwnProps<T>;
+type Props<T> = FieldRenderProps<string, HTMLInputElement> & IOwnProps<T>;
 
-function SpyFieldComponent<T>(props: IProps<T>) {
+function TextInput<T>(props: Props<T>) {
   const { input, fieldValue, compare } = props;
   const { onChange } = input;
 
@@ -19,8 +20,12 @@ function SpyFieldComponent<T>(props: IProps<T>) {
   return <input {...input} type="hidden" />;
 }
 
+function SpyField<T>(props: IOwnProps<T>) {
+  return <Field {...props} component={TextInput as any} />;
+}
+
 function defaultCompare<T>(prev: T, current: T) {
   return prev === current;
 }
 
-export const SpyField = getFieldWithComponent(SpyFieldComponent);
+export { SpyField };

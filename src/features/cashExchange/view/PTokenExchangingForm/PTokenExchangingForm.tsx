@@ -1,15 +1,17 @@
 import React, { useMemo, useCallback } from 'react';
 import BN from 'bn.js';
 import { Form, FormSpy } from 'react-final-form';
+import { FORM_ERROR } from 'final-form';
 import * as R from 'ramda';
 
 import { DecimalsField } from 'components/form';
-import { Grid, Hint, Typography, Button, CircularProgress, Loading } from 'components';
+import { Grid, Hint, Typography, Button, CircularProgress } from 'components';
 import {
   validateInteger,
   validatePositiveNumber,
   lessThenOrEqual,
   composeValidators,
+  isRequired,
 } from 'utils/validators';
 import { formatBalance } from 'utils/format';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
@@ -35,7 +37,7 @@ interface IProps {
   sourceSymbol: string;
   targetSymbol: string;
   placeholder: string;
-  onSubmit: (values: IFormData) => void;
+  onSubmit: ({ givenAmount, receivedAmount }: { givenAmount: string; receivedAmount: BN }) => void;
   onCancel: () => void;
 }
 
@@ -72,6 +74,7 @@ function PTokenExchangingForm(props: IProps) {
 
   const validateAmount = useMemo(() => {
     return composeValidators(
+      isRequired,
       validateInteger,
       validatePositiveNumber,
       // eslint-disable-next-line no-underscore-dangle
@@ -92,9 +95,20 @@ function PTokenExchangingForm(props: IProps) {
     [formatBalance, targetSymbol],
   );
 
+  const handleFormSubmit = useCallback(
+    (values: IFormData): { [FORM_ERROR]: string } | void => {
+      if (!values.targetAmount) {
+        return { [FORM_ERROR]: t(tKeys.targetAmountError.getKey()) };
+      }
+
+      onSubmit({ givenAmount: values.amount, receivedAmount: values.targetAmount });
+    },
+    [onSubmit, FORM_ERROR, t],
+  );
+
   return (
     <Form
-      onSubmit={onSubmit}
+      onSubmit={handleFormSubmit}
       initialValues={initialValues}
       subscription={{ submitError: true, submitting: true, dirtySinceLastSubmit: true }}
     >
@@ -122,17 +136,10 @@ function PTokenExchangingForm(props: IProps) {
                     sourceAmount={values.amount}
                     spyFieldName={fieldNames.targetAmount}
                   />
-                  {(values.targetAmount && (
+                  {values.targetAmount && (
                     <Hint>
                       <Typography>{renderCalculatedAmountMessage(values.targetAmount)}</Typography>
                     </Hint>
-                  )) || (
-                    <Loading
-                      meta={{
-                        loaded: typeof values.targetAmount !== 'undefined',
-                        error: submitError,
-                      }}
-                    />
                   )}
                 </Grid>
               )}

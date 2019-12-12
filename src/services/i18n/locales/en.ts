@@ -42,16 +42,15 @@ const en = {
       cashExchangeForm: {
         cancelButtonText: 'Cancel',
         givenAmountText: 'You get ~%{formattedAmount}',
+        targetAmountError: 'Please, wait until amount is calculated',
       },
       cashBuyingForm: {
         title: 'Buy cash',
         placeholder: 'Enter sum',
-        targetAmountError: 'Please, wait until amount is calculated',
       },
       cashSellingForm: {
         title: 'Sell cash',
         placeholder: 'Enter sum',
-        targetAmountError: 'Please, wait until amount is calculated',
       },
       confirmCashExchangeForm: {
         title: 'Confirm exchanging',

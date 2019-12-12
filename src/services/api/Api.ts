@@ -4,6 +4,7 @@ import BN from 'bn.js';
 import * as R from 'ramda';
 import PromiEvent from 'web3/promiEvent';
 import { Web3WalletsManager } from 'web3-wallets-kit';
+import { autobind } from 'core-decorators';
 
 import { memoize } from 'utils/decorators';
 import { createErc20 } from 'generated/contracts/createErc20';
@@ -85,6 +86,7 @@ export class Api {
     await promiEvent;
   }
 
+  @autobind
   public async sellPtk$(address: string, value: BN): Promise<void> {
     const promiEvent = new Promise(resolve =>
       setTimeout(() => {
@@ -104,6 +106,7 @@ export class Api {
     await promiEvent;
   }
 
+  @autobind
   public async buyPtk$(address: string, value: BN): Promise<void> {
     const promiEvent = new Promise(resolve =>
       setTimeout(() => {

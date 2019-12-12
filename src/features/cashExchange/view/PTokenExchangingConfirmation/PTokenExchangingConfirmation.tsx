@@ -2,31 +2,38 @@ import React from 'react';
 import BN from 'bn.js';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { Grid, Hint, Typography, Button } from 'components';
+import { Grid, Hint, Typography, Button, CircularProgress } from 'components';
 import { formatBalance } from 'utils/format';
+import { Communication } from 'utils/react';
+
+export type Amount = {
+  givenAmount: string;
+  receivedAmount: BN;
+};
 
 interface IProps {
-  givenAmount: string;
+  amount: Amount | null;
   sourceSymbol: string;
-  receivedAmount: BN;
   targetSymbol: string;
-  onClick: () => void;
+  communication: Communication<any, any>;
   onCancel: () => void;
 }
 
 function PTokenExchangingConfirmation(props: IProps) {
-  const { givenAmount, sourceSymbol, targetSymbol, receivedAmount, onCancel, onClick } = props;
+  const { sourceSymbol, targetSymbol, onCancel, amount, communication } = props;
+
+  const { status, error } = communication;
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.cashExchange.confirmCashExchangeForm;
 
   const confirmMessage = t(tKeys.confirmMessage.getKey(), {
     givenAmount: formatBalance({
-      amountInBaseUnits: givenAmount,
+      amountInBaseUnits: amount?.givenAmount || '0',
       baseDecimals: 0,
       tokenSymbol: sourceSymbol,
     }),
     receivedAmount: formatBalance({
-      amountInBaseUnits: receivedAmount,
+      amountInBaseUnits: amount?.receivedAmount || '0',
       baseDecimals: 0,
       tokenSymbol: targetSymbol,
     }),
@@ -44,16 +51,33 @@ function PTokenExchangingConfirmation(props: IProps) {
           <Hint>
             <Typography>{confirmMessage}</Typography>
           </Hint>
+          {communication.status === 'error' && (
+            <Hint>
+              <Typography color="error">{error}</Typography>
+            </Hint>
+          )}
         </Grid>
-
         <Grid item xs={6}>
-          <Button variant="outlined" color="primary" fullWidth onClick={onCancel}>
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth
+            onClick={onCancel}
+            disabled={status === 'pending'}
+          >
             {t(tKeys.no.getKey())}
           </Button>
         </Grid>
         <Grid item xs={6}>
-          <Button variant="contained" color="primary" type="submit" fullWidth onClick={onClick}>
-            {t(tKeys.yes.getKey())}
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            fullWidth
+            onClick={communication.execute}
+            disabled={status === 'pending'}
+          >
+            {status === 'pending' ? <CircularProgress size={24} /> : t(tKeys.yes.getKey())}
           </Button>
         </Grid>
       </Grid>
