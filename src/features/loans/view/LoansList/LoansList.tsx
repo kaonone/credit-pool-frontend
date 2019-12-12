@@ -16,7 +16,6 @@ function LoansList() {
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
   const loan: ILoan = {
-    address: account,
     loan: '3000000000000000',
     duePayment: '3000000000000000',
     borrowApr: 17.5,
@@ -26,7 +25,6 @@ function LoansList() {
   };
 
   const guarantee: ILoan = {
-    address: account,
     loan: '3000000000000000',
     duePayment: '3000000000000000',
     borrowApr: 17.5,
@@ -42,6 +40,7 @@ function LoansList() {
           <Grid item xs={12}>
             <LoansPanel
               title={<LoansTitle title={t(tKeys.myLoans.getKey())} amount={94} />}
+              account={account}
               list={[loan, loan, loan]}
               expanded
               withPaymentDate
@@ -50,6 +49,7 @@ function LoansList() {
           <Grid item xs={12}>
             <LoansPanel
               title={<LoansTitle title={t(tKeys.myGuarantees.getKey())} amount={94} />}
+              account={account}
               list={[guarantee, guarantee, guarantee]}
               withEarn
             />
@@ -57,13 +57,14 @@ function LoansList() {
           <Grid item xs={12}>
             <LoansPanel
               title={<LoansTitle title={t(tKeys.others.getKey())} amount={94} />}
+              account={account}
               list={[guarantee, guarantee, guarantee]}
               withEarn
             />
           </Grid>
         </Grid>
       ) : (
-        <Hint>You need connect to wallet</Hint>
+        <Hint>{t(tKeys.connectingWarning.getKey())}</Hint>
       )}
     </Loading>
   );

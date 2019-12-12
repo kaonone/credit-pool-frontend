@@ -56,6 +56,7 @@ const en = {
     },
     loans: {
       loansList: {
+        connectingWarning: 'You need connect to wallet',
         myLoans: 'My loans',
         myGuarantees: 'My guarantees',
         others: 'Others',

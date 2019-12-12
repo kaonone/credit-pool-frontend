@@ -13,7 +13,6 @@ import { useStyles } from './LoansPanel.style';
 const Table = GeneralTable as MakeTableType<ILoan>;
 
 export interface ILoan {
-  address: string;
   loan: string;
   duePayment: string;
   borrowApr: number;
@@ -25,6 +24,7 @@ export interface ILoan {
 
 interface IProps {
   title: React.ReactNode;
+  account: string;
   list: ILoan[];
   withEarn?: boolean;
   withPaymentDate?: boolean;
@@ -32,7 +32,7 @@ interface IProps {
 }
 
 function LoansPanel(props: IProps) {
-  const { title, list, withEarn, withPaymentDate, expanded } = props;
+  const { title, account, list, withEarn, withPaymentDate, expanded } = props;
   const classes = useStyles();
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.loans.loansPanel;
@@ -47,7 +47,7 @@ function LoansPanel(props: IProps) {
       </Table.Column>
       <Table.Column>
         <Table.Head>{t(tKeys.address.getKey())}</Table.Head>
-        <Table.Cell>{({ data }) => <AddressCell address={data.address} />}</Table.Cell>
+        <Table.Cell>{() => <AddressCell address={account} />}</Table.Cell>
       </Table.Column>
       <Table.Column>
         <Table.Head>{t(tKeys.loan.getKey())}</Table.Head>
