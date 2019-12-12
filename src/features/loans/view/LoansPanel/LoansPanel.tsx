@@ -8,10 +8,11 @@ import { ExpansionPanel } from 'components/ExpansionPanel/ExpansionPanel';
 import { formatBalance } from 'utils/format';
 
 import { AddressCell } from './LoansTableCells';
+import { useStyles } from './LoansPanel.style';
 
-const Table = GeneralTable as MakeTableType<ILoansList>;
+const Table = GeneralTable as MakeTableType<ILoan>;
 
-interface ILoansList {
+export interface ILoan {
   address: string;
   loan: string;
   duePayment: string;
@@ -24,13 +25,15 @@ interface ILoansList {
 
 interface IProps {
   title: React.ReactNode;
-  list: ILoansList[];
+  list: ILoan[];
   withEarn?: boolean;
   withPaymentDate?: boolean;
+  expanded?: boolean;
 }
 
 function LoansPanel(props: IProps) {
-  const { title, list, withEarn, withPaymentDate } = props;
+  const { title, list, withEarn, withPaymentDate, expanded } = props;
+  const classes = useStyles();
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.loans.loansPanel;
 
@@ -116,7 +119,14 @@ function LoansPanel(props: IProps) {
     </Table>
   );
 
-  return <ExpansionPanel title={title} details={LoansTable} />;
+  return (
+    <ExpansionPanel
+      title={title}
+      details={LoansTable}
+      detailsClassName={classes.details}
+      expanded={expanded}
+    />
+  );
 }
 
 export { LoansPanel };

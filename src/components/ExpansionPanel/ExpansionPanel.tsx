@@ -13,26 +13,32 @@ interface IProps {
   title: React.ReactNode;
   details: React.ReactNode;
   showPreview?: boolean;
+  detailsClassName?: string;
+  expanded?: boolean;
 }
 
 function ExpansionPanelComponent(props: IProps) {
-  const { title, details, showPreview } = props;
+  const { title, details, showPreview, detailsClassName, expanded: defaultExpanded } = props;
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(!!defaultExpanded);
 
   const handleExpansionPanelChange = (_event: React.ChangeEvent<{}>, isExpanded: boolean) => {
     setExpanded(isExpanded);
   };
 
   return (
-    <ExpansionPanel onChange={handleExpansionPanelChange} className={classes.root}>
+    <ExpansionPanel
+      expanded={expanded}
+      onChange={handleExpansionPanelChange}
+      className={classes.root}
+    >
       <ExpansionPanelSummary
         className={classes.summary}
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
         <Grid item xs className={classes.summaryContent}>
-          <Typography noWrap>
+          <Typography noWrap={!!showPreview}>
             {expanded && <ContainedCircleArrow className={classes.toggleExpandIcon} />}
             {!expanded && <OutlinedCircleArrow className={classes.toggleExpandIcon} />}
             <span className={classes.summaryTitle}>{title}</span>
@@ -40,7 +46,7 @@ function ExpansionPanelComponent(props: IProps) {
           </Typography>
         </Grid>
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails>{details}</ExpansionPanelDetails>
+      <ExpansionPanelDetails className={detailsClassName}>{details}</ExpansionPanelDetails>
     </ExpansionPanel>
   );
 }

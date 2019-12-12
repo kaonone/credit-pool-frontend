@@ -14,7 +14,7 @@ function LoansTitle(props: IProps) {
   const classes = useStyles();
 
   return (
-    <Badge className={classes.badge} badgeContent={amount} color="primary">
+    <Badge badgeContent={amount} color="primary">
       <Typography component="span" variant="subtitle1" className={classes.title}>
         {title}
       </Typography>

@@ -5,7 +5,7 @@ import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 import { Loading, Hint, Grid } from 'components';
 
-import { LoansPanel } from '../LoansPanel/LoansPanel';
+import { LoansPanel, ILoan } from '../LoansPanel/LoansPanel';
 import { LoansTitle } from '../LoansTitle/LoansTitle';
 
 function LoansList() {
@@ -15,7 +15,7 @@ function LoansList() {
   const api = useApi();
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
-  const loan = {
+  const loan: ILoan = {
     address: account,
     loan: '3000000000000000',
     duePayment: '3000000000000000',
@@ -25,7 +25,7 @@ function LoansList() {
     paymentDate: new Date(),
   };
 
-  const guarantee = {
+  const guarantee: ILoan = {
     address: account,
     loan: '3000000000000000',
     duePayment: '3000000000000000',
@@ -43,6 +43,7 @@ function LoansList() {
             <LoansPanel
               title={<LoansTitle title={t(tKeys.myLoans.getKey())} amount={94} />}
               list={[loan, loan, loan]}
+              expanded
               withPaymentDate
             />
           </Grid>
