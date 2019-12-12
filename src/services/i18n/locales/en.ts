@@ -23,21 +23,26 @@ const en = {
         success: 'dai.approve transaction succeeded',
         error: 'dai.approve transaction failed',
       },
-      'dai.sellPtk': {
-        pending: 'dai.sellPtk transaction pending',
-        success: 'dai.sellPtk transaction succeeded',
-        error: 'dai.sellPtk transaction failed',
+      'pull.sellPtk': {
+        pending: 'pull.sellPtk transaction pending',
+        success: 'pull.sellPtk transaction succeeded',
+        error: 'pull.sellPtk transaction failed',
       },
-      'dai.buyPtk': {
-        pending: 'dai.buyPtk transaction pending',
-        success: 'dai.buyPtk transaction succeeded',
-        error: 'dai.buyPtk transaction failed',
+      'pull.buyPtk': {
+        pending: 'pull.buyPtk transaction pending',
+        success: 'pull.buyPtk transaction succeeded',
+        error: 'pull.buyPtk transaction failed',
       },
     },
     cashExchange: {
+      pTokenExchangingButton: {
+        buyPtk: 'Buy PTK',
+        sellPtk: 'Sell PTK',
+      },
       cashExchangeForm: {
         cancelButtonText: 'Cancel',
         givenAmountText: 'You get ~%{formattedAmount}',
+        targetAmountError: 'Please, wait until amount is calculated',
       },
       cashBuyingForm: {
         title: 'Buy cash',

@@ -1,9 +1,10 @@
-import { Observable, ReplaySubject, BehaviorSubject } from 'rxjs';
+import { Observable, ReplaySubject, BehaviorSubject, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
 import PromiEvent from 'web3/promiEvent';
 import { Web3WalletsManager } from 'web3-wallets-kit';
+import { autobind } from 'core-decorators';
 
 import { memoize } from 'utils/decorators';
 import { createErc20 } from 'generated/contracts/createErc20';
@@ -85,6 +86,7 @@ export class Api {
     await promiEvent;
   }
 
+  @autobind
   public async sellPtk$(address: string, value: BN): Promise<void> {
     const promiEvent = new Promise(resolve =>
       setTimeout(() => {
@@ -96,7 +98,7 @@ export class Api {
 
     (promiEvent as any).on = () => {};
 
-    this.pushToSubmittedTransactions$('dai.sellPtk', promiEvent as PromiEvent<boolean>, {
+    this.pushToSubmittedTransactions$('pull.sellPtk', promiEvent as PromiEvent<boolean>, {
       address,
       value,
     });
@@ -104,6 +106,7 @@ export class Api {
     await promiEvent;
   }
 
+  @autobind
   public async buyPtk$(address: string, value: BN): Promise<void> {
     const promiEvent = new Promise(resolve =>
       setTimeout(() => {
@@ -115,7 +118,7 @@ export class Api {
 
     (promiEvent as any).on = () => {};
 
-    this.pushToSubmittedTransactions$('dai.buyPtk', promiEvent as PromiEvent<boolean>, {
+    this.pushToSubmittedTransactions$('pull.buyPtk', promiEvent as PromiEvent<boolean>, {
       address,
       value,
     });
@@ -133,6 +136,18 @@ export class Api {
       { _owner: address },
       { Transfer: [{ filter: { _from: address } }, { filter: { _to: address } }] },
     );
+  }
+
+  @memoize(R.identity)
+  // eslint-disable-next-line class-methods-use-this
+  public getPTokenByDai$(value: BN): Observable<BN> {
+    return of(new BN(value).muln(2));
+  }
+
+  @memoize(R.identity)
+  // eslint-disable-next-line class-methods-use-this
+  public getDaiByPToken$(value: BN): Observable<BN> {
+    return of(new BN(value).muln(0.5));
   }
 
   private pushToSubmittedTransactions$<T extends SubmittedTransactionType>(
