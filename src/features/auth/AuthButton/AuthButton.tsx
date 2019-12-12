@@ -2,12 +2,11 @@ import * as React from 'react';
 import { GetProps } from '_helpers';
 
 import { useApi } from 'services/api';
-import { useSubscribable, useCommunication, withProps } from 'utils/react';
-import { Button, Loading, Box } from 'components';
+import { getShortAddress } from 'utils/format';
+import { useSubscribable, useCommunication } from 'utils/react';
+import { Button, Loading } from 'components';
 
 import { AuthModal } from './components/AuthModal';
-
-const CustomBox = withProps(Box, { ml: 1.5, display: 'flex' });
 
 type IProps = Pick<GetProps<typeof Button>, 'color'>;
 
@@ -36,18 +35,21 @@ export function AuthButton(props: IProps) {
         variant="outlined"
         disabled={!accountMeta.loaded || status === 'pending'}
         onClick={toggleIsOpened}
+        endIcon={
+          <Loading
+            ignoreError
+            meta={{ loaded: status !== 'pending', error: null }}
+            communication={connectCommunication}
+            progressVariant="circle"
+            progressProps={{
+              size: 24,
+            }}
+          />
+        }
       >
-        <Loading meta={accountMeta}>{account || 'Connect to wallet'}</Loading>
-        <Loading
-          ignoreError
-          meta={{ loaded: status !== 'pending', error: null }}
-          communication={connectCommunication}
-          progressVariant="circle"
-          component={CustomBox}
-          progressProps={{
-            size: 24,
-          }}
-        />
+        <Loading meta={accountMeta}>
+          {account ? getShortAddress(account) : 'Connect to wallet'}
+        </Loading>
       </Button>
       <AuthModal
         status={status}

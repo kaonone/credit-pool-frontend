@@ -51,13 +51,13 @@ export function useSubgraphPagination<
   const from = currentPage * perPage;
 
   const checkNextPage = useQuery({
-    variables: { first: 1, skip: from + perPage, ...(variables as V) },
+    variables: { first: perPage, skip: from + perPage, ...(variables as V) },
     fetchPolicy: 'no-cache',
   });
 
-  const hasNextPage =
-    !checkNextPage.loading && checkNextPage.data && hasItemsInArrayProps(checkNextPage.data);
-  const total = (currentPage + 1) * perPage + (hasNextPage ? 1 : 0);
+  const nextPageLength: number =
+    !checkNextPage.loading && checkNextPage.data ? getLengthOfArrayProps(checkNextPage.data) : 0;
+  const total = (currentPage + 1) * perPage + nextPageLength;
 
   const changePerPage = useCallback(
     itemPerPage => {
@@ -81,6 +81,6 @@ export function useSubgraphPagination<
   return { result, paginationView };
 }
 
-function hasItemsInArrayProps<D extends Record<string, any>>(data: D) {
-  return Object.keys(data).some((key: keyof D) => Array.isArray(data[key]) && data[key].length);
+function getLengthOfArrayProps<D extends Record<string, any[]>>(data: D) {
+  return (Object.values(data).find((value: any) => Array.isArray(value)) || []).length;
 }
