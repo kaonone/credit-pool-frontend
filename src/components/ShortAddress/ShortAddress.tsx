@@ -3,6 +3,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { useTheme } from 'utils/styles';
+import { getShortAddress } from 'utils/format';
 
 import { useStyles } from './ShortAddress.style';
 
@@ -13,7 +14,7 @@ function ShortAddress({ address }: { address: string }) {
   const [tooltipTitle, setTooltipTitle] = useState<'copy' | 'copied!'>('copy');
   const closeTimeout = useRef(0);
 
-  const shortAddress = `${address.substr(0, 6)}...${address.substr(-4, 4)}`;
+  const shortAddress = getShortAddress(address);
 
   const handleCopy = useCallback(() => {
     setTooltipTitle('copied!');
