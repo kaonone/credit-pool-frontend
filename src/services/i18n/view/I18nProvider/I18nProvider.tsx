@@ -3,7 +3,7 @@ import { withRouter, RouteComponentProps } from 'react-router';
 import Polyglot from 'node-polyglot';
 import { autobind } from 'core-decorators';
 
-import { withProps } from 'utils/react';
+import { withProps } from 'utils/react/withProps';
 
 import { ITranslateFunction, Lang, ITranslateKey } from '../../types';
 import { DEFAULT_LANGUAGE, TContext, tKeys } from '../../constants';

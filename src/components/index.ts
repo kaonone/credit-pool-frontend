@@ -25,3 +25,4 @@ export * from './ActivitiesCard/ActivitiesCard';
 export * from './ModalButton/ModalButton';
 export * from './Table/Table';
 export * from './ShortAddress/ShortAddress';
+export * from './Pagination/Pagination';

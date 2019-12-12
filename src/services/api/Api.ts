@@ -24,14 +24,15 @@ function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNulla
   return value as NonNullable<T>;
 }
 
+const INFURA_ID = '6d0d9f2e41224239b3dce04146c256df';
+
 export class Api {
   public web3Manager = new Web3WalletsManager({
     network: 'kovan',
-    infuraAccessToken: '6d0d9f2e41224239b3dce04146c256df',
+    infuraAccessToken: INFURA_ID,
     walletConfigs: {
       'wallet-connect': {
-        bridge: 'https://bridge.walletconnect.org',
-        rpc: {},
+        infuraId: INFURA_ID,
         chainId: 42,
       },
       bitski: {

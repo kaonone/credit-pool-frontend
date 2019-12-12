@@ -1,5 +1,0 @@
-query BalancesByAddress($address: Bytes!) @dai {
-  balances(where: {address: $address}) {
-    wad
-  }
-}
