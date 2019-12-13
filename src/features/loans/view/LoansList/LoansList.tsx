@@ -36,7 +36,7 @@ function LoansList() {
   return (
     <Loading meta={accountMeta}>
       {account ? (
-        <Grid container spacing={3}>
+        <Grid container>
           <Grid item xs={12}>
             <LoansPanel
               title={<LoansTitle title={t(tKeys.myLoans.getKey())} amount={94} />}

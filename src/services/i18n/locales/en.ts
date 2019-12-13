@@ -45,11 +45,11 @@ const en = {
         targetAmountError: 'Please, wait until amount is calculated',
       },
       cashBuyingForm: {
-        title: 'Buy cash',
+        title: 'Buy Pool Tokens',
         placeholder: 'Enter sum',
       },
       cashSellingForm: {
-        title: 'Sell cash',
+        title: 'Sell Pool Tokens',
         placeholder: 'Enter sum',
       },
       confirmCashExchangeForm: {
