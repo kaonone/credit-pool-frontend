@@ -5,7 +5,6 @@ import { CommunicationState } from 'utils/react';
 import {
   Button,
   Loading,
-  DialogActions,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -69,24 +68,22 @@ export function AuthModal(props: AuthModalProps) {
           <Typography>By connecting to the wallet you accept Terms of Service.</Typography>
         </Hint>
       </DialogContent>
-      <DialogActions>
-        <DialogContent>
-          <Grid container spacing={1}>
-            {isLogged && (
-              <Grid item xs>
-                <Button fullWidth color="primary" variant="outlined" onClick={disconnect}>
-                  Disconnect
-                </Button>
-              </Grid>
-            )}
-            {walletTypes.map(type => (
-              <Grid item xs>
-                <ConnectButton connect={connect} type={type} key={type} />
-              </Grid>
-            ))}
-          </Grid>
-        </DialogContent>
-      </DialogActions>
+      <DialogContent>
+        <Grid container spacing={1}>
+          {isLogged && (
+            <Grid item xs>
+              <Button fullWidth color="primary" variant="outlined" onClick={disconnect}>
+                Disconnect
+              </Button>
+            </Grid>
+          )}
+          {walletTypes.map(type => (
+            <Grid item xs>
+              <ConnectButton connect={connect} type={type} key={type} />
+            </Grid>
+          ))}
+        </Grid>
+      </DialogContent>
     </Dialog>
   );
 }

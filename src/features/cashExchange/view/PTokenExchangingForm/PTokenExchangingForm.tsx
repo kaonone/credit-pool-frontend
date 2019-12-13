@@ -106,7 +106,7 @@ function PTokenExchangingForm(props: IProps) {
         <form onSubmit={handleSubmit}>
           <Grid container justify="center" spacing={2}>
             <Grid item xs={12}>
-              <Typography variant="h5" noWrap gutterBottom>
+              <Typography variant="h5" gutterBottom>
                 {title}
               </Typography>
               <DecimalsField

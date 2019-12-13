@@ -60,7 +60,7 @@ function PTokenExchangingConfirmation(props: IProps) {
       <DialogContent>
         <Grid container justify="center" spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="h5" noWrap gutterBottom>
+            <Typography variant="h5" gutterBottom>
               {t(tKeys.title.getKey())}
             </Typography>
           </Grid>

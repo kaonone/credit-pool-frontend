@@ -32,7 +32,7 @@ function PTokenBuyingForm(props: IProps) {
     await api.buyPtk$(account, new BN(amounts?.givenAmount || 0));
     setAmounts(null);
     onCancel();
-  }, [onCancel, api, account, amounts]);
+  }, [onCancel, api, account, amounts?.givenAmount]);
 
   const handlePTokenExchangingConfirmationCancel = useCallback(() => {
     setAmounts(null);
