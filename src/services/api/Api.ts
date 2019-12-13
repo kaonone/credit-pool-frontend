@@ -1,5 +1,5 @@
 import { Observable, ReplaySubject, BehaviorSubject, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, delay } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
 import PromiEvent from 'web3/promiEvent';
@@ -98,7 +98,7 @@ export class Api {
 
     (promiEvent as any).on = () => {};
 
-    this.pushToSubmittedTransactions$('pull.sellPtk', promiEvent as PromiEvent<boolean>, {
+    this.pushToSubmittedTransactions$('pool.sellPtk', promiEvent as PromiEvent<boolean>, {
       address,
       value,
     });
@@ -118,7 +118,7 @@ export class Api {
 
     (promiEvent as any).on = () => {};
 
-    this.pushToSubmittedTransactions$('pull.buyPtk', promiEvent as PromiEvent<boolean>, {
+    this.pushToSubmittedTransactions$('pool.buyPtk', promiEvent as PromiEvent<boolean>, {
       address,
       value,
     });
@@ -140,14 +140,14 @@ export class Api {
 
   @memoize(R.identity)
   // eslint-disable-next-line class-methods-use-this
-  public getPTokenByDai$(value: BN): Observable<BN> {
-    return of(new BN(value).muln(2));
+  public getPTokenByDai$(value: string): Observable<BN> {
+    return of(new BN(value).muln(2)).pipe(delay(2000));
   }
 
   @memoize(R.identity)
   // eslint-disable-next-line class-methods-use-this
-  public getDaiByPToken$(value: BN): Observable<BN> {
-    return of(new BN(value).muln(0.5));
+  public getDaiByPToken$(value: string): Observable<BN> {
+    return of(new BN(value).muln(0.5)).pipe(delay(2000));
   }
 
   private pushToSubmittedTransactions$<T extends SubmittedTransactionType>(

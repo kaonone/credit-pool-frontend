@@ -92,6 +92,20 @@ export const theme: Theme = createMuiTheme({
         },
       },
     },
+
+    MuiButton: {
+      endIcon: {
+        '&:empty': {
+          display: 'none',
+        },
+      },
+
+      startIcon: {
+        '&:empty': {
+          display: 'none',
+        },
+      },
+    },
   },
 });
 

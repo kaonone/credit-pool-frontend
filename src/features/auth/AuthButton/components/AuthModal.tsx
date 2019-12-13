@@ -5,13 +5,14 @@ import { CommunicationState } from 'utils/react';
 import {
   Button,
   Loading,
-  DialogActions,
   Dialog,
   DialogTitle,
   DialogContent,
   Hint,
   Typography,
   Box,
+  ShortAddress,
+  Grid,
 } from 'components';
 
 const walletTypes: WalletType[] = ['bitski', 'metamask', 'wallet-connect'];
@@ -55,7 +56,9 @@ export function AuthModal(props: AuthModalProps) {
           <Hint>
             <Box>
               <Typography>Your wallet provider: &quot;{connectedWallet}&quot;.</Typography>
-              <Typography>Your wallet address: {account}.</Typography>
+              <Typography>
+                Your wallet address: {account && <ShortAddress address={account} />}.
+              </Typography>
             </Box>
           </Hint>
         </DialogContent>
@@ -65,16 +68,22 @@ export function AuthModal(props: AuthModalProps) {
           <Typography>By connecting to the wallet you accept Terms of Service.</Typography>
         </Hint>
       </DialogContent>
-      <DialogActions>
-        {isLogged && (
-          <Button color="primary" variant="outlined" onClick={disconnect}>
-            Disconnect
-          </Button>
-        )}
-        {walletTypes.map(type => (
-          <ConnectButton connect={connect} type={type} key={type} />
-        ))}
-      </DialogActions>
+      <DialogContent>
+        <Grid container spacing={1}>
+          {isLogged && (
+            <Grid item xs>
+              <Button fullWidth color="primary" variant="outlined" onClick={disconnect}>
+                Disconnect
+              </Button>
+            </Grid>
+          )}
+          {walletTypes.map(type => (
+            <Grid item xs>
+              <ConnectButton connect={connect} type={type} key={type} />
+            </Grid>
+          ))}
+        </Grid>
+      </DialogContent>
     </Dialog>
   );
 }
@@ -88,8 +97,10 @@ function ConnectButton({ type, connect }: ConnectButtonProps) {
   const handleClick = React.useCallback(() => connect(type), [type]);
 
   return (
-    <Button color="primary" variant="contained" onClick={handleClick}>
-      {type}
+    <Button fullWidth color="primary" variant="contained" onClick={handleClick}>
+      <Box component="span" whiteSpace="nowrap">
+        {type}
+      </Box>
     </Button>
   );
 }

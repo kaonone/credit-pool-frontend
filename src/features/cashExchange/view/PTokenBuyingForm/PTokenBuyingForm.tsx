@@ -3,13 +3,13 @@ import BN from 'bn.js';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { useSubscribable, useCommunication } from 'utils/react';
-import { Dialog, DialogContent, Loading } from 'components';
+import { useSubscribable } from 'utils/react';
+import { Loading } from 'components';
 
 import { PTokenExchangingForm } from '../PTokenExchangingForm/PTokenExchangingForm';
 import {
   PTokenExchangingConfirmation,
-  Amount,
+  Amounts,
 } from '../PTokenExchangingConfirmation/PTokenExchangingConfirmation';
 
 interface IProps {
@@ -23,19 +23,20 @@ function PTokenBuyingForm(props: IProps) {
 
   const api = useApi();
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, [], null);
-  const [amount, setAmount] = useState<Amount | null>(null);
+  const [amounts, setAmounts] = useState<Amounts | null>(null);
 
   const handlePTokenExchangingConfirmationClick = useCallback(async () => {
-    account && (await api.buyPtk$(account, new BN(amount?.givenAmount || 0)));
-    setAmount(null);
+    if (!account) {
+      throw new Error('You need to connect to Ethereum wallet');
+    }
+    await api.buyPtk$(account, new BN(amounts?.givenAmount || 0));
+    setAmounts(null);
     onCancel();
-  }, [onCancel, api, account, amount]);
-
-  const communication = useCommunication(handlePTokenExchangingConfirmationClick, []);
+  }, [onCancel, api, account, amounts?.givenAmount]);
 
   const handlePTokenExchangingConfirmationCancel = useCallback(() => {
-    setAmount(null);
-  }, [setAmount]);
+    setAmounts(null);
+  }, []);
 
   return (
     <Loading meta={accountMeta} progressVariant="circle">
@@ -46,20 +47,17 @@ function PTokenBuyingForm(props: IProps) {
         sourceSymbol="DAI"
         targetSymbol="PTK"
         placeholder={t(tKeys.placeholder.getKey())}
-        onSubmit={setAmount}
+        onSubmit={setAmounts}
         onCancel={onCancel}
       />
-      <Dialog fullWidth maxWidth="sm" open={!!amount}>
-        <DialogContent>
-          <PTokenExchangingConfirmation
-            sourceSymbol="DAI"
-            targetSymbol="PTK"
-            onCancel={handlePTokenExchangingConfirmationCancel}
-            amount={amount}
-            communication={communication}
-          />
-        </DialogContent>
-      </Dialog>
+      <PTokenExchangingConfirmation
+        isOpen={!!amounts}
+        sourceSymbol="DAI"
+        targetSymbol="PTK"
+        onConfirm={handlePTokenExchangingConfirmationClick}
+        onCancel={handlePTokenExchangingConfirmationCancel}
+        amounts={amounts}
+      />
     </Loading>
   );
 }

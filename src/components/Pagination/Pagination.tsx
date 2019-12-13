@@ -69,7 +69,7 @@ function Pagination(props: IProps) {
         </Grid>
         <Grid item>
           <Typography className={classes.currentItems} variant="subtitle1">
-            {t(tKeys.currentPagination.getKey(), { from: from + 1, to })}
+            {t(tKeys.currentPagination.getKey(), { from: from + 1, to, total: totalItems })}
           </Typography>
         </Grid>
         <Grid item>
