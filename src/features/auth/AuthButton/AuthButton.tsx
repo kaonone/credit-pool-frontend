@@ -33,7 +33,6 @@ export function AuthButton(props: IProps) {
       <Button
         color={color}
         variant="outlined"
-        disabled={!accountMeta.loaded || status === 'pending'}
         onClick={toggleIsOpened}
         endIcon={
           <Loading

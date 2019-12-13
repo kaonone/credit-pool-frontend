@@ -106,6 +106,20 @@ export const theme: Theme = createMuiTheme({
         },
       },
     },
+
+    MuiExpansionPanelSummary: {
+      root: {
+        '&$expanded': {
+          minHeight: defaultTheme.spacing(6),
+        },
+      },
+
+      content: {
+        '&$expanded': {
+          margin: defaultTheme.spacing(1.5, 0),
+        },
+      },
+    },
   },
 });
 

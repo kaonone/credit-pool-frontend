@@ -29,30 +29,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(2),
   },
 
-  toggleExpandIcon: {
-    position: 'relative',
-    top: '0.25em',
-    marginRight: theme.spacing(1),
-    color: colors.royalPurple,
-  },
-
-  expansionPanel: {
-    boxShadow: 'none',
-  },
-
-  expansionPanelSummary: {
-    padding: 0,
-  },
-
-  summaryContent: {
-    width: 0,
-    color: colors.topaz,
-  },
-
-  summaryTitle: {
-    color: colors.royalPurple,
-  },
-
   votingForIcon: {
     marginRight: theme.spacing(1),
     composes: '$votingIcon',

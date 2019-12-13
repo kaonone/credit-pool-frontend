@@ -1,4 +1,5 @@
 declare module 'filemanager-webpack-plugin';
+declare module 'react-jazzicon';
 
 declare module '*.woff' {
   const url: string;

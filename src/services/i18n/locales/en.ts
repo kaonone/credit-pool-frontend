@@ -45,11 +45,11 @@ const en = {
         targetAmountError: 'Please, wait until amount is calculated',
       },
       cashBuyingForm: {
-        title: 'Buy cash',
+        title: 'Buy Pool Tokens',
         placeholder: 'Enter sum',
       },
       cashSellingForm: {
-        title: 'Sell cash',
+        title: 'Sell Pool Tokens',
         placeholder: 'Enter sum',
       },
       confirmCashExchangeForm: {
@@ -57,6 +57,28 @@ const en = {
         confirmMessage: 'Are you sure you want exchange %{givenAmount} on %{receivedAmount}?',
         no: 'no',
         yes: 'yes',
+      },
+    },
+    loans: {
+      loansList: {
+        connectingWarning: 'You need connect to wallet',
+        myLoans: 'My loans',
+        myGuarantees: 'My guarantees',
+        others: 'Others',
+      },
+      loansPanel: {
+        address: 'Address',
+        loan: 'Loan',
+        duePayment: 'Due payment',
+        borrowApr: 'Borrow APR',
+        earn: 'Earn',
+        status: 'Status',
+        myStake: 'My stake',
+        paymentDate: 'Payment date',
+        statuses: {
+          closed: 'closed',
+          opened: 'opened',
+        },
       },
     },
   },

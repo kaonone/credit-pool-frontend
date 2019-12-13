@@ -22,20 +22,22 @@ interface ICellProps<T> {
   className?: string;
   align?: 'left' | 'center' | 'right';
   colSpan?: number;
-  children: ({ index, data }: { index: number; data: T }) => React.ReactNode;
+  prop?: keyof T;
+  children?: ({ index, data }: { index: number; data: T }) => React.ReactNode;
 }
 
 interface ITableProps<T> {
   className?: string;
   children?: React.ReactNode;
   data: T[];
-  separated?: boolean;
+  /** default: separated */
+  variant?: 'separated' | 'compact';
   onClick?(): void;
 }
 
 function TableComponent<T>(props: ITableProps<T>) {
   const classes = useStyles();
-  const { children, className, separated, data } = props;
+  const { children, className, data, variant = 'separated' } = props;
 
   interface IAggregatedColumn {
     headProps?: IHeadProps;
@@ -53,11 +55,7 @@ function TableComponent<T>(props: ITableProps<T>) {
   const needToRenderHead = columns.some(column => column.headProps);
 
   return (
-    <table
-      className={cn(classes.root, className, {
-        [classes.separated]: separated,
-      })}
-    >
+    <table className={cn(classes.root, classes[variant], className)}>
       {needToRenderHead && (
         <thead>
           <tr>
@@ -79,7 +77,9 @@ function TableComponent<T>(props: ITableProps<T>) {
             {columns.map(({ cellProps }, cellIndex) =>
               cellProps ? (
                 <td key={cellIndex} align={cellProps.align}>
-                  {cellProps.children({ index, data: dataRow })}
+                  {cellProps.prop
+                    ? dataRow[cellProps.prop]
+                    : cellProps.children && cellProps.children({ index, data: dataRow })}
                 </td>
               ) : (
                 <td key={cellIndex} />
