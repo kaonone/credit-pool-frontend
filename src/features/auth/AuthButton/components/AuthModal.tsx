@@ -13,6 +13,7 @@ import {
   Typography,
   Box,
   ShortAddress,
+  Grid,
 } from 'components';
 
 const walletTypes: WalletType[] = ['bitski', 'metamask', 'wallet-connect'];
@@ -69,14 +70,22 @@ export function AuthModal(props: AuthModalProps) {
         </Hint>
       </DialogContent>
       <DialogActions>
-        {isLogged && (
-          <Button color="primary" variant="outlined" onClick={disconnect}>
-            Disconnect
-          </Button>
-        )}
-        {walletTypes.map(type => (
-          <ConnectButton connect={connect} type={type} key={type} />
-        ))}
+        <DialogContent>
+          <Grid container spacing={1}>
+            {isLogged && (
+              <Grid item xs>
+                <Button fullWidth color="primary" variant="outlined" onClick={disconnect}>
+                  Disconnect
+                </Button>
+              </Grid>
+            )}
+            {walletTypes.map(type => (
+              <Grid item xs>
+                <ConnectButton connect={connect} type={type} key={type} />
+              </Grid>
+            ))}
+          </Grid>
+        </DialogContent>
       </DialogActions>
     </Dialog>
   );
@@ -91,8 +100,10 @@ function ConnectButton({ type, connect }: ConnectButtonProps) {
   const handleClick = React.useCallback(() => connect(type), [type]);
 
   return (
-    <Button color="primary" variant="contained" onClick={handleClick}>
-      {type}
+    <Button fullWidth color="primary" variant="contained" onClick={handleClick}>
+      <Box component="span" whiteSpace="nowrap">
+        {type}
+      </Box>
     </Button>
   );
 }

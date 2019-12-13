@@ -4,8 +4,8 @@ import { Form, FormSpy } from 'react-final-form';
 import { FORM_ERROR } from 'final-form';
 import * as R from 'ramda';
 
-import { DecimalsField } from 'components/form';
 import { Grid, Hint, Typography, Button, CircularProgress } from 'components';
+import { DecimalsField } from 'components/form';
 import {
   validateInteger,
   validatePositiveNumber,
@@ -64,13 +64,16 @@ function PTokenExchangingForm(props: IProps) {
     [],
   );
 
-  const formatValue = (value: number | BN) => {
-    return formatBalance({
-      amountInBaseUnits: value as BN,
-      baseDecimals: 0,
-      tokenSymbol: targetSymbol,
-    });
-  };
+  const formatValue = useCallback(
+    (value: number | BN) => {
+      return formatBalance({
+        amountInBaseUnits: value as BN,
+        baseDecimals: 0,
+        tokenSymbol: targetSymbol,
+      });
+    },
+    [targetSymbol],
+  );
 
   const validateAmount = useMemo(() => {
     return composeValidators(
@@ -80,20 +83,7 @@ function PTokenExchangingForm(props: IProps) {
       // eslint-disable-next-line no-underscore-dangle
       R.curry(lessThenOrEqual)(maxValue, R.__, formatValue),
     );
-  }, [maxValue, validateInteger, validatePositiveNumber, R, targetSymbol]);
-
-  const renderCalculatedAmountMessage = useCallback(
-    (value: string) => {
-      const formattedAmount = formatBalance({
-        amountInBaseUnits: value,
-        baseDecimals: 0,
-        tokenSymbol: targetSymbol,
-      });
-
-      return t(tKeys.givenAmountText.getKey(), { formattedAmount });
-    },
-    [formatBalance, targetSymbol],
-  );
+  }, [maxValue, targetSymbol, formatValue]);
 
   const handleFormSubmit = useCallback(
     (values: IFormData): { [FORM_ERROR]: string } | void => {
@@ -134,13 +124,9 @@ function PTokenExchangingForm(props: IProps) {
                   <TargetAmountField
                     direction={direction}
                     sourceAmount={values.amount}
+                    targetSymbol={targetSymbol}
                     spyFieldName={fieldNames.targetAmount}
                   />
-                  {values.targetAmount && (
-                    <Hint>
-                      <Typography>{renderCalculatedAmountMessage(values.targetAmount)}</Typography>
-                    </Hint>
-                  )}
                 </Grid>
               )}
             </FormSpy>
