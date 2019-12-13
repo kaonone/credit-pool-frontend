@@ -22,12 +22,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
     background: 'rgba(255, 255, 255, 0.2)',
   },
 
-  dropdown: {
-    width: theme.spacing(15.5),
-    height: theme.spacing(4),
-    background: 'rgba(255, 255, 255, 0.2)',
-  },
-
   button: {
     width: theme.spacing(15.5),
     height: theme.spacing(5.5),

@@ -1,9 +1,10 @@
-import { Observable, ReplaySubject, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, ReplaySubject, BehaviorSubject, of } from 'rxjs';
+import { map, delay } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
 import PromiEvent from 'web3/promiEvent';
 import { Web3WalletsManager } from 'web3-wallets-kit';
+import { autobind } from 'core-decorators';
 
 import { memoize } from 'utils/decorators';
 import { createErc20 } from 'generated/contracts/createErc20';
@@ -85,6 +86,46 @@ export class Api {
     await promiEvent;
   }
 
+  @autobind
+  public async sellPtk$(address: string, value: BN): Promise<void> {
+    const promiEvent = new Promise(resolve =>
+      setTimeout(() => {
+        resolve();
+        // eslint-disable-next-line no-console
+        console.log('Sell ptk transaction');
+      }, 1000),
+    );
+
+    (promiEvent as any).on = () => {};
+
+    this.pushToSubmittedTransactions$('pool.sellPtk', promiEvent as PromiEvent<boolean>, {
+      address,
+      value,
+    });
+
+    await promiEvent;
+  }
+
+  @autobind
+  public async buyPtk$(address: string, value: BN): Promise<void> {
+    const promiEvent = new Promise(resolve =>
+      setTimeout(() => {
+        resolve();
+        // eslint-disable-next-line no-console
+        console.log('Buy ptk transaction');
+      }, 1000),
+    );
+
+    (promiEvent as any).on = () => {};
+
+    this.pushToSubmittedTransactions$('pool.buyPtk', promiEvent as PromiEvent<boolean>, {
+      address,
+      value,
+    });
+
+    await promiEvent;
+  }
+
   public getSubmittedTransaction$() {
     return this.submittedTransaction;
   }
@@ -95,6 +136,18 @@ export class Api {
       { _owner: address },
       { Transfer: [{ filter: { _from: address } }, { filter: { _to: address } }] },
     );
+  }
+
+  @memoize(R.identity)
+  // eslint-disable-next-line class-methods-use-this
+  public getPTokenByDai$(value: string): Observable<BN> {
+    return of(new BN(value).muln(2)).pipe(delay(2000));
+  }
+
+  @memoize(R.identity)
+  // eslint-disable-next-line class-methods-use-this
+  public getDaiByPToken$(value: string): Observable<BN> {
+    return of(new BN(value).muln(0.5)).pipe(delay(2000));
   }
 
   private pushToSubmittedTransactions$<T extends SubmittedTransactionType>(

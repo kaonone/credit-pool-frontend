@@ -21,5 +21,6 @@ export * from './RowsLayout/RowsLayout';
 export * from './MetricsList/MetricsList';
 export * from './PersonalInformation/PersonalInformation';
 export * from './ActivitiesCard/ActivitiesCard';
+export * from './ModalButton/ModalButton';
 export * from './Pagination/Pagination';
 export * from './ShortAddress/ShortAddress';

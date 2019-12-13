@@ -23,6 +23,41 @@ const en = {
         success: 'dai.approve transaction succeeded',
         error: 'dai.approve transaction failed',
       },
+      'pool.sellPtk': {
+        pending: 'pool.sellPtk transaction pending',
+        success: 'pool.sellPtk transaction succeeded',
+        error: 'pool.sellPtk transaction failed',
+      },
+      'pool.buyPtk': {
+        pending: 'pool.buyPtk transaction pending',
+        success: 'pool.buyPtk transaction succeeded',
+        error: 'pool.buyPtk transaction failed',
+      },
+    },
+    cashExchange: {
+      pTokenExchangingButton: {
+        buyPtk: 'Buy PTK',
+        sellPtk: 'Sell PTK',
+      },
+      cashExchangeForm: {
+        cancelButtonText: 'Cancel',
+        givenAmountText: 'You get ~%{formattedAmount}',
+        targetAmountError: 'Please, wait until amount is calculated',
+      },
+      cashBuyingForm: {
+        title: 'Buy cash',
+        placeholder: 'Enter sum',
+      },
+      cashSellingForm: {
+        title: 'Sell cash',
+        placeholder: 'Enter sum',
+      },
+      confirmCashExchangeForm: {
+        title: 'Confirm exchanging',
+        confirmMessage: 'Are you sure you want exchange %{givenAmount} on %{receivedAmount}?',
+        no: 'no',
+        yes: 'yes',
+      },
     },
   },
   utils: {

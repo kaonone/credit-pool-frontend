@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { GetProps } from '_helpers';
 
 import { useApi } from 'services/api';
 import { getShortAddress } from 'utils/format';
@@ -7,7 +8,10 @@ import { Button, Loading } from 'components';
 
 import { AuthModal } from './components/AuthModal';
 
-export function AuthButton() {
+type IProps = Pick<GetProps<typeof Button>, 'color'>;
+
+export function AuthButton(props: IProps) {
+  const { color } = props;
   const [isOpened, setIsOpened] = React.useState(false);
   const api = useApi();
 
@@ -27,7 +31,7 @@ export function AuthButton() {
   return (
     <>
       <Button
-        color="primary"
+        color={color}
         variant="outlined"
         disabled={!accountMeta.loaded || status === 'pending'}
         onClick={toggleIsOpened}
