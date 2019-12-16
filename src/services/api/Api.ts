@@ -88,42 +88,17 @@ export class Api {
 
   @autobind
   public async sellPtk$(address: string, value: BN): Promise<void> {
-    const promiEvent = new Promise(resolve =>
-      setTimeout(() => {
-        resolve();
-        // eslint-disable-next-line no-console
-        console.log('Sell ptk transaction');
-      }, 1000),
-    );
-
-    (promiEvent as any).on = () => {};
-
-    this.pushToSubmittedTransactions$('pool.sellPtk', promiEvent as PromiEvent<boolean>, {
-      address,
-      value,
-    });
-
-    await promiEvent;
+    this.sendMockTransaction$('pool.sellPtk', address, value);
   }
 
   @autobind
   public async buyPtk$(address: string, value: BN): Promise<void> {
-    const promiEvent = new Promise(resolve =>
-      setTimeout(() => {
-        resolve();
-        // eslint-disable-next-line no-console
-        console.log('Buy ptk transaction');
-      }, 1000),
-    );
+    this.sendMockTransaction$('pool.buyPtk', address, value);
+  }
 
-    (promiEvent as any).on = () => {};
-
-    this.pushToSubmittedTransactions$('pool.buyPtk', promiEvent as PromiEvent<boolean>, {
-      address,
-      value,
-    });
-
-    await promiEvent;
+  @autobind
+  public async stakePtk$(address: string, value: BN): Promise<void> {
+    this.sendMockTransaction$('pool.stakePtk', address, value);
   }
 
   public getSubmittedTransaction$() {
@@ -148,6 +123,30 @@ export class Api {
   // eslint-disable-next-line class-methods-use-this
   public getDaiByPToken$(value: string): Observable<BN> {
     return of(new BN(value).muln(0.5)).pipe(delay(2000));
+  }
+
+  @autobind
+  private async sendMockTransaction$<T extends SubmittedTransactionType>(
+    transactionName: T,
+    address: string,
+    value: BN,
+  ): Promise<void> {
+    const promiEvent = new Promise(resolve =>
+      setTimeout(() => {
+        resolve();
+        // eslint-disable-next-line no-console
+        console.log(`Send transaction ${transactionName}`);
+      }, 1000),
+    );
+
+    (promiEvent as any).on = () => {};
+
+    this.pushToSubmittedTransactions$(transactionName, promiEvent as PromiEvent<boolean>, {
+      address,
+      value,
+    });
+
+    await promiEvent;
   }
 
   private pushToSubmittedTransactions$<T extends SubmittedTransactionType>(

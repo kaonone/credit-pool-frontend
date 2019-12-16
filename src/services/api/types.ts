@@ -8,7 +8,8 @@ export type SubmittedTransaction =
     >
   | IGenericSubmittedTransaction<'dai.approve', { spender: string; fromAddress: string; value: BN }>
   | IGenericSubmittedTransaction<'pool.sellPtk', { address: string; value: BN }>
-  | IGenericSubmittedTransaction<'pool.buyPtk', { address: string; value: BN }>;
+  | IGenericSubmittedTransaction<'pool.buyPtk', { address: string; value: BN }>
+  | IGenericSubmittedTransaction<'pool.stakePtk', { address: string; value: BN }>;
 
 export interface IGenericSubmittedTransaction<T extends string, P = void> {
   type: T;

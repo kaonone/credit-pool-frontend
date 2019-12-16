@@ -4,7 +4,7 @@ import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import { Back } from 'components/icons';
 import { Grid, IconButton, Typography, MetricsList, IMetric } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { PTokenExchangingButton } from 'features/cashExchange';
+import { PTokenBuyingButton, PTokenSellingButton } from 'features/cashExchange';
 import { AuthButton } from 'features/auth';
 
 import { useStyles } from './Header.style';
@@ -85,20 +85,10 @@ function HeaderComponent(props: IProps) {
             <Grid item>
               <Grid container spacing={2} alignItems="center">
                 <Grid item>
-                  <PTokenExchangingButton
-                    direction="sell"
-                    size="large"
-                    color="secondary"
-                    variant="contained"
-                  />
+                  <PTokenSellingButton size="large" color="secondary" variant="contained" />
                 </Grid>
                 <Grid item>
-                  <PTokenExchangingButton
-                    direction="buy"
-                    size="large"
-                    color="secondary"
-                    variant="contained"
-                  />
+                  <PTokenBuyingButton size="large" color="secondary" variant="contained" />
                 </Grid>
               </Grid>
             </Grid>

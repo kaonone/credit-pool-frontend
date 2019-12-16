@@ -1,12 +1,15 @@
 import React, { useCallback } from 'react';
 import BN from 'bn.js';
+import Typography from '@material-ui/core/Typography';
 
 import { useSubscribable } from 'utils/react';
-import { useApi } from 'services/api';
-import { SpyField } from 'components/form';
-import { Loading, Hint, Typography } from 'components';
 import { formatBalance } from 'utils/format';
+import { useApi } from 'services/api';
 import { useTranslate } from 'services/i18n';
+import { SpyField } from 'components/form';
+import { Loading } from 'components/Loading';
+import { Hint } from 'components/Hint/Hint';
+import { DEFAULT_DECIMALS } from 'env';
 
 import { Direction } from './PTokenExchangingForm';
 
@@ -15,15 +18,16 @@ interface IProps {
   sourceAmount: string;
   targetSymbol: string;
   spyFieldName: string;
+  messageText?: string;
 }
 
 function TargetAmountField(props: IProps) {
-  const { direction, sourceAmount, spyFieldName, targetSymbol } = props;
+  const { direction, sourceAmount, spyFieldName, targetSymbol, messageText } = props;
   const { t, tKeys } = useTranslate();
   const api = useApi();
 
   const [targetAmount, targetAmountMeta] = useSubscribable(
-    direction === 'buy'
+    direction === 'DaiToPtk'
       ? () => api.getPTokenByDai$(sourceAmount)
       : () => api.getDaiByPToken$(sourceAmount),
     [sourceAmount, direction],
@@ -38,11 +42,11 @@ function TargetAmountField(props: IProps) {
   const renderCalculatedAmountMessage = useCallback(() => {
     const formattedAmount = formatBalance({
       amountInBaseUnits: targetAmount || new BN(0),
-      baseDecimals: 0,
+      baseDecimals: DEFAULT_DECIMALS,
       tokenSymbol: targetSymbol,
     });
 
-    return t(tKeys.features.cashExchange.cashExchangeForm.givenAmountText.getKey(), {
+    return t(messageText || tKeys.features.cashExchange.cashExchangeForm.givenAmountText.getKey(), {
       formattedAmount,
     });
   }, [targetSymbol, targetAmount, t]);

@@ -3,6 +3,7 @@ import React from 'react';
 import { Metric } from 'components/Metric/Metric';
 import { Profit } from 'components/Profit/Profit';
 import { formatBalance } from 'utils/format';
+import { DEFAULT_DECIMALS } from 'env';
 
 interface IProps {
   title: React.ReactNode;
@@ -18,7 +19,7 @@ function CashMetric(props: IProps) {
 
   const formattedValue = formatBalance({
     amountInBaseUnits: value,
-    baseDecimals: 15,
+    baseDecimals: DEFAULT_DECIMALS,
     tokenSymbol: symbol,
   });
 
@@ -26,7 +27,7 @@ function CashMetric(props: IProps) {
     needed &&
     `~${formatBalance({
       amountInBaseUnits: needed,
-      baseDecimals: 15,
+      baseDecimals: DEFAULT_DECIMALS,
       tokenSymbol: symbol,
     })} needed`;
 

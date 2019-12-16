@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
+import { StakeButton } from 'features/cashExchange';
 import { CashMetric } from 'components/CashMetric/CashMetric';
 import { Metric } from 'components/Metric/Metric';
 import { ShortAddress } from 'components/ShortAddress/ShortAddress';
@@ -92,7 +93,14 @@ function ActivitiesCard(props: IOwnProps) {
             </Grid>
           </Grid>
         ) : (
-          <Progress percent={progress} timeLeft={timeLeft} />
+          <Grid container spacing={2} justify="center" direction="column">
+            <Grid item>
+              <Progress percent={progress} timeLeft={timeLeft} />
+            </Grid>
+            <Grid item>
+              <StakeButton variant="contained" color="primary" fullWidth />
+            </Grid>
+          </Grid>
         )}
       </Grid>
     </Grid>
