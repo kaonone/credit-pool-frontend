@@ -33,28 +33,39 @@ const en = {
         success: 'pool.buyPtk transaction succeeded',
         error: 'pool.buyPtk transaction failed',
       },
+      'pool.stakePtk': {
+        pending: 'pool.stakePtk transaction pending',
+        success: 'pool.stakePtk transaction succeeded',
+        error: 'pool.stakePtk transaction failed',
+      },
     },
     cashExchange: {
-      pTokenExchangingButton: {
-        buyPtk: 'Buy PTK',
-        sellPtk: 'Sell PTK',
+      pTokenBuyingButton: {
+        buttonTitle: 'Buy PTK',
+        formTitle: 'Buy Pool Tokens',
+        placeholder: 'Enter sum',
       },
-      cashExchangeForm: {
+      pTokenSellingButton: {
+        buttonTitle: 'Sell PTK',
+        formTitle: 'Sell Pool Tokens',
+        placeholder: 'Enter sum',
+      },
+      stakeButton: {
+        buttonTitle: 'Stake',
+        formTitle: 'Stake',
+        placeholder: 'Enter sum',
+        confirmText:
+          'Are you sure you want to stake %{sourceAmount} and cover deposit %{targetAmount}?',
+        calculatedAmountText: 'You cover deposit ~%{formattedAmount}',
+      },
+      exchangingForm: {
         cancelButtonText: 'Cancel',
         givenAmountText: 'You get ~%{formattedAmount}',
-        targetAmountError: 'Please, wait until amount is calculated',
+        targetAmountError: 'Please wait until amount is calculated',
       },
-      cashBuyingForm: {
-        title: 'Buy Pool Tokens',
-        placeholder: 'Enter sum',
-      },
-      cashSellingForm: {
-        title: 'Sell Pool Tokens',
-        placeholder: 'Enter sum',
-      },
-      confirmCashExchangeForm: {
-        title: 'Confirm exchanging',
-        confirmMessage: 'Are you sure you want exchange %{givenAmount} on %{receivedAmount}?',
+      exchangingConfirmation: {
+        title: 'Confirm action',
+        confirmMessage: 'Are you sure you want exchange %{sourceAmount} on %{targetAmount}?',
         no: 'no',
         yes: 'yes',
       },
