@@ -87,18 +87,18 @@ export class Api {
   }
 
   @autobind
-  public async sellPtk$(address: string, value: BN): Promise<void> {
-    this.sendMockTransaction$('pool.sellPtk', address, value);
+  public async sellPtk$(address: string, sourceAmount: BN, targetAmount: BN): Promise<void> {
+    this.sendMockTransaction$('pool.sellPtk', { address, sourceAmount, targetAmount });
   }
 
   @autobind
-  public async buyPtk$(address: string, value: BN): Promise<void> {
-    this.sendMockTransaction$('pool.buyPtk', address, value);
+  public async buyPtk$(address: string, sourceAmount: BN, targetAmount: BN): Promise<void> {
+    this.sendMockTransaction$('pool.buyPtk', { address, sourceAmount, targetAmount });
   }
 
   @autobind
-  public async stakePtk$(address: string, value: BN): Promise<void> {
-    this.sendMockTransaction$('pool.stakePtk', address, value);
+  public async stakePtk$(address: string, sourceAmount: BN, targetAmount: BN): Promise<void> {
+    this.sendMockTransaction$('pool.stakePtk', { address, sourceAmount, targetAmount });
   }
 
   public getSubmittedTransaction$() {
@@ -114,12 +114,14 @@ export class Api {
   }
 
   @memoize(R.identity)
+  @autobind
   // eslint-disable-next-line class-methods-use-this
   public getPTokenByDai$(value: string): Observable<BN> {
     return of(new BN(value).muln(2)).pipe(delay(2000));
   }
 
   @memoize(R.identity)
+  @autobind
   // eslint-disable-next-line class-methods-use-this
   public getDaiByPToken$(value: string): Observable<BN> {
     return of(new BN(value).muln(0.5)).pipe(delay(2000));
@@ -128,8 +130,7 @@ export class Api {
   @autobind
   private async sendMockTransaction$<T extends SubmittedTransactionType>(
     transactionName: T,
-    address: string,
-    value: BN,
+    payload: ExtractSubmittedTransaction<T>['payload'],
   ): Promise<void> {
     const promiEvent = new Promise(resolve =>
       setTimeout(() => {
@@ -141,10 +142,7 @@ export class Api {
 
     (promiEvent as any).on = () => {};
 
-    this.pushToSubmittedTransactions$(transactionName, promiEvent as PromiEvent<boolean>, {
-      address,
-      value,
-    });
+    this.pushToSubmittedTransactions$(transactionName, promiEvent as PromiEvent<boolean>, payload);
 
     await promiEvent;
   }

@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import BN from 'bn.js';
 import Typography from '@material-ui/core/Typography';
+import { Observable } from 'rxjs';
 
 import { useSubscribable } from 'utils/react';
 import { formatBalance } from 'utils/format';
@@ -18,18 +19,21 @@ interface IProps {
   sourceAmount: string;
   targetSymbol: string;
   spyFieldName: string;
-  messageText?: string;
+  messageTKey?: string;
 }
 
 function TargetAmountField(props: IProps) {
-  const { direction, sourceAmount, spyFieldName, targetSymbol, messageText } = props;
+  const { direction, sourceAmount, spyFieldName, targetSymbol, messageTKey } = props;
   const { t, tKeys } = useTranslate();
   const api = useApi();
 
+  const methodByDirection: Record<Direction, (value: string) => Observable<BN>> = {
+    DaiToPtk: api.getPTokenByDai$,
+    PtkToDai: api.getDaiByPToken$,
+  };
+
   const [targetAmount, targetAmountMeta] = useSubscribable(
-    direction === 'DaiToPtk'
-      ? () => api.getPTokenByDai$(sourceAmount)
-      : () => api.getDaiByPToken$(sourceAmount),
+    () => methodByDirection[direction](sourceAmount),
     [sourceAmount, direction],
   );
 
@@ -46,10 +50,10 @@ function TargetAmountField(props: IProps) {
       tokenSymbol: targetSymbol,
     });
 
-    return t(messageText || tKeys.features.cashExchange.cashExchangeForm.givenAmountText.getKey(), {
+    return t(messageTKey || tKeys.features.cashExchange.exchangingForm.givenAmountText.getKey(), {
       formattedAmount,
     });
-  }, [targetSymbol, targetAmount, t]);
+  }, [targetSymbol, targetAmount, messageTKey, t]);
 
   return (
     <>

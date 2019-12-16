@@ -41,8 +41,8 @@ interface IProps {
   maxValue: BN;
   sourceSymbol: string;
   targetSymbol: string;
-  placeholder: string;
-  calculatedAmountText?: string;
+  sourcePlaceholder: string;
+  calculatedAmountTKey?: string;
   onSubmit: ({ givenAmount, receivedAmount }: { givenAmount: string; receivedAmount: BN }) => void;
   onCancel: () => void;
 }
@@ -56,12 +56,12 @@ function PTokenExchangingForm(props: IProps) {
     targetSymbol,
     onSubmit,
     onCancel,
-    placeholder,
-    calculatedAmountText,
+    sourcePlaceholder,
+    calculatedAmountTKey,
   } = props;
 
   const { t } = useTranslate();
-  const tKeys = tKeysAll.features.cashExchange.cashExchangeForm;
+  const tKeys = tKeysAll.features.cashExchange.exchangingForm;
 
   const initialValues = useMemo<IFormData>(
     () => ({
@@ -122,7 +122,7 @@ function PTokenExchangingForm(props: IProps) {
                 baseDecimals={DEFAULT_DECIMALS}
                 baseUnitName={sourceSymbol}
                 name={fieldNames.amount}
-                placeholder={placeholder}
+                placeholder={sourcePlaceholder}
               />
             </Grid>
             <FormSpy subscription={{ values: true }}>
@@ -133,7 +133,7 @@ function PTokenExchangingForm(props: IProps) {
                     sourceAmount={values.amount}
                     targetSymbol={targetSymbol}
                     spyFieldName={fieldNames.targetAmount}
-                    messageText={calculatedAmountText}
+                    messageTKey={calculatedAmountTKey}
                   />
                 </Grid>
               )}

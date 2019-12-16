@@ -58,12 +58,12 @@ const en = {
           'Are you sure you want to stake %{sourceAmount} and cover deposit %{targetAmount}?',
         calculatedAmountText: 'You cover deposit ~%{formattedAmount}',
       },
-      cashExchangeForm: {
+      exchangingForm: {
         cancelButtonText: 'Cancel',
         givenAmountText: 'You get ~%{formattedAmount}',
-        targetAmountError: 'Please, wait until amount is calculated',
+        targetAmountError: 'Please wait until amount is calculated',
       },
-      confirmCashExchangeForm: {
+      exchangingConfirmation: {
         title: 'Confirm action',
         confirmMessage: 'Are you sure you want exchange %{sourceAmount} on %{targetAmount}?',
         no: 'no',

@@ -1,5 +1,4 @@
 import React from 'react';
-import { GetProps } from '_helpers';
 import BN from 'bn.js';
 import Button from '@material-ui/core/Button';
 
@@ -10,12 +9,11 @@ import { useApi } from 'services/api';
 
 import { PTokenExchanging } from '../../components/PTokenExcahnging/PTokenExcahnging';
 
-type IProps = Omit<GetProps<typeof Button>, 'ref'>;
+type IProps = React.ComponentPropsWithoutRef<typeof Button>;
 
 const tKeys = tKeysAll.features.cashExchange.pTokenSellingButton;
 
 function PTokenSellingButton(props: IProps) {
-  const { ...restProps } = props;
   const { t } = useTranslate();
   const api = useApi();
 
@@ -24,17 +22,17 @@ function PTokenSellingButton(props: IProps) {
       startIcon={<SellCashIcon />}
       content={t(tKeys.buttonTitle.getKey())}
       fullWidth
-      {...restProps}
+      {...props}
     >
       {({ closeModal }) => (
         <PTokenExchanging
           title={t(tKeys.formTitle.getKey())}
           maxValue={new BN(1000000000000000)}
-          placeholder={t(tKeys.placeholder.getKey())}
+          sourcePlaceholder={t(tKeys.placeholder.getKey())}
           sourceSymbol="PTK"
           targetSymbol="DAI"
           direction="PtkToDai"
-          apiMethod={api.sellPtk$}
+          onExchangeRequest={api.sellPtk$}
           onCancel={closeModal}
         />
       )}

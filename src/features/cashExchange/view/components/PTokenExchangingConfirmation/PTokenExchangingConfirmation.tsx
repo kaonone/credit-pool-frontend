@@ -23,21 +23,21 @@ interface IProps {
   amounts: Amounts | null;
   sourceSymbol: string;
   targetSymbol: string;
-  confirmText?: string;
+  messageTKey?: string;
   onConfirm: () => Promise<void>;
   onCancel: () => void;
 }
 
 function PTokenExchangingConfirmation(props: IProps) {
-  const { sourceSymbol, targetSymbol, confirmText, onCancel, onConfirm, amounts, isOpen } = props;
+  const { sourceSymbol, targetSymbol, messageTKey, onCancel, onConfirm, amounts, isOpen } = props;
 
   const { t } = useTranslate();
-  const tKeys = tKeysAll.features.cashExchange.confirmCashExchangeForm;
+  const tKeys = tKeysAll.features.cashExchange.exchangingConfirmation;
 
   const communication = useCommunication(onConfirm, []);
   const { status, error } = communication;
 
-  const confirmMessage = t(confirmText || tKeys.confirmMessage.getKey(), {
+  const confirmMessage = t(messageTKey || tKeys.confirmMessage.getKey(), {
     sourceAmount: formatBalance({
       amountInBaseUnits: amounts?.givenAmount || '0',
       baseDecimals: DEFAULT_DECIMALS,

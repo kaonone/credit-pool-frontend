@@ -1,5 +1,4 @@
 import React from 'react';
-import { GetProps } from '_helpers';
 import BN from 'bn.js';
 import Button from '@material-ui/core/Button';
 
@@ -9,12 +8,11 @@ import { ModalButton } from 'components/ModalButton/ModalButton';
 
 import { PTokenExchanging } from '../../components/PTokenExcahnging/PTokenExcahnging';
 
-type IProps = Omit<GetProps<typeof Button>, 'ref'>;
+type IProps = React.ComponentPropsWithoutRef<typeof Button>;
 
 const tKeys = tKeysAll.features.cashExchange.stakeButton;
 
 function StakeButton(props: IProps) {
-  const { ...restProps } = props;
   const { t } = useTranslate();
   const api = useApi();
 
@@ -22,19 +20,19 @@ function StakeButton(props: IProps) {
   const calculatedAmountText = tKeys.calculatedAmountText.getKey();
 
   return (
-    <ModalButton content={t(tKeys.buttonTitle.getKey())} fullWidth {...restProps}>
+    <ModalButton content={t(tKeys.buttonTitle.getKey())} fullWidth {...props}>
       {({ closeModal }) => (
         <PTokenExchanging
           title={t(tKeys.formTitle.getKey())}
           maxValue={new BN(1000000000000000)}
-          placeholder={t(tKeys.placeholder.getKey())}
-          confirmText={confirmText}
+          sourcePlaceholder={t(tKeys.placeholder.getKey())}
+          confirmMessageTKey={confirmText}
           sourceSymbol="PTK"
           targetSymbol="DAI"
           direction="PtkToDai"
-          apiMethod={api.stakePtk$}
+          onExchangeRequest={api.stakePtk$}
           onCancel={closeModal}
-          calculatedAmountText={calculatedAmountText}
+          calculatedAmountTKey={calculatedAmountText}
         />
       )}
     </ModalButton>

@@ -1,21 +1,19 @@
 import React from 'react';
-import { GetProps } from '_helpers';
 import BN from 'bn.js';
 import Button from '@material-ui/core/Button';
 
+import { useApi } from 'services/api';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { BuyCashIcon } from 'components/icons';
 import { ModalButton } from 'components/ModalButton/ModalButton';
-import { useApi } from 'services/api';
 
 import { PTokenExchanging } from '../../components/PTokenExcahnging/PTokenExcahnging';
 
-type IProps = Omit<GetProps<typeof Button>, 'ref'>;
+type IProps = React.ComponentPropsWithoutRef<typeof Button>;
 
 const tKeys = tKeysAll.features.cashExchange.pTokenBuyingButton;
 
 function PTokenBuyingButton(props: IProps) {
-  const { ...restProps } = props;
   const { t } = useTranslate();
   const api = useApi();
 
@@ -24,17 +22,17 @@ function PTokenBuyingButton(props: IProps) {
       startIcon={<BuyCashIcon />}
       content={t(tKeys.buttonTitle.getKey())}
       fullWidth
-      {...restProps}
+      {...props}
     >
       {({ closeModal }) => (
         <PTokenExchanging
           title={t(tKeys.formTitle.getKey())}
           maxValue={new BN(1000000000000000)}
-          placeholder={t(tKeys.placeholder.getKey())}
+          sourcePlaceholder={t(tKeys.placeholder.getKey())}
           sourceSymbol="DAI"
           targetSymbol="PTK"
           direction="DaiToPtk"
-          apiMethod={api.buyPtk$}
+          onExchangeRequest={api.buyPtk$}
           onCancel={closeModal}
         />
       )}

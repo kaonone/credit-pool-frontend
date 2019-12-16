@@ -14,13 +14,13 @@ import { PTokenExchangingForm, Direction } from '../PTokenExchangingForm/PTokenE
 interface IProps {
   title: string;
   maxValue: BN;
-  placeholder: string;
+  sourcePlaceholder: string;
   sourceSymbol: string;
   targetSymbol: string;
   direction: Direction;
-  confirmText?: string;
-  calculatedAmountText?: string;
-  apiMethod: (account: string, amount: BN) => Promise<void>;
+  confirmMessageTKey?: string;
+  calculatedAmountTKey?: string;
+  onExchangeRequest: (account: string, sourceAmount: BN, targetAmount: BN) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -28,14 +28,14 @@ function PTokenExchanging(props: IProps) {
   const {
     title,
     maxValue,
-    placeholder,
+    sourcePlaceholder,
     sourceSymbol,
     targetSymbol,
     direction,
-    confirmText,
-    apiMethod,
+    confirmMessageTKey,
+    onExchangeRequest,
     onCancel,
-    calculatedAmountText,
+    calculatedAmountTKey,
   } = props;
 
   const api = useApi();
@@ -46,10 +46,14 @@ function PTokenExchanging(props: IProps) {
     if (!account) {
       throw new Error('You need to connect to Ethereum wallet');
     }
-    await apiMethod(account, new BN(amounts?.givenAmount || 0));
+    await onExchangeRequest(
+      account,
+      new BN(amounts?.givenAmount || 0),
+      new BN(amounts?.receivedAmount || 0),
+    );
     setAmounts(null);
     onCancel();
-  }, [apiMethod, onCancel, api, account, amounts?.givenAmount]);
+  }, [onExchangeRequest, onCancel, api, account, amounts?.givenAmount]);
 
   const handlePTokenExchangingConfirmationCancel = useCallback(() => {
     setAmounts(null);
@@ -64,16 +68,16 @@ function PTokenExchanging(props: IProps) {
           maxValue={maxValue}
           sourceSymbol={sourceSymbol}
           targetSymbol={targetSymbol}
-          placeholder={placeholder}
+          sourcePlaceholder={sourcePlaceholder}
           onSubmit={setAmounts}
           onCancel={onCancel}
-          calculatedAmountText={calculatedAmountText}
+          calculatedAmountTKey={calculatedAmountTKey}
         />
         <PTokenExchangingConfirmation
           isOpen={!!amounts}
           sourceSymbol={sourceSymbol}
           targetSymbol={targetSymbol}
-          confirmText={confirmText}
+          messageTKey={confirmMessageTKey}
           onConfirm={handlePTokenExchangingConfirmationClick}
           onCancel={handlePTokenExchangingConfirmationCancel}
           amounts={amounts}
