@@ -9,3 +9,4 @@ export { LendIcon } from './LendIcon';
 export { SellCashIcon } from './SellCashIcon';
 export { BuyCashIcon } from './BuyCashIcon';
 export { AngleArrow } from './AngleArrow';
+export { InfoIcon } from './InfoIcon';

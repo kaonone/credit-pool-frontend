@@ -13,6 +13,7 @@ export { default as IconButton } from '@material-ui/core/IconButton';
 export { default as Tabs } from '@material-ui/core/Tabs';
 export { default as Tab } from '@material-ui/core/Tab';
 export { default as Badge } from '@material-ui/core/Badge';
+export { default as Tooltip } from '@material-ui/core/Tooltip';
 
 export * from './ErrorBoundary';
 export * from './Hint/Hint';

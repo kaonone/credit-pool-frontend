@@ -11,6 +11,7 @@ import Box from '@material-ui/core/Box';
 import { BalanceChart } from 'components/BalanceChart/BalanceChart';
 import { Growth } from 'components/Growth/Growth';
 import { formatBalance } from 'utils/format';
+import { DEFAULT_DECIMALS } from 'env';
 
 import { useStyles } from './Chart.style';
 
@@ -59,7 +60,7 @@ const Chart = (props: IProps) => {
           <Typography className={classes.balanceValue} variant="h4">
             {formatBalance({
               amountInBaseUnits: balance,
-              baseDecimals: 18,
+              baseDecimals: DEFAULT_DECIMALS,
               tokenSymbol: '$',
             })}
           </Typography>

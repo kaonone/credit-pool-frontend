@@ -16,10 +16,12 @@ export const useStyles = makeStyles((theme: Theme) => ({
     fontWeight: 600,
   },
 
-  icon: {
-    width: theme.spacing(2.5),
-    height: theme.spacing(2.5),
-    background: 'rgba(255, 255, 255, 0.2)',
+  infoButton: {
+    padding: 0,
+  },
+
+  infoIcon: {
+    fontSize: theme.spacing(3),
   },
 
   button: {
