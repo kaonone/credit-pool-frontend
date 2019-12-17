@@ -77,8 +77,8 @@ export function AuthModal(props: AuthModalProps) {
               </Button>
             </Grid>
           )}
-          {walletTypes.map(type => (
-            <Grid item xs>
+          {walletTypes.map((type, index) => (
+            <Grid item xs key={index}>
               <ConnectButton connect={connect} type={type} key={type} />
             </Grid>
           ))}

@@ -1,14 +1,13 @@
-import { makeStyles, colors, Theme } from 'utils/styles';
+import { makeStyles, colors } from 'utils/styles';
 
-export const useStyles = makeStyles((theme: Theme) => ({
-  icon: {
-    ...theme.typography.h6,
-    position: 'relative',
-    top: '.125em;',
+export const useStyles = makeStyles(() => ({
+  root: {
     color: colors.shamrock,
   },
 
-  value: {
-    color: colors.shamrock,
+  icon: {
+    position: 'relative',
+    top: '.125em;',
+    fontSize: 'inherit',
   },
 }));
