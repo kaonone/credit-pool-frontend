@@ -3,9 +3,13 @@ import BN from 'bn.js';
 import { Form, FormSpy } from 'react-final-form';
 import { FORM_ERROR } from 'final-form';
 import * as R from 'ramda';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { Grid, Hint, Typography, Button, CircularProgress } from 'components';
 import { DecimalsField } from 'components/form';
+import { Hint } from 'components/Hint/Hint';
 import {
   validateInteger,
   validatePositiveNumber,
@@ -15,6 +19,7 @@ import {
 } from 'utils/validators';
 import { formatBalance } from 'utils/format';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
+import { DEFAULT_DECIMALS } from 'env';
 
 import { TargetAmountField } from './TargetAmountField';
 
@@ -28,7 +33,7 @@ const fieldNames: { [K in keyof IFormData]: K } = {
   targetAmount: 'targetAmount',
 };
 
-export type Direction = 'buy' | 'sell';
+export type Direction = 'PtkToDai' | 'DaiToPtk';
 
 interface IProps {
   direction: Direction;
@@ -36,7 +41,8 @@ interface IProps {
   maxValue: BN;
   sourceSymbol: string;
   targetSymbol: string;
-  placeholder: string;
+  sourcePlaceholder: string;
+  calculatedAmountTKey?: string;
   onSubmit: ({ givenAmount, receivedAmount }: { givenAmount: string; receivedAmount: BN }) => void;
   onCancel: () => void;
 }
@@ -50,11 +56,12 @@ function PTokenExchangingForm(props: IProps) {
     targetSymbol,
     onSubmit,
     onCancel,
-    placeholder,
+    sourcePlaceholder,
+    calculatedAmountTKey,
   } = props;
 
   const { t } = useTranslate();
-  const tKeys = tKeysAll.features.cashExchange.cashExchangeForm;
+  const tKeys = tKeysAll.features.cashExchange.exchangingForm;
 
   const initialValues = useMemo<IFormData>(
     () => ({
@@ -68,7 +75,7 @@ function PTokenExchangingForm(props: IProps) {
     (value: number | BN) => {
       return formatBalance({
         amountInBaseUnits: value as BN,
-        baseDecimals: 0,
+        baseDecimals: DEFAULT_DECIMALS,
         tokenSymbol: targetSymbol,
       });
     },
@@ -112,10 +119,10 @@ function PTokenExchangingForm(props: IProps) {
               <DecimalsField
                 maxValue={maxValue}
                 validate={validateAmount}
-                baseDecimals={0}
+                baseDecimals={DEFAULT_DECIMALS}
                 baseUnitName={sourceSymbol}
                 name={fieldNames.amount}
-                placeholder={placeholder}
+                placeholder={sourcePlaceholder}
               />
             </Grid>
             <FormSpy subscription={{ values: true }}>
@@ -126,6 +133,7 @@ function PTokenExchangingForm(props: IProps) {
                     sourceAmount={values.amount}
                     targetSymbol={targetSymbol}
                     spyFieldName={fieldNames.targetAmount}
+                    messageTKey={calculatedAmountTKey}
                   />
                 </Grid>
               )}

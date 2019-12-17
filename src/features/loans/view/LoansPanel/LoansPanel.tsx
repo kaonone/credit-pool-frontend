@@ -6,6 +6,7 @@ import { MakeTableType } from 'components/Table/Table';
 import { Table as GeneralTable, Typography } from 'components';
 import { ExpansionPanel } from 'components/ExpansionPanel/ExpansionPanel';
 import { formatBalance } from 'utils/format';
+import { DEFAULT_DECIMALS } from 'env';
 
 import { AddressCell } from './LoansTableCells';
 import { useStyles } from './LoansPanel.style';
@@ -55,7 +56,7 @@ function LoansPanel(props: IProps) {
           {({ data }) =>
             formatBalance({
               amountInBaseUnits: new BN(data.loan),
-              baseDecimals: 0,
+              baseDecimals: DEFAULT_DECIMALS,
               tokenSymbol: 'DAI',
             })
           }
@@ -67,7 +68,7 @@ function LoansPanel(props: IProps) {
           {({ data }) =>
             formatBalance({
               amountInBaseUnits: new BN(data.duePayment),
-              baseDecimals: 0,
+              baseDecimals: DEFAULT_DECIMALS,
               tokenSymbol: 'DAI',
             })
           }
@@ -93,7 +94,7 @@ function LoansPanel(props: IProps) {
               data.earn &&
               formatBalance({
                 amountInBaseUnits: new BN(data.earn),
-                baseDecimals: 0,
+                baseDecimals: DEFAULT_DECIMALS,
                 tokenSymbol: 'DAI',
               })
             }
@@ -110,7 +111,7 @@ function LoansPanel(props: IProps) {
           {({ data }) =>
             formatBalance({
               amountInBaseUnits: new BN(data.myStake),
-              baseDecimals: 0,
+              baseDecimals: DEFAULT_DECIMALS,
               tokenSymbol: 'DAI',
             })
           }
