@@ -17,8 +17,6 @@ export const useStyles = makeStyles((theme: Theme) => {
 
     switchButton: {
       minWidth: 'unset',
-      minHeight: 'unset',
-      padding: '0.1875rem 0.6875rem',
       fontSize: '0.625rem',
     },
 

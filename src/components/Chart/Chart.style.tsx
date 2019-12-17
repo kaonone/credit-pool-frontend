@@ -25,20 +25,23 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
 
   membersCount: {
-    width: theme.spacing(3),
+    display: 'flex',
+    alignItems: 'center',
+    minWidth: theme.spacing(3),
     height: theme.spacing(3),
-    composes: '$avatarStub',
+    padding: theme.spacing(0, 1),
+    borderRadius: theme.spacing(1.5),
     backgroundColor: colors.athensGray,
     color: colors.haiti,
-  },
-
-  balance: {
-    marginBottom: theme.spacing(1),
   },
 
   balanceValue: {
     marginRight: theme.spacing(1),
     lineHeight: 1.15,
+  },
+
+  growth: {
+    fontSize: '0.8em',
   },
 
   graphic: {

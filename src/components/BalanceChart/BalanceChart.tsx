@@ -118,12 +118,14 @@ function PeriodSwitch(props: IPeriodSwitchProps) {
   return (
     <Grid container wrap="nowrap" spacing={2} justify="space-between">
       {periods.map(period => (
-        <Grid item key={period}>
+        <Grid item xs key={period}>
           <Button
             variant="contained"
             color={period === selectedPeriod ? 'primary' : undefined}
             onClick={selectPeriod(period)}
             className={classes.switchButton}
+            size="small"
+            fullWidth
           >
             {period}
           </Button>

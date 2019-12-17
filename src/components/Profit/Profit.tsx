@@ -1,24 +1,23 @@
 import React from 'react';
+import cn from 'classnames';
 import CallMadeIcon from '@material-ui/icons/CallMade';
-import Typography from '@material-ui/core/Typography';
 
 import { useStyles } from './Profit.style';
 
 interface IProps {
   value: React.ReactNode;
+  className?: string;
 }
 
 function Profit(props: IProps) {
-  const { value } = props;
+  const { value, className } = props;
   const classes = useStyles();
 
   return (
-    <div>
+    <span className={cn(classes.root, className)}>
       <CallMadeIcon className={classes.icon} />
-      <Typography variant="h6" component="span" className={classes.value}>
-        {`${value}%`}
-      </Typography>
-    </div>
+      {`${value}%`}
+    </span>
   );
 }
 

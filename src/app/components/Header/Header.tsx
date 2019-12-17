@@ -61,23 +61,17 @@ function HeaderComponent(props: IProps) {
         )}
 
         <Grid item xs zeroMinWidth>
-          <Grid container spacing={1} alignItems="center">
-            <Grid item>
-              <Typography variant="h4" noWrap className={classes.title}>
-                {title}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Tooltip
-                title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, nobis!"
-                placement="right"
-              >
-                <div>
-                  <InfoIcon className={classes.infoIcon} />
-                </div>
-              </Tooltip>
-            </Grid>
-          </Grid>
+          <Typography variant="h4" noWrap className={classes.title}>
+            {title}{' '}
+            <Tooltip
+              title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, nobis!"
+              placement="right"
+            >
+              <span>
+                <InfoIcon className={classes.infoIcon} />
+              </span>
+            </Tooltip>
+          </Typography>
         </Grid>
 
         <Grid item>

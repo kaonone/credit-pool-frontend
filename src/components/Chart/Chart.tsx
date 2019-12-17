@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import Box from '@material-ui/core/Box';
 
 import { BalanceChart } from 'components/BalanceChart/BalanceChart';
 import { Growth } from 'components/Growth/Growth';
@@ -35,36 +34,35 @@ const Chart = (props: IProps) => {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Box mb={3}>
-          <Grid container spacing={3} alignItems="center">
-            <Grid item xs={6}>
-              <Typography className={classes.title} variant="subtitle2">
-                {title}
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Grid container wrap="nowrap" direction="row-reverse">
-                <Avatar classes={{ colorDefault: classes.membersCount }}>
-                  <Typography variant="subtitle2">{members.length}</Typography>
+        {/* <Box mb={3}> */}
+        <Grid container spacing={3} alignItems="center">
+          <Grid item xs={6}>
+            <Typography className={classes.title} variant="subtitle2">
+              {title}
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Grid container wrap="nowrap" direction="row-reverse">
+              <div className={classes.membersCount}>
+                <Typography variant="subtitle2">{members.length}</Typography>
+              </div>
+              {members.slice(0, 3).map(item => (
+                <Avatar key={item} className={classes.avatar}>
+                  <Jazzicon diameter={40} seed={jsNumberForAddress(item)} />
                 </Avatar>
-                {members.slice(0, 3).map(item => (
-                  <Avatar key={item} className={classes.avatar}>
-                    <Jazzicon diameter={40} seed={jsNumberForAddress(item)} />
-                  </Avatar>
-                ))}
-              </Grid>
+              ))}
             </Grid>
           </Grid>
-        </Box>
-        <Grid container wrap="nowrap" alignItems="flex-start" className={classes.balance}>
-          <Typography className={classes.balanceValue} variant="h4">
-            {formatBalance({
-              amountInBaseUnits: balance,
-              baseDecimals: DEFAULT_DECIMALS,
-              tokenSymbol: '$',
-            })}
-          </Typography>
-          <Growth previous={balanceDayAgo} current={balance} />
+          <Grid item xs={12}>
+            <Typography className={classes.balanceValue} variant="h4">
+              {formatBalance({
+                amountInBaseUnits: balance,
+                baseDecimals: DEFAULT_DECIMALS,
+                tokenSymbol: '$',
+              })}{' '}
+              <Growth className={classes.growth} previous={balanceDayAgo} current={balance} />
+            </Typography>
+          </Grid>
         </Grid>
         <div className={classes.graphic}>
           <BalanceChart points={chartPoints} />
