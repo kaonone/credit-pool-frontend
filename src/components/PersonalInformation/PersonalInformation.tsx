@@ -43,7 +43,7 @@ function PersonalInformation() {
   );
 
   return (
-    <Card>
+    <Card className={classes.root}>
       <CardContent>
         <Box mb={3}>
           <Typography className={classes.title} variant="subtitle2">
