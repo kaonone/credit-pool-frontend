@@ -72,9 +72,9 @@ function HeaderComponent(props: IProps) {
                 title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, nobis!"
                 placement="right"
               >
-                <IconButton className={classes.infoButton} aria-label="info">
+                <div>
                   <InfoIcon className={classes.infoIcon} />
-                </IconButton>
+                </div>
               </Tooltip>
             </Grid>
           </Grid>

@@ -16,11 +16,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
     fontWeight: 600,
   },
 
-  infoButton: {
-    padding: 0,
-  },
-
   infoIcon: {
+    position: 'relative',
+    top: '0.1em',
     fontSize: theme.spacing(3),
   },
 
