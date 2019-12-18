@@ -7,8 +7,9 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Observable } from 'rxjs';
 
-import { DecimalsField } from 'components/form';
+import { DecimalsField, SpyField } from 'components/form';
 import { Hint } from 'components/Hint/Hint';
 import {
   validateInteger,
@@ -20,17 +21,21 @@ import {
 import { formatBalance } from 'utils/format';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { DEFAULT_DECIMALS } from 'env';
+import { useApi } from 'services/api';
+import { useSubscribable } from 'utils/react';
 
 import { TargetAmountField } from './TargetAmountField';
 
 export interface IFormData {
   sourceAmount: string;
   targetAmount: null | BN;
+  triggerRevalidate: BN | undefined;
 }
 
 const fieldNames: { [K in keyof IFormData]: K } = {
   sourceAmount: 'sourceAmount',
   targetAmount: 'targetAmount',
+  triggerRevalidate: 'triggerRevalidate',
 };
 
 export type Direction = 'PtkToDai' | 'DaiToPtk' | 'DaiToLoanCollateral';
@@ -41,9 +46,9 @@ export interface ISubmittedFormData {
 }
 
 interface IProps<ExtraFormData extends Record<string, any> = {}> {
+  account: string;
   direction: Direction;
   title: string;
-  maxValue: BN;
   sourceSymbol: string;
   targetSymbol: string;
   sourcePlaceholder: string;
@@ -58,9 +63,9 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
   props: IProps<ExtraFormData>,
 ) {
   const {
+    account,
     direction,
     title,
-    maxValue,
     sourceSymbol,
     targetSymbol,
     onSubmit,
@@ -74,10 +79,21 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.cashExchange.exchangingForm;
 
+  const api = useApi();
+
+  const methodByDirection: Record<Direction, () => Observable<BN>> = {
+    DaiToPtk: () => api.getBalance$('dai', account),
+    PtkToDai: () => api.getBalance$('ptk', account),
+    DaiToLoanCollateral: () => api.getMaxAvailableLoanSize$(account),
+  };
+
+  const [maxValue] = useSubscribable(() => methodByDirection[direction](), []);
+
   const initialValues = useMemo<IFormData & ExtraFormData>(
     () => ({
       sourceAmount: '',
       targetAmount: null,
+      triggerRevalidate: maxValue,
       ...additionalInitialValues,
     }),
     [],
@@ -100,9 +116,15 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
       validateInteger,
       validatePositiveNumber,
       // eslint-disable-next-line no-underscore-dangle
-      R.curry(lessThenOrEqual)(maxValue, R.__, formatValue),
+      ...(maxValue ? [R.curry(lessThenOrEqual)(maxValue, R.__, formatValue)] : []),
     );
   }, [maxValue, targetSymbol, formatValue]);
+
+  const compareValues = useCallback((prev: BN | undefined, current: BN | undefined) => {
+    return Boolean(
+      (!prev && current) || (prev && !current) || (prev && current && !prev.eq(current)),
+    );
+  }, []);
 
   const handleFormSubmit = useCallback(
     ({
@@ -139,6 +161,11 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
                 baseUnitName={sourceSymbol}
                 name={fieldNames.sourceAmount}
                 placeholder={sourcePlaceholder}
+              />
+              <SpyField
+                name={fieldNames.triggerRevalidate}
+                fieldValue={maxValue}
+                compare={compareValues}
               />
             </Grid>
             {additionalFields?.map((item, index) => (

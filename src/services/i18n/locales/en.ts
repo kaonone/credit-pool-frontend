@@ -2,6 +2,7 @@
 const en = {
   app: {
     mainTitle: 'Akropolis Pool',
+    connectingWarning: 'You need connect to wallet',
     pages: {},
     components: {
       header: {
@@ -90,7 +91,6 @@ const en = {
     },
     loans: {
       loansList: {
-        connectingWarning: 'You need connect to wallet',
         myLoans: 'My loans',
         myGuarantees: 'My guarantees',
         others: 'Others',

@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import BN from 'bn.js';
 import Button from '@material-ui/core/Button';
 
 import { useApi } from 'services/api';
@@ -86,7 +85,6 @@ function GetLoanButton(props: IProps) {
       {({ closeModal }) => (
         <PTokenExchanging<IExtraFormData>
           title={t(tKeys.formTitle.getKey())}
-          maxValue={new BN(1000000000000000)}
           sourcePlaceholder={t(tKeys.amountPlaceholder.getKey())}
           sourceSymbol="DAI"
           targetSymbol="PTK"

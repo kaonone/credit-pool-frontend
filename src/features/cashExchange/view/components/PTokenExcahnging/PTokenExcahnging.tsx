@@ -4,6 +4,8 @@ import BN from 'bn.js';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 import { Loading } from 'components/Loading';
+import { Hint } from 'components/Hint/Hint';
+import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 
 import { PTokenExchangingConfirmation } from '../PTokenExchangingConfirmation/PTokenExchangingConfirmation';
 import {
@@ -14,7 +16,6 @@ import {
 
 interface IProps<ExtraFormData> {
   title: string;
-  maxValue: BN;
   sourcePlaceholder: string;
   sourceSymbol: string;
   targetSymbol: string;
@@ -30,12 +31,13 @@ interface IProps<ExtraFormData> {
   onCancel: () => void;
 }
 
+const tKeysApp = tKeysAll.app;
+
 function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
   props: IProps<ExtraFormData>,
 ) {
   const {
     title,
-    maxValue,
     sourcePlaceholder,
     sourceSymbol,
     targetSymbol,
@@ -47,6 +49,8 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
     additionalFields,
     initialValues,
   } = props;
+
+  const { t } = useTranslate();
 
   const api = useApi();
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, [], null);
@@ -82,28 +86,34 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
   return (
     <>
       <Loading meta={accountMeta} progressVariant="circle">
-        <PTokenExchangingForm<ExtraFormData>
-          direction={direction}
-          title={title}
-          maxValue={maxValue}
-          sourceSymbol={sourceSymbol}
-          targetSymbol={targetSymbol}
-          sourcePlaceholder={sourcePlaceholder}
-          onSubmit={setValues}
-          onCancel={onCancel}
-          calculatedAmountTKey={calculatedAmountTKey}
-          additionalFields={additionalFields}
-          additionalInitialValues={initialValues}
-        />
-        <PTokenExchangingConfirmation
-          isOpen={!!values}
-          sourceSymbol={sourceSymbol}
-          targetSymbol={targetSymbol}
-          messageTKey={confirmMessageTKey}
-          onConfirm={handlePTokenExchangingConfirmationClick}
-          onCancel={handlePTokenExchangingConfirmationCancel}
-          values={values}
-        />
+        {account ? (
+          <>
+            <PTokenExchangingForm<ExtraFormData>
+              account={account}
+              direction={direction}
+              title={title}
+              sourceSymbol={sourceSymbol}
+              targetSymbol={targetSymbol}
+              sourcePlaceholder={sourcePlaceholder}
+              onSubmit={setValues}
+              onCancel={onCancel}
+              calculatedAmountTKey={calculatedAmountTKey}
+              additionalFields={additionalFields}
+              additionalInitialValues={initialValues}
+            />
+            <PTokenExchangingConfirmation
+              isOpen={!!values}
+              sourceSymbol={sourceSymbol}
+              targetSymbol={targetSymbol}
+              messageTKey={confirmMessageTKey}
+              onConfirm={handlePTokenExchangingConfirmationClick}
+              onCancel={handlePTokenExchangingConfirmationCancel}
+              values={values}
+            />
+          </>
+        ) : (
+          <Hint>{t(tKeysApp.connectingWarning.getKey())}</Hint>
+        )}
       </Loading>
     </>
   );

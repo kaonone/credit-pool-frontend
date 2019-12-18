@@ -11,6 +11,7 @@ import { LoansTitle } from '../LoansTitle/LoansTitle';
 function LoansList() {
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.loans.loansList;
+  const tKeysApp = tKeysAll.app;
 
   const api = useApi();
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
@@ -64,7 +65,7 @@ function LoansList() {
           </Grid>
         </Grid>
       ) : (
-        <Hint>{t(tKeys.connectingWarning.getKey())}</Hint>
+        <Hint>{t(tKeysApp.connectingWarning.getKey())}</Hint>
       )}
     </Loading>
   );
