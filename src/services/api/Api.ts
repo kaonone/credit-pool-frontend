@@ -87,18 +87,35 @@ export class Api {
   }
 
   @autobind
-  public async sellPtk$(address: string, sourceAmount: BN, targetAmount: BN): Promise<void> {
-    this.sendMockTransaction$('pool.sellPtk', { address, sourceAmount, targetAmount });
+  public async sellPtk$(
+    address: string,
+    values: { sourceAmount: BN; targetAmount: BN },
+  ): Promise<void> {
+    this.sendMockTransaction$('pool.sellPtk', { address, ...values });
   }
 
   @autobind
-  public async buyPtk$(address: string, sourceAmount: BN, targetAmount: BN): Promise<void> {
-    this.sendMockTransaction$('pool.buyPtk', { address, sourceAmount, targetAmount });
+  public async buyPtk$(
+    address: string,
+    values: { sourceAmount: BN; targetAmount: BN },
+  ): Promise<void> {
+    this.sendMockTransaction$('pool.buyPtk', { address, ...values });
   }
 
   @autobind
-  public async stakePtk$(address: string, sourceAmount: BN, targetAmount: BN): Promise<void> {
-    this.sendMockTransaction$('pool.stakePtk', { address, sourceAmount, targetAmount });
+  public async stakePtk$(
+    address: string,
+    values: { sourceAmount: BN; targetAmount: BN },
+  ): Promise<void> {
+    this.sendMockTransaction$('pool.stakePtk', { address, ...values });
+  }
+
+  @autobind
+  public async getLoan$(
+    address: string,
+    values: { sourceAmount: BN; targetAmount: BN; apr: string; description: string },
+  ): Promise<void> {
+    this.sendMockTransaction$('pool.getLoan', { address, ...values });
   }
 
   public getSubmittedTransaction$() {
@@ -127,6 +144,13 @@ export class Api {
     return of(new BN(value).muln(0.5)).pipe(delay(2000));
   }
 
+  @memoize(R.identity)
+  @autobind
+  // eslint-disable-next-line class-methods-use-this
+  public getDaiToLoanCollateral$(value: string): Observable<BN> {
+    return of(new BN(value).muln(0.5)).pipe(delay(2000));
+  }
+
   @autobind
   private async sendMockTransaction$<T extends SubmittedTransactionType>(
     transactionName: T,
@@ -136,7 +160,7 @@ export class Api {
       setTimeout(() => {
         resolve();
         // eslint-disable-next-line no-console
-        console.log(`Send transaction ${transactionName}`);
+        console.log(`Send transaction ${transactionName}`, payload);
       }, 1000),
     );
 

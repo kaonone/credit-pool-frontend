@@ -17,6 +17,7 @@ interface IOwnProps {
   baseUnitName?: string;
   value: string;
   maxValue?: BN;
+  withSelect?: boolean;
   onChange: (value: string) => void;
 }
 
@@ -28,7 +29,15 @@ interface IOption<T> {
 type IProps = IOwnProps & Omit<GetProps<typeof TextInput>, 'ref'>;
 
 function DecimalsInput(props: IProps) {
-  const { onChange, baseDecimals, value, maxValue, baseUnitName, ...restInputProps } = props;
+  const {
+    onChange,
+    baseDecimals,
+    value,
+    maxValue,
+    baseUnitName,
+    withSelect = true,
+    ...restInputProps
+  } = props;
 
   const [siPrefix, setSiPrefix] = React.useState(getInitialPrefix(value, baseDecimals));
   const [suffix, setSuffix] = React.useState('');
@@ -102,7 +111,7 @@ function DecimalsInput(props: IProps) {
   return (
     <>
       <Grid container spacing={1}>
-        <Grid item xs={9}>
+        <Grid item xs={withSelect ? 9 : 12}>
           <TextInput
             {...restInputProps}
             value={amount}
@@ -118,21 +127,23 @@ function DecimalsInput(props: IProps) {
             }}
           />
         </Grid>
-        <Grid item xs={3}>
-          <TextField
-            select
-            value={siPrefix}
-            onChange={handleSelectChange}
-            variant="outlined"
-            fullWidth
-          >
-            {options.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.text}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
+        {withSelect && (
+          <Grid item xs={3}>
+            <TextField
+              select
+              value={siPrefix}
+              onChange={handleSelectChange}
+              variant="outlined"
+              fullWidth
+            >
+              {options.map(option => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.text}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+        )}
       </Grid>
     </>
   );

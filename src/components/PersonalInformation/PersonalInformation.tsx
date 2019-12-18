@@ -5,6 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
+import { GetLoanButton } from 'features/cashExchange';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { CashMetric } from 'components/CashMetric/CashMetric';
 
@@ -50,13 +51,16 @@ function PersonalInformation() {
             {t(tKeys.title.getKey())}
           </Typography>
         </Box>
-        <Grid container spacing={2} className={classes.metrics}>
-          {metrics.map(({ title, value, symbol, profit }, index) => (
-            <Grid key={index} item xs={12}>
-              <CashMetric title={title} value={value} symbol={symbol} profit={profit} />
-            </Grid>
-          ))}
-        </Grid>
+        <Box mb={2}>
+          <Grid container spacing={2} className={classes.metrics}>
+            {metrics.map(({ title, value, symbol, profit }, index) => (
+              <Grid key={index} item xs={12}>
+                <CashMetric title={title} value={value} symbol={symbol} profit={profit} />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+        <GetLoanButton />
       </CardContent>
     </Card>
   );

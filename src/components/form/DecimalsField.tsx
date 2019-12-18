@@ -12,6 +12,7 @@ interface IOwnProps {
   baseDecimals: number;
   baseUnitName: string;
   maxValue?: BN;
+  withSelect?: boolean;
 }
 
 type IProps = Omit<GetProps<typeof TextInput>, 'ref'> &
