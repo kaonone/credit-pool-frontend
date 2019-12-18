@@ -40,6 +40,10 @@ export class Api {
         clientId: '45e6d1b2-f059-4ebd-8afc-3c1cfa0262a4',
         redirectUri: 'http://localhost:8080/bitski-callback.html',
       },
+      fortmatic: {
+        apiKey: 'pk_test_508AC5D15FD0D930',
+        network: 'kovan',
+      },
     },
   });
 
