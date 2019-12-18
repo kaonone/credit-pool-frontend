@@ -20,7 +20,7 @@ type IProps = Omit<GetProps<typeof TextInput>, 'ref'> &
   IOwnProps;
 
 function DecimalsFieldComponent(props: IProps) {
-  const { baseDecimals, maxValue, input, meta, ...rest } = props;
+  const { input, meta, ...rest } = props;
   const { t } = useTranslate();
 
   const error =
@@ -28,16 +28,7 @@ function DecimalsFieldComponent(props: IProps) {
       ? rest.error && meta.error && t(meta.error)
       : meta.touched && meta.error && t(meta.error);
 
-  return (
-    <DecimalsInput
-      baseDecimals={baseDecimals}
-      maxValue={maxValue}
-      {...rest}
-      helperText={error}
-      error={Boolean(error)}
-      {...input}
-    />
-  );
+  return <DecimalsInput {...rest} helperText={error} error={Boolean(error)} {...input} />;
 }
 
 export const DecimalsField = getFieldWithComponent(DecimalsFieldComponent);

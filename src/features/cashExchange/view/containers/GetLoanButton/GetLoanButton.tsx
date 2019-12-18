@@ -49,31 +49,34 @@ function GetLoanButton(props: IProps) {
     [],
   );
 
-  const additionalFields = [
-    <DecimalsField
-      validate={validatePercent}
-      baseDecimals={DEFAULT_PERCENT_DECIMALS}
-      baseUnitName="%"
-      name={fieldNames.apr}
-      label={t(tKeys.percentLabel.getKey())}
-      placeholder={t(tKeys.percentPlaceholder.getKey())}
-      withSelect={false}
-      InputLabelProps={{
-        shrink: true,
-      }}
-    />,
-    <TextInputField
-      validate={isRequired}
-      name={fieldNames.description}
-      label={t(tKeys.descriptionLabel.getKey())}
-      placeholder={t(tKeys.descriptionPlaceholder.getKey())}
-      variant="outlined"
-      fullWidth
-      InputLabelProps={{
-        shrink: true,
-      }}
-    />,
-  ];
+  const additionalFields = useMemo(
+    () => [
+      <DecimalsField
+        validate={validatePercent}
+        baseDecimals={DEFAULT_PERCENT_DECIMALS}
+        baseUnitName="%"
+        name={fieldNames.apr}
+        label={t(tKeys.percentLabel.getKey())}
+        placeholder={t(tKeys.percentPlaceholder.getKey())}
+        withSelect={false}
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />,
+      <TextInputField
+        validate={isRequired}
+        name={fieldNames.description}
+        label={t(tKeys.descriptionLabel.getKey())}
+        placeholder={t(tKeys.descriptionPlaceholder.getKey())}
+        variant="outlined"
+        fullWidth
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />,
+    ],
+    [t],
+  );
 
   return (
     <ModalButton

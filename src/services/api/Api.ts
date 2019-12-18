@@ -147,7 +147,7 @@ export class Api {
   @memoize(R.identity)
   @autobind
   // eslint-disable-next-line class-methods-use-this
-  public getDaiToLoanCollateral$(value: string): Observable<BN> {
+  public getLoanCollateralByDai$(value: string): Observable<BN> {
     return of(new BN(value).muln(0.5)).pipe(delay(2000));
   }
 
