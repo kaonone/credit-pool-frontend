@@ -51,16 +51,16 @@ function PersonalInformation() {
             {t(tKeys.title.getKey())}
           </Typography>
         </Box>
-        <Box mb={2}>
-          <Grid container spacing={2} className={classes.metrics}>
-            {metrics.map(({ title, value, symbol, profit }, index) => (
-              <Grid key={index} item xs={12}>
-                <CashMetric title={title} value={value} symbol={symbol} profit={profit} />
-              </Grid>
-            ))}
+        <Grid container spacing={2} className={classes.metrics}>
+          {metrics.map(({ title, value, symbol, profit }, index) => (
+            <Grid key={index} item xs={12}>
+              <CashMetric title={title} value={value} symbol={symbol} profit={profit} />
+            </Grid>
+          ))}
+          <Grid item xs={12}>
+            <GetLoanButton />
           </Grid>
-        </Box>
-        <GetLoanButton />
+        </Grid>
       </CardContent>
     </Card>
   );
