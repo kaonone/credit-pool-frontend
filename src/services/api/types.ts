@@ -18,6 +18,10 @@ export type SubmittedTransaction =
   | IGenericSubmittedTransaction<
       'pool.stakePtk',
       { address: string; sourceAmount: BN; targetAmount: BN }
+    >
+  | IGenericSubmittedTransaction<
+      'pool.getLoan',
+      { address: string; sourceAmount: BN; targetAmount: BN; apr: string; description: string }
     >;
 
 export interface IGenericSubmittedTransaction<T extends string, P = void> {

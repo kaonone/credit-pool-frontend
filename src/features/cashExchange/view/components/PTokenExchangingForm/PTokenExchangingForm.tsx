@@ -24,18 +24,23 @@ import { DEFAULT_DECIMALS } from 'env';
 import { TargetAmountField } from './TargetAmountField';
 
 export interface IFormData {
-  amount: string;
+  sourceAmount: string;
   targetAmount: null | BN;
 }
 
 const fieldNames: { [K in keyof IFormData]: K } = {
-  amount: 'amount',
+  sourceAmount: 'sourceAmount',
   targetAmount: 'targetAmount',
 };
 
-export type Direction = 'PtkToDai' | 'DaiToPtk';
+export type Direction = 'PtkToDai' | 'DaiToPtk' | 'DaiToLoanCollateral';
 
-interface IProps {
+export interface ISubmittedFormData {
+  sourceAmount: BN;
+  targetAmount: BN;
+}
+
+interface IProps<ExtraFormData extends Record<string, any> = {}> {
   direction: Direction;
   title: string;
   maxValue: BN;
@@ -43,11 +48,15 @@ interface IProps {
   targetSymbol: string;
   sourcePlaceholder: string;
   calculatedAmountTKey?: string;
-  onSubmit: ({ givenAmount, receivedAmount }: { givenAmount: string; receivedAmount: BN }) => void;
+  additionalFields?: React.ReactNode[];
+  additionalInitialValues?: ExtraFormData;
+  onSubmit: (values: ISubmittedFormData & Omit<ExtraFormData, keyof ISubmittedFormData>) => void;
   onCancel: () => void;
 }
 
-function PTokenExchangingForm(props: IProps) {
+function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
+  props: IProps<ExtraFormData>,
+) {
   const {
     direction,
     title,
@@ -58,15 +67,18 @@ function PTokenExchangingForm(props: IProps) {
     onCancel,
     sourcePlaceholder,
     calculatedAmountTKey,
+    additionalFields,
+    additionalInitialValues = {} as ExtraFormData,
   } = props;
 
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.cashExchange.exchangingForm;
 
-  const initialValues = useMemo<IFormData>(
+  const initialValues = useMemo<IFormData & ExtraFormData>(
     () => ({
-      amount: '',
+      sourceAmount: '',
       targetAmount: null,
+      ...additionalInitialValues,
     }),
     [],
   );
@@ -93,12 +105,16 @@ function PTokenExchangingForm(props: IProps) {
   }, [maxValue, targetSymbol, formatValue]);
 
   const handleFormSubmit = useCallback(
-    (values: IFormData): { [FORM_ERROR]: string } | void => {
-      if (!values.targetAmount) {
+    ({
+      sourceAmount,
+      targetAmount,
+      ...restValues
+    }: IFormData & ExtraFormData): { [FORM_ERROR]: string } | void => {
+      if (!targetAmount) {
         return { [FORM_ERROR]: t(tKeys.targetAmountError.getKey()) };
       }
 
-      onSubmit({ givenAmount: values.amount, receivedAmount: values.targetAmount });
+      onSubmit({ sourceAmount: new BN(sourceAmount), targetAmount, ...restValues });
     },
     [onSubmit, FORM_ERROR, t],
   );
@@ -121,16 +137,21 @@ function PTokenExchangingForm(props: IProps) {
                 validate={validateAmount}
                 baseDecimals={DEFAULT_DECIMALS}
                 baseUnitName={sourceSymbol}
-                name={fieldNames.amount}
+                name={fieldNames.sourceAmount}
                 placeholder={sourcePlaceholder}
               />
             </Grid>
+            {additionalFields?.map((item, index) => (
+              <Grid key={index} item xs={12}>
+                {item}
+              </Grid>
+            ))}
             <FormSpy subscription={{ values: true }}>
               {({ values }) => (
                 <Grid item xs={12}>
                   <TargetAmountField
                     direction={direction}
-                    sourceAmount={values.amount}
+                    sourceAmount={values.sourceAmount}
                     targetSymbol={targetSymbol}
                     spyFieldName={fieldNames.targetAmount}
                     messageTKey={calculatedAmountTKey}

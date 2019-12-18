@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import BN from 'bn.js';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
@@ -13,14 +12,11 @@ import { formatBalance } from 'utils/format';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { DEFAULT_DECIMALS } from 'env';
 
-export type Amounts = {
-  givenAmount: string;
-  receivedAmount: BN;
-};
+import { ISubmittedFormData } from '../PTokenExchangingForm/PTokenExchangingForm';
 
-interface IProps {
+interface IProps<ExtraFormData extends Record<string, any> = {}> {
   isOpen: boolean;
-  amounts: Amounts | null;
+  values: (ISubmittedFormData & Omit<ExtraFormData, keyof ISubmittedFormData>) | null;
   sourceSymbol: string;
   targetSymbol: string;
   messageTKey?: string;
@@ -28,8 +24,10 @@ interface IProps {
   onCancel: () => void;
 }
 
-function PTokenExchangingConfirmation(props: IProps) {
-  const { sourceSymbol, targetSymbol, messageTKey, onCancel, onConfirm, amounts, isOpen } = props;
+function PTokenExchangingConfirmation<ExtraFormData extends Record<string, any> = {}>(
+  props: IProps<ExtraFormData>,
+) {
+  const { sourceSymbol, targetSymbol, messageTKey, onCancel, onConfirm, values, isOpen } = props;
 
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.cashExchange.exchangingConfirmation;
@@ -39,12 +37,12 @@ function PTokenExchangingConfirmation(props: IProps) {
 
   const confirmMessage = t(messageTKey || tKeys.confirmMessage.getKey(), {
     sourceAmount: formatBalance({
-      amountInBaseUnits: amounts?.givenAmount || '0',
+      amountInBaseUnits: values?.sourceAmount || '0',
       baseDecimals: DEFAULT_DECIMALS,
       tokenSymbol: sourceSymbol,
     }),
     targetAmount: formatBalance({
-      amountInBaseUnits: amounts?.receivedAmount || '0',
+      amountInBaseUnits: values?.targetAmount || '0',
       baseDecimals: DEFAULT_DECIMALS,
       tokenSymbol: targetSymbol,
     }),

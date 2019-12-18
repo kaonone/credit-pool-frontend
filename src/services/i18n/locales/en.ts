@@ -38,6 +38,11 @@ const en = {
         success: 'pool.stakePtk transaction succeeded',
         error: 'pool.stakePtk transaction failed',
       },
+      'pool.getLoan': {
+        pending: 'pool.getLoan transaction pending',
+        success: 'pool.getLoan transaction succeeded',
+        error: 'pool.getLoan transaction failed',
+      },
     },
     cashExchange: {
       pTokenBuyingButton: {
@@ -57,6 +62,19 @@ const en = {
         confirmText:
           'Are you sure you want to stake %{sourceAmount} and cover deposit %{targetAmount}?',
         calculatedAmountText: 'You cover deposit ~%{formattedAmount}',
+      },
+      getLoanButton: {
+        buttonTitle: 'Get loan',
+        formTitle: 'Get loan',
+        amountPlaceholder: 'Enter sum',
+        amountLabel: 'Loan sum',
+        percentPlaceholder: 'Enter percent value',
+        percentLabel: 'Percent',
+        descriptionPlaceholder: 'Enter reason',
+        descriptionLabel: 'Reason',
+        confirmText:
+          'Are you sure you want get loan %{sourceAmount} with collateral %{targetAmount}?',
+        calculatedAmountText: 'Collateral will be ~%{formattedAmount}',
       },
       exchangingForm: {
         cancelButtonText: 'Cancel',

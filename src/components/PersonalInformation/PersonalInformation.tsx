@@ -5,6 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
+import { GetLoanButton } from 'features/cashExchange';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { CashMetric } from 'components/CashMetric/CashMetric';
 
@@ -56,6 +57,9 @@ function PersonalInformation() {
               <CashMetric title={title} value={value} symbol={symbol} profit={profit} />
             </Grid>
           ))}
+          <Grid item xs={12}>
+            <GetLoanButton />
+          </Grid>
         </Grid>
       </CardContent>
     </Card>
