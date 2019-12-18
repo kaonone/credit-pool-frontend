@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 
-import { Back } from 'components/icons';
-import { Grid, IconButton, Typography, MetricsList, IMetric } from 'components';
+import { Back, InfoIcon } from 'components/icons';
+import { Grid, IconButton, Typography, MetricsList, IMetric, Tooltip } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { PTokenBuyingButton, PTokenSellingButton } from 'features/cashExchange';
 import { AuthButton } from 'features/auth';
@@ -61,16 +61,17 @@ function HeaderComponent(props: IProps) {
         )}
 
         <Grid item xs zeroMinWidth>
-          <Grid container spacing={1} alignItems="center">
-            <Grid item>
-              <Typography variant="h4" noWrap className={classes.title}>
-                {title}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <div className={classes.icon} />
-            </Grid>
-          </Grid>
+          <Typography variant="h4" noWrap className={classes.title}>
+            {title}{' '}
+            <Tooltip
+              title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, nobis!"
+              placement="right"
+            >
+              <span>
+                <InfoIcon className={classes.infoIcon} />
+              </span>
+            </Tooltip>
+          </Typography>
         </Grid>
 
         <Grid item>
