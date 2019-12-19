@@ -9,6 +9,8 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Observable } from 'rxjs';
 
+import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
+import { useApi } from 'services/api';
 import { DecimalsField, SpyField } from 'components/form';
 import { Hint } from 'components/Hint/Hint';
 import {
@@ -19,10 +21,9 @@ import {
   isRequired,
 } from 'utils/validators';
 import { formatBalance } from 'utils/format';
-import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { DEFAULT_DECIMALS } from 'env';
-import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
+import { compareBn } from 'utils/bn';
+import { DEFAULT_DECIMALS } from 'env';
 
 import { TargetAmountField } from './TargetAmountField';
 
@@ -120,12 +121,6 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
     );
   }, [maxValue, targetSymbol, formatValue]);
 
-  const compareValues = useCallback((prev: BN | undefined, current: BN | undefined) => {
-    return Boolean(
-      (!prev && current) || (prev && !current) || (prev && current && !prev.eq(current)),
-    );
-  }, []);
-
   const handleFormSubmit = useCallback(
     ({
       sourceAmount,
@@ -165,7 +160,7 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
               <SpyField
                 name={fieldNames.triggerRevalidate}
                 fieldValue={maxValue}
-                compare={compareValues}
+                compare={compareBn}
               />
             </Grid>
             {additionalFields?.map((item, index) => (
