@@ -15,7 +15,7 @@ import {
   Grid,
 } from 'components';
 
-const walletTypes: WalletType[] = ['bitski', 'metamask', 'wallet-connect'];
+const walletTypes: WalletType[] = ['bitski', 'metamask', 'wallet-connect', 'fortmatic'];
 
 interface AuthModalProps {
   isOpened: boolean;
@@ -24,7 +24,7 @@ interface AuthModalProps {
   status: ConnectionStatus;
   connectedWallet: WalletType | null;
   onClose(): void;
-  connect(wallet: 'wallet-connect' | 'bitski' | 'metamask'): void;
+  connect(wallet: WalletType): void;
   disconnect(): void;
 }
 
@@ -42,7 +42,8 @@ export function AuthModal(props: AuthModalProps) {
   const isLogged: boolean = !!account && !!connectedWallet;
 
   return (
-    <Dialog open={isOpened} onClose={onClose}>
+    // tabIndex needed for Fortmatic form. Without tabIndex, form input cannot be taken into focus
+    <Dialog open={isOpened} onClose={onClose} TransitionProps={{ tabIndex: 'unset' } as any}>
       <DialogTitle>
         {isLogged ? 'Choose another wallet or disconnect:' : 'Choose your wallet:'}
       </DialogTitle>
