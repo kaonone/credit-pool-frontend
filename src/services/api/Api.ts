@@ -151,7 +151,7 @@ export class Api {
     );
   }
 
-  @memoize(R.identity)
+  @memoize((token: 'ptk' | 'dai', address: string) => token + address)
   @autobind
   public getBalance$(token: 'ptk' | 'dai', address: string): Observable<BN> {
     return token === 'ptk' ? this.getPtkBalance$(address) : this.getDaiBalance$(address);

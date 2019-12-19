@@ -2,10 +2,10 @@ import React, { useState, useCallback } from 'react';
 import BN from 'bn.js';
 
 import { useApi } from 'services/api';
+import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useSubscribable } from 'utils/react';
 import { Loading } from 'components/Loading';
 import { Hint } from 'components/Hint/Hint';
-import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 
 import { PTokenExchangingConfirmation } from '../PTokenExchangingConfirmation/PTokenExchangingConfirmation';
 import {

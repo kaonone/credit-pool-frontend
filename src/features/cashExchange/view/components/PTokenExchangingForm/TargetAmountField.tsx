@@ -3,13 +3,14 @@ import BN from 'bn.js';
 import Typography from '@material-ui/core/Typography';
 import { Observable } from 'rxjs';
 
-import { useSubscribable } from 'utils/react';
-import { formatBalance } from 'utils/format';
 import { useApi } from 'services/api';
 import { useTranslate } from 'services/i18n';
 import { SpyField } from 'components/form';
 import { Loading } from 'components/Loading';
 import { Hint } from 'components/Hint/Hint';
+import { useSubscribable } from 'utils/react';
+import { formatBalance } from 'utils/format';
+import { compareBn } from 'utils/bn';
 import { DEFAULT_DECIMALS } from 'env';
 
 import { Direction } from './PTokenExchangingForm';
@@ -38,12 +39,6 @@ function TargetAmountField(props: IProps) {
     [sourceAmount, direction],
   );
 
-  const compareValues = useCallback((prev: BN | null, current: BN | null) => {
-    return Boolean(
-      (!prev && current) || (prev && !current) || (prev && current && !prev.eq(current)),
-    );
-  }, []);
-
   const renderCalculatedAmountMessage = useCallback(() => {
     const formattedAmount = formatBalance({
       amountInBaseUnits: targetAmount || new BN(0),
@@ -58,7 +53,7 @@ function TargetAmountField(props: IProps) {
 
   return (
     <>
-      <SpyField name={spyFieldName} fieldValue={targetAmount || null} compare={compareValues} />
+      <SpyField name={spyFieldName} fieldValue={targetAmount || null} compare={compareBn} />
       <Loading meta={targetAmountMeta} component={Hint}>
         <Hint>
           <Typography>{renderCalculatedAmountMessage()}</Typography>
