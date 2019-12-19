@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
 import Button from '@material-ui/core/Button';
+import * as R from 'ramda';
+import BN from 'bn.js';
 
 import { useApi } from 'services/api';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
@@ -8,8 +10,9 @@ import { DecimalsField, TextInputField } from 'components/form';
 import {
   isRequired,
   validateInteger,
-  validatePositiveNumber,
   composeValidators,
+  moreThenOrEqual,
+  moreThen,
 } from 'utils/validators';
 import { DEFAULT_PERCENT_DECIMALS } from 'env';
 
@@ -37,8 +40,13 @@ function GetLoanButton(props: IProps) {
   const calculatedAmountText = tKeys.calculatedAmountText.getKey();
 
   const validatePercent = useMemo(() => {
-    return composeValidators(isRequired, validateInteger, validatePositiveNumber);
-  }, []);
+    return composeValidators(
+      isRequired,
+      validateInteger,
+      // eslint-disable-next-line no-underscore-dangle
+      R.curry(moreThen)(new BN(0), R.__, undefined as any),
+    );
+  }, [R, moreThenOrEqual]);
 
   const initialValues = useMemo<IExtraFormData>(
     () => ({
