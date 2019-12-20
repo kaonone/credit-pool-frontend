@@ -7,13 +7,7 @@ import { useApi } from 'services/api';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { ModalButton } from 'components/ModalButton/ModalButton';
 import { DecimalsField, TextInputField } from 'components/form';
-import {
-  isRequired,
-  validateInteger,
-  composeValidators,
-  moreThenOrEqual,
-  moreThen,
-} from 'utils/validators';
+import { isRequired, validateInteger, composeValidators, moreThen } from 'utils/validators';
 import { DEFAULT_PERCENT_DECIMALS } from 'env';
 
 import { PTokenExchanging } from '../../components/PTokenExcahnging/PTokenExcahnging';
@@ -46,7 +40,7 @@ function GetLoanButton(props: IProps) {
       // eslint-disable-next-line no-underscore-dangle
       R.curry(moreThen)(new BN(0), R.__, undefined as any),
     );
-  }, [R, moreThenOrEqual]);
+  }, []);
 
   const initialValues = useMemo<IExtraFormData>(
     () => ({
