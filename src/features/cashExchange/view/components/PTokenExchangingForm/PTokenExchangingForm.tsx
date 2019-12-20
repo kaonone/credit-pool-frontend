@@ -20,6 +20,7 @@ import {
   lessThenOrEqual,
   composeValidators,
   isRequired,
+  moreThen,
 } from 'utils/validators';
 import { useSubscribable, useFormattedBalance } from 'utils/react';
 import { compareBn } from 'utils/bn';
@@ -121,8 +122,10 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
       isRequired,
       validateInteger,
       validatePositiveNumber,
-      // eslint-disable-next-line no-underscore-dangle
+      /* eslint-disable no-underscore-dangle */
+      R.curry(moreThen)(new BN(0), R.__, undefined as any),
       ...(maxValue ? [R.curry(lessThenOrEqual)(maxValue, R.__, formatValue)] : []),
+      /* eslint-enable no-underscore-dangle */
     );
   }, [maxValue, formatValue]);
 
