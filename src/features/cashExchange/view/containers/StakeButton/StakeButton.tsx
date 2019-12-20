@@ -25,8 +25,8 @@ function StakeButton(props: IProps) {
           title={t(tKeys.formTitle.getKey())}
           sourcePlaceholder={t(tKeys.placeholder.getKey())}
           confirmMessageTKey={confirmText}
-          sourceSymbol="PTK"
-          targetSymbol="DAI"
+          sourceToken="ptk"
+          targetToken="dai"
           direction="PtkToDai"
           onExchangeRequest={api.stakePtk$}
           onCancel={closeModal}

@@ -13,6 +13,7 @@ import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { DecimalsField, SpyField } from 'components/form';
 import { Hint } from 'components/Hint/Hint';
+import { Loading } from 'components/Loading';
 import {
   validateInteger,
   validatePositiveNumber,
@@ -20,10 +21,9 @@ import {
   composeValidators,
   isRequired,
 } from 'utils/validators';
-import { formatBalance } from 'utils/format';
-import { useSubscribable } from 'utils/react';
+import { useSubscribable, useFormattedBalance } from 'utils/react';
 import { compareBn } from 'utils/bn';
-import { DEFAULT_DECIMALS } from 'env';
+import { Token } from 'model/types';
 
 import { TargetAmountField } from './TargetAmountField';
 
@@ -50,8 +50,8 @@ interface IProps<ExtraFormData extends Record<string, any> = {}> {
   account: string;
   direction: Direction;
   title: string;
-  sourceSymbol: string;
-  targetSymbol: string;
+  sourceToken: Token;
+  targetToken: Token;
   sourcePlaceholder: string;
   calculatedAmountTKey?: string;
   additionalFields?: React.ReactNode[];
@@ -67,8 +67,8 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
     account,
     direction,
     title,
-    sourceSymbol,
-    targetSymbol,
+    sourceToken,
+    targetToken,
     onSubmit,
     onCancel,
     sourcePlaceholder,
@@ -100,15 +100,20 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
     [],
   );
 
+  const [sourceTokenInfo, sourceTokenInfoMeta] = useSubscribable(
+    () => api.getTokenInfo$(sourceToken),
+    [],
+  );
+
+  const [targetTokenInfo, targetTokenInfoMeta] = useSubscribable(
+    () => api.getTokenInfo$(targetToken),
+    [],
+  );
+
   const formatValue = useCallback(
-    (value: number | BN) => {
-      return formatBalance({
-        amountInBaseUnits: value as BN,
-        baseDecimals: DEFAULT_DECIMALS,
-        tokenSymbol: targetSymbol,
-      });
-    },
-    [targetSymbol],
+    (value: number | BN) =>
+      (targetTokenInfo && useFormattedBalance(targetTokenInfo, value as BN)) || value.toString(),
+    [targetTokenInfo],
   );
 
   const validateAmount = useMemo(() => {
@@ -119,7 +124,7 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
       // eslint-disable-next-line no-underscore-dangle
       ...(maxValue ? [R.curry(lessThenOrEqual)(maxValue, R.__, formatValue)] : []),
     );
-  }, [maxValue, targetSymbol, formatValue]);
+  }, [maxValue, formatValue]);
 
   const handleFormSubmit = useCallback(
     ({
@@ -137,77 +142,82 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
   );
 
   return (
-    <Form
-      onSubmit={handleFormSubmit}
-      initialValues={initialValues}
-      subscription={{ submitError: true, submitting: true, dirtySinceLastSubmit: true }}
-    >
-      {({ handleSubmit, submitError, submitting, dirtySinceLastSubmit }) => (
-        <form onSubmit={handleSubmit}>
-          <Grid container justify="center" spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h5" gutterBottom>
-                {title}
-              </Typography>
-              <DecimalsField
-                maxValue={maxValue}
-                validate={validateAmount}
-                baseDecimals={DEFAULT_DECIMALS}
-                baseUnitName={sourceSymbol}
-                name={fieldNames.sourceAmount}
-                placeholder={sourcePlaceholder}
-              />
-              <SpyField
-                name={fieldNames.triggerRevalidate}
-                fieldValue={maxValue}
-                compare={compareBn}
-              />
-            </Grid>
-            {additionalFields?.map((item, index) => (
-              <Grid key={index} item xs={12}>
-                {item}
-              </Grid>
-            ))}
-            <FormSpy subscription={{ values: true }}>
-              {({ values }) => (
-                <Grid item xs={12}>
-                  <TargetAmountField
-                    direction={direction}
-                    sourceAmount={values.sourceAmount}
-                    targetSymbol={targetSymbol}
-                    spyFieldName={fieldNames.targetAmount}
-                    messageTKey={calculatedAmountTKey}
+    <Loading meta={[sourceTokenInfoMeta, targetTokenInfoMeta]}>
+      <Form
+        onSubmit={handleFormSubmit}
+        initialValues={initialValues}
+        subscription={{ submitError: true, submitting: true, dirtySinceLastSubmit: true }}
+      >
+        {({ handleSubmit, submitError, submitting, dirtySinceLastSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            <Grid container justify="center" spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="h5" gutterBottom>
+                  {title}
+                </Typography>
+
+                {sourceTokenInfo && (
+                  <DecimalsField
+                    maxValue={maxValue}
+                    validate={validateAmount}
+                    baseDecimals={sourceTokenInfo.decimals}
+                    baseUnitName={sourceTokenInfo.symbol}
+                    name={fieldNames.sourceAmount}
+                    placeholder={sourcePlaceholder}
                   />
+                )}
+                <SpyField
+                  name={fieldNames.triggerRevalidate}
+                  fieldValue={maxValue}
+                  compare={compareBn}
+                />
+              </Grid>
+              {additionalFields?.map((item, index) => (
+                <Grid key={index} item xs={12}>
+                  {item}
+                </Grid>
+              ))}
+              <FormSpy subscription={{ values: true }}>
+                {({ values }) => (
+                  <Grid item xs={12}>
+                    <TargetAmountField
+                      direction={direction}
+                      sourceAmount={values.sourceAmount}
+                      targetToken={targetToken}
+                      spyFieldName={fieldNames.targetAmount}
+                      messageTKey={calculatedAmountTKey}
+                    />
+                  </Grid>
+                )}
+              </FormSpy>
+              {!dirtySinceLastSubmit && !!submitError && (
+                <Grid item xs={12}>
+                  <Hint>
+                    <Typography color="error">{submitError}</Typography>
+                  </Hint>
                 </Grid>
               )}
-            </FormSpy>
-            {!dirtySinceLastSubmit && !!submitError && (
-              <Grid item xs={12}>
-                <Hint>
-                  <Typography color="error">{submitError}</Typography>
-                </Hint>
+              <Grid item xs={6}>
+                <Button variant="outlined" color="primary" fullWidth onClick={onCancel}>
+                  {t(tKeys.cancelButtonText.getKey())}
+                </Button>
               </Grid>
-            )}
-            <Grid item xs={6}>
-              <Button variant="outlined" color="primary" fullWidth onClick={onCancel}>
-                {t(tKeys.cancelButtonText.getKey())}
-              </Button>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  fullWidth
+                  disabled={submitting}
+                >
+                  {submitting ? <CircularProgress size={24} /> : 'submit'}
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                fullWidth
-                disabled={submitting}
-              >
-                {submitting ? <CircularProgress size={24} /> : 'submit'}
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      )}
-    </Form>
+          </form>
+        )}
+      </Form>
+    </Loading>
   );
 }
 

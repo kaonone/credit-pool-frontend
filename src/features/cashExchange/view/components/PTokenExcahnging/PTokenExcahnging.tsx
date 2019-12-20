@@ -6,6 +6,7 @@ import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useSubscribable } from 'utils/react';
 import { Loading } from 'components/Loading';
 import { Hint } from 'components/Hint/Hint';
+import { Token } from 'model/types';
 
 import { PTokenExchangingConfirmation } from '../PTokenExchangingConfirmation/PTokenExchangingConfirmation';
 import {
@@ -17,8 +18,8 @@ import {
 interface IProps<ExtraFormData> {
   title: string;
   sourcePlaceholder: string;
-  sourceSymbol: string;
-  targetSymbol: string;
+  sourceToken: Token;
+  targetToken: Token;
   direction: Direction;
   confirmMessageTKey?: string;
   calculatedAmountTKey?: string;
@@ -39,8 +40,8 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
   const {
     title,
     sourcePlaceholder,
-    sourceSymbol,
-    targetSymbol,
+    sourceToken,
+    targetToken,
     direction,
     confirmMessageTKey,
     onExchangeRequest,
@@ -92,8 +93,8 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
               account={account}
               direction={direction}
               title={title}
-              sourceSymbol={sourceSymbol}
-              targetSymbol={targetSymbol}
+              sourceToken={sourceToken}
+              targetToken={targetToken}
               sourcePlaceholder={sourcePlaceholder}
               onSubmit={setValues}
               onCancel={onCancel}
@@ -103,8 +104,8 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
             />
             <PTokenExchangingConfirmation
               isOpen={!!values}
-              sourceSymbol={sourceSymbol}
-              targetSymbol={targetSymbol}
+              sourceToken={sourceToken}
+              targetToken={targetToken}
               messageTKey={confirmMessageTKey}
               onConfirm={handlePTokenExchangingConfirmationClick}
               onCancel={handlePTokenExchangingConfirmationCancel}

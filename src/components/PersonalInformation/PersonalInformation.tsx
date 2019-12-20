@@ -7,7 +7,7 @@ import Box from '@material-ui/core/Box';
 
 import { GetLoanButton } from 'features/cashExchange';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { CashMetric } from 'components/CashMetric/CashMetric';
+import { CashMetric, IProps as ICashMetric } from 'components/CashMetric/CashMetric';
 
 import { useStyles } from './PersonalInformation.style';
 
@@ -16,28 +16,28 @@ function PersonalInformation() {
   const { t } = useTranslate();
   const tKeys = tKeysAll.components.personalInformation;
 
-  const metrics = React.useMemo(
+  const metrics: ICashMetric[] = React.useMemo(
     () => [
       {
         title: t(tKeys.deposit.getKey()),
         value: '18534000000000000',
-        symbol: 'DAI',
+        token: 'dai',
       },
       {
         title: t(tKeys.liquid.getKey()),
         value: '18534000000000000',
-        symbol: 'PTK',
+        token: 'ptk',
         profit: 285.34,
       },
       {
         title: t(tKeys.staked.getKey()),
         value: '18534000000000000',
-        symbol: 'PTK',
+        token: 'ptk',
       },
       {
         title: t(tKeys.credit.getKey()),
         value: '280000000000000000',
-        symbol: 'DAI',
+        token: 'dai',
       },
     ],
     [t],
@@ -52,9 +52,9 @@ function PersonalInformation() {
           </Typography>
         </Box>
         <Grid container spacing={2} className={classes.metrics}>
-          {metrics.map(({ title, value, symbol, profit }, index) => (
+          {metrics.map(({ title, value, token, profit }, index) => (
             <Grid key={index} item xs={12}>
-              <CashMetric title={title} value={value} symbol={symbol} profit={profit} />
+              <CashMetric title={title} value={value} token={token} profit={profit} />
             </Grid>
           ))}
           <Grid item xs={12}>

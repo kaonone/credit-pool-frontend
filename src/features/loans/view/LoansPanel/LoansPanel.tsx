@@ -5,8 +5,7 @@ import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { MakeTableType } from 'components/Table/Table';
 import { Table as GeneralTable, Typography } from 'components';
 import { ExpansionPanel } from 'components/ExpansionPanel/ExpansionPanel';
-import { formatBalance } from 'utils/format';
-import { DEFAULT_DECIMALS } from 'env';
+import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
 
 import { AddressCell } from './LoansTableCells';
 import { useStyles } from './LoansPanel.style';
@@ -53,25 +52,13 @@ function LoansPanel(props: IProps) {
       <Table.Column>
         <Table.Head>{t(tKeys.loan.getKey())}</Table.Head>
         <Table.Cell>
-          {({ data }) =>
-            formatBalance({
-              amountInBaseUnits: new BN(data.loan),
-              baseDecimals: DEFAULT_DECIMALS,
-              tokenSymbol: 'DAI',
-            })
-          }
+          {({ data }) => <FormattedBalance sum={new BN(data.loan)} token="dai" />}
         </Table.Cell>
       </Table.Column>
       <Table.Column>
         <Table.Head>{t(tKeys.duePayment.getKey())}</Table.Head>
         <Table.Cell>
-          {({ data }) =>
-            formatBalance({
-              amountInBaseUnits: new BN(data.duePayment),
-              baseDecimals: DEFAULT_DECIMALS,
-              tokenSymbol: 'DAI',
-            })
-          }
+          {({ data }) => <FormattedBalance sum={new BN(data.duePayment)} token="dai" />}
         </Table.Cell>
       </Table.Column>
       {withPaymentDate && (
@@ -90,14 +77,7 @@ function LoansPanel(props: IProps) {
         <Table.Column>
           <Table.Head>{t(tKeys.earn.getKey())}</Table.Head>
           <Table.Cell>
-            {({ data }) =>
-              data.earn &&
-              formatBalance({
-                amountInBaseUnits: new BN(data.earn),
-                baseDecimals: DEFAULT_DECIMALS,
-                tokenSymbol: 'DAI',
-              })
-            }
+            {({ data }) => data.earn && <FormattedBalance sum={new BN(data.earn)} token="dai" />}
           </Table.Cell>
         </Table.Column>
       )}
@@ -108,13 +88,7 @@ function LoansPanel(props: IProps) {
       <Table.Column>
         <Table.Head>{t(tKeys.myStake.getKey())}</Table.Head>
         <Table.Cell>
-          {({ data }) =>
-            formatBalance({
-              amountInBaseUnits: new BN(data.myStake),
-              baseDecimals: DEFAULT_DECIMALS,
-              tokenSymbol: 'DAI',
-            })
-          }
+          {({ data }) => <FormattedBalance sum={new BN(data.myStake)} token="dai" />}
         </Table.Cell>
       </Table.Column>
     </Table>

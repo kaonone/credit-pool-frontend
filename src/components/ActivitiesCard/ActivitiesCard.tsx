@@ -54,7 +54,7 @@ function ActivitiesCard(props: IOwnProps) {
             <CashMetric
               title={t(tKeys.lend.getKey())}
               value={lendValue}
-              symbol="DAI"
+              token="dai"
               icon={<LendIcon className={classes.lendIcon} />}
             />
           </Grid>
@@ -68,7 +68,7 @@ function ActivitiesCard(props: IOwnProps) {
             <CashMetric
               title={t(tKeys.staked.getKey())}
               value={stakedValue}
-              symbol="PTK"
+              token="ptk"
               needed={neededValue}
             />
           </Grid>

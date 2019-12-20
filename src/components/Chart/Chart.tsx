@@ -9,8 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 
 import { BalanceChart } from 'components/BalanceChart/BalanceChart';
 import { Growth } from 'components/Growth/Growth';
-import { formatBalance } from 'utils/format';
-import { DEFAULT_DECIMALS } from 'env';
+import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
 
 import { useStyles } from './Chart.style';
 
@@ -55,11 +54,7 @@ const Chart = (props: IProps) => {
           </Grid>
           <Grid item xs={12}>
             <Typography className={classes.balanceValue} variant="h4">
-              {formatBalance({
-                amountInBaseUnits: balance,
-                baseDecimals: DEFAULT_DECIMALS,
-                tokenSymbol: '$',
-              })}{' '}
+              <FormattedBalance sum={balance} token="dai" />{' '}
               <Growth className={classes.growth} previous={balanceDayAgo} current={balance} />
             </Typography>
           </Grid>

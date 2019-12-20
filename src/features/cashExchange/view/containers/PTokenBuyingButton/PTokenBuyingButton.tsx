@@ -27,8 +27,8 @@ function PTokenBuyingButton(props: IProps) {
         <PTokenExchanging
           title={t(tKeys.formTitle.getKey())}
           sourcePlaceholder={t(tKeys.placeholder.getKey())}
-          sourceSymbol="DAI"
-          targetSymbol="PTK"
+          sourceToken="dai"
+          targetToken="ptk"
           direction="DaiToPtk"
           onExchangeRequest={api.buyPtk$}
           onCancel={closeModal}

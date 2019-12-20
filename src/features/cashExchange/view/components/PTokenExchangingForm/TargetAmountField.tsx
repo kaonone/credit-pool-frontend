@@ -8,23 +8,23 @@ import { useTranslate } from 'services/i18n';
 import { SpyField } from 'components/form';
 import { Loading } from 'components/Loading';
 import { Hint } from 'components/Hint/Hint';
+import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
 import { useSubscribable } from 'utils/react';
-import { formatBalance } from 'utils/format';
 import { compareBn } from 'utils/bn';
-import { DEFAULT_DECIMALS } from 'env';
+import { Token } from 'model/types';
 
 import { Direction } from './PTokenExchangingForm';
 
 interface IProps {
   direction: Direction;
   sourceAmount: string;
-  targetSymbol: string;
+  targetToken: Token;
   spyFieldName: string;
   messageTKey?: string;
 }
 
 function TargetAmountField(props: IProps) {
-  const { direction, sourceAmount, spyFieldName, targetSymbol, messageTKey } = props;
+  const { direction, sourceAmount, spyFieldName, targetToken, messageTKey } = props;
   const { t, tKeys } = useTranslate();
   const api = useApi();
 
@@ -39,24 +39,24 @@ function TargetAmountField(props: IProps) {
     [sourceAmount, direction],
   );
 
-  const renderCalculatedAmountMessage = useCallback(() => {
-    const formattedAmount = formatBalance({
-      amountInBaseUnits: targetAmount || new BN(0),
-      baseDecimals: DEFAULT_DECIMALS,
-      tokenSymbol: targetSymbol,
-    });
-
-    return t(messageTKey || tKeys.features.cashExchange.exchangingForm.givenAmountText.getKey(), {
-      formattedAmount,
-    });
-  }, [targetSymbol, targetAmount, messageTKey, t]);
+  const renderCalculatedAmountMessage = useCallback(
+    formattedAmount =>
+      t(messageTKey || tKeys.features.cashExchange.exchangingForm.givenAmountText.getKey(), {
+        formattedAmount,
+      }),
+    [messageTKey, t],
+  );
 
   return (
     <>
       <SpyField name={spyFieldName} fieldValue={targetAmount || null} compare={compareBn} />
       <Loading meta={targetAmountMeta} component={Hint}>
         <Hint>
-          <Typography>{renderCalculatedAmountMessage()}</Typography>
+          <Typography>
+            <FormattedBalance sum={targetAmount || new BN(0)} token={targetToken}>
+              {({ formattedBalance }) => <>{renderCalculatedAmountMessage(formattedBalance)}</>}
+            </FormattedBalance>
+          </Typography>
         </Hint>
       </Loading>
     </>

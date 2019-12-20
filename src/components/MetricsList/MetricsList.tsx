@@ -4,6 +4,7 @@ import Divider from '@material-ui/core/Divider';
 
 import { Metric } from 'components/Metric/Metric';
 import { CashMetric } from 'components/CashMetric/CashMetric';
+import { Token } from 'model/types';
 
 import { useStyles } from './MetricsList.style';
 
@@ -13,7 +14,7 @@ export interface IMetric {
   subValue?: React.ReactNode;
   isCashMetric?: boolean;
   profit?: number;
-  symbol?: string;
+  token?: Token;
 }
 
 interface IProps {
@@ -27,7 +28,7 @@ function MetricsList(props: IProps) {
 
   return (
     <Grid container spacing={2} alignItems="center" className={className}>
-      {metrics.map(({ title, value, subValue, isCashMetric, profit, symbol }, index) => (
+      {metrics.map(({ title, value, subValue, isCashMetric, profit, token }, index) => (
         <React.Fragment key={index}>
           {!!index && (
             <Grid item className={classes.dividerItem}>
@@ -35,8 +36,8 @@ function MetricsList(props: IProps) {
             </Grid>
           )}
           <Grid item className={classes.metric}>
-            {isCashMetric && symbol ? (
-              <CashMetric title={title} value={value} profit={profit} symbol={symbol} />
+            {isCashMetric && token ? (
+              <CashMetric title={title} value={value} profit={profit} token={token} />
             ) : (
               <Metric title={title} value={value} subValue={subValue} />
             )}

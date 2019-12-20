@@ -1,2 +1,0 @@
-export const DEFAULT_DECIMALS = 18;
-export const DEFAULT_PERCENT_DECIMALS = 3;
