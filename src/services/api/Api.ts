@@ -1,5 +1,5 @@
 import { Observable, ReplaySubject, BehaviorSubject, of } from 'rxjs';
-import { map, delay } from 'rxjs/operators';
+import { map, delay, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
 import PromiEvent from 'web3/promiEvent';
@@ -132,6 +132,29 @@ export class Api {
       { _owner: address },
       { Transfer: [{ filter: { _from: address } }, { filter: { _to: address } }] },
     );
+  }
+
+  @memoize(R.identity)
+  @autobind
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
+  public getPtkBalance$(_address: string): Observable<BN> {
+    return of(new BN('2000000000000000000')).pipe(delay(5000));
+  }
+
+  @memoize(R.identity)
+  @autobind
+  public getMaxAvailableLoanSize$(address: string): Observable<BN> {
+    return this.getBalance$('ptk', address).pipe(
+      switchMap(balance => {
+        return this.getDaiByPToken$(balance.muln(2).toString());
+      }),
+    );
+  }
+
+  @memoize((token: 'ptk' | 'dai', address: string) => token + address)
+  @autobind
+  public getBalance$(token: 'ptk' | 'dai', address: string): Observable<BN> {
+    return token === 'ptk' ? this.getPtkBalance$(address) : this.getDaiBalance$(address);
   }
 
   @memoize(R.identity)

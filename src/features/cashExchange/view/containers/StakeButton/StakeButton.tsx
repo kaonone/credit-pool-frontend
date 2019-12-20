@@ -1,5 +1,4 @@
 import React from 'react';
-import BN from 'bn.js';
 import Button from '@material-ui/core/Button';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
@@ -24,7 +23,6 @@ function StakeButton(props: IProps) {
       {({ closeModal }) => (
         <PTokenExchanging
           title={t(tKeys.formTitle.getKey())}
-          maxValue={new BN(1000000000000000)}
           sourcePlaceholder={t(tKeys.placeholder.getKey())}
           confirmMessageTKey={confirmText}
           sourceSymbol="PTK"

@@ -1,17 +1,13 @@
 import React, { useMemo } from 'react';
-import BN from 'bn.js';
 import Button from '@material-ui/core/Button';
+import * as R from 'ramda';
+import BN from 'bn.js';
 
 import { useApi } from 'services/api';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { ModalButton } from 'components/ModalButton/ModalButton';
 import { DecimalsField, TextInputField } from 'components/form';
-import {
-  isRequired,
-  validateInteger,
-  validatePositiveNumber,
-  composeValidators,
-} from 'utils/validators';
+import { isRequired, validateInteger, composeValidators, moreThen } from 'utils/validators';
 import { DEFAULT_PERCENT_DECIMALS } from 'env';
 
 import { PTokenExchanging } from '../../components/PTokenExcahnging/PTokenExcahnging';
@@ -38,7 +34,12 @@ function GetLoanButton(props: IProps) {
   const calculatedAmountText = tKeys.calculatedAmountText.getKey();
 
   const validatePercent = useMemo(() => {
-    return composeValidators(isRequired, validateInteger, validatePositiveNumber);
+    return composeValidators(
+      isRequired,
+      validateInteger,
+      // eslint-disable-next-line no-underscore-dangle
+      R.curry(moreThen)(new BN(0), R.__, undefined as any),
+    );
   }, []);
 
   const initialValues = useMemo<IExtraFormData>(
@@ -89,7 +90,6 @@ function GetLoanButton(props: IProps) {
       {({ closeModal }) => (
         <PTokenExchanging<IExtraFormData>
           title={t(tKeys.formTitle.getKey())}
-          maxValue={new BN(1000000000000000)}
           sourcePlaceholder={t(tKeys.amountPlaceholder.getKey())}
           sourceSymbol="DAI"
           targetSymbol="PTK"
