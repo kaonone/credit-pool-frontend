@@ -67,7 +67,7 @@ const config: webpack.Configuration = {
       chunksSortMode: sortChunks,
       title: pageTitle,
     }),
-    new FaviconsWebpackPlugin(path.resolve(__dirname, '..', 'src', 'assets', 'favicon.png')),
+    new FaviconsWebpackPlugin(path.resolve(__dirname, '..', 'assets', 'favicon.png')),
     // new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, new RegExp(LANGUAGES.join('|'))),
     new CircularDependencyPlugin({
       exclude: /node_modules/,
