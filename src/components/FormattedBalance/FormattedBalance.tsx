@@ -1,9 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import BN from 'bn.js';
 
-import { useApi } from 'services/api';
-import { useSubscribable } from 'utils/react';
-import { formatBalance } from 'utils/format';
+import { useFormattedBalance } from 'utils/react';
 import { Loading } from 'components/Loading';
 import { Token } from 'model/types';
 
@@ -15,21 +13,11 @@ interface IProps {
 
 function FormattedBalance(props: IProps) {
   const { sum, token, children } = props;
-  const api = useApi();
-  const [tokenInfo, tokenInfoMeta] = useSubscribable(() => api.getTokenInfo$(token), []);
-
-  const formattedBalance =
-    (tokenInfo &&
-      formatBalance({
-        amountInBaseUnits: sum,
-        baseDecimals: tokenInfo.decimals,
-        tokenSymbol: tokenInfo.symbol,
-      })) ||
-    '';
+  const [formattedBalance, formattedBalanceMeta] = useFormattedBalance(token, sum);
 
   return (
     <Loading
-      meta={tokenInfoMeta}
+      meta={formattedBalanceMeta}
       progressVariant="circle"
       progressProps={{ size: '0.8em', color: 'inherit' }}
     >

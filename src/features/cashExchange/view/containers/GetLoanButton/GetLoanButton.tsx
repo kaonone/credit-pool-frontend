@@ -57,33 +57,39 @@ function GetLoanButton(props: IProps) {
   );
 
   const additionalFields = useMemo(
-    () =>
-      (percentDecimals && [
-        <DecimalsField
-          validate={validatePercent}
-          baseDecimals={percentDecimals}
-          baseUnitName="%"
-          name={fieldNames.apr}
-          label={t(tKeys.percentLabel.getKey())}
-          placeholder={t(tKeys.percentPlaceholder.getKey())}
-          withSelect={false}
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />,
-        <TextInputField
-          validate={isRequired}
-          name={fieldNames.description}
-          label={t(tKeys.descriptionLabel.getKey())}
-          placeholder={t(tKeys.descriptionPlaceholder.getKey())}
-          variant="outlined"
-          fullWidth
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />,
-      ]) ||
-      [],
+    () => [
+      <Loading meta={percentDecimalsMeta}>
+        {percentDecimals && (
+          <DecimalsField
+            validate={validatePercent}
+            baseDecimals={percentDecimals}
+            baseUnitName="%"
+            name={fieldNames.apr}
+            label={t(tKeys.percentLabel.getKey())}
+            placeholder={t(tKeys.percentPlaceholder.getKey())}
+            withSelect={false}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        )}
+      </Loading>,
+      <Loading meta={percentDecimalsMeta}>
+        {percentDecimals && (
+          <TextInputField
+            validate={isRequired}
+            name={fieldNames.description}
+            label={t(tKeys.descriptionLabel.getKey())}
+            placeholder={t(tKeys.descriptionPlaceholder.getKey())}
+            variant="outlined"
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        )}
+      </Loading>,
+    ],
     [t, percentDecimals],
   );
 
@@ -96,21 +102,19 @@ function GetLoanButton(props: IProps) {
       {...props}
     >
       {({ closeModal }) => (
-        <Loading meta={percentDecimalsMeta}>
-          <PTokenExchanging<IExtraFormData>
-            title={t(tKeys.formTitle.getKey())}
-            sourcePlaceholder={t(tKeys.amountPlaceholder.getKey())}
-            sourceToken="dai"
-            targetToken="ptk"
-            direction="DaiToLoanCollateral"
-            onExchangeRequest={api.getLoan$}
-            onCancel={closeModal}
-            confirmMessageTKey={confirmText}
-            calculatedAmountTKey={calculatedAmountText}
-            additionalFields={additionalFields}
-            initialValues={initialValues}
-          />
-        </Loading>
+        <PTokenExchanging<IExtraFormData>
+          title={t(tKeys.formTitle.getKey())}
+          sourcePlaceholder={t(tKeys.amountPlaceholder.getKey())}
+          sourceToken="dai"
+          targetToken="ptk"
+          direction="DaiToLoanCollateral"
+          onExchangeRequest={api.getLoan$}
+          onCancel={closeModal}
+          confirmMessageTKey={confirmText}
+          calculatedAmountTKey={calculatedAmountText}
+          additionalFields={additionalFields}
+          initialValues={initialValues}
+        />
       )}
     </ModalButton>
   );

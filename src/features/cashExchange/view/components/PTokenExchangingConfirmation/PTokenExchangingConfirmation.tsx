@@ -6,10 +6,9 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { Hint } from 'components/Hint/Hint';
-import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
-import { useCommunication } from 'utils/react';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
+import { Hint } from 'components/Hint/Hint';
+import { useCommunication, useFormattedBalance } from 'utils/react';
 import { Token } from 'model/types';
 
 import { ISubmittedFormData } from '../PTokenExchangingForm/PTokenExchangingForm';
@@ -35,6 +34,9 @@ function PTokenExchangingConfirmation<ExtraFormData extends Record<string, any> 
   const communication = useCommunication(onConfirm, []);
   const { status, error } = communication;
 
+  const [sourceAmount] = useFormattedBalance(sourceToken, values?.sourceAmount || '0');
+  const [targetAmount] = useFormattedBalance(targetToken, values?.targetAmount || '0');
+
   const handleCancel = useCallback(() => {
     onCancel();
     communication.reset();
@@ -52,20 +54,10 @@ function PTokenExchangingConfirmation<ExtraFormData extends Record<string, any> 
           <Grid item xs={12}>
             <Hint>
               <Typography>
-                <FormattedBalance sum={values?.sourceAmount || '0'} token={sourceToken}>
-                  {({ formattedBalance: sourceAmount }) => (
-                    <FormattedBalance sum={values?.targetAmount || '0'} token={targetToken}>
-                      {({ formattedBalance: targetAmount }) => (
-                        <>
-                          {t(messageTKey || tKeys.confirmMessage.getKey(), {
-                            sourceAmount,
-                            targetAmount,
-                          })}
-                        </>
-                      )}
-                    </FormattedBalance>
-                  )}
-                </FormattedBalance>
+                {t(messageTKey || tKeys.confirmMessage.getKey(), {
+                  sourceAmount,
+                  targetAmount,
+                })}
               </Typography>
             </Hint>
           </Grid>

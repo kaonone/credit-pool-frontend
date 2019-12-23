@@ -8,13 +8,12 @@ import { autobind } from 'core-decorators';
 
 import { memoize } from 'utils/decorators';
 import { createErc20 } from 'generated/contracts/createErc20';
-import { Token } from 'model/types';
+import { Token, ITokenInfo } from 'model/types';
 
 import {
   SubmittedTransaction,
   SubmittedTransactionType,
   ExtractSubmittedTransaction,
-  ITokenInfo,
 } from './types';
 
 function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNullable<T> {
@@ -92,6 +91,7 @@ export class Api {
     await promiEvent;
   }
 
+  @memoize(R.identity)
   @autobind
   // eslint-disable-next-line class-methods-use-this
   public getTokenInfo$(token: Token): Observable<ITokenInfo> {

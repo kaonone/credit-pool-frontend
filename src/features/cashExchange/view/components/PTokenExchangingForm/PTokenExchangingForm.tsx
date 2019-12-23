@@ -31,13 +31,15 @@ import { TargetAmountField } from './TargetAmountField';
 export interface IFormData {
   sourceAmount: string;
   targetAmount: null | BN;
-  triggerRevalidate: BN | undefined;
+  triggerRevalidateByMax: BN | undefined;
+  triggerRevalidateByFormatMax: () => string;
 }
 
 const fieldNames: { [K in keyof IFormData]: K } = {
   sourceAmount: 'sourceAmount',
   targetAmount: 'targetAmount',
-  triggerRevalidate: 'triggerRevalidate',
+  triggerRevalidateByMax: 'triggerRevalidateByMax',
+  triggerRevalidateByFormatMax: 'triggerRevalidateByFormatMax',
 };
 
 export type Direction = 'PtkToDai' | 'DaiToPtk' | 'DaiToLoanCollateral';
@@ -95,7 +97,8 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
     () => ({
       sourceAmount: '',
       targetAmount: null,
-      triggerRevalidate: maxValue,
+      triggerRevalidateByMax: maxValue,
+      triggerRevalidateByFormatMax: () => '0',
       ...additionalInitialValues,
     }),
     [],
@@ -106,16 +109,8 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
     [],
   );
 
-  const [targetTokenInfo, targetTokenInfoMeta] = useSubscribable(
-    () => api.getTokenInfo$(targetToken),
-    [],
-  );
-
-  const formatValue = useCallback(
-    (value: number | BN) =>
-      (targetTokenInfo && useFormattedBalance(targetTokenInfo, value as BN)) || value.toString(),
-    [targetTokenInfo],
-  );
+  const [formattedMax] = useFormattedBalance(targetToken, maxValue || new BN(0));
+  const formatMax = useCallback(() => formattedMax, [formattedMax]);
 
   const validateAmount = useMemo(() => {
     return composeValidators(
@@ -124,10 +119,10 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
       validatePositiveNumber,
       /* eslint-disable no-underscore-dangle */
       R.curry(moreThen)(new BN(0), R.__, undefined as any),
-      ...(maxValue ? [R.curry(lessThenOrEqual)(maxValue, R.__, formatValue)] : []),
+      ...(maxValue ? [R.curry(lessThenOrEqual)(maxValue, R.__, formatMax)] : []),
       /* eslint-enable no-underscore-dangle */
     );
-  }, [maxValue, formatValue]);
+  }, [maxValue, formatMax]);
 
   const handleFormSubmit = useCallback(
     ({
@@ -145,7 +140,7 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
   );
 
   return (
-    <Loading meta={[sourceTokenInfoMeta, targetTokenInfoMeta]}>
+    <Loading meta={sourceTokenInfoMeta}>
       <Form
         onSubmit={handleFormSubmit}
         initialValues={initialValues}
@@ -170,10 +165,11 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
                   />
                 )}
                 <SpyField
-                  name={fieldNames.triggerRevalidate}
+                  name={fieldNames.triggerRevalidateByMax}
                   fieldValue={maxValue}
                   compare={compareBn}
                 />
+                <SpyField name={fieldNames.triggerRevalidateByFormatMax} fieldValue={formatMax} />
               </Grid>
               {additionalFields?.map((item, index) => (
                 <Grid key={index} item xs={12}>

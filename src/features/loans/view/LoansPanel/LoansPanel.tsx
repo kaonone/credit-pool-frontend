@@ -1,5 +1,4 @@
 import React from 'react';
-import BN from 'bn.js';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { MakeTableType } from 'components/Table/Table';
@@ -51,14 +50,12 @@ function LoansPanel(props: IProps) {
       </Table.Column>
       <Table.Column>
         <Table.Head>{t(tKeys.loan.getKey())}</Table.Head>
-        <Table.Cell>
-          {({ data }) => <FormattedBalance sum={new BN(data.loan)} token="dai" />}
-        </Table.Cell>
+        <Table.Cell>{({ data }) => <FormattedBalance sum={data.loan} token="dai" />}</Table.Cell>
       </Table.Column>
       <Table.Column>
         <Table.Head>{t(tKeys.duePayment.getKey())}</Table.Head>
         <Table.Cell>
-          {({ data }) => <FormattedBalance sum={new BN(data.duePayment)} token="dai" />}
+          {({ data }) => <FormattedBalance sum={data.duePayment} token="dai" />}
         </Table.Cell>
       </Table.Column>
       {withPaymentDate && (
@@ -77,7 +74,7 @@ function LoansPanel(props: IProps) {
         <Table.Column>
           <Table.Head>{t(tKeys.earn.getKey())}</Table.Head>
           <Table.Cell>
-            {({ data }) => data.earn && <FormattedBalance sum={new BN(data.earn)} token="dai" />}
+            {({ data }) => data.earn && <FormattedBalance sum={data.earn} token="dai" />}
           </Table.Cell>
         </Table.Column>
       )}
@@ -87,9 +84,7 @@ function LoansPanel(props: IProps) {
       </Table.Column>
       <Table.Column>
         <Table.Head>{t(tKeys.myStake.getKey())}</Table.Head>
-        <Table.Cell>
-          {({ data }) => <FormattedBalance sum={new BN(data.myStake)} token="dai" />}
-        </Table.Cell>
+        <Table.Cell>{({ data }) => <FormattedBalance sum={data.myStake} token="dai" />}</Table.Cell>
       </Table.Column>
     </Table>
   );

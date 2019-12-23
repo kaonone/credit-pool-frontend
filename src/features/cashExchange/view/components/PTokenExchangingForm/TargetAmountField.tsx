@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import BN from 'bn.js';
 import Typography from '@material-ui/core/Typography';
 import { Observable } from 'rxjs';
@@ -8,8 +8,7 @@ import { useTranslate } from 'services/i18n';
 import { SpyField } from 'components/form';
 import { Loading } from 'components/Loading';
 import { Hint } from 'components/Hint/Hint';
-import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
-import { useSubscribable } from 'utils/react';
+import { useSubscribable, useFormattedBalance } from 'utils/react';
 import { compareBn } from 'utils/bn';
 import { Token } from 'model/types';
 
@@ -39,13 +38,7 @@ function TargetAmountField(props: IProps) {
     [sourceAmount, direction],
   );
 
-  const renderCalculatedAmountMessage = useCallback(
-    formattedAmount =>
-      t(messageTKey || tKeys.features.cashExchange.exchangingForm.givenAmountText.getKey(), {
-        formattedAmount,
-      }),
-    [messageTKey, t],
-  );
+  const [formattedAmount] = useFormattedBalance(targetToken, targetAmount || '0');
 
   return (
     <>
@@ -53,9 +46,9 @@ function TargetAmountField(props: IProps) {
       <Loading meta={targetAmountMeta} component={Hint}>
         <Hint>
           <Typography>
-            <FormattedBalance sum={targetAmount || new BN(0)} token={targetToken}>
-              {({ formattedBalance }) => <>{renderCalculatedAmountMessage(formattedBalance)}</>}
-            </FormattedBalance>
+            {t(messageTKey || tKeys.features.cashExchange.exchangingForm.givenAmountText.getKey(), {
+              formattedAmount,
+            })}
           </Typography>
         </Hint>
       </Loading>

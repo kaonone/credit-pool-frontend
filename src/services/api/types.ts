@@ -37,8 +37,3 @@ export type ExtractSubmittedTransaction<T extends SubmittedTransactionType> = Ex
   SubmittedTransaction,
   IGenericSubmittedTransaction<T, any>
 >;
-
-export interface ITokenInfo {
-  decimals: number;
-  symbol: string;
-}
