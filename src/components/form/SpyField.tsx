@@ -19,7 +19,7 @@ const SpyFieldComponent = getFieldWithComponent<Props<any>>(function SpyFieldCom
 
   useOnChangeState(fieldValue, compare || defaultCompare, (_prev, current) => onChange(current));
 
-  return <input {...input} type="hidden" />;
+  return <noscript />;
 });
 
 function defaultCompare<T>(prev: T, current: T) {

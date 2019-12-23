@@ -8,6 +8,7 @@ import { autobind } from 'core-decorators';
 
 import { memoize } from 'utils/decorators';
 import { createErc20 } from 'generated/contracts/createErc20';
+import { Token, ITokenInfo } from 'model/types';
 
 import {
   SubmittedTransaction,
@@ -88,6 +89,27 @@ export class Api {
     this.pushToSubmittedTransactions$('dai.approve', promiEvent, { spender, fromAddress, value });
 
     await promiEvent;
+  }
+
+  @memoize(R.identity)
+  @autobind
+  // eslint-disable-next-line class-methods-use-this
+  public getTokenInfo$(token: Token): Observable<ITokenInfo> {
+    return token === 'dai'
+      ? of({
+          decimals: 18,
+          symbol: 'DAI',
+        }).pipe(delay(2000))
+      : of({
+          decimals: 18,
+          symbol: 'PTK',
+        }).pipe(delay(2000));
+  }
+
+  @autobind
+  // eslint-disable-next-line class-methods-use-this
+  public getInterestPercentDecimals$(): Observable<number> {
+    return of(3);
   }
 
   @autobind

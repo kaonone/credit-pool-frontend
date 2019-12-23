@@ -3,13 +3,13 @@ import { Subscribable } from 'rxjs';
 
 import { getErrorMsg } from '../getErrorMsg';
 
-interface IMeta {
+export interface ISubscriptionMeta {
   loaded: boolean;
   error: string | null;
   updatedAt: number;
 }
 
-type Result<T> = [T, IMeta];
+type Result<T> = [T, ISubscriptionMeta];
 
 function useSubscribable<T>(getTarget: () => Subscribable<T>, deps: any[]): Result<T | undefined>;
 function useSubscribable<T>(getTarget: () => Subscribable<T>, deps: any[], fallback: T): Result<T>;
@@ -51,7 +51,7 @@ function useSubscribable<T>(
     return () => subscription.unsubscribe();
   }, [target]);
 
-  const meta: IMeta = useMemo(
+  const meta: ISubscriptionMeta = useMemo(
     () => ({
       loaded,
       updatedAt,
