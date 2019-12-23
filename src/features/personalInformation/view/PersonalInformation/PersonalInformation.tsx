@@ -11,10 +11,11 @@ import { CashMetric, IProps as ICashMetric } from 'components/CashMetric/CashMet
 
 import { useStyles } from './PersonalInformation.style';
 
+const tKeys = tKeysAll.features.personalInformation;
+
 function PersonalInformation() {
   const classes = useStyles();
   const { t } = useTranslate();
-  const tKeys = tKeysAll.components.personalInformation;
 
   const metrics: ICashMetric[] = React.useMemo(
     () => [

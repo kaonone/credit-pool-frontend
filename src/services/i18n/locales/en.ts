@@ -89,6 +89,13 @@ const en = {
         yes: 'yes',
       },
     },
+    personalInformation: {
+      title: 'Personal Information',
+      deposit: 'deposit',
+      liquid: 'liquid ptk',
+      staked: 'staked ptk',
+      credit: 'credit',
+    },
     loans: {
       loansList: {
         myLoans: 'My loans',
@@ -145,13 +152,6 @@ const en = {
       itemsPerPage: 'Items per page',
       currentPagination: '%{from} - %{to} of %{total}',
       currentSubgraphPagination: '%{from} - %{to}',
-    },
-    personalInformation: {
-      title: 'Personal Information',
-      deposit: 'deposit',
-      liquid: 'liquid ptk',
-      staked: 'staked ptk',
-      credit: 'credit',
     },
     activitiesCard: {
       expansionPanelTitle: 'Reason',
