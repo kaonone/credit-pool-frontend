@@ -27,5 +27,5 @@ export * from './Table/Table';
 export * from './ShortAddress/ShortAddress';
 export * from './Pagination/Pagination';
 export * from './Chart/Chart';
-export { Metric } from './Metric/Metric';
-export { CashMetric } from './CashMetric/CashMetric';
+export * from './Metric/Metric';
+export * from './CashMetric/CashMetric';

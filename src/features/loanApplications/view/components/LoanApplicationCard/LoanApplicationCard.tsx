@@ -61,7 +61,7 @@ function LoanApplicationCard(props: IProps) {
         />
       </span>,
     ],
-    [t, lendValue, address, stakedValue, neededValue],
+    [t, lendValue, address, aprValue, stakedValue, neededValue],
   );
 
   const asideContent = React.useMemo(
@@ -86,7 +86,7 @@ function LoanApplicationCard(props: IProps) {
           </Grid>
         </Grid>
       ),
-    [t, status, progressInPercents, timeLeft],
+    [t, isOver, status, progressInPercents, timeLeft],
   );
 
   return (

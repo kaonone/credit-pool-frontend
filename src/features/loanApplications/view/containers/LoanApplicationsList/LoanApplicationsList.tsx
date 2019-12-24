@@ -16,54 +16,51 @@ interface Activity {
   status: 'PENDING' | 'APPROVED' | 'DECLINED';
 }
 
-function LoanApplicationsList() {
-  const activities: Activity[] = React.useMemo(
-    () => [
-      {
-        lendValue: '120000000000000000',
-        address: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        aprValue: 15.8,
-        stakedValue: '170000000000000000',
-        neededValue: '250000000000000000',
-        progressInPercents: 85,
-        timeLeft: 15,
-        expansionPanelDetails:
-          'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
-        status: 'PENDING',
-      },
-      {
-        lendValue: '120000000000000000',
-        address: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        aprValue: 15.8,
-        stakedValue: '170000000000000000',
-        neededValue: '250000000000000000',
-        progressInPercents: 85,
-        timeLeft: 15,
-        expansionPanelDetails:
-          'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
-        status: 'APPROVED',
-      },
-      {
-        lendValue: '120000000000000000',
-        address: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        aprValue: 15.8,
-        stakedValue: '170000000000000000',
-        neededValue: '250000000000000000',
-        progressInPercents: 85,
-        timeLeft: 15,
-        expansionPanelDetails:
-          'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
-        status: 'DECLINED',
-      },
-    ],
-    [],
-  );
+const activities: Activity[] = [
+  {
+    lendValue: '120000000000000000',
+    address: '0x0000000000000000000000000000000000000000000000000000000000000000',
+    aprValue: 15.8,
+    stakedValue: '170000000000000000',
+    neededValue: '250000000000000000',
+    progressInPercents: 85,
+    timeLeft: 15,
+    expansionPanelDetails:
+      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
+    status: 'PENDING',
+  },
+  {
+    lendValue: '120000000000000000',
+    address: '0x0000000000000000000000000000000000000000000000000000000000000000',
+    aprValue: 15.8,
+    stakedValue: '170000000000000000',
+    neededValue: '250000000000000000',
+    progressInPercents: 85,
+    timeLeft: 15,
+    expansionPanelDetails:
+      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
+    status: 'APPROVED',
+  },
+  {
+    lendValue: '120000000000000000',
+    address: '0x0000000000000000000000000000000000000000000000000000000000000000',
+    aprValue: 15.8,
+    stakedValue: '170000000000000000',
+    neededValue: '250000000000000000',
+    progressInPercents: 85,
+    timeLeft: 15,
+    expansionPanelDetails:
+      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
+    status: 'DECLINED',
+  },
+];
 
+function LoanApplicationsList() {
   return (
     <Grid container spacing={3}>
       {activities.map((activity, index) => (
-        <Grid item xs={12}>
-          <LoanApplicationCard key={index} {...activity} />
+        <Grid key={index} item xs={12}>
+          <LoanApplicationCard {...activity} />
         </Grid>
       ))}
     </Grid>

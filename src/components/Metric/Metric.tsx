@@ -4,14 +4,14 @@ import Grid from '@material-ui/core/Grid';
 
 import { useStyles } from './Metric.style';
 
-export interface IProps {
+export interface IMetricProps {
   title: React.ReactNode;
   value: React.ReactNode;
   subValue?: React.ReactNode;
   icon?: React.ReactNode;
 }
 
-function Metric(props: IProps) {
+function Metric(props: IMetricProps) {
   const { title, value, subValue, icon } = props;
   const classes = useStyles();
 

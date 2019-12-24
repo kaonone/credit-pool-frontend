@@ -5,7 +5,7 @@ import { Profit } from 'components/Profit/Profit';
 import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
 import { Token } from 'model/types';
 
-export interface IProps {
+export interface ICashMetricProps {
   title: React.ReactNode;
   value: string;
   token: Token;
@@ -14,7 +14,7 @@ export interface IProps {
   profit?: number;
 }
 
-function CashMetric(props: IProps) {
+function CashMetric(props: ICashMetricProps) {
   const { title, value, needed, token, icon, profit } = props;
 
   return (
