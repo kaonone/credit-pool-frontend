@@ -89,6 +89,13 @@ const en = {
         yes: 'yes',
       },
     },
+    personalInformation: {
+      title: 'Personal Information',
+      deposit: 'deposit',
+      liquid: 'liquid ptk',
+      staked: 'staked ptk',
+      credit: 'credit',
+    },
     loans: {
       loansList: {
         myLoans: 'My loans',
@@ -108,6 +115,20 @@ const en = {
           closed: 'closed',
           opened: 'opened',
         },
+      },
+    },
+    loanApplications: {
+      lend: 'lend',
+      to: 'to',
+      apr: 'apr',
+      staked: 'staked',
+      collateral: 'Collateral',
+      timeLeft: 'Time left',
+      expansionPanelTitle: 'Reason',
+      status: {
+        APPROVED: 'approved',
+        DECLINED: 'declined',
+        PENDING: 'pending',
       },
     },
   },
@@ -132,26 +153,8 @@ const en = {
       currentPagination: '%{from} - %{to} of %{total}',
       currentSubgraphPagination: '%{from} - %{to}',
     },
-    personalInformation: {
-      title: 'Personal Information',
-      deposit: 'deposit',
-      liquid: 'liquid ptk',
-      staked: 'staked ptk',
-      credit: 'credit',
-    },
     activitiesCard: {
-      lend: 'lend',
-      to: 'to',
-      apr: 'apr',
-      staked: 'staked',
-      collateral: 'Collateral',
-      timeLeft: 'Time left',
       expansionPanelTitle: 'Reason',
-      status: {
-        APPROVED: 'approved',
-        DECLINED: 'declined',
-        PENDING: 'pending',
-      },
     },
   },
 };

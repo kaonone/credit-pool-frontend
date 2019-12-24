@@ -15,29 +15,8 @@ export const useStyles = makeStyles((theme: Theme) => ({
     color: colors.haiti,
   },
 
-  highlightedMetric: {
-    color: colors.royalPurple,
-  },
-
-  lendIcon: {
-    fontSize: theme.spacing(2.5),
-    display: 'block',
-  },
-
-  collateral: {
+  asideContent: {
     borderLeft: `solid ${colors.athensGray} 1px`,
     padding: theme.spacing(2),
-  },
-
-  votingForIcon: {
-    marginRight: theme.spacing(1),
-    composes: '$votingIcon',
-    color: colors.shamrock,
-  },
-
-  votingAgainstIcon: {
-    marginRight: theme.spacing(1),
-    composes: '$votingIcon',
-    color: colors.geraldine,
   },
 }));

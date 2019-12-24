@@ -1,7 +1,8 @@
 import * as React from 'react';
 import BN from 'bn.js';
 
-import { Grid, PersonalInformation, Chart, IChartPoint } from 'components';
+import { PersonalInformation } from 'features/personalInformation';
+import { Grid, Chart, IChartPoint } from 'components';
 
 const chartPoints: IChartPoint[] = [
   {

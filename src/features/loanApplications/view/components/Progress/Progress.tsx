@@ -8,20 +8,21 @@ import { ProgressBar } from './ProgressBar/ProgressBar';
 import { useStyles } from './Progress.style';
 
 interface IProps {
-  percent: number;
+  progressInPercents: number;
   timeLeft: number;
 }
 
+const tKeys = tKeysAll.features.loanApplications;
+
 function Progress(props: IProps) {
-  const { percent, timeLeft } = props;
+  const { progressInPercents, timeLeft } = props;
   const classes = useStyles();
   const { t } = useTranslate();
-  const tKeys = tKeysAll.components.activitiesCard;
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <ProgressBar title={t(tKeys.collateral.getKey())} value={percent} />
+        <ProgressBar title={t(tKeys.collateral.getKey())} value={progressInPercents} />
       </Grid>
       <Grid item xs={12}>
         <Grid container justify="space-between">

@@ -5,18 +5,19 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import { GetLoanButton } from 'features/cashExchange';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { CashMetric, IProps as ICashMetric } from 'components/CashMetric/CashMetric';
+import { GetLoanButton } from 'features/cashExchange';
+import { CashMetric, ICashMetricProps } from 'components';
 
 import { useStyles } from './PersonalInformation.style';
+
+const tKeys = tKeysAll.features.personalInformation;
 
 function PersonalInformation() {
   const classes = useStyles();
   const { t } = useTranslate();
-  const tKeys = tKeysAll.components.personalInformation;
 
-  const metrics: ICashMetric[] = React.useMemo(
+  const metrics: ICashMetricProps[] = React.useMemo(
     () => [
       {
         title: t(tKeys.deposit.getKey()),
