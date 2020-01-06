@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import * as R from 'ramda';
 import BN from 'bn.js';
+import { map } from 'rxjs/operators';
 
 import { useApi } from 'services/api';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
@@ -10,8 +11,12 @@ import { ModalButton } from 'components/ModalButton/ModalButton';
 import { Loading } from 'components/Loading';
 import { DecimalsField, TextInputField } from 'components/form';
 import { isRequired, validateInteger, composeValidators, moreThen } from 'utils/validators';
+import { formatBalance } from 'utils/format';
 
-import { PTokenExchanging } from '../../components/PTokenExcahnging/PTokenExcahnging';
+import {
+  PTokenExchanging,
+  ISubmittedFormData,
+} from '../../components/PTokenExcahnging/PTokenExcahnging';
 
 type IProps = React.ComponentPropsWithoutRef<typeof Button>;
 
@@ -36,9 +41,6 @@ function GetLoanButton(props: IProps) {
     [],
   );
 
-  const confirmText = tKeys.confirmText.getKey();
-  const calculatedAmountText = tKeys.calculatedAmountText.getKey();
-
   const validatePercent = useMemo(() => {
     return composeValidators(
       isRequired,
@@ -54,6 +56,39 @@ function GetLoanButton(props: IProps) {
       description: '',
     }),
     [],
+  );
+
+  const [daiTokenInfo] = useSubscribable(() => api.getTokenInfo$('dai'), []);
+
+  const getConfirmMessage = useCallback(
+    (values: (ISubmittedFormData & IExtraFormData) | null) => {
+      const rawSourceAmount = values?.sourceAmount?.toString() || '0';
+
+      return api.getDaiLoanCollateralByDai$(rawSourceAmount).pipe(
+        map(rawCollateral => {
+          const collateral =
+            (daiTokenInfo &&
+              formatBalance({
+                amountInBaseUnits: rawCollateral,
+                baseDecimals: daiTokenInfo.decimals,
+                tokenSymbol: daiTokenInfo.symbol,
+              })) ||
+            '⏳';
+
+          const sourceAmount =
+            (daiTokenInfo &&
+              formatBalance({
+                amountInBaseUnits: rawSourceAmount,
+                baseDecimals: daiTokenInfo.decimals,
+                tokenSymbol: daiTokenInfo.symbol,
+              })) ||
+            '⏳';
+
+          return t(tKeys.confirmMessage.getKey(), { collateral, sourceAmount });
+        }),
+      );
+    },
+    [daiTokenInfo],
   );
 
   const additionalFields = useMemo(
@@ -105,13 +140,10 @@ function GetLoanButton(props: IProps) {
         <PTokenExchanging<IExtraFormData>
           title={t(tKeys.formTitle.getKey())}
           sourcePlaceholder={t(tKeys.amountPlaceholder.getKey())}
-          sourceToken="dai"
-          targetToken="ptk"
           direction="DaiToLoanCollateral"
           onExchangeRequest={api.getLoan$}
           onCancel={closeModal}
-          confirmMessageTKey={confirmText}
-          calculatedAmountTKey={calculatedAmountText}
+          confirmMessageTKey={getConfirmMessage}
           additionalFields={additionalFields}
           initialValues={initialValues}
         />

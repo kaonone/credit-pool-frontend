@@ -5,20 +5,22 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Observable } from 'rxjs';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { Hint } from 'components/Hint/Hint';
-import { useCommunication, useFormattedBalance } from 'utils/react';
-import { Token } from 'model/types';
+import { Loading, Hint } from 'components';
+import { useCommunication, useFormattedBalance, useSubscribable } from 'utils/react';
 
 import { ISubmittedFormData } from '../PTokenExchangingForm/PTokenExchangingForm';
 
 interface IProps<ExtraFormData extends Record<string, any> = {}> {
   isOpen: boolean;
   values: (ISubmittedFormData & Omit<ExtraFormData, keyof ISubmittedFormData>) | null;
-  sourceToken: Token;
-  targetToken: Token;
-  messageTKey?: string;
+  messageTKey:
+    | string
+    | ((
+        values: (ISubmittedFormData & Omit<ExtraFormData, keyof ISubmittedFormData>) | null,
+      ) => Observable<string>);
   onConfirm: () => Promise<void>;
   onCancel: () => void;
 }
@@ -26,7 +28,7 @@ interface IProps<ExtraFormData extends Record<string, any> = {}> {
 function PTokenExchangingConfirmation<ExtraFormData extends Record<string, any> = {}>(
   props: IProps<ExtraFormData>,
 ) {
-  const { sourceToken, targetToken, messageTKey, onCancel, onConfirm, values, isOpen } = props;
+  const { messageTKey, onCancel, onConfirm, values, isOpen } = props;
 
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.cashExchange.exchangingConfirmation;
@@ -34,8 +36,12 @@ function PTokenExchangingConfirmation<ExtraFormData extends Record<string, any> 
   const communication = useCommunication(onConfirm, []);
   const { status, error } = communication;
 
-  const [sourceAmount] = useFormattedBalance(sourceToken, values?.sourceAmount || '0');
-  const [targetAmount] = useFormattedBalance(targetToken, values?.targetAmount || '0');
+  const [sourceAmount] = useFormattedBalance('dai', values?.sourceAmount || '0');
+
+  const [message, messageMeta] =
+    typeof messageTKey === 'string'
+      ? [t(messageTKey, { sourceAmount }), { loaded: true }]
+      : useSubscribable(() => messageTKey(values), [values]);
 
   const handleCancel = useCallback(() => {
     onCancel();
@@ -52,14 +58,9 @@ function PTokenExchangingConfirmation<ExtraFormData extends Record<string, any> 
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Hint>
-              <Typography>
-                {t(messageTKey || tKeys.confirmMessage.getKey(), {
-                  sourceAmount,
-                  targetAmount,
-                })}
-              </Typography>
-            </Hint>
+            <Loading component={Hint} meta={messageMeta}>
+              <Typography>{message}</Typography>
+            </Loading>
           </Grid>
           {communication.status === 'error' && error && (
             <Grid item xs={12}>
@@ -86,7 +87,7 @@ function PTokenExchangingConfirmation<ExtraFormData extends Record<string, any> 
               type="submit"
               fullWidth
               onClick={communication.execute}
-              disabled={status === 'pending'}
+              disabled={status === 'pending' || !messageMeta.loaded}
             >
               {status === 'pending' ? <CircularProgress size={24} /> : t(tKeys.yes.getKey())}
             </Button>

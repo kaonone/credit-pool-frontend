@@ -47,22 +47,22 @@ const en = {
     },
     cashExchange: {
       pTokenBuyingButton: {
-        buttonTitle: 'Buy PTK',
-        formTitle: 'Buy Pool Tokens',
+        buttonTitle: 'Deposit',
+        formTitle: 'Deposit to Pool',
         placeholder: 'Enter sum',
+        confirmMessage: 'Are you sure you want deposit %{sourceAmount}?',
       },
       pTokenSellingButton: {
-        buttonTitle: 'Sell PTK',
-        formTitle: 'Sell Pool Tokens',
+        buttonTitle: 'Withdraw',
+        formTitle: 'Withdraw from Pool',
         placeholder: 'Enter sum',
+        confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
       },
       stakeButton: {
         buttonTitle: 'Stake',
         formTitle: 'Stake',
         placeholder: 'Enter sum',
-        confirmText:
-          'Are you sure you want to stake %{sourceAmount} and cover deposit %{targetAmount}?',
-        calculatedAmountText: 'You cover deposit ~%{formattedAmount}',
+        confirmMessage: 'Are you sure you want to stake %{sourceAmount}?',
       },
       getLoanButton: {
         buttonTitle: 'Get loan',
@@ -73,9 +73,8 @@ const en = {
         percentLabel: 'Percent',
         descriptionPlaceholder: 'Enter reason',
         descriptionLabel: 'Reason',
-        confirmText:
-          'Are you sure you want get loan %{sourceAmount} with collateral %{targetAmount}?',
-        calculatedAmountText: 'Collateral will be ~%{formattedAmount}',
+        confirmMessage:
+          'Are you sure you want get loan %{sourceAmount} with collateral %{collateral}?',
       },
       exchangingForm: {
         cancelButtonText: 'Cancel',
@@ -84,7 +83,6 @@ const en = {
       },
       exchangingConfirmation: {
         title: 'Confirm action',
-        confirmMessage: 'Are you sure you want exchange %{sourceAmount} on %{targetAmount}?',
         no: 'no',
         yes: 'yes',
       },

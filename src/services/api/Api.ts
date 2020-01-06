@@ -48,7 +48,7 @@ export class Api {
     },
   });
 
-  private dai = createErc20(this.web3Manager.web3, '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea');
+  private dai = createErc20(this.web3Manager.web3, '0xc4375b7de8af5a38a93548eb8453a498222c4ff2');
   private txDai = new BehaviorSubject<ReturnType<typeof createErc20> | null>(null);
 
   private submittedTransaction = new ReplaySubject<SubmittedTransaction>();
@@ -56,7 +56,7 @@ export class Api {
   constructor() {
     this.web3Manager.txWeb3
       .pipe(
-        map(txWeb3 => txWeb3 && createErc20(txWeb3, '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea')),
+        map(txWeb3 => txWeb3 && createErc20(txWeb3, '0xc4375b7de8af5a38a93548eb8453a498222c4ff2')),
       )
       .subscribe(this.txDai);
   }
@@ -113,33 +113,24 @@ export class Api {
   }
 
   @autobind
-  public async sellPtk$(
-    address: string,
-    values: { sourceAmount: BN; targetAmount: BN },
-  ): Promise<void> {
+  public async sellPtk$(address: string, values: { sourceAmount: BN }): Promise<void> {
     this.sendMockTransaction$('pool.sellPtk', { address, ...values });
   }
 
   @autobind
-  public async buyPtk$(
-    address: string,
-    values: { sourceAmount: BN; targetAmount: BN },
-  ): Promise<void> {
+  public async buyPtk$(address: string, values: { sourceAmount: BN }): Promise<void> {
     this.sendMockTransaction$('pool.buyPtk', { address, ...values });
   }
 
   @autobind
-  public async stakePtk$(
-    address: string,
-    values: { sourceAmount: BN; targetAmount: BN },
-  ): Promise<void> {
+  public async stakePtk$(address: string, values: { sourceAmount: BN }): Promise<void> {
     this.sendMockTransaction$('pool.stakePtk', { address, ...values });
   }
 
   @autobind
   public async getLoan$(
     address: string,
-    values: { sourceAmount: BN; targetAmount: BN; apr: string; description: string },
+    values: { sourceAmount: BN; apr: string; description: string },
   ): Promise<void> {
     this.sendMockTransaction$('pool.getLoan', { address, ...values });
   }
@@ -173,6 +164,14 @@ export class Api {
     );
   }
 
+  @memoize(R.identity)
+  @autobind
+  public getPtkBalanceInDai$(address: string): Observable<BN> {
+    return this.getPtkBalance$(address).pipe(
+      switchMap(balance => this.getDaiByPToken$(balance.toString())),
+    );
+  }
+
   @memoize((token: 'ptk' | 'dai', address: string) => token + address)
   @autobind
   public getBalance$(token: 'ptk' | 'dai', address: string): Observable<BN> {
@@ -190,14 +189,14 @@ export class Api {
   @autobind
   // eslint-disable-next-line class-methods-use-this
   public getDaiByPToken$(value: string): Observable<BN> {
-    return of(new BN(value).muln(0.5)).pipe(delay(2000));
+    return of(new BN(value).divn(2)).pipe(delay(2000));
   }
 
   @memoize(R.identity)
   @autobind
   // eslint-disable-next-line class-methods-use-this
-  public getLoanCollateralByDai$(value: string): Observable<BN> {
-    return of(new BN(value).muln(0.5)).pipe(delay(2000));
+  public getDaiLoanCollateralByDai$(value: string): Observable<BN> {
+    return of(new BN(value).divn(2)).pipe(delay(2000));
   }
 
   @autobind

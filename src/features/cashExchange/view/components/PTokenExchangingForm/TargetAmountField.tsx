@@ -22,6 +22,7 @@ interface IProps {
   messageTKey?: string;
 }
 
+// TODO remove this component if PTK doesn't return
 function TargetAmountField(props: IProps) {
   const { direction, sourceAmount, spyFieldName, targetToken, messageTKey } = props;
   const { t, tKeys } = useTranslate();
@@ -30,7 +31,7 @@ function TargetAmountField(props: IProps) {
   const methodByDirection: Record<Direction, (value: string) => Observable<BN>> = {
     DaiToPtk: api.getPTokenByDai$,
     PtkToDai: api.getDaiByPToken$,
-    DaiToLoanCollateral: api.getLoanCollateralByDai$,
+    DaiToLoanCollateral: api.getDaiLoanCollateralByDai$,
   };
 
   const [targetAmount, targetAmountMeta] = useSubscribable(
