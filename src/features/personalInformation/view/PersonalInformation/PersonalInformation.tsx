@@ -25,15 +25,15 @@ function PersonalInformation() {
         token: 'dai',
       },
       {
-        title: t(tKeys.liquid.getKey()),
+        title: t(tKeys.availableBalance.getKey()),
         value: '18534000000000000',
-        token: 'ptk',
+        token: 'dai',
         profit: 285.34,
       },
       {
-        title: t(tKeys.staked.getKey()),
+        title: t(tKeys.locked.getKey()),
         value: '18534000000000000',
-        token: 'ptk',
+        token: 'dai',
       },
       {
         title: t(tKeys.credit.getKey()),

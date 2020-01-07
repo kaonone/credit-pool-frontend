@@ -89,10 +89,10 @@ const en = {
     },
     personalInformation: {
       title: 'Personal Information',
-      deposit: 'deposit',
-      liquid: 'liquid ptk',
-      staked: 'staked ptk',
-      credit: 'credit',
+      deposit: 'Deposit',
+      availableBalance: 'Available balance',
+      locked: 'Locked',
+      credit: 'Credit',
     },
     loans: {
       loansList: {
