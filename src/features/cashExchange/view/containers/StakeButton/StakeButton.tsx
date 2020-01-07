@@ -15,22 +15,16 @@ function StakeButton(props: IProps) {
   const { t } = useTranslate();
   const api = useApi();
 
-  const confirmText = tKeys.confirmText.getKey();
-  const calculatedAmountText = tKeys.calculatedAmountText.getKey();
-
   return (
     <ModalButton content={t(tKeys.buttonTitle.getKey())} fullWidth {...props}>
       {({ closeModal }) => (
         <PTokenExchanging
           title={t(tKeys.formTitle.getKey())}
           sourcePlaceholder={t(tKeys.placeholder.getKey())}
-          confirmMessageTKey={confirmText}
-          sourceToken="ptk"
-          targetToken="dai"
           direction="PtkToDai"
+          confirmMessageTKey={tKeys.confirmMessage.getKey()}
           onExchangeRequest={api.stakePtk$}
           onCancel={closeModal}
-          calculatedAmountTKey={calculatedAmountText}
         />
       )}
     </ModalButton>
