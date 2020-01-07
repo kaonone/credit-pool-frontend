@@ -26,7 +26,7 @@ function CashMetric(props: ICashMetricProps) {
         (profit && <Profit value={profit} />) ||
         (needed && (
           <>
-            ~<FormattedBalance sum={needed} token={token} /> needed
+            <FormattedBalance sum={needed} token={token} /> needed
           </>
         ))
       }

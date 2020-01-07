@@ -9,8 +9,6 @@ interface Activity {
   address: string;
   aprValue: number;
   stakedValue: string;
-  neededValue: string;
-  progressInPercents: number;
   timeLeft: number;
   expansionPanelDetails: string;
   status: 'PENDING' | 'APPROVED' | 'DECLINED';
@@ -21,9 +19,7 @@ const activities: Activity[] = [
     lendValue: '120000000000000000',
     address: '0x0000000000000000000000000000000000000000000000000000000000000000',
     aprValue: 15.8,
-    stakedValue: '170000000000000000',
-    neededValue: '250000000000000000',
-    progressInPercents: 85,
+    stakedValue: '70000000000000000',
     timeLeft: 15,
     expansionPanelDetails:
       'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
@@ -33,9 +29,7 @@ const activities: Activity[] = [
     lendValue: '120000000000000000',
     address: '0x0000000000000000000000000000000000000000000000000000000000000000',
     aprValue: 15.8,
-    stakedValue: '170000000000000000',
-    neededValue: '250000000000000000',
-    progressInPercents: 85,
+    stakedValue: '120000000000000000',
     timeLeft: 15,
     expansionPanelDetails:
       'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
@@ -45,9 +39,7 @@ const activities: Activity[] = [
     lendValue: '120000000000000000',
     address: '0x0000000000000000000000000000000000000000000000000000000000000000',
     aprValue: 15.8,
-    stakedValue: '170000000000000000',
-    neededValue: '250000000000000000',
-    progressInPercents: 85,
+    stakedValue: '10000000000000000',
     timeLeft: 15,
     expansionPanelDetails:
       'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',

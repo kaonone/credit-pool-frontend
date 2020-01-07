@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import BN from 'bn.js';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { StakeButton } from 'features/cashExchange';
@@ -17,8 +18,6 @@ interface IProps {
   address: string;
   aprValue: number;
   stakedValue: string;
-  neededValue: string;
-  progressInPercents: number;
   timeLeft: number;
   expansionPanelDetails: string;
   status: 'PENDING' | 'APPROVED' | 'DECLINED';
@@ -30,8 +29,6 @@ function LoanApplicationCard(props: IProps) {
     address,
     aprValue,
     stakedValue,
-    neededValue,
-    progressInPercents,
     timeLeft,
     expansionPanelDetails,
     status,
@@ -56,13 +53,18 @@ function LoanApplicationCard(props: IProps) {
         <CashMetric
           title={t(tKeys.staked.getKey())}
           value={stakedValue}
-          token="ptk"
-          needed={neededValue}
+          token="dai"
+          needed={lendValue}
         />
       </span>,
     ],
-    [t, lendValue, address, aprValue, stakedValue, neededValue],
+    [t, lendValue, address, aprValue, stakedValue],
   );
+
+  const progressInPercents = new BN(stakedValue)
+    .muln(100)
+    .div(new BN(lendValue))
+    .toNumber();
 
   const asideContent = React.useMemo(
     () =>
