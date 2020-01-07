@@ -49,7 +49,7 @@ export function OverviewPage() {
       <Grid item xs={4}>
         <Chart
           chartPoints={chartPoints}
-          title="Pool Balance"
+          title="Pool balance"
           balance={new BN(1155000000000000)}
           balanceDayAgo={new BN(1000000000000000)}
           members={[
@@ -62,7 +62,7 @@ export function OverviewPage() {
       <Grid item xs={4}>
         <Chart
           chartPoints={chartPoints}
-          title="PTK Price"
+          title="My balance"
           balance={new BN(1155000000000000)}
           balanceDayAgo={new BN(1000000000000000)}
           members={[

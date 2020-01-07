@@ -6,9 +6,9 @@ const en = {
     pages: {},
     components: {
       header: {
-        balance: 'balance',
-        issued: 'issued ptk',
-        price: 'ptk price',
+        total: 'Total',
+        availableBalance: 'Available balance',
+        issued: 'Issued loans',
       },
     },
   },

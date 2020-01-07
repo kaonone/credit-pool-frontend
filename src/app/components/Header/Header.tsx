@@ -26,20 +26,21 @@ function HeaderComponent(props: IProps) {
   const metrics: IMetric[] = React.useMemo(
     () => [
       {
-        title: t(tKeys.balance.getKey()),
+        title: t(tKeys.total.getKey()),
         value: '2192000000000000000',
         isCashMetric: true,
         profit: 12.81,
         token: 'dai',
       },
       {
-        title: t(tKeys.issued.getKey()),
+        title: t(tKeys.availableBalance.getKey()),
         value: '1895200000000000000',
         isCashMetric: true,
-        token: 'ptk',
+        profit: 12.81,
+        token: 'dai',
       },
       {
-        title: t(tKeys.price.getKey()),
+        title: t(tKeys.issued.getKey()),
         value: '12150000000000000',
         isCashMetric: true,
         profit: 12.81,
