@@ -3,7 +3,6 @@ import { map, delay, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
 import PromiEvent from 'web3/promiEvent';
-import { Web3WalletsManager } from 'web3-wallets-kit';
 import { autobind } from 'core-decorators';
 
 import { memoize } from 'utils/decorators';
@@ -15,6 +14,7 @@ import {
   SubmittedTransactionType,
   ExtractSubmittedTransaction,
 } from './types';
+import { Web3Manager } from './Web3Manager';
 
 function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNullable<T> {
   const value = subject.getValue();
@@ -26,27 +26,8 @@ function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNulla
   return value as NonNullable<T>;
 }
 
-const INFURA_ID = '6d0d9f2e41224239b3dce04146c256df';
-
 export class Api {
-  public web3Manager = new Web3WalletsManager({
-    network: 'kovan',
-    infuraAccessToken: INFURA_ID,
-    walletConfigs: {
-      'wallet-connect': {
-        infuraId: INFURA_ID,
-        chainId: 42,
-      },
-      bitski: {
-        clientId: '45e6d1b2-f059-4ebd-8afc-3c1cfa0262a4',
-        redirectUri: 'http://localhost:8080/bitski-callback.html',
-      },
-      fortmatic: {
-        apiKey: 'pk_test_508AC5D15FD0D930',
-        network: 'kovan',
-      },
-    },
-  });
+  public web3Manager = new Web3Manager();
 
   private dai = createErc20(this.web3Manager.web3, '0xc4375b7de8af5a38a93548eb8453a498222c4ff2');
   private txDai = new BehaviorSubject<ReturnType<typeof createErc20> | null>(null);

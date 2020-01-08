@@ -17,7 +17,7 @@ export function AuthButton(props: IProps) {
 
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
   const [status] = useSubscribable(() => api.web3Manager.status, [], 'pending');
-  const [connectedWallet] = useSubscribable(() => api.web3Manager.wallet, [], null);
+  const [connectedWallet] = useSubscribable(() => api.web3Manager.connectedWallet, [], null);
 
   const connectCommunication = useCommunication(api.web3Manager.connect, []);
 

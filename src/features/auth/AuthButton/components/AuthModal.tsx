@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { WalletType, ConnectionStatus } from 'web3-wallets-kit';
 
 import { CommunicationState } from 'utils/react';
 import {
@@ -14,14 +13,13 @@ import {
   ShortAddress,
   Grid,
 } from 'components';
-
-const walletTypes: WalletType[] = ['bitski', 'metamask', 'wallet-connect', 'fortmatic'];
+import { WalletType, wallets, Web3ConnectionStatus } from 'services/api';
 
 interface AuthModalProps {
   isOpened: boolean;
   connectCommunication: CommunicationState<any, any>;
   account: string | null | undefined;
-  status: ConnectionStatus;
+  status: Web3ConnectionStatus;
   connectedWallet: WalletType | null;
   onClose(): void;
   connect(wallet: WalletType): void;
@@ -78,7 +76,7 @@ export function AuthModal(props: AuthModalProps) {
               </Button>
             </Grid>
           )}
-          {walletTypes.map((type, index) => (
+          {wallets.map((type, index) => (
             <Grid item xs key={index}>
               <ConnectButton connect={connect} type={type} key={type} />
             </Grid>
