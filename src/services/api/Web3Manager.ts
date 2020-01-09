@@ -8,12 +8,21 @@ import { ConnectWalletConnector } from '@web3-wallets-kit/connect-wallet-connect
 import { BitskiConnector } from '@web3-wallets-kit/bitski-connector';
 
 import { getEnv } from 'core/getEnv';
+import { LocalStorage } from 'services/storage';
 
 export { ConnectionStatus } from '@web3-wallets-kit/core';
 
 export const wallets = ['bitski', 'metamask', 'connectWallet', 'fortmatic'] as const;
 
 export type WalletType = typeof wallets[number];
+
+function isWallet(wallet: string): wallet is WalletType {
+  return wallets.includes(wallet as WalletType);
+}
+
+interface ILocalStorage {
+  lastProvider: null | WalletType;
+}
 
 const NETWORK = 'kovan';
 const NETWORK_ID = 42;
@@ -37,10 +46,16 @@ const connectors: Record<WalletType, Connector> = {
 export class Web3Manager {
   public connectedWallet = new BehaviorSubject<WalletType | null>(null);
 
+  private LocalStorage: LocalStorage<ILocalStorage> = new LocalStorage('v1', 'walletManager');
+
   private manager = new Web3WalletsManager<Web3>({
     defaultProvider: { network: NETWORK, infuraAccessToken: INFURA_API_KEY },
     makeWeb3: provider => new Web3(provider),
   });
+
+  constructor() {
+    this.connectLastProvider();
+  }
 
   get web3() {
     return this.manager.web3;
@@ -61,6 +76,7 @@ export class Web3Manager {
   @autobind
   async disconnect() {
     this.connectedWallet.next(null);
+    this.LocalStorage.set('lastProvider', null);
     await this.manager.disconnect();
   }
 
@@ -68,6 +84,15 @@ export class Web3Manager {
   async connect(wallet: WalletType) {
     const payload = await this.manager.connect(connectors[wallet]);
     this.connectedWallet.next(wallet);
+    this.LocalStorage.set('lastProvider', wallet);
     return payload;
+  }
+
+  private connectLastProvider() {
+    const lastProvider = this.LocalStorage.get('lastProvider');
+
+    if (lastProvider && isWallet(lastProvider)) {
+      this.connect(lastProvider);
+    }
   }
 }
