@@ -1,8 +1,11 @@
+/* eslint-disable no-dupe-class-members */
 class LocalStorage<Data extends Record<string, any> | Record<'version', string>> {
   public static namespaces: string[] = [];
 
-  public static checkAvailability() {
-    const testKey = '__test__';
+  public static isLocalStorageAvailable = LocalStorage.checkAvailability();
+
+  private static checkAvailability() {
+    const testKey = `__test__${Math.random}`;
 
     try {
       localStorage.setItem(testKey, '__test-value__');
@@ -14,35 +17,34 @@ class LocalStorage<Data extends Record<string, any> | Record<'version', string>>
     }
   }
 
-  private isLocalStorageAvailable: boolean | null = null;
-
   constructor(version: string, private currentNamespace: string) {
-    this.isLocalStorageAvailable = LocalStorage.checkAvailability();
-    this.checkVersion(version);
-
     if (LocalStorage.namespaces.includes(currentNamespace)) {
       throw new Error(`Namespace '${currentNamespace}' is already exist`);
     }
+
+    this.checkVersion(version);
 
     LocalStorage.namespaces = [...LocalStorage.namespaces, currentNamespace];
   }
 
   public set<Key extends keyof Data>(key: Key, value: Data[Key]): void {
-    if (!this.isLocalStorageAvailable) {
+    if (!LocalStorage.isLocalStorageAvailable) {
       return;
     }
 
-    localStorage.setItem(`${this.currentNamespace}:${key}`, JSON.stringify(value));
+    localStorage.setItem(this.getFullKey(key), JSON.stringify(value));
   }
 
+  public get<Key extends keyof Data>(key: Key): Data[Key] | null;
+  public get<Key extends keyof Data>(key: Key, fallback: Data[Key]): Data[Key];
   public get<Key extends keyof Data>(key: Key, fallback?: Data[Key]): Data[Key] | null {
     const defaultValue = fallback || null;
 
-    if (!this.isLocalStorageAvailable) {
+    if (!LocalStorage.isLocalStorageAvailable) {
       return defaultValue;
     }
 
-    const data = localStorage.getItem(`${this.currentNamespace}:${key}`);
+    const data = localStorage.getItem(this.getFullKey(key));
 
     try {
       return data ? JSON.parse(data) : defaultValue;
@@ -55,16 +57,6 @@ class LocalStorage<Data extends Record<string, any> | Record<'version', string>>
     }
   }
 
-  public reset() {
-    if (this.isLocalStorageAvailable) {
-      Object.entries(localStorage).forEach(([key]) => {
-        if (key.match(this.currentNamespace)) {
-          localStorage.removeItem(key);
-        }
-      });
-    }
-  }
-
   private checkVersion(version: string) {
     const currentVersion = this.getVersion();
 
@@ -74,12 +66,26 @@ class LocalStorage<Data extends Record<string, any> | Record<'version', string>>
     }
   }
 
+  public reset() {
+    if (LocalStorage.isLocalStorageAvailable) {
+      Object.entries(localStorage).forEach(([key]) => {
+        if (new RegExp(`^${this.getFullKey('' as keyof Data)}.+$`).test(key)) {
+          localStorage.removeItem(key);
+        }
+      });
+    }
+  }
+
   private getVersion() {
     return this.get('version');
   }
 
   private saveVersion(version: string) {
     this.set('version', version);
+  }
+
+  private getFullKey<Key extends keyof Data>(key: Key): string {
+    return `${this.currentNamespace}:${key}`;
   }
 }
 

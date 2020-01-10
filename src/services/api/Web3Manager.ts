@@ -20,7 +20,7 @@ function isWallet(wallet: string): wallet is WalletType {
   return wallets.includes(wallet as WalletType);
 }
 
-interface ILocalStorage {
+interface StorageState {
   lastProvider: null | WalletType;
 }
 
@@ -46,7 +46,7 @@ const connectors: Record<WalletType, Connector> = {
 export class Web3Manager {
   public connectedWallet = new BehaviorSubject<WalletType | null>(null);
 
-  private LocalStorage: LocalStorage<ILocalStorage> = new LocalStorage('v1', 'walletManager');
+  private storage: LocalStorage<StorageState> = new LocalStorage('v1', 'walletManager');
 
   private manager = new Web3WalletsManager<Web3>({
     defaultProvider: { network: NETWORK, infuraAccessToken: INFURA_API_KEY },
@@ -76,7 +76,7 @@ export class Web3Manager {
   @autobind
   async disconnect() {
     this.connectedWallet.next(null);
-    this.LocalStorage.set('lastProvider', null);
+    this.storage.set('lastProvider', null);
     await this.manager.disconnect();
   }
 
@@ -84,12 +84,12 @@ export class Web3Manager {
   async connect(wallet: WalletType) {
     const payload = await this.manager.connect(connectors[wallet]);
     this.connectedWallet.next(wallet);
-    this.LocalStorage.set('lastProvider', wallet);
+    this.storage.set('lastProvider', wallet);
     return payload;
   }
 
   private connectLastProvider() {
-    const lastProvider = this.LocalStorage.get('lastProvider');
+    const lastProvider = this.storage.get('lastProvider');
 
     if (lastProvider && isWallet(lastProvider)) {
       this.connect(lastProvider);
