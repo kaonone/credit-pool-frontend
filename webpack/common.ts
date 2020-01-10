@@ -78,7 +78,7 @@ const config: webpack.Configuration = {
       onEnd: {
         copy: [
           {
-            source: `node_modules/web3-wallets-kit/assets/bitski/bitski-callback.html`,
+            source: `node_modules/@web3-wallets-kit/bitski-connector/assets/bitski-callback.html`,
             destination: `build/bitski-callback.html`,
           },
         ],
