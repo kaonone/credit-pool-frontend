@@ -1,1 +1,2 @@
-export { LocalStorage } from './LocalStorage';
+export { Storage } from './Storage';
+export { LocalStorageAdapter } from './LocalStorageAdapter';
