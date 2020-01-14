@@ -71,18 +71,14 @@ class Storage<States extends IData[]> {
     this.adapter.setItem(this.getFullKey(key), convertedValue);
   }
 
-  public getItem<Key extends keyof Tuple.Last<States>>(key: Key): Tuple.Last<States>[Key] | null {
+  public getItem<Key extends keyof Tuple.Last<States>>(key: Key): Tuple.Last<States>[Key] {
     const data = this.adapter.getItem(this.getFullKey(key));
 
-    try {
-      return data ? JSON.parse(data) : null;
-    } catch (e) {
-      console.error(
-        `Error while parsing data from storage for key: ${key}.
-        Error is: ${e.message}, stack is: ${e.stack}`,
-      );
-      return null;
+    if (!data) {
+      throw new Error(`${key} value is not found`);
     }
+
+    return JSON.parse(data);
   }
 
   private normalizeVersion() {
@@ -94,11 +90,13 @@ class Storage<States extends IData[]> {
       this.reset();
       this.set(this.initialState);
     }
-    this.saveVersion(this.migrations.length);
+    this.saveVersion((this.migrations.length as unknown) as number);
   }
 
   private executeMigrations(currentVersion: number) {
-    const migrations = this.migrations.slice(currentVersion);
+    const migrations = ((this.migrations.slice as unknown) as Array<(state: any) => any>['slice'])(
+      currentVersion,
+    );
 
     if (!migrations.length) {
       return;
@@ -119,7 +117,11 @@ class Storage<States extends IData[]> {
   }
 
   private getVersion(): number | undefined | null {
-    return this.getItem('version');
+    try {
+      return this.getItem('version');
+    } catch {
+      return null;
+    }
   }
 
   private saveVersion(version: number) {

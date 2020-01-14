@@ -9,8 +9,7 @@ export interface StorageAdapter {
 }
 
 type _TailAndStatesToMigrations<T, S extends any> = {
-  [key in Exclude<keyof T, keyof []>]: (state: S[key]) => T[key];
-} &
-  ((state: S[keyof S]) => T[keyof T])[];
+  [key in keyof T]: (state: S[key]) => T[key];
+};
 
 export type StatesToMigrations<S extends any[]> = _TailAndStatesToMigrations<Tuple.Tail<S>, S>;

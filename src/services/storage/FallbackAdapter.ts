@@ -1,11 +1,7 @@
 import { StorageAdapter } from './types';
 
 class FallbackAdapter implements StorageAdapter {
-  private state: Record<string, string>;
-
-  constructor() {
-    this.state = {};
-  }
+  private state: Record<string, string> = {};
 
   // eslint-disable-next-line class-methods-use-this
   checkAvailability() {
