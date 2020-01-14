@@ -50,11 +50,11 @@ const initialStorageState: StorageState = {
 export class Web3Manager {
   public connectedWallet = new BehaviorSubject<WalletType | null>(null);
 
-  private storage: Storage<StorageState> = new Storage(
-    'v1',
+  private storage = new Storage<[StorageState]>(
     'walletManager',
     LocalStorageAdapter,
     initialStorageState,
+    [],
   );
 
   private manager = new Web3WalletsManager<Web3>({
