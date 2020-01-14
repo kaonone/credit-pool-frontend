@@ -6,13 +6,22 @@ import { InpageConnector } from '@web3-wallets-kit/inpage-connector';
 import { FortmaticConnector } from '@web3-wallets-kit/fortmatic-connector';
 import { ConnectWalletConnector } from '@web3-wallets-kit/connect-wallet-connector';
 import { BitskiConnector } from '@web3-wallets-kit/bitski-connector';
+import { PortisConnector } from '@web3-wallets-kit/portis-connector';
+import { SquarelinkConnector } from '@web3-wallets-kit/squarelink-connector';
 
 import { getEnv } from 'core/getEnv';
 import { LocalStorage } from 'services/storage';
 
 export { ConnectionStatus } from '@web3-wallets-kit/core';
 
-export const wallets = ['bitski', 'metamask', 'connectWallet', 'fortmatic'] as const;
+export const wallets = [
+  'bitski',
+  'metamask',
+  'connectWallet',
+  'fortmatic',
+  'portis',
+  'squarelink',
+] as const;
 
 export type WalletType = typeof wallets[number];
 
@@ -36,11 +45,17 @@ const BITSKI_REDIR_URL = getEnv().isDevelopment
 
 const FORTMATIC_API_KEY = 'pk_test_508AC5D15FD0D930';
 
+const PORTIS_API_KEY = '4ab3cbfe-0ea7-4bce-aa27-04a19a8b78ea';
+
+const SQUARELINK_API_KEY = 'd023ebcfeb78fb3bb3bc';
+
 const connectors: Record<WalletType, Connector> = {
   metamask: new InpageConnector(),
   connectWallet: new ConnectWalletConnector({ infuraId: INFURA_API_KEY, chainId: NETWORK_ID }),
   bitski: new BitskiConnector({ clientId: BITSKI_API_KEY, redirectUri: BITSKI_REDIR_URL }),
   fortmatic: new FortmaticConnector({ apiKey: FORTMATIC_API_KEY, network: NETWORK }),
+  portis: new PortisConnector({ apiKey: PORTIS_API_KEY, network: NETWORK }),
+  squarelink: new SquarelinkConnector({ apiKey: SQUARELINK_API_KEY, network: NETWORK }),
 };
 
 export class Web3Manager {

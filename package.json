@@ -31,6 +31,8 @@
     "@web3-wallets-kit/core": "0.0.9",
     "@web3-wallets-kit/fortmatic-connector": "0.0.8",
     "@web3-wallets-kit/inpage-connector": "0.0.8",
+    "@web3-wallets-kit/portis-connector": "^0.1.0",
+    "@web3-wallets-kit/squarelink-connector": "^0.1.0",
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-client": "^2.6.4",
     "apollo-link": "^1.2.13",
