@@ -10,7 +10,7 @@ import { PortisConnector } from '@web3-wallets-kit/portis-connector';
 import { SquarelinkConnector } from '@web3-wallets-kit/squarelink-connector';
 
 import { getEnv } from 'core/getEnv';
-import { LocalStorage } from 'services/storage';
+import { Storage, localStorageAdapter } from 'services/storage';
 
 export { ConnectionStatus } from '@web3-wallets-kit/core';
 
@@ -58,10 +58,19 @@ const connectors: Record<WalletType, Connector> = {
   squarelink: new SquarelinkConnector({ apiKey: SQUARELINK_API_KEY, network: NETWORK }),
 };
 
+const initialStorageState: StorageState = {
+  lastProvider: null,
+};
+
 export class Web3Manager {
   public connectedWallet = new BehaviorSubject<WalletType | null>(null);
 
-  private storage: LocalStorage<StorageState> = new LocalStorage('v1', 'walletManager');
+  private storage = new Storage<[StorageState]>(
+    'walletManager',
+    localStorageAdapter,
+    initialStorageState,
+    [],
+  );
 
   private manager = new Web3WalletsManager<Web3>({
     defaultProvider: { network: NETWORK, infuraAccessToken: INFURA_API_KEY },
@@ -91,7 +100,7 @@ export class Web3Manager {
   @autobind
   async disconnect() {
     this.connectedWallet.next(null);
-    this.storage.set('lastProvider', null);
+    this.storage.setItem('lastProvider', null);
     await this.manager.disconnect();
   }
 
@@ -99,12 +108,12 @@ export class Web3Manager {
   async connect(wallet: WalletType) {
     const payload = await this.manager.connect(connectors[wallet]);
     this.connectedWallet.next(wallet);
-    this.storage.set('lastProvider', wallet);
+    this.storage.setItem('lastProvider', wallet);
     return payload;
   }
 
   private connectLastProvider() {
-    const lastProvider = this.storage.get('lastProvider');
+    const lastProvider = this.storage.getItem('lastProvider');
 
     if (lastProvider && isWallet(lastProvider)) {
       this.connect(lastProvider);
