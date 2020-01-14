@@ -2,6 +2,7 @@
 import { Tuple } from 'ts-toolbelt';
 
 import { StorageAdapter, StatesToMigrations } from './types';
+import { FallbackAdapter } from './FallbackAdapter';
 
 function entries<Object>(obj: Object) {
   return Object.entries(obj) as [keyof Object, any][];
@@ -18,7 +19,6 @@ class Storage<States extends IData[]> {
   constructor(
     private currentNamespace: string,
     private adapter: StorageAdapter,
-    private fallbackAdapter: StorageAdapter,
     private initialState: Tuple.Last<States>,
     private migrations: StatesToMigrations<States>,
   ) {
@@ -27,7 +27,7 @@ class Storage<States extends IData[]> {
     }
 
     if (!this.adapter.checkAvailability()) {
-      this.adapter = this.fallbackAdapter;
+      this.adapter = new FallbackAdapter();
 
       console.warn(
         `Storage '${currentNamespace}' is not available! Fallback storage will be used.`,
