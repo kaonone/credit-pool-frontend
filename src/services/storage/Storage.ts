@@ -15,11 +15,10 @@ interface IData {
 class Storage<States extends IData[]> {
   public static namespaces: string[] = [];
 
-  private isStorageAvailable: boolean | null = null;
-
   constructor(
     private currentNamespace: string,
     private adapter: StorageAdapter,
+    private fallbackAdapter: StorageAdapter,
     private initialState: Tuple.Last<States>,
     private migrations: StatesToMigrations<States>,
   ) {
@@ -27,7 +26,14 @@ class Storage<States extends IData[]> {
       throw new Error(`Namespace '${currentNamespace}' is already exist`);
     }
 
-    this.isStorageAvailable = this.adapter.checkAvailability();
+    if (!this.adapter.checkAvailability()) {
+      this.adapter = this.fallbackAdapter;
+
+      console.warn(
+        `Storage '${currentNamespace}' is not available! Fallback storage will be used.`,
+      );
+    }
+
     Storage.namespaces = [...Storage.namespaces, currentNamespace];
     this.normalizeVersion();
   }
@@ -60,49 +66,26 @@ class Storage<States extends IData[]> {
     key: Key,
     value: Tuple.Last<States>[Key],
   ): void {
-    if (!this.isStorageAvailable) {
-      return;
-    }
-
     const convertedValue = JSON.stringify(value);
 
     this.adapter.setItem(this.getFullKey(key), convertedValue);
   }
 
-  public getItem<Key extends keyof Tuple.Last<States>>(key: Key): Tuple.Last<States>[Key] | null;
-  public getItem<Key extends keyof Tuple.Last<States>>(
-    key: Key,
-    fallback: Tuple.Last<States>[Key],
-  ): Tuple.Last<States>[Key];
-
-  public getItem<Key extends keyof Tuple.Last<States>>(
-    key: Key,
-    fallback?: Tuple.Last<States>[Key],
-  ): Tuple.Last<States>[Key] | null {
-    const defaultValue = fallback || null;
-
-    if (!this.isStorageAvailable) {
-      return defaultValue;
-    }
-
+  public getItem<Key extends keyof Tuple.Last<States>>(key: Key): Tuple.Last<States>[Key] | null {
     const data = this.adapter.getItem(this.getFullKey(key));
 
     try {
-      return data ? JSON.parse(data) : defaultValue;
+      return data ? JSON.parse(data) : null;
     } catch (e) {
       console.error(
         `Error while parsing data from storage for key: ${key}.
         Error is: ${e.message}, stack is: ${e.stack}`,
       );
-      return defaultValue;
+      return null;
     }
   }
 
   private normalizeVersion() {
-    if (!this.isStorageAvailable) {
-      return;
-    }
-
     const version = this.getVersion();
 
     if (typeof version === 'number') {
@@ -128,13 +111,11 @@ class Storage<States extends IData[]> {
   }
 
   public reset() {
-    if (this.isStorageAvailable) {
-      this.adapter.getAllKeys().forEach(key => {
-        if (this.isCurrentNamespaceKey(key)) {
-          this.adapter.removeItem(key);
-        }
-      });
-    }
+    this.adapter.getAllKeys().forEach(key => {
+      if (this.isCurrentNamespaceKey(key)) {
+        this.adapter.removeItem(key);
+      }
+    });
   }
 
   private getVersion(): number | undefined | null {
