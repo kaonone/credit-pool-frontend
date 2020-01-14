@@ -10,7 +10,7 @@ import { PortisConnector } from '@web3-wallets-kit/portis-connector';
 import { SquarelinkConnector } from '@web3-wallets-kit/squarelink-connector';
 
 import { getEnv } from 'core/getEnv';
-import { Storage, LocalStorageAdapter } from 'services/storage';
+import { Storage, localStorageAdapter } from 'services/storage';
 
 export { ConnectionStatus } from '@web3-wallets-kit/core';
 
@@ -67,7 +67,7 @@ export class Web3Manager {
 
   private storage = new Storage<[StorageState]>(
     'walletManager',
-    LocalStorageAdapter,
+    localStorageAdapter,
     initialStorageState,
     [],
   );

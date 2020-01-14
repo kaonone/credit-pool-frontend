@@ -1,24 +1,18 @@
 /* eslint-disable no-dupe-class-members */
 import { Tuple } from 'ts-toolbelt';
 
-import { StorageAdapter } from './types';
+import { StorageAdapter, StatesToMigrations } from './types';
 
 function entries<Object>(obj: Object) {
   return Object.entries(obj) as [keyof Object, any][];
 }
-
-type _TailAndStatesToMigrations<T, S extends any> = {
-  [key in keyof T]: (state: S[key]) => T[key];
-};
-
-type StatesToMigrations<S extends any[]> = _TailAndStatesToMigrations<Tuple.Tail<S>, S>;
 
 interface IData {
   [key: string]: any;
   version?: number;
 }
 
-class Storage<Data extends IData[]> {
+class Storage<States extends IData[]> {
   public static namespaces: string[] = [];
 
   private isStorageAvailable: boolean | null = null;
@@ -26,8 +20,8 @@ class Storage<Data extends IData[]> {
   constructor(
     private currentNamespace: string,
     private adapter: StorageAdapter,
-    private initialState: Tuple.Last<Data>,
-    private migrations: StatesToMigrations<Data>,
+    private initialState: Tuple.Last<States>,
+    private migrations: StatesToMigrations<States>,
   ) {
     if (Storage.namespaces.includes(currentNamespace)) {
       throw new Error(`Namespace '${currentNamespace}' is already exist`);
@@ -35,34 +29,37 @@ class Storage<Data extends IData[]> {
 
     this.isStorageAvailable = this.adapter.checkAvailability();
     Storage.namespaces = [...Storage.namespaces, currentNamespace];
-    this.checkVersion();
+    this.normalizeVersion();
   }
 
   // eslint-disable-next-line class-methods-use-this
-  public set(data: Tuple.Last<Data>): void {
+  public set(data: Tuple.Last<States>): void {
     entries(data).forEach(item => {
       const [key, value] = item;
       this.setItem(key, value);
     });
   }
 
-  public get(): Tuple.Last<Data> {
-    return this.adapter.getAllKeys().reduce((allKeys, currentKey) => {
+  public get(): Tuple.Last<States> {
+    return this.adapter.getAllKeys().reduce((acc, currentKey) => {
       if (!this.isCurrentNamespaceKey(currentKey)) {
-        return allKeys;
+        return acc;
       }
 
       const key = this.getShortKey(currentKey);
       const data = this.getItem(key);
 
       return {
-        ...allKeys,
+        ...acc,
         [key]: data,
       };
-    }, {} as Tuple.Last<Data>);
+    }, {} as Tuple.Last<States>);
   }
 
-  public setItem<Key extends keyof Tuple.Last<Data>>(key: Key, value: Tuple.Last<Data>[Key]): void {
+  public setItem<Key extends keyof Tuple.Last<States>>(
+    key: Key,
+    value: Tuple.Last<States>[Key],
+  ): void {
     if (!this.isStorageAvailable) {
       return;
     }
@@ -72,16 +69,16 @@ class Storage<Data extends IData[]> {
     this.adapter.setItem(this.getFullKey(key), convertedValue);
   }
 
-  public getItem<Key extends keyof Tuple.Last<Data>>(key: Key): Tuple.Last<Data>[Key] | null;
-  public getItem<Key extends keyof Tuple.Last<Data>>(
+  public getItem<Key extends keyof Tuple.Last<States>>(key: Key): Tuple.Last<States>[Key] | null;
+  public getItem<Key extends keyof Tuple.Last<States>>(
     key: Key,
-    fallback: Tuple.Last<Data>[Key],
-  ): Tuple.Last<Data>[Key];
+    fallback: Tuple.Last<States>[Key],
+  ): Tuple.Last<States>[Key];
 
-  public getItem<Key extends keyof Tuple.Last<Data>>(
+  public getItem<Key extends keyof Tuple.Last<States>>(
     key: Key,
-    fallback?: Tuple.Last<Data>[Key],
-  ): Tuple.Last<Data>[Key] | null {
+    fallback?: Tuple.Last<States>[Key],
+  ): Tuple.Last<States>[Key] | null {
     const defaultValue = fallback || null;
 
     if (!this.isStorageAvailable) {
@@ -101,38 +98,33 @@ class Storage<Data extends IData[]> {
     }
   }
 
-  private checkVersion() {
+  private normalizeVersion() {
     if (!this.isStorageAvailable) {
       return;
     }
 
-    const isVersionExist = !!this.getVersion() || this.getVersion() === 0;
+    const version = this.getVersion();
 
-    if (!isVersionExist) {
+    if (typeof version === 'number') {
+      this.executeMigrations(version);
+    } else {
       this.reset();
       this.set(this.initialState);
-      this.saveVersion(this.migrations.length as any); // TODO this.migrations.length is not a number
-    } else {
-      this.executeMigrations(Number(this.getVersion()));
     }
+    this.saveVersion(this.migrations.length);
   }
 
   private executeMigrations(currentVersion: number) {
-    const isMigrationExist =
-      this.migrations.length && typeof this.migrations[currentVersion] !== 'undefined';
+    const migrations = this.migrations.slice(currentVersion);
 
-    if (!isMigrationExist) {
+    if (!migrations.length) {
       return;
     }
 
     const currentData = this.get();
-    const newData = this.migrations[currentVersion](currentData);
+    const newData = migrations.reduce((data, migration) => migration(data), currentData);
     this.reset();
     this.set(newData);
-
-    const nextVersion = currentVersion + 1;
-    this.saveVersion(nextVersion);
-    this.executeMigrations(nextVersion);
   }
 
   public reset() {
@@ -145,7 +137,7 @@ class Storage<Data extends IData[]> {
     }
   }
 
-  private getVersion() {
+  private getVersion(): number | undefined | null {
     return this.getItem('version');
   }
 
@@ -153,18 +145,18 @@ class Storage<Data extends IData[]> {
     this.setItem('version', version);
   }
 
-  private getFullKey<Key extends keyof Tuple.Last<Data>>(key: Key): string {
+  private getFullKey<Key extends keyof Tuple.Last<States>>(key: Key): string {
     return `${this.currentNamespace}:${key}`;
   }
 
-  private getShortKey(key: string): string {
+  private getShortKey(key: string): keyof Tuple.Last<States> {
     return key.replace(`${this.currentNamespace}:`, '');
   }
 
-  private isCurrentNamespaceKey(key: string | number | symbol): key is keyof Tuple.Last<Data> {
+  private isCurrentNamespaceKey(key: string | number | symbol): boolean {
     return (
       typeof key === 'string' &&
-      new RegExp(`^${this.getFullKey('' as keyof Tuple.Last<Data>)}.+$`).test(key)
+      new RegExp(`^${this.getFullKey('' as keyof Tuple.Last<States>)}.+$`).test(key)
     );
   }
 }

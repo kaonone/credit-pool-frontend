@@ -1,6 +1,6 @@
 import { StorageAdapter } from './types';
 
-const LocalStorageAdapter: StorageAdapter = {
+const localStorageAdapter: StorageAdapter = {
   checkAvailability(): boolean {
     const testKey = `__test__${Math.random}`;
 
@@ -31,4 +31,4 @@ const LocalStorageAdapter: StorageAdapter = {
   },
 };
 
-export { LocalStorageAdapter };
+export { localStorageAdapter };
