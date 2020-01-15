@@ -3,10 +3,10 @@ import * as React from 'react';
 import { AuthButton } from 'features/auth';
 import { Typography, Loading } from 'components';
 import { useSubgraphPagination } from 'utils/react';
-import { useBalancesQuery } from 'generated/gql/dai-graphql';
+import { useUsersQuery } from 'generated/gql/pool';
 
 export function DemoPage() {
-  const { result, paginationView } = useSubgraphPagination(useBalancesQuery, {});
+  const { result, paginationView } = useSubgraphPagination(useUsersQuery, {});
 
   return (
     <div>
@@ -15,9 +15,7 @@ export function DemoPage() {
         Page for developers
       </Typography>
       <Loading gqlResults={result}>
-        {result.data && (
-          <pre>{result.data.balances.map(({ id, wad }) => `${id}\t${wad}`).join('\n')}</pre>
-        )}
+        {result.data && <pre>{JSON.stringify(result.data.users, null, 2)}</pre>}
       </Loading>
       {paginationView}
     </div>
