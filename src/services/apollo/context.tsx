@@ -30,6 +30,14 @@ async function createMockApolloClient() {
         })),
     }),
     BigInt: () => '123456',
+    // TODO dыoesn't work
+    Subscription: () => ({
+      pools: () =>
+        new MockList(1, () => ({
+          lBalance: () => '1192000000000000000000',
+          lDebt: () => '1000000000000000000000',
+        })),
+    }),
   };
 
   addMockFunctionsToSchema({
