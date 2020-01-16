@@ -1,4 +1,10 @@
-const UnavailableAdapter = jest.fn().mockImplementation(() => {
+import { StorageAdapter } from '../types';
+
+interface IUnavailableAdapter extends StorageAdapter {
+  state: Record<string, string>;
+}
+
+const UnavailableAdapter = jest.fn<IUnavailableAdapter, []>().mockImplementation(() => {
   return {
     state: {},
 

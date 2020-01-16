@@ -1,4 +1,10 @@
-const StorageAdapter = jest.fn().mockImplementation(() => {
+import { StorageAdapter } from '../types';
+
+interface IStorageAdapter extends StorageAdapter {
+  state: Record<string, string>;
+}
+
+const MockStorageAdapter = jest.fn<IStorageAdapter, []>().mockImplementation(() => {
   return {
     state: {},
 
@@ -24,4 +30,4 @@ const StorageAdapter = jest.fn().mockImplementation(() => {
   };
 });
 
-export { StorageAdapter };
+export { MockStorageAdapter as StorageAdapter };
