@@ -10,7 +10,7 @@ function entries<Object>(obj: Object) {
 
 interface IData {
   [key: string]: any;
-  version?: number;
+  __storage_version__?: number;
 }
 
 class Storage<States extends IData[]> {
@@ -48,11 +48,13 @@ class Storage<States extends IData[]> {
 
   public get(): Tuple.Last<States> {
     return this.adapter.getAllKeys().reduce((acc, currentKey) => {
-      if (!this.isCurrentNamespaceKey(currentKey)) {
+      const key = this.getShortKey(currentKey);
+      const isVersionKey = key === '__storage_version__';
+
+      if (!this.isCurrentNamespaceKey(currentKey) || isVersionKey) {
         return acc;
       }
 
-      const key = this.getShortKey(currentKey);
       const data = this.getItem(key);
 
       return {
@@ -118,14 +120,14 @@ class Storage<States extends IData[]> {
 
   private getVersion(): number | undefined | null {
     try {
-      return this.getItem('version');
+      return this.getItem('__storage_version__');
     } catch {
       return null;
     }
   }
 
   private saveVersion(version: number) {
-    this.setItem('version', version);
+    this.setItem('__storage_version__', version);
   }
 
   private getFullKey<Key extends keyof Tuple.Last<States>>(key: Key): string {
