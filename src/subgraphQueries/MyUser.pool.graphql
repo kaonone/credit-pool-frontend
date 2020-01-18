@@ -1,0 +1,8 @@
+query MyUser($address: String!) {
+  users(first: 1) {
+    id
+    pBalance
+    locked
+    credit
+  }
+}
