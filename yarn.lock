@@ -1978,10 +1978,10 @@
     "@web3-wallets-kit/abstract-connector" "^0.0.4"
     "@web3-wallets-kit/types" "^0.1.1"
 
-"@web3-wallets-kit/core@0.0.11":
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/core/-/core-0.0.11.tgz#efeaa173bc7917987bcdfbf9ebd57670096ba408"
-  integrity sha512-CJo4uWHINOi12OLIApy+K3PN8h+Ci8Jw4M0T34slrSc1v6cKObKNhgmNwBviwmrAOQXrvP/+sfPtoqv3Q8vrKQ==
+"@web3-wallets-kit/core@0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/core/-/core-0.0.12.tgz#ceb819facc6b5d87a2c7918d66d05013327ee9b7"
+  integrity sha512-eOy+URbTmWr0n6in8lmnCBDDH2fHV9tlOB13zbyfn9fotBephOomQISw/0YjDSzCOppw3dIxTU1VsQVTgIw5gA==
   dependencies:
     "@web3-wallets-kit/types" "^0.1.1"
     rxjs "^6.2.2"

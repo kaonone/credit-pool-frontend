@@ -34,8 +34,17 @@ function first<T>(input: Observable<T>): Promise<T> {
 export class Api {
   public web3Manager = new Web3Manager();
 
-  private dai = createErc20(this.web3Manager.web3, '0xc4375b7de8af5a38a93548eb8453a498222c4ff2');
-  private tx = new BehaviorSubject<null | {
+  private readonlyContracts = {
+    dai: createErc20(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.dai),
+    ptk: createErc20(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.ptk),
+    fundsModule: createFundsModule(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.fundsModule),
+    liquidityModule: createLiquidityModule(
+      this.web3Manager.web3,
+      ETH_NETWORK_CONFIG.contracts.liquidityModule,
+    ),
+  };
+
+  private txContracts = new BehaviorSubject<null | {
     dai: ReturnType<typeof createErc20>;
     ptk: ReturnType<typeof createErc20>;
     fundsModule: ReturnType<typeof createFundsModule>;
@@ -60,11 +69,11 @@ export class Api {
             },
         ),
       )
-      .subscribe(this.tx);
+      .subscribe(this.txContracts);
   }
 
   public async transferDai$(fromAddress: string, toAddress: string, value: BN): Promise<void> {
-    const txDai = getCurrentValueOrThrow(this.tx).dai;
+    const txDai = getCurrentValueOrThrow(this.txContracts).dai;
 
     const promiEvent = txDai.methods.transfer(
       { _to: toAddress, _value: value },
@@ -81,7 +90,7 @@ export class Api {
   }
 
   public async approvePtk(fromAddress: string, spender: string, value: BN): Promise<void> {
-    const txPtk = getCurrentValueOrThrow(this.tx).ptk;
+    const txPtk = getCurrentValueOrThrow(this.txContracts).ptk;
 
     const promiEvent = txPtk.methods.approve(
       { _spender: spender, _value: value },
@@ -94,7 +103,7 @@ export class Api {
   }
 
   public async approveDai(fromAddress: string, spender: string, value: BN): Promise<void> {
-    const txDai = getCurrentValueOrThrow(this.tx).dai;
+    const txDai = getCurrentValueOrThrow(this.txContracts).dai;
 
     const promiEvent = txDai.methods.approve(
       { _spender: spender, _value: value },
@@ -130,7 +139,7 @@ export class Api {
   @autobind
   public async sellPtk$(fromAddress: string, values: { sourceAmount: BN }): Promise<void> {
     const { sourceAmount } = values;
-    const txLiquidityModule = getCurrentValueOrThrow(this.tx).liquidityModule;
+    const txLiquidityModule = getCurrentValueOrThrow(this.txContracts).liquidityModule;
 
     const pAmount = await first(this.getPTokenByDai$(sourceAmount.toString()));
 
@@ -152,7 +161,7 @@ export class Api {
   @autobind
   public async buyPtk(fromAddress: string, values: { sourceAmount: BN }): Promise<void> {
     const { sourceAmount } = values;
-    const txLiquidityModule = getCurrentValueOrThrow(this.tx).liquidityModule;
+    const txLiquidityModule = getCurrentValueOrThrow(this.txContracts).liquidityModule;
 
     await this.approveDai(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, sourceAmount);
 
@@ -186,9 +195,15 @@ export class Api {
     return this.submittedTransaction;
   }
 
+  @memoize((token: 'ptk' | 'dai', address: string) => token + address)
+  @autobind
+  public getBalance$(token: 'ptk' | 'dai', address: string): Observable<BN> {
+    return token === 'ptk' ? this.getPtkBalance$(address) : this.getDaiBalance$(address);
+  }
+
   @memoize(R.identity)
   public getDaiBalance$(address: string): Observable<BN> {
-    return this.dai.methods.balanceOf(
+    return this.readonlyContracts.dai.methods.balanceOf(
       { _owner: address },
       { Transfer: [{ filter: { _from: address } }, { filter: { _to: address } }] },
     );
@@ -196,9 +211,11 @@ export class Api {
 
   @memoize(R.identity)
   @autobind
-  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
-  public getPtkBalance$(_address: string): Observable<BN> {
-    return of(new BN('2000000000000000000')).pipe(delay(5000));
+  public getPtkBalance$(address: string): Observable<BN> {
+    return this.readonlyContracts.ptk.methods.balanceOf(
+      { _owner: address },
+      { Transfer: [{ filter: { _from: address } }, { filter: { _to: address } }] },
+    );
   }
 
   @memoize(R.identity)
@@ -219,18 +236,13 @@ export class Api {
     );
   }
 
-  @memoize((token: 'ptk' | 'dai', address: string) => token + address)
-  @autobind
-  public getBalance$(token: 'ptk' | 'dai', address: string): Observable<BN> {
-    return token === 'ptk' ? this.getPtkBalance$(address) : this.getDaiBalance$(address);
-  }
-
   @memoize(R.identity)
   @autobind
   public getPTokenByDai$(value: string): Observable<BN> {
-    const txFunds = getCurrentValueOrThrow(this.tx).fundsModule;
-
-    return txFunds.methods.calculatePoolEnter({ lAmount: new BN(value) }, { Status: {} });
+    return this.readonlyContracts.fundsModule.methods.calculatePoolEnter(
+      { lAmount: new BN(value) },
+      { Status: {} },
+    );
   }
 
   @memoize(R.identity)
@@ -242,9 +254,7 @@ export class Api {
   @memoize(R.identity)
   @autobind
   public getWithdrawPTokenInfo$(value: string): Observable<{ total: BN; user: BN; fee: BN }> {
-    const txFunds = getCurrentValueOrThrow(this.tx).fundsModule;
-
-    return txFunds.methods
+    return this.readonlyContracts.fundsModule.methods
       .calculatePoolExitInverse({ pAmount: new BN(value) }, { Status: {} })
       .pipe(
         map(([total, user, fee]) => ({

@@ -28,7 +28,7 @@
     "@material-ui/styles": "^4.6.0",
     "@web3-wallets-kit/bitski-connector": "0.0.9",
     "@web3-wallets-kit/connect-wallet-connector": "0.0.10",
-    "@web3-wallets-kit/core": "0.0.11",
+    "@web3-wallets-kit/core": "0.0.12",
     "@web3-wallets-kit/fortmatic-connector": "0.0.10",
     "@web3-wallets-kit/inpage-connector": "0.0.10",
     "@web3-wallets-kit/portis-connector": "^0.1.2",
