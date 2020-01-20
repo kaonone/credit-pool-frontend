@@ -2,12 +2,13 @@ import * as React from 'react';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 
 import { Back, InfoIcon } from 'components/icons';
-import { Grid, IconButton, Typography, MetricsList, IMetric, Tooltip } from 'components';
-import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
+import { Grid, IconButton, Typography, Tooltip, Loading } from 'components';
 import { PTokenBuyingButton, PTokenSellingButton } from 'features/cashExchange';
 import { AuthButton } from 'features/auth';
+import { usePoolMetricsSubscription } from 'generated/gql/pool';
 
 import { useStyles } from './Header.style';
+import { Metrics } from './Metrics';
 
 interface IOwnProps {
   backRoutePath?: string;
@@ -16,39 +17,11 @@ interface IOwnProps {
 
 type IProps = IOwnProps & RouteComponentProps;
 
-const tKeys = tKeysAll.app.components.header;
-
 function HeaderComponent(props: IProps) {
   const { title, backRoutePath } = props;
   const classes = useStyles();
-  const { t } = useTranslate();
 
-  const metrics: IMetric[] = React.useMemo(
-    () => [
-      {
-        title: t(tKeys.total.getKey()),
-        value: '2192000000000000000',
-        isCashMetric: true,
-        profit: 12.81,
-        token: 'dai',
-      },
-      {
-        title: t(tKeys.availableBalance.getKey()),
-        value: '1895200000000000000',
-        isCashMetric: true,
-        profit: 12.81,
-        token: 'dai',
-      },
-      {
-        title: t(tKeys.issued.getKey()),
-        value: '12150000000000000',
-        isCashMetric: true,
-        profit: 12.81,
-        token: 'dai',
-      },
-    ],
-    [t],
-  );
+  const poolMetricsGqlResult = usePoolMetricsSubscription();
 
   return (
     <div className={classes.root}>
@@ -82,7 +55,9 @@ function HeaderComponent(props: IProps) {
         <Grid item xs={12}>
           <Grid container alignItems="center" justify="space-between" spacing={2}>
             <Grid item>
-              <MetricsList metrics={metrics} />
+              <Loading gqlResults={poolMetricsGqlResult}>
+                {poolMetricsGqlResult.data && <Metrics data={poolMetricsGqlResult.data} />}
+              </Loading>
             </Grid>
             <Grid item>
               <Grid container spacing={2} alignItems="center">
