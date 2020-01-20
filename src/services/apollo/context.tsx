@@ -26,11 +26,11 @@ async function createMockApolloClient() {
       users: () => new MockList(10),
       balances: () =>
         new MockList(10, () => ({
-          ethAddress: () => '0x0000000000000000000000000000000000000000000000000000000000000000',
+          lBalance: () => '12345',
         })),
     }),
     BigInt: () => '123456',
-    // TODO dыoesn't work
+    // TODO doesn't work
     Subscription: () => ({
       pools: () =>
         new MockList(1, () => ({

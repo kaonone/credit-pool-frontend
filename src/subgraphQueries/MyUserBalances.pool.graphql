@@ -1,0 +1,8 @@
+query MyUserBalances($address: String!) {
+  balances(where: {user: $address}) {
+    id
+    user
+    lBalance
+    pBalance
+  }
+}
