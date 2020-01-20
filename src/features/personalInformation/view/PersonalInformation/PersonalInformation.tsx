@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import BN from 'bn.js';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
@@ -26,11 +26,11 @@ function PersonalInformation() {
 
   const myUserResult = useMyUserQuery({
     variables: {
-      address: account || '',
+      address: account?.toLowerCase() || '',
     },
   });
 
-  const myUser = myUserResult.data?.users[0];
+  const myUser = myUserResult.data?.user;
 
   const balanceInPtk = myUser?.pBalance || '0';
   const [availableBalance, availableBalanceMeta] = useSubscribable(
@@ -46,11 +46,10 @@ function PersonalInformation() {
     new BN(0),
   );
 
-  const [deposit, depositMeta] = useSubscribable(
-    () => api.getDaiByPToken$(availableBalance.add(locked).toString()),
-    [availableBalance, locked],
-    new BN(0),
-  );
+  const deposit = useMemo(() => availableBalance.add(locked).toString(), [
+    availableBalance,
+    locked,
+  ]);
 
   const balancesResult = useMyUserBalancesQuery({
     variables: {
@@ -58,7 +57,7 @@ function PersonalInformation() {
     },
   });
 
-  const balanceDayAgo = balancesResult.data?.balances[1];
+  const balanceDayAgo = balancesResult.data?.balances[0];
 
   const balanceInDaiDayAgo = new BN(balanceDayAgo?.lBalance || '0');
 
@@ -99,7 +98,7 @@ function PersonalInformation() {
   return (
     <Loading
       gqlResults={myUserResult}
-      meta={[accountMeta, availableBalanceMeta, lockedMeta, depositMeta]}
+      meta={[accountMeta, availableBalanceMeta, lockedMeta]}
       progressVariant="circle"
     >
       <Card className={classes.root}>

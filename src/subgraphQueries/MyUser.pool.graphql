@@ -1,5 +1,5 @@
-query MyUser($address: String!) {
-  users(first: 1) {
+query MyUser($address: ID!) {
+  user(id: $address) {
     id
     pBalance
     locked
