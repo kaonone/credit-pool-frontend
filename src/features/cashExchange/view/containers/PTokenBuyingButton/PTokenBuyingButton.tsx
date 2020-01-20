@@ -29,7 +29,7 @@ function PTokenBuyingButton(props: IProps) {
           sourcePlaceholder={t(tKeys.placeholder.getKey())}
           direction="DaiToPtk"
           confirmMessageTKey={tKeys.confirmMessage.getKey()}
-          onExchangeRequest={api.buyPtk$}
+          onExchangeRequest={api.buyPtk}
           onCancel={closeModal}
         />
       )}
