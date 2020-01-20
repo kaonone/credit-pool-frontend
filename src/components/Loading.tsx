@@ -4,7 +4,7 @@ import CircularProgress, { CircularProgressProps } from '@material-ui/core/Circu
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { QueryResult } from '@apollo/react-common';
+import { SubscriptionResult } from '@apollo/react-common';
 
 import { CommunicationState } from 'utils/react';
 
@@ -20,7 +20,7 @@ interface IProps<V extends ProgressType> {
   children?: React.ReactNode;
   meta?: MaybeArray<IMeta>;
   communication?: MaybeArray<CommunicationState<any, any>>;
-  gqlResults?: MaybeArray<QueryResult>;
+  gqlResults?: MaybeArray<SubscriptionResult>;
   component?: React.ComponentType;
   progressVariant?: V;
   progressProps?: {
@@ -47,7 +47,7 @@ function communicationsToMetas(values: MaybeArray<CommunicationState<any, any>>)
   }));
 }
 
-function gqlResultsToMetas(values: MaybeArray<QueryResult>): IMeta[] {
+function gqlResultsToMetas(values: MaybeArray<SubscriptionResult>): IMeta[] {
   return toArray(values).map<IMeta>(value => ({
     loaded: typeof value.data !== 'undefined' || !value.loading,
     error: value.error?.message,

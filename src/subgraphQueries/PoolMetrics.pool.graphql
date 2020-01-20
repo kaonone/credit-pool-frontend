@@ -1,0 +1,6 @@
+subscription PoolMetrics @pool {
+  pools {
+    lBalance
+    lDebt
+  }
+}

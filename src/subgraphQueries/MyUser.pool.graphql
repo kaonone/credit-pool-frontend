@@ -1,0 +1,8 @@
+query MyUser($address: ID!) {
+  user(id: $address) {
+    id
+    pBalance
+    locked
+    credit
+  }
+}

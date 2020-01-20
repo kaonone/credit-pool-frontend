@@ -32,10 +32,15 @@ const config: webpack.Configuration = {
   },
   resolve: {
     modules: ['node_modules', 'src'],
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+    extensions: ['.js', 'mjs', '.jsx', '.ts', '.tsx', '.json'],
   },
   module: {
     rules: [
+      {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
+      },
       {
         test: /\.tsx?$/,
         use: {
