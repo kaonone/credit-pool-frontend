@@ -24,15 +24,20 @@ const en = {
         success: 'dai.approve transaction succeeded',
         error: 'dai.approve transaction failed',
       },
-      'pool.sellPtk': {
-        pending: 'pool.sellPtk transaction pending',
-        success: 'pool.sellPtk transaction succeeded',
-        error: 'pool.sellPtk transaction failed',
+      'ptk.approve': {
+        pending: 'ptk.approve transaction pending',
+        success: 'ptk.approve transaction succeeded',
+        error: 'ptk.approve transaction failed',
       },
-      'pool.buyPtk': {
-        pending: 'pool.buyPtk transaction pending',
-        success: 'pool.buyPtk transaction succeeded',
-        error: 'pool.buyPtk transaction failed',
+      'liquidity.sellPtk': {
+        pending: 'liquidity.sellPtk transaction pending',
+        success: 'liquidity.sellPtk transaction succeeded',
+        error: 'liquidity.sellPtk transaction failed',
+      },
+      'liquidity.buyPtk': {
+        pending: 'liquidity.buyPtk transaction pending',
+        success: 'liquidity.buyPtk transaction succeeded',
+        error: 'liquidity.buyPtk transaction failed',
       },
       'pool.stakePtk': {
         pending: 'pool.stakePtk transaction pending',

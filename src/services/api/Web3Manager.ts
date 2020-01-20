@@ -11,6 +11,7 @@ import { SquarelinkConnector } from '@web3-wallets-kit/squarelink-connector';
 
 import { getEnv } from 'core/getEnv';
 import { Storage, localStorageAdapter } from 'services/storage';
+import { ETH_NETWORK_CONFIG } from 'env';
 
 export { ConnectionStatus } from '@web3-wallets-kit/core';
 
@@ -33,9 +34,6 @@ interface StorageState {
   lastProvider: null | WalletType;
 }
 
-const NETWORK = 'kovan';
-const NETWORK_ID = 42;
-
 const INFURA_API_KEY = '6d0d9f2e41224239b3dce04146c256df';
 
 const BITSKI_API_KEY = '45e6d1b2-f059-4ebd-8afc-3c1cfa0262a4';
@@ -51,11 +49,20 @@ const SQUARELINK_API_KEY = 'd023ebcfeb78fb3bb3bc';
 
 const connectors: Record<WalletType, Connector> = {
   metamask: new InpageConnector(),
-  connectWallet: new ConnectWalletConnector({ infuraId: INFURA_API_KEY, chainId: NETWORK_ID }),
+  connectWallet: new ConnectWalletConnector({
+    infuraId: INFURA_API_KEY,
+    chainId: ETH_NETWORK_CONFIG.id,
+  }),
   bitski: new BitskiConnector({ clientId: BITSKI_API_KEY, redirectUri: BITSKI_REDIR_URL }),
-  fortmatic: new FortmaticConnector({ apiKey: FORTMATIC_API_KEY, network: NETWORK }),
-  portis: new PortisConnector({ apiKey: PORTIS_API_KEY, network: NETWORK }),
-  squarelink: new SquarelinkConnector({ apiKey: SQUARELINK_API_KEY, network: NETWORK }),
+  fortmatic: new FortmaticConnector({
+    apiKey: FORTMATIC_API_KEY,
+    network: ETH_NETWORK_CONFIG.name,
+  }),
+  portis: new PortisConnector({ apiKey: PORTIS_API_KEY, network: ETH_NETWORK_CONFIG.name }),
+  squarelink: new SquarelinkConnector({
+    apiKey: SQUARELINK_API_KEY,
+    network: ETH_NETWORK_CONFIG.name,
+  }),
 };
 
 const initialStorageState: StorageState = {
@@ -73,7 +80,7 @@ export class Web3Manager {
   );
 
   private manager = new Web3WalletsManager<Web3>({
-    defaultProvider: { network: NETWORK, infuraAccessToken: INFURA_API_KEY },
+    defaultProvider: { network: ETH_NETWORK_CONFIG.name, infuraAccessToken: INFURA_API_KEY },
     makeWeb3: provider => new Web3(provider),
   });
 
