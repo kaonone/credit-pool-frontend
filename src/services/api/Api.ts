@@ -180,6 +180,13 @@ export class Api {
     return of(new BN(value).divn(2)).pipe(delay(2000));
   }
 
+  @memoize(R.identity)
+  @autobind
+  // eslint-disable-next-line class-methods-use-this
+  public getDaiByPtkForLocked$(value: string): Observable<BN> {
+    return of(new BN(value).divn(2)).pipe(delay(2000));
+  }
+
   @autobind
   private async sendMockTransaction$<T extends SubmittedTransactionType>(
     transactionName: T,

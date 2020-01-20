@@ -41,7 +41,7 @@ function PersonalInformation() {
 
   const lockedInPtk = myUser?.locked || '0';
   const [locked, lockedMeta] = useSubscribable(
-    () => api.getDaiByPToken$(lockedInPtk),
+    () => api.getDaiByPtkForLocked$(lockedInPtk),
     [lockedInPtk],
     new BN(0),
   );
