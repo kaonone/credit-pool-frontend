@@ -1,10 +1,9 @@
 import * as React from 'react';
 
-import { Grid, Loading, Hint, Typography, Box } from 'components';
-import { useMyUserDebtsQuery, Status } from 'generated/gql/pool';
+import { Grid, Hint, Typography, Box } from 'components';
+import { useDebtsQuery, Status } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { useApi } from 'services/api';
-import { useSubscribable, useSubgraphPagination } from 'utils/react';
+import { useSubgraphPagination } from 'utils/react';
 
 import { LoanApplicationCard } from '../../components/LoanApplicationCard/LoanApplicationCard';
 
@@ -22,13 +21,7 @@ interface Activity {
 function LoanApplicationsList() {
   const { t } = useTranslate();
 
-  const api = useApi();
-  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
-
-  const { result, paginationView } = useSubgraphPagination(useMyUserDebtsQuery, {
-    address: account?.toLowerCase() || '',
-  });
-
+  const { result, paginationView } = useSubgraphPagination(useDebtsQuery, {});
   const debts = result.data?.debts;
 
   const activities: Activity[] = React.useMemo(
@@ -53,15 +46,13 @@ function LoanApplicationsList() {
         </Hint>
       ) : (
         <>
-          <Loading meta={accountMeta} gqlResults={result}>
-            <Grid container spacing={3}>
-              {activities.map((activity, index) => (
-                <Grid key={index} item xs={12}>
-                  <LoanApplicationCard {...activity} />
-                </Grid>
-              ))}
-            </Grid>
-          </Loading>
+          <Grid container spacing={3}>
+            {activities.map((activity, index) => (
+              <Grid key={index} item xs={12}>
+                <LoanApplicationCard {...activity} />
+              </Grid>
+            ))}
+          </Grid>
           <Box my={3}>{paginationView}</Box>
         </>
       )}
