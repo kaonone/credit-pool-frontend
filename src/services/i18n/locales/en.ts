@@ -44,10 +44,10 @@ const en = {
         success: 'pool.stakePtk transaction succeeded',
         error: 'pool.stakePtk transaction failed',
       },
-      'pool.getLoan': {
-        pending: 'pool.getLoan transaction pending',
-        success: 'pool.getLoan transaction succeeded',
-        error: 'pool.getLoan transaction failed',
+      'loan.createProposal': {
+        pending: 'loan.createProposal transaction pending',
+        success: 'loan.createProposal transaction succeeded',
+        error: 'loan.createProposal transaction failed',
       },
     },
     cashExchange: {
