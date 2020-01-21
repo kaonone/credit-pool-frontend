@@ -1,5 +1,5 @@
 subscription PoolMetrics @pool {
-  pools {
+  pools(orderBy: id, orderDirection: desc) {
     lBalance
     lDebt
   }

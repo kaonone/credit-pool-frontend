@@ -76,7 +76,7 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
   const methodByDirection: Record<Direction, () => Observable<BN>> = {
     DaiToPtk: () => api.getBalance$('dai', account),
     PtkToDai: () => api.getPtkBalanceInDai$(account),
-    DaiToLoanCollateral: () => api.getMaxAvailableLoanSize$(account),
+    DaiToLoanCollateral: () => api.getMaxAvailableLoanSizeInDai$(account),
   };
 
   const [maxValue] = useSubscribable(() => methodByDirection[direction](), []);
