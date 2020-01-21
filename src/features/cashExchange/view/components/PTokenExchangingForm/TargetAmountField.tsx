@@ -29,9 +29,9 @@ function TargetAmountField(props: IProps) {
   const api = useApi();
 
   const methodByDirection: Record<Direction, (value: string) => Observable<BN>> = {
-    DaiToPtk: api.getPTokenByDai$,
-    PtkToDai: api.getDaiByPToken$,
-    DaiToLoanCollateral: api.getDaiLoanCollateralByDai$,
+    DaiToPtk: api.convertDaiToPtkEnter$,
+    PtkToDai: api.convertPtkToDaiExit$,
+    DaiToLoanCollateral: api.getMinLoanCollateralByDaiInDai$,
   };
 
   const [targetAmount, targetAmountMeta] = useSubscribable(

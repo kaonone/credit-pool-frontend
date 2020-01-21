@@ -64,7 +64,7 @@ function GetLoanButton(props: IProps) {
     (values: (ISubmittedFormData & IExtraFormData) | null) => {
       const rawSourceAmount = values?.sourceAmount?.toString() || '0';
 
-      return api.getDaiLoanCollateralByDai$(rawSourceAmount).pipe(
+      return api.getMinLoanCollateralByDaiInDai$(rawSourceAmount).pipe(
         map(rawCollateral => {
           const collateral =
             (daiTokenInfo &&
@@ -141,7 +141,7 @@ function GetLoanButton(props: IProps) {
           title={t(tKeys.formTitle.getKey())}
           sourcePlaceholder={t(tKeys.amountPlaceholder.getKey())}
           direction="DaiToLoanCollateral"
-          onExchangeRequest={api.getLoan$}
+          onExchangeRequest={api.createLoanProposal}
           onCancel={closeModal}
           confirmMessageTKey={getConfirmMessage}
           additionalFields={additionalFields}
