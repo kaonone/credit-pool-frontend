@@ -1,4 +1,4 @@
-query MyUser($address: ID!) {
+subscription MyUser($address: ID!) {
   user(id: $address) {
     id
     pBalance

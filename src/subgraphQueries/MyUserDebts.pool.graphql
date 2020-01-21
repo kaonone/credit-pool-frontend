@@ -1,0 +1,13 @@
+query MyUserDebts($first: Int!, $skip: Int!, $address: ID!) {
+  debts(first: $first, skip: $skip, where: {id: $address}) {
+    id
+    debt_id
+    apr
+    borrower
+    total
+    repayed
+    pledges
+    staked
+    status
+  }
+}

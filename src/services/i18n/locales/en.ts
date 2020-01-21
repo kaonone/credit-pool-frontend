@@ -121,6 +121,7 @@ const en = {
       },
     },
     loanApplications: {
+      notFound: 'Loan applications not found',
       lend: 'lend',
       to: 'to',
       apr: 'apr',
@@ -129,9 +130,11 @@ const en = {
       timeLeft: 'Time left',
       expansionPanelTitle: 'Reason',
       status: {
+        PROPOSED: 'proposed',
         APPROVED: 'approved',
         DECLINED: 'declined',
-        PENDING: 'pending',
+        PARTIALLY_REPAYED: 'partially repayed',
+        CLOSED: 'closed',
       },
     },
   },

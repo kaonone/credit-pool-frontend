@@ -23,15 +23,17 @@ async function createMockApolloClient() {
 
   const mocks = {
     Query: () => ({
-      users: () => new MockList(10),
       balances: () =>
         new MockList(10, () => ({
           lBalance: () => '12345',
         })),
+      debts: () => new MockList(10),
     }),
     BigInt: () => '123456',
+    Bytes: () => '0x0000000000000000000000000000000000000000000000000000000000000000',
     // TODO doesn't work
     Subscription: () => ({
+      users: () => new MockList(10),
       pools: () =>
         new MockList(1, () => ({
           lBalance: () => '1192000000000000000000',
