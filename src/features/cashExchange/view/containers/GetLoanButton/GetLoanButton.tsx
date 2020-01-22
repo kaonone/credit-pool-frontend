@@ -36,10 +36,12 @@ function GetLoanButton(props: IProps) {
   const { t } = useTranslate();
   const api = useApi();
 
-  const [percentDecimals, percentDecimalsMeta] = useSubscribable(
-    () => api.getInterestPercentDecimals$(),
+  const getMaxSourceValue = useCallback(
+    (account: string) => api.getMaxAvailableLoanSizeInDai$(account),
     [],
   );
+
+  const [percentDecimals, percentDecimalsMeta] = useSubscribable(() => api.getAprDecimals$(), []);
 
   const validatePercent = useMemo(() => {
     return composeValidators(
@@ -140,7 +142,7 @@ function GetLoanButton(props: IProps) {
         <PTokenExchanging<IExtraFormData>
           title={t(tKeys.formTitle.getKey())}
           sourcePlaceholder={t(tKeys.amountPlaceholder.getKey())}
-          direction="DaiToLoanCollateral"
+          getMaxSourceValue={getMaxSourceValue}
           onExchangeRequest={api.createLoanProposal}
           onCancel={closeModal}
           confirmMessageTKey={getConfirmMessage}

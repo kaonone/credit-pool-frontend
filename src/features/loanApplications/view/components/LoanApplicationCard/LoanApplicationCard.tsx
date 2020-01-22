@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { memo } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import BN from 'bn.js';
@@ -19,15 +19,24 @@ const tKeys = tKeysAll.features.loanApplications;
 
 interface IProps {
   lendValue: string;
-  address: string;
+  borrower: string;
   aprValue: string;
   stakedValue: string;
   expansionPanelDetails: string;
   status: Status;
+  proposalId: string;
 }
 
-function LoanApplicationCard(props: IProps) {
-  const { lendValue, address, aprValue, stakedValue, expansionPanelDetails, status } = props;
+const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
+  const {
+    lendValue,
+    borrower,
+    proposalId,
+    aprValue,
+    stakedValue,
+    expansionPanelDetails,
+    status,
+  } = props;
 
   const classes = useStyles();
   const { t } = useTranslate();
@@ -45,7 +54,7 @@ function LoanApplicationCard(props: IProps) {
         token="dai"
         icon={<LendIcon className={classes.lendIcon} />}
       />,
-      <Metric title={t(tKeys.to.getKey())} value={<ShortAddress address={address} />} />,
+      <Metric title={t(tKeys.to.getKey())} value={<ShortAddress address={borrower} />} />,
       <Metric
         title={t(tKeys.apr.getKey())}
         value={
@@ -58,13 +67,15 @@ function LoanApplicationCard(props: IProps) {
         <CashMetric title={t(tKeys.staked.getKey())} value={stakedValue} token="dai" />
       </span>,
     ],
-    [t, lendValue, address, aprValue, stakedValue, aprDecimals, aprDecimalsMeta],
+    [t, lendValue, borrower, aprValue, stakedValue, aprDecimals, aprDecimalsMeta],
   );
 
   const progressInPercents = new BN(stakedValue)
     .muln(100)
     .div(new BN(lendValue))
     .toNumber();
+
+  const maxStakeSize = new BN(lendValue).sub(new BN(stakedValue)).toString();
 
   const asideContent = React.useMemo(
     () =>
@@ -86,7 +97,14 @@ function LoanApplicationCard(props: IProps) {
             <Progress progressInPercents={progressInPercents} />
           </Grid>
           <Grid item>
-            <StakeButton variant="contained" color="primary" fullWidth />
+            <StakeButton
+              maxStakeSize={maxStakeSize}
+              proposalId={proposalId}
+              borrower={borrower}
+              variant="contained"
+              color="primary"
+              fullWidth
+            />
           </Grid>
         </Grid>
       ),
@@ -100,6 +118,6 @@ function LoanApplicationCard(props: IProps) {
       asideContent={asideContent}
     />
   );
-}
+});
 
 export { LoanApplicationCard };

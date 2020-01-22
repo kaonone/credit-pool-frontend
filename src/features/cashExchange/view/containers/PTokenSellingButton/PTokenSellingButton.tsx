@@ -22,6 +22,8 @@ function PTokenSellingButton(props: IProps) {
   const { t } = useTranslate();
   const api = useApi();
 
+  const getMaxSourceValue = useCallback((account: string) => api.getPtkBalanceInDai$(account), []);
+
   const [daiTokenInfo] = useSubscribable(() => api.getTokenInfo$('dai'), []);
 
   const confirmMessageTKey = useCallback(
@@ -74,7 +76,7 @@ function PTokenSellingButton(props: IProps) {
         <PTokenExchanging
           title={t(tKeys.formTitle.getKey())}
           sourcePlaceholder={t(tKeys.placeholder.getKey())}
-          direction="PtkToDai"
+          getMaxSourceValue={getMaxSourceValue}
           confirmMessageTKey={confirmMessageTKey}
           onExchangeRequest={api.sellPtk$}
           onCancel={closeModal}
