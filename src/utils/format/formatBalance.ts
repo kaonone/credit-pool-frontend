@@ -8,13 +8,13 @@ import { formatDecimal } from './formatDecimal';
 interface IFormatBalanceOptions {
   amountInBaseUnits: string | BN;
   baseDecimals: number;
-  tokenSymbol: string;
+  tokenSymbol?: string;
 }
 
 export function formatBalance({
   amountInBaseUnits,
   baseDecimals,
-  tokenSymbol,
+  tokenSymbol = '',
 }: IFormatBalanceOptions): string {
   let balanceString = bnToBn(amountInBaseUnits).toString();
 
@@ -40,7 +40,7 @@ export function formatBalance({
 
   const units = si.value === '-' ? ` ${tokenSymbol}` : `${si.value} ${tokenSymbol}`;
 
-  return `${isNegative ? '-' : ''}${formatDecimal(prefix || '0')}.${postfix}${units}`;
+  return `${isNegative ? '-' : ''}${formatDecimal(prefix || '0')}.${postfix}${units.trimEnd()}`;
 }
 
 formatBalance.getOptions = (baseDecimals: number, baseUnitName?: string) => {
