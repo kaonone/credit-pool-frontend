@@ -6,19 +6,16 @@ import { useStyles } from './LoansTitle.style';
 
 interface IProps {
   title: string;
-  amount: number;
 }
 
 function LoansTitle(props: IProps) {
-  const { title, amount } = props;
+  const { title } = props;
   const classes = useStyles();
 
   return (
-    <Badge badgeContent={amount} color="primary">
-      <Typography component="span" variant="subtitle1" className={classes.title}>
-        {title}
-      </Typography>
-    </Badge>
+    <Typography component="span" variant="subtitle1" className={classes.title}>
+      {title}
+    </Typography>
   );
 }
 

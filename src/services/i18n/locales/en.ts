@@ -106,6 +106,7 @@ const en = {
         others: 'Others',
       },
       loansPanel: {
+        notFound: 'Loans not found',
         address: 'Address',
         loan: 'Loan',
         duePayment: 'Due payment',
@@ -115,8 +116,11 @@ const en = {
         myStake: 'My stake',
         paymentDate: 'Payment date',
         statuses: {
-          closed: 'closed',
-          opened: 'opened',
+          PROPOSED: 'proposed',
+          APPROVED: 'approved',
+          DECLINED: 'declined',
+          PARTIALLY_REPAYED: 'partially repayed',
+          CLOSED: 'closed',
         },
       },
     },

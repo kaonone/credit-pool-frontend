@@ -2,9 +2,10 @@ import React from 'react';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { MakeTableType } from 'components/Table/Table';
-import { Table as GeneralTable, Typography } from 'components';
+import { Table as GeneralTable, Typography, Hint, Grid } from 'components';
 import { ExpansionPanel } from 'components/ExpansionPanel/ExpansionPanel';
 import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
+import { Status } from 'generated/gql/pool';
 
 import { AddressCell } from './LoansTableCells';
 import { useStyles } from './LoansPanel.style';
@@ -16,7 +17,7 @@ export interface ILoan {
   duePayment: string;
   borrowApr: number;
   earn?: string;
-  status: 'closed' | 'opened';
+  status: Status;
   myStake: string;
   paymentDate?: Date;
 }
@@ -28,65 +29,89 @@ interface IProps {
   withEarn?: boolean;
   withPaymentDate?: boolean;
   expanded?: boolean;
+  paginationView?: React.ReactNode;
 }
 
 function LoansPanel(props: IProps) {
-  const { title, account, list, withEarn, withPaymentDate, expanded } = props;
+  const { title, account, list, withEarn, withPaymentDate, expanded, paginationView } = props;
   const classes = useStyles();
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.loans.loansPanel;
 
   const LoansTable = (
-    <Table data={list}>
-      <Table.Column>
-        <Table.Head align="center">#</Table.Head>
-        <Table.Cell align="center">
-          {({ index }) => <Typography variant="body1">{index + 1}</Typography>}
-        </Table.Cell>
-      </Table.Column>
-      <Table.Column>
-        <Table.Head>{t(tKeys.address.getKey())}</Table.Head>
-        <Table.Cell>{() => <AddressCell address={account} />}</Table.Cell>
-      </Table.Column>
-      <Table.Column>
-        <Table.Head>{t(tKeys.loan.getKey())}</Table.Head>
-        <Table.Cell>{({ data }) => <FormattedBalance sum={data.loan} token="dai" />}</Table.Cell>
-      </Table.Column>
-      <Table.Column>
-        <Table.Head>{t(tKeys.duePayment.getKey())}</Table.Head>
-        <Table.Cell>
-          {({ data }) => <FormattedBalance sum={data.duePayment} token="dai" />}
-        </Table.Cell>
-      </Table.Column>
-      {withPaymentDate && (
-        <Table.Column>
-          <Table.Head>{t(tKeys.paymentDate.getKey())}</Table.Head>
-          <Table.Cell>
-            {({ data }) => data.paymentDate && data.paymentDate.toLocaleDateString()}
-          </Table.Cell>
-        </Table.Column>
+    <>
+      {!list.length ? (
+        <Hint>
+          <Typography>{t(tKeys.notFound.getKey())}</Typography>
+        </Hint>
+      ) : (
+        <>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Table data={list}>
+                <Table.Column>
+                  <Table.Head align="center">#</Table.Head>
+                  <Table.Cell align="center">
+                    {({ index }) => <Typography variant="body1">{index + 1}</Typography>}
+                  </Table.Cell>
+                </Table.Column>
+                <Table.Column>
+                  <Table.Head>{t(tKeys.address.getKey())}</Table.Head>
+                  <Table.Cell>{() => <AddressCell address={account} />}</Table.Cell>
+                </Table.Column>
+                <Table.Column>
+                  <Table.Head>{t(tKeys.loan.getKey())}</Table.Head>
+                  <Table.Cell>
+                    {({ data }) => <FormattedBalance sum={data.loan} token="dai" />}
+                  </Table.Cell>
+                </Table.Column>
+                <Table.Column>
+                  <Table.Head>{t(tKeys.duePayment.getKey())}</Table.Head>
+                  <Table.Cell>
+                    {({ data }) => <FormattedBalance sum={data.duePayment} token="dai" />}
+                  </Table.Cell>
+                </Table.Column>
+                {withPaymentDate && (
+                  <Table.Column>
+                    <Table.Head>{t(tKeys.paymentDate.getKey())}</Table.Head>
+                    <Table.Cell>
+                      {({ data }) => data.paymentDate && data.paymentDate.toLocaleDateString()}
+                    </Table.Cell>
+                  </Table.Column>
+                )}
+                <Table.Column>
+                  <Table.Head>{t(tKeys.borrowApr.getKey())}</Table.Head>
+                  <Table.Cell>{({ data }) => `${data.borrowApr}%`}</Table.Cell>
+                </Table.Column>
+                {withEarn && (
+                  <Table.Column>
+                    <Table.Head>{t(tKeys.earn.getKey())}</Table.Head>
+                    <Table.Cell>
+                      {({ data }) => data.earn && <FormattedBalance sum={data.earn} token="dai" />}
+                    </Table.Cell>
+                  </Table.Column>
+                )}
+                <Table.Column>
+                  <Table.Head>{t(tKeys.status.getKey())}</Table.Head>
+                  <Table.Cell>{({ data }) => t(tKeys.statuses[data.status].getKey())}</Table.Cell>
+                </Table.Column>
+                <Table.Column>
+                  <Table.Head>{t(tKeys.myStake.getKey())}</Table.Head>
+                  <Table.Cell>
+                    {({ data }) => <FormattedBalance sum={data.myStake} token="dai" />}
+                  </Table.Cell>
+                </Table.Column>
+              </Table>
+            </Grid>
+            {paginationView && (
+              <Grid item xs={12}>
+                {paginationView}
+              </Grid>
+            )}
+          </Grid>
+        </>
       )}
-      <Table.Column>
-        <Table.Head>{t(tKeys.borrowApr.getKey())}</Table.Head>
-        <Table.Cell>{({ data }) => `${data.borrowApr}%`}</Table.Cell>
-      </Table.Column>
-      {withEarn && (
-        <Table.Column>
-          <Table.Head>{t(tKeys.earn.getKey())}</Table.Head>
-          <Table.Cell>
-            {({ data }) => data.earn && <FormattedBalance sum={data.earn} token="dai" />}
-          </Table.Cell>
-        </Table.Column>
-      )}
-      <Table.Column>
-        <Table.Head>{t(tKeys.status.getKey())}</Table.Head>
-        <Table.Cell>{({ data }) => t(tKeys.statuses[data.status].getKey())}</Table.Cell>
-      </Table.Column>
-      <Table.Column>
-        <Table.Head>{t(tKeys.myStake.getKey())}</Table.Head>
-        <Table.Cell>{({ data }) => <FormattedBalance sum={data.myStake} token="dai" />}</Table.Cell>
-      </Table.Column>
-    </Table>
+    </>
   );
 
   return (
