@@ -1,10 +1,11 @@
 import { Observable, ReplaySubject, BehaviorSubject, of, combineLatest } from 'rxjs';
-import { map, delay, switchMap, first as firstOperator } from 'rxjs/operators';
+import { map, switchMap, first as firstOperator } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
 import PromiEvent from 'web3/promiEvent';
 import { autobind } from 'core-decorators';
 
+import { decimalsToWei } from 'utils/bn';
 import { memoize } from 'utils/decorators';
 import {
   createErc20,
@@ -14,7 +15,6 @@ import {
 } from 'generated/contracts';
 import { Token, ITokenInfo } from 'model/types';
 import { ETH_NETWORK_CONFIG, MIN_COLLATERAL_PERCENT_FOR_BORROWER } from 'env';
-import { decimalsToWei } from 'utils/bn';
 
 import {
   Contracts,
@@ -121,17 +121,28 @@ export class Api {
 
   @memoize(R.identity)
   @autobind
-  // eslint-disable-next-line class-methods-use-this
   public getTokenInfo$(token: Token): Observable<ITokenInfo> {
-    return token === 'dai'
-      ? of({
-          decimals: 18,
-          symbol: 'DAI',
-        }).pipe(delay(2000))
-      : of({
-          decimals: 18,
-          symbol: 'PTK',
-        }).pipe(delay(2000));
+    return combineLatest([
+      this.readonlyContracts[token].methods.symbol(),
+      this.readonlyContracts[token].methods.decimals(),
+    ]).pipe(
+      map(([tokenSymbol, decimals]) => ({ symbol: tokenSymbol, decimals: decimals.toNumber() })),
+    );
+  }
+
+  @memoize()
+  @autobind
+  public getAprDecimals$(): Observable<number> {
+    // on the contract, apr is measured in fractions of a unit, so we need to shift the decimals by 2
+    const toPercentMultiplierDivider = 2;
+
+    return this.readonlyContracts.loanModule.methods.INTEREST_MULTIPLIER().pipe(
+      map(multiplier => {
+        // the multiplier is 10^n
+        const decimals = multiplier.toString().length - 1 - toPercentMultiplierDivider;
+        return Math.max(0, decimals);
+      }),
+    );
   }
 
   @autobind

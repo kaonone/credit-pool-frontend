@@ -6,7 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import { useMyUserSubscription, useMyUserBalancesQuery } from 'generated/gql/pool';
+import { useMyUserSubscription, useMyUserBalancesSubscription } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { GetLoanButton } from 'features/cashExchange';
@@ -51,7 +51,7 @@ function PersonalInformation() {
     locked,
   ]);
 
-  const balancesResult = useMyUserBalancesQuery({
+  const balancesResult = useMyUserBalancesSubscription({
     variables: {
       address: account || '',
     },

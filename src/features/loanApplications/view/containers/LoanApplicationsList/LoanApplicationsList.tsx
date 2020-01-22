@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Grid, Hint, Typography, Box } from 'components';
+import { Grid, Hint, Typography, Box, Loading } from 'components';
 import { useDebtsQuery, Status } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useSubgraphPagination } from 'utils/react';
@@ -12,7 +12,7 @@ const tKeys = tKeysAll.features.loanApplications;
 interface Activity {
   lendValue: string;
   address: string;
-  aprValue: number;
+  aprValue: string;
   stakedValue: string;
   expansionPanelDetails: string;
   status: Status;
@@ -29,7 +29,7 @@ function LoanApplicationsList() {
       debts?.map(debt => ({
         lendValue: debt.total,
         address: debt.borrower,
-        aprValue: Number(debt.apr),
+        aprValue: debt.apr,
         stakedValue: debt.staked,
         expansionPanelDetails:
           'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
@@ -39,7 +39,7 @@ function LoanApplicationsList() {
   );
 
   return (
-    <div>
+    <Loading gqlResults={result}>
       {!activities.length ? (
         <Hint>
           <Typography>{t(tKeys.notFound.getKey())}</Typography>
@@ -56,7 +56,7 @@ function LoanApplicationsList() {
           <Box my={3}>{paginationView}</Box>
         </>
       )}
-    </div>
+    </Loading>
   );
 }
 

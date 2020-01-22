@@ -4,20 +4,23 @@ import Typography from '@material-ui/core/Typography';
 import BN from 'bn.js';
 
 import { Status } from 'generated/gql/pool';
+import { useApi } from 'services/api';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { StakeButton } from 'features/cashExchange';
-import { CashMetric, Metric, ShortAddress, ActivitiesCard } from 'components';
+import { CashMetric, Metric, ShortAddress, ActivitiesCard, Loading } from 'components';
 import { LendIcon, Checked, ContainedCross } from 'components/icons';
+import { useSubscribable } from 'utils/react';
+import { formatBalance } from 'utils/format';
 
-import { Progress } from '../Progress/Progress';
 import { useStyles } from './LoanApplicationCard.style';
+import { Progress } from '../Progress/Progress';
 
 const tKeys = tKeysAll.features.loanApplications;
 
 interface IProps {
   lendValue: string;
   address: string;
-  aprValue: number;
+  aprValue: string;
   stakedValue: string;
   expansionPanelDetails: string;
   status: Status;
@@ -28,6 +31,9 @@ function LoanApplicationCard(props: IProps) {
 
   const classes = useStyles();
   const { t } = useTranslate();
+
+  const api = useApi();
+  const [aprDecimals, aprDecimalsMeta] = useSubscribable(() => api.getAprDecimals$(), [], 0);
 
   const isOver = status !== 'PROPOSED';
 
@@ -40,12 +46,19 @@ function LoanApplicationCard(props: IProps) {
         icon={<LendIcon className={classes.lendIcon} />}
       />,
       <Metric title={t(tKeys.to.getKey())} value={<ShortAddress address={address} />} />,
-      <Metric title={t(tKeys.apr.getKey())} value={`${aprValue}%`} />,
+      <Metric
+        title={t(tKeys.apr.getKey())}
+        value={
+          <Loading meta={aprDecimalsMeta}>
+            {formatBalance({ amountInBaseUnits: aprValue, baseDecimals: aprDecimals })}%
+          </Loading>
+        }
+      />,
       <span className={classes.highlightedMetric}>
         <CashMetric title={t(tKeys.staked.getKey())} value={stakedValue} token="dai" />
       </span>,
     ],
-    [t, lendValue, address, aprValue, stakedValue],
+    [t, lendValue, address, aprValue, stakedValue, aprDecimals, aprDecimalsMeta],
   );
 
   const progressInPercents = new BN(stakedValue)
