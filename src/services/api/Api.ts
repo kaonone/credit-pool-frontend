@@ -1,4 +1,4 @@
-import { Observable, ReplaySubject, BehaviorSubject, of } from 'rxjs';
+import { Observable, ReplaySubject, BehaviorSubject, of, combineLatest } from 'rxjs';
 import { map, delay, switchMap, first as firstOperator } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
@@ -14,6 +14,7 @@ import {
 } from 'generated/contracts';
 import { Token, ITokenInfo } from 'model/types';
 import { ETH_NETWORK_CONFIG, MIN_COLLATERAL_PERCENT_FOR_BORROWER } from 'env';
+import { decimalsToWei } from 'utils/bn';
 
 import {
   Contracts,
@@ -288,7 +289,16 @@ export class Api {
   @autobind
   // eslint-disable-next-line class-methods-use-this
   public convertPtkToDaiForLocked$(value: string): Observable<BN> {
-    return of(new BN(value).divn(2)).pipe(delay(2000));
+    return combineLatest([this.getTokenInfo$('dai'), this.getTokenInfo$('ptk')]).pipe(
+      switchMap(([daiInfo, ptkInfo]) =>
+        this.convertDaiToPtkEnter$(decimalsToWei(daiInfo.decimals).toString()).pipe(
+          map(oneDaiPrice => ({ oneDaiPrice, ptkInfo })),
+        ),
+      ),
+      map(({ oneDaiPrice, ptkInfo }) =>
+        new BN(value).mul(decimalsToWei(ptkInfo.decimals)).div(oneDaiPrice),
+      ),
+    );
   }
 
   @memoize(R.identity)
@@ -303,6 +313,14 @@ export class Api {
           fee,
         })),
       );
+  }
+
+  @memoize(R.identity)
+  @autobind
+  public getDaiToDaiExitInfo$(daiValue: string): Observable<{ total: BN; user: BN; fee: BN }> {
+    return this.convertDaiToPtkExit$(daiValue).pipe(
+      switchMap(ptkValue => this.getPtkToDaiExitInfo$(ptkValue.toString())),
+    );
   }
 
   @memoize(R.identity)
