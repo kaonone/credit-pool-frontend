@@ -45,6 +45,9 @@ function useSubscribable<T>(
       error: err => {
         setLoaded(true);
         setError(getErrorMsg(err));
+        if (process.env.NODE_ENV === 'development') {
+          console.error(err);
+        }
       },
     });
 

@@ -27,7 +27,7 @@ function PTokenSellingButton(props: IProps) {
   const confirmMessageTKey = useCallback(
     (values: ISubmittedFormData | null) => {
       const rawSourceAmount = values?.sourceAmount?.toString() || '0';
-      return api.getWithdrawPTokenInfo$(rawSourceAmount).pipe(
+      return api.getDaiToDaiExitInfo$(rawSourceAmount).pipe(
         map(({ total, user, fee }) => {
           const sourceAmount =
             (daiTokenInfo &&
