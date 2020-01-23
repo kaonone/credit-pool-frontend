@@ -19,12 +19,12 @@ const ethNetworkConfigs: Record<number, INetworkConfig> = {
     name: 'rinkeby',
     contracts: {
       dai: '0x3F5B698332572Fb6188492F5D53ba75f81797F9d',
-      ptk: '0x671e51CAAAde72DfD6B6d2dEDFa102368dE74c84',
-      pool: '0x47c1003f9542FF4fBa23d2E17f8545EDe7D6949a',
-      curveModule: '0xC8584d1D606826Ced02c44Dc17B48f34B9Ce5d05',
-      fundsModule: '0x82A0dcCA7F14A8eF77C8E8CC263BE6A030494e07',
-      liquidityModule: '0x2E506DaC3563CCCDB6890f20BEBf681CA5F33190',
-      loanModule: '0x1Efcb2B253a9155Be36AddF5EaEd7f644C9C09fd',
+      ptk: '0xc88F54A79CaE4C125D7A8c2Cf811daaE78b07D64',
+      pool: '0x42b41f636C9eBB150F859f65e3c0f938b0347f59',
+      curveModule: '0x42E24De51db5baf6E18F91619195375FBAe63b13',
+      fundsModule: '0x5188E51Df8BD8675fFC71255F056cbBdBB7A79bf',
+      liquidityModule: '0x7B6dD55353e080644809350Ef8230414cA064E29',
+      loanModule: '0x46dB9021F2F3fFB79faE02BF47380698D81134a0',
     },
     etherskanDomain: 'https://rinkeby.etherscan.io/',
   },
@@ -46,3 +46,4 @@ const ethNetworkConfigs: Record<number, INetworkConfig> = {
 
 export const NETWORK_ID = 4;
 export const ETH_NETWORK_CONFIG = ethNetworkConfigs[NETWORK_ID];
+export const MIN_COLLATERAL_PERCENT_FOR_BORROWER = 50;

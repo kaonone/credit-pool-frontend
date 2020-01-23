@@ -1,16 +1,23 @@
-import { Observable, ReplaySubject, BehaviorSubject, of } from 'rxjs';
-import { map, delay, switchMap, first as firstOperator } from 'rxjs/operators';
+import { Observable, ReplaySubject, BehaviorSubject, of, combineLatest } from 'rxjs';
+import { map, switchMap, first as firstOperator } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
 import PromiEvent from 'web3/promiEvent';
 import { autobind } from 'core-decorators';
 
+import { decimalsToWei } from 'utils/bn';
 import { memoize } from 'utils/decorators';
-import { createErc20, createFundsModule, createLiquidityModule } from 'generated/contracts';
+import {
+  createErc20,
+  createFundsModule,
+  createLiquidityModule,
+  createLoanModule,
+} from 'generated/contracts';
 import { Token, ITokenInfo } from 'model/types';
-import { ETH_NETWORK_CONFIG } from 'env';
+import { ETH_NETWORK_CONFIG, MIN_COLLATERAL_PERCENT_FOR_BORROWER } from 'env';
 
 import {
+  Contracts,
   SubmittedTransaction,
   SubmittedTransactionType,
   ExtractSubmittedTransaction,
@@ -34,22 +41,18 @@ function first<T>(input: Observable<T>): Promise<T> {
 export class Api {
   public web3Manager = new Web3Manager();
 
-  private readonlyContracts = {
+  private readonlyContracts: Contracts = {
     dai: createErc20(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.dai),
     ptk: createErc20(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.ptk),
     fundsModule: createFundsModule(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.fundsModule),
+    loanModule: createLoanModule(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.loanModule),
     liquidityModule: createLiquidityModule(
       this.web3Manager.web3,
       ETH_NETWORK_CONFIG.contracts.liquidityModule,
     ),
   };
 
-  private txContracts = new BehaviorSubject<null | {
-    dai: ReturnType<typeof createErc20>;
-    ptk: ReturnType<typeof createErc20>;
-    fundsModule: ReturnType<typeof createFundsModule>;
-    liquidityModule: ReturnType<typeof createLiquidityModule>;
-  }>(null);
+  private txContracts = new BehaviorSubject<null | Contracts>(null);
 
   private submittedTransaction = new ReplaySubject<SubmittedTransaction>();
 
@@ -62,6 +65,7 @@ export class Api {
               dai: createErc20(txWeb3, ETH_NETWORK_CONFIG.contracts.dai),
               ptk: createErc20(txWeb3, ETH_NETWORK_CONFIG.contracts.ptk),
               fundsModule: createFundsModule(txWeb3, ETH_NETWORK_CONFIG.contracts.fundsModule),
+              loanModule: createLoanModule(txWeb3, ETH_NETWORK_CONFIG.contracts.loanModule),
               liquidityModule: createLiquidityModule(
                 txWeb3,
                 ETH_NETWORK_CONFIG.contracts.liquidityModule,
@@ -117,23 +121,28 @@ export class Api {
 
   @memoize(R.identity)
   @autobind
-  // eslint-disable-next-line class-methods-use-this
   public getTokenInfo$(token: Token): Observable<ITokenInfo> {
-    return token === 'dai'
-      ? of({
-          decimals: 18,
-          symbol: 'DAI',
-        }).pipe(delay(2000))
-      : of({
-          decimals: 18,
-          symbol: 'PTK',
-        }).pipe(delay(2000));
+    return combineLatest([
+      this.readonlyContracts[token].methods.symbol(),
+      this.readonlyContracts[token].methods.decimals(),
+    ]).pipe(
+      map(([tokenSymbol, decimals]) => ({ symbol: tokenSymbol, decimals: decimals.toNumber() })),
+    );
   }
 
+  @memoize()
   @autobind
-  // eslint-disable-next-line class-methods-use-this
-  public getInterestPercentDecimals$(): Observable<number> {
-    return of(3);
+  public getAprDecimals$(): Observable<number> {
+    // on the contract, apr is measured in fractions of a unit, so we need to shift the decimals by 2
+    const toPercentMultiplierDivider = 2;
+
+    return this.readonlyContracts.loanModule.methods.INTEREST_MULTIPLIER().pipe(
+      map(multiplier => {
+        // the multiplier is 10^n
+        const decimals = multiplier.toString().length - 1 - toPercentMultiplierDivider;
+        return Math.max(0, decimals);
+      }),
+    );
   }
 
   @autobind
@@ -141,7 +150,7 @@ export class Api {
     const { sourceAmount } = values;
     const txLiquidityModule = getCurrentValueOrThrow(this.txContracts).liquidityModule;
 
-    const pAmount = await first(this.getPTokenByDai$(sourceAmount.toString()));
+    const pAmount = await first(this.convertDaiToPtkExit$(sourceAmount.toString()));
 
     await this.approvePtk(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, pAmount);
 
@@ -179,16 +188,56 @@ export class Api {
   }
 
   @autobind
-  public async stakePtk$(address: string, values: { sourceAmount: BN }): Promise<void> {
-    this.sendMockTransaction$('pool.stakePtk', { address, ...values });
+  public async stakePtk(
+    fromAddress: string,
+    values: { sourceAmount: BN; borrower: string; proposalId: string },
+  ): Promise<void> {
+    const { sourceAmount, borrower, proposalId } = values;
+    const txLoanModule = getCurrentValueOrThrow(this.txContracts).loanModule;
+
+    const pAmount = await first(this.convertDaiToPtkExit$(sourceAmount.toString()));
+
+    await this.approvePtk(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, pAmount);
+
+    const promiEvent = txLoanModule.methods.addPledge(
+      { borrower, lAmountMin: new BN(0), pAmount, proposal: new BN(proposalId) },
+      { from: fromAddress },
+    );
+
+    this.pushToSubmittedTransactions$('loan.addPledge', promiEvent, {
+      address: fromAddress,
+      ...values,
+    });
+
+    await promiEvent;
   }
 
   @autobind
-  public async getLoan$(
-    address: string,
+  public async createLoanProposal(
+    fromAddress: string,
     values: { sourceAmount: BN; apr: string; description: string },
   ): Promise<void> {
-    this.sendMockTransaction$('pool.getLoan', { address, ...values });
+    const { sourceAmount, apr } = values;
+    const txLoanModule = getCurrentValueOrThrow(this.txContracts).loanModule;
+
+    const minLCollateral = await first(
+      this.getMinLoanCollateralByDaiInDai$(sourceAmount.toString()),
+    );
+    const pAmount = await first(this.convertDaiToPtkExit$(minLCollateral.toString()));
+
+    await this.approvePtk(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, pAmount);
+
+    const promiEvent = txLoanModule.methods.createDebtProposal(
+      { debtLAmount: sourceAmount, interest: new BN(apr), lAmountMin: new BN(0), pAmount },
+      { from: fromAddress },
+    );
+
+    this.pushToSubmittedTransactions$('loan.createProposal', promiEvent, {
+      address: fromAddress,
+      ...values,
+    });
+
+    await promiEvent;
   }
 
   public getSubmittedTransaction$() {
@@ -220,11 +269,12 @@ export class Api {
 
   @memoize(R.identity)
   @autobind
-  public getMaxAvailableLoanSize$(address: string): Observable<BN> {
+  public getMaxAvailableLoanSizeInDai$(address: string): Observable<BN> {
     return this.getBalance$('ptk', address).pipe(
       switchMap(balance => {
-        return this.getDaiByPToken$(balance.muln(2).toString());
+        return this.convertPtkToDaiExit$(balance.toString());
       }),
+      map(item => item.muln(100).divn(MIN_COLLATERAL_PERCENT_FOR_BORROWER)),
     );
   }
 
@@ -232,13 +282,13 @@ export class Api {
   @autobind
   public getPtkBalanceInDai$(address: string): Observable<BN> {
     return this.getPtkBalance$(address).pipe(
-      switchMap(balance => this.getDaiByPToken$(balance.toString())),
+      switchMap(balance => this.convertPtkToDaiExit$(balance.toString())),
     );
   }
 
   @memoize(R.identity)
   @autobind
-  public getPTokenByDai$(value: string): Observable<BN> {
+  public convertDaiToPtkEnter$(value: string): Observable<BN> {
     return this.readonlyContracts.fundsModule.methods.calculatePoolEnter(
       { lAmount: new BN(value) },
       { Status: {} },
@@ -247,13 +297,38 @@ export class Api {
 
   @memoize(R.identity)
   @autobind
-  public getDaiByPToken$(value: string): Observable<BN> {
-    return this.getWithdrawPTokenInfo$(value).pipe(map(({ total }) => total));
+  public convertDaiToPtkExit$(value: string): Observable<BN> {
+    return this.readonlyContracts.fundsModule.methods.calculatePoolExit(
+      { lAmount: new BN(value) },
+      { Status: {} },
+    );
   }
 
   @memoize(R.identity)
   @autobind
-  public getWithdrawPTokenInfo$(value: string): Observable<{ total: BN; user: BN; fee: BN }> {
+  public convertPtkToDaiExit$(value: string): Observable<BN> {
+    return this.getPtkToDaiExitInfo$(value).pipe(map(({ total }) => total));
+  }
+
+  @memoize(R.identity)
+  @autobind
+  // eslint-disable-next-line class-methods-use-this
+  public convertPtkToDaiForLocked$(value: string): Observable<BN> {
+    return combineLatest([this.getTokenInfo$('dai'), this.getTokenInfo$('ptk')]).pipe(
+      switchMap(([daiInfo, ptkInfo]) =>
+        this.convertDaiToPtkEnter$(decimalsToWei(daiInfo.decimals).toString()).pipe(
+          map(oneDaiPrice => ({ oneDaiPrice, ptkInfo })),
+        ),
+      ),
+      map(({ oneDaiPrice, ptkInfo }) =>
+        new BN(value).mul(decimalsToWei(ptkInfo.decimals)).div(oneDaiPrice),
+      ),
+    );
+  }
+
+  @memoize(R.identity)
+  @autobind
+  public getPtkToDaiExitInfo$(value: string): Observable<{ total: BN; user: BN; fee: BN }> {
     return this.readonlyContracts.fundsModule.methods
       .calculatePoolExitInverse({ pAmount: new BN(value) }, { Status: {} })
       .pipe(
@@ -267,9 +342,17 @@ export class Api {
 
   @memoize(R.identity)
   @autobind
+  public getDaiToDaiExitInfo$(daiValue: string): Observable<{ total: BN; user: BN; fee: BN }> {
+    return this.convertDaiToPtkExit$(daiValue).pipe(
+      switchMap(ptkValue => this.getPtkToDaiExitInfo$(ptkValue.toString())),
+    );
+  }
+
+  @memoize(R.identity)
+  @autobind
   // eslint-disable-next-line class-methods-use-this
-  public getDaiLoanCollateralByDai$(value: string): Observable<BN> {
-    return of(new BN(value).divn(2)).pipe(delay(2000));
+  public getMinLoanCollateralByDaiInDai$(value: string): Observable<BN> {
+    return of(new BN(value).muln(MIN_COLLATERAL_PERCENT_FOR_BORROWER).divn(100));
   }
 
   @memoize(R.identity)
@@ -277,33 +360,6 @@ export class Api {
   // eslint-disable-next-line class-methods-use-this
   public getDuePayment$(): Observable<number> {
     return of(7776000000);
-  }
-
-  @memoize(R.identity)
-  @autobind
-  // eslint-disable-next-line class-methods-use-this
-  public getDaiByPtkForLocked$(value: string): Observable<BN> {
-    return of(new BN(value).divn(2)).pipe(delay(2000));
-  }
-
-  @autobind
-  private async sendMockTransaction$<T extends SubmittedTransactionType>(
-    transactionName: T,
-    payload: ExtractSubmittedTransaction<T>['payload'],
-  ): Promise<void> {
-    const promiEvent = new Promise(resolve =>
-      setTimeout(() => {
-        resolve();
-        // eslint-disable-next-line no-console
-        console.log(`Send transaction ${transactionName}`, payload);
-      }, 1000),
-    );
-
-    (promiEvent as any).on = () => {};
-
-    this.pushToSubmittedTransactions$(transactionName, promiEvent as PromiEvent<boolean>, payload);
-
-    await promiEvent;
   }
 
   private pushToSubmittedTransactions$<T extends SubmittedTransactionType>(

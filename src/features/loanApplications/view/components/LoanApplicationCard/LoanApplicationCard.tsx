@@ -1,33 +1,48 @@
-import * as React from 'react';
+import React, { memo } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import BN from 'bn.js';
 
 import { Status } from 'generated/gql/pool';
+import { useApi } from 'services/api';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { StakeButton } from 'features/cashExchange';
-import { CashMetric, Metric, ShortAddress, ActivitiesCard } from 'components';
+import { CashMetric, Metric, ShortAddress, ActivitiesCard, Loading } from 'components';
 import { LendIcon, Checked, ContainedCross } from 'components/icons';
+import { useSubscribable } from 'utils/react';
+import { formatBalance } from 'utils/format';
 
-import { Progress } from '../Progress/Progress';
 import { useStyles } from './LoanApplicationCard.style';
+import { Progress } from '../Progress/Progress';
 
 const tKeys = tKeysAll.features.loanApplications;
 
 interface IProps {
   lendValue: string;
-  address: string;
-  aprValue: number;
+  borrower: string;
+  aprValue: string;
   stakedValue: string;
   expansionPanelDetails: string;
   status: Status;
+  proposalId: string;
 }
 
-function LoanApplicationCard(props: IProps) {
-  const { lendValue, address, aprValue, stakedValue, expansionPanelDetails, status } = props;
+const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
+  const {
+    lendValue,
+    borrower,
+    proposalId,
+    aprValue,
+    stakedValue,
+    expansionPanelDetails,
+    status,
+  } = props;
 
   const classes = useStyles();
   const { t } = useTranslate();
+
+  const api = useApi();
+  const [aprDecimals, aprDecimalsMeta] = useSubscribable(() => api.getAprDecimals$(), [], 0);
 
   const isOver = status !== 'PROPOSED';
 
@@ -39,19 +54,28 @@ function LoanApplicationCard(props: IProps) {
         token="dai"
         icon={<LendIcon className={classes.lendIcon} />}
       />,
-      <Metric title={t(tKeys.to.getKey())} value={<ShortAddress address={address} />} />,
-      <Metric title={t(tKeys.apr.getKey())} value={`${aprValue}%`} />,
+      <Metric title={t(tKeys.to.getKey())} value={<ShortAddress address={borrower} />} />,
+      <Metric
+        title={t(tKeys.apr.getKey())}
+        value={
+          <Loading meta={aprDecimalsMeta}>
+            {formatBalance({ amountInBaseUnits: aprValue, baseDecimals: aprDecimals })}%
+          </Loading>
+        }
+      />,
       <span className={classes.highlightedMetric}>
         <CashMetric title={t(tKeys.staked.getKey())} value={stakedValue} token="dai" />
       </span>,
     ],
-    [t, lendValue, address, aprValue, stakedValue],
+    [t, lendValue, borrower, aprValue, stakedValue, aprDecimals, aprDecimalsMeta],
   );
 
   const progressInPercents = new BN(stakedValue)
     .muln(100)
     .div(new BN(lendValue))
     .toNumber();
+
+  const maxStakeSize = new BN(lendValue).sub(new BN(stakedValue)).toString();
 
   const asideContent = React.useMemo(
     () =>
@@ -73,7 +97,14 @@ function LoanApplicationCard(props: IProps) {
             <Progress progressInPercents={progressInPercents} />
           </Grid>
           <Grid item>
-            <StakeButton variant="contained" color="primary" fullWidth />
+            <StakeButton
+              maxStakeSize={maxStakeSize}
+              proposalId={proposalId}
+              borrower={borrower}
+              variant="contained"
+              color="primary"
+              fullWidth
+            />
           </Grid>
         </Grid>
       ),
@@ -87,6 +118,6 @@ function LoanApplicationCard(props: IProps) {
       asideContent={asideContent}
     />
   );
-}
+});
 
 export { LoanApplicationCard };

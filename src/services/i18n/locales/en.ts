@@ -39,15 +39,15 @@ const en = {
         success: 'liquidity.buyPtk transaction succeeded',
         error: 'liquidity.buyPtk transaction failed',
       },
-      'pool.stakePtk': {
-        pending: 'pool.stakePtk transaction pending',
-        success: 'pool.stakePtk transaction succeeded',
-        error: 'pool.stakePtk transaction failed',
+      'loan.addPledge': {
+        pending: 'loan.addPledge transaction pending',
+        success: 'loan.addPledge transaction succeeded',
+        error: 'loan.addPledge transaction failed',
       },
-      'pool.getLoan': {
-        pending: 'pool.getLoan transaction pending',
-        success: 'pool.getLoan transaction succeeded',
-        error: 'pool.getLoan transaction failed',
+      'loan.createProposal': {
+        pending: 'loan.createProposal transaction pending',
+        success: 'loan.createProposal transaction succeeded',
+        error: 'loan.createProposal transaction failed',
       },
     },
     cashExchange: {
@@ -61,7 +61,8 @@ const en = {
         buttonTitle: 'Withdraw',
         formTitle: 'Withdraw from Pool',
         placeholder: 'Enter sum',
-        confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
+        confirmMessage:
+          'Are you sure you want withdraw %{sourceAmount}? You will get %{targetAmount} and will pay %{feeAmount} fee.',
       },
       stakeButton: {
         buttonTitle: 'Stake',

@@ -36,10 +36,12 @@ function GetLoanButton(props: IProps) {
   const { t } = useTranslate();
   const api = useApi();
 
-  const [percentDecimals, percentDecimalsMeta] = useSubscribable(
-    () => api.getInterestPercentDecimals$(),
+  const getMaxSourceValue = useCallback(
+    (account: string) => api.getMaxAvailableLoanSizeInDai$(account),
     [],
   );
+
+  const [percentDecimals, percentDecimalsMeta] = useSubscribable(() => api.getAprDecimals$(), []);
 
   const validatePercent = useMemo(() => {
     return composeValidators(
@@ -64,7 +66,7 @@ function GetLoanButton(props: IProps) {
     (values: (ISubmittedFormData & IExtraFormData) | null) => {
       const rawSourceAmount = values?.sourceAmount?.toString() || '0';
 
-      return api.getDaiLoanCollateralByDai$(rawSourceAmount).pipe(
+      return api.getMinLoanCollateralByDaiInDai$(rawSourceAmount).pipe(
         map(rawCollateral => {
           const collateral =
             (daiTokenInfo &&
@@ -140,8 +142,8 @@ function GetLoanButton(props: IProps) {
         <PTokenExchanging<IExtraFormData>
           title={t(tKeys.formTitle.getKey())}
           sourcePlaceholder={t(tKeys.amountPlaceholder.getKey())}
-          direction="DaiToLoanCollateral"
-          onExchangeRequest={api.getLoan$}
+          getMaxSourceValue={getMaxSourceValue}
+          onExchangeRequest={api.createLoanProposal}
           onCancel={closeModal}
           confirmMessageTKey={getConfirmMessage}
           additionalFields={additionalFields}

@@ -1,4 +1,4 @@
-query MyUserBalances($address: String!) {
+subscription MyUserBalances($address: String!) {
   balances(where: {user: $address}) {
     id
     user

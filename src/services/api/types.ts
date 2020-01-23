@@ -1,6 +1,21 @@
 import PromiEvent from 'web3/promiEvent';
 import BN from 'bn.js';
 
+import {
+  createErc20,
+  createFundsModule,
+  createLiquidityModule,
+  createLoanModule,
+} from 'generated/contracts';
+
+export type Contracts = {
+  dai: ReturnType<typeof createErc20>;
+  ptk: ReturnType<typeof createErc20>;
+  fundsModule: ReturnType<typeof createFundsModule>;
+  liquidityModule: ReturnType<typeof createLiquidityModule>;
+  loanModule: ReturnType<typeof createLoanModule>;
+};
+
 export type SubmittedTransaction =
   | IGenericSubmittedTransaction<
       'dai.transfer',
@@ -10,9 +25,9 @@ export type SubmittedTransaction =
   | IGenericSubmittedTransaction<'ptk.approve', { spender: string; fromAddress: string; value: BN }>
   | IGenericSubmittedTransaction<'liquidity.sellPtk', { address: string; sourceAmount: BN }>
   | IGenericSubmittedTransaction<'liquidity.buyPtk', { address: string; sourceAmount: BN }>
-  | IGenericSubmittedTransaction<'pool.stakePtk', { address: string; sourceAmount: BN }>
+  | IGenericSubmittedTransaction<'loan.addPledge', { address: string; sourceAmount: BN }>
   | IGenericSubmittedTransaction<
-      'pool.getLoan',
+      'loan.createProposal',
       { address: string; sourceAmount: BN; apr: string; description: string }
     >;
 
