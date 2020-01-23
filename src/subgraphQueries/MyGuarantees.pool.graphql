@@ -1,12 +1,13 @@
-# TODO string or bytes?
-query MyGuarantees($first: Int!, $skip: Int!, $address: String!) {
-  debts(first: $first, skip: $skip, where: {pledgers_contains: [$address], borrower_not: $address}) {
+# TODO pledgers in string, borrower in bytes
+query MyGuarantees($first: Int!, $skip: Int!, $address: String!, $addressInBytes: Bytes!) {
+  debts(first: $first, skip: $skip, where: {pledgers_contains: [$address], borrower_not: $addressInBytes}) {
     id
     debt_id
     apr
     borrower
     total
     repayed
+    pledgers
     pledges
     staked
     status

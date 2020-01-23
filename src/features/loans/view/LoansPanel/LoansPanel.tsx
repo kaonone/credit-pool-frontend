@@ -1,21 +1,25 @@
 import React from 'react';
+import BN from 'bn.js';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
+import { useApi } from 'services/api';
 import { MakeTableType } from 'components/Table/Table';
-import { Table as GeneralTable, Typography, Hint, Grid } from 'components';
+import { Table as GeneralTable, Typography, Hint, Grid, Loading } from 'components';
 import { ExpansionPanel } from 'components/ExpansionPanel/ExpansionPanel';
 import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
-import { Status } from 'generated/gql/pool';
+import { Status, Debt } from 'generated/gql/pool';
+import { formatBalance } from 'utils/format';
+import { useSubscribable } from 'utils/react';
 
 import { AddressCell } from './LoansTableCells';
 import { useStyles } from './LoansPanel.style';
 
-const Table = GeneralTable as MakeTableType<ILoan>;
+const Table = GeneralTable as MakeTableType<Debt>;
 
 export interface ILoan {
   loan: string;
   duePayment: string;
-  borrowApr: number;
+  borrowApr: string;
   earn?: string;
   status: Status;
   myStake: string;
@@ -24,7 +28,7 @@ export interface ILoan {
 interface IProps {
   title: React.ReactNode;
   account: string;
-  list: ILoan[];
+  list: Debt[];
   withEarn?: boolean;
   expanded?: boolean;
   paginationView?: React.ReactNode;
@@ -35,6 +39,21 @@ function LoansPanel(props: IProps) {
   const classes = useStyles();
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.loans.loansPanel;
+
+  const api = useApi();
+  const [aprDecimals, aprDecimalsMeta] = useSubscribable(() => api.getAprDecimals$(), [], 0);
+
+  const [duePaymentTimeout, duePaymentTimeoutMeta] = useSubscribable(
+    () => api.getDuePaymentTimeout$(),
+    [],
+    0,
+  );
+
+  const getDuePayment = (lastUpdate: string | null | undefined, paymentTimeout: number) => {
+    return lastUpdate
+      ? new Date(new BN(lastUpdate).add(new BN(paymentTimeout)).toNumber()).toLocaleDateString()
+      : '–';
+  };
 
   const LoansTable = (
     <>
@@ -60,22 +79,38 @@ function LoansPanel(props: IProps) {
                 <Table.Column>
                   <Table.Head>{t(tKeys.loan.getKey())}</Table.Head>
                   <Table.Cell>
-                    {({ data }) => <FormattedBalance sum={data.loan} token="dai" />}
+                    {({ data }) => <FormattedBalance sum={data.total} token="dai" />}
                   </Table.Cell>
                 </Table.Column>
                 <Table.Column>
                   <Table.Head>{t(tKeys.duePayment.getKey())}</Table.Head>
-                  <Table.Cell>{({ data }) => data.duePayment}</Table.Cell>
+                  <Table.Cell>
+                    {({ data }) => (
+                      <Loading meta={duePaymentTimeoutMeta}>
+                        {getDuePayment(data.last_update, duePaymentTimeout)}
+                      </Loading>
+                    )}
+                  </Table.Cell>
                 </Table.Column>
                 <Table.Column>
                   <Table.Head>{t(tKeys.borrowApr.getKey())}</Table.Head>
-                  <Table.Cell>{({ data }) => `${data.borrowApr}%`}</Table.Cell>
+                  <Table.Cell>
+                    {({ data }) => (
+                      <Loading meta={aprDecimalsMeta}>
+                        {formatBalance({
+                          amountInBaseUnits: data.apr,
+                          baseDecimals: aprDecimals,
+                        })}
+                        %
+                      </Loading>
+                    )}
+                  </Table.Cell>
                 </Table.Column>
                 {withEarn && (
                   <Table.Column>
                     <Table.Head>{t(tKeys.earn.getKey())}</Table.Head>
                     <Table.Cell>
-                      {({ data }) => data.earn && <FormattedBalance sum={data.earn} token="dai" />}
+                      {() => <FormattedBalance sum="7000000000000000" token="dai" />}
                     </Table.Cell>
                   </Table.Column>
                 )}
@@ -86,7 +121,7 @@ function LoansPanel(props: IProps) {
                 <Table.Column>
                   <Table.Head>{t(tKeys.myStake.getKey())}</Table.Head>
                   <Table.Cell>
-                    {({ data }) => <FormattedBalance sum={data.myStake} token="dai" />}
+                    {({ data }) => <FormattedBalance sum={data.staked} token="dai" />}
                   </Table.Cell>
                 </Table.Column>
               </Table>

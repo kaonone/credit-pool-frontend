@@ -358,7 +358,7 @@ export class Api {
   @memoize(R.identity)
   @autobind
   // eslint-disable-next-line class-methods-use-this
-  public getDuePayment$(): Observable<number> {
+  public getDuePaymentTimeout$(): Observable<number> {
     return of(7776000000);
   }
 
