@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Typography, Badge } from 'components';
+import { Typography } from 'components';
 
 import { useStyles } from './LoansTitle.style';
 
