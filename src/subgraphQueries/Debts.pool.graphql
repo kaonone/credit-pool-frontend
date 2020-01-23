@@ -9,5 +9,6 @@ query Debts($first: Int!, $skip: Int!) {
     pledges
     staked
     status
+    last_update
   }
 }

@@ -1,10 +1,11 @@
 import React from 'react';
+import BN from 'bn.js';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable, useSubgraphPagination } from 'utils/react';
 import { Loading, Hint, Grid } from 'components';
-import { useDebtsQuery, useMyLoansQuery } from 'generated/gql/pool';
+import { useDebtsQuery, useMyLoansQuery, useMyGuaranteesQuery } from 'generated/gql/pool';
 
 import { LoansPanel, ILoan } from '../LoansPanel/LoansPanel';
 import { LoansTitle } from '../LoansTitle/LoansTitle';
@@ -20,21 +21,25 @@ function LoansList() {
   const { result: myLoansResult, paginationView: myLoansPaginationView } = useSubgraphPagination(
     useMyLoansQuery,
     {
-      currentAddress: account || '',
+      currentAddress: '0x5d507818b52a891fe296463adc01eed9c51e218b', // TODO change on account
     },
   );
 
   const loansData = myLoansResult.data?.debts;
+  const [duePayment, duePaymentMeta] = useSubscribable(() => api.getDuePayment$(), [], 0); // TODO rename method
+
+  const getDuePayment = (lastUpdate: string | null | undefined, due: number) => {
+    return lastUpdate ? new Date(new BN(lastUpdate).add(new BN(due)).toNumber()) : new Date();
+  };
 
   const loans: ILoan[] = React.useMemo(
     () =>
       loansData?.map(debt => ({
         loan: debt.total,
-        duePayment: '3000000000000000',
+        duePayment: getDuePayment(debt.last_update, duePayment).toLocaleDateString(), // TODO last_update=null
         borrowApr: Number(debt.apr),
         status: debt.status,
         myStake: debt.staked,
-        paymentDate: new Date(),
       })) || [],
     [loansData],
   );
@@ -42,8 +47,8 @@ function LoansList() {
   const {
     result: myGuaranteesResult,
     paginationView: myGuaranteesPaginationView,
-  } = useSubgraphPagination(useMyLoansQuery, {
-    currentAddress: account || '',
+  } = useSubgraphPagination(useMyGuaranteesQuery, {
+    address: account || '',
   });
 
   const guaranteesData = myGuaranteesResult.data?.debts;
@@ -52,7 +57,7 @@ function LoansList() {
     () =>
       guaranteesData?.map(debt => ({
         loan: debt.total,
-        duePayment: '3000000000000000',
+        duePayment: getDuePayment(debt.last_update, duePayment).toLocaleDateString(),
         borrowApr: Number(debt.apr),
         earn: '7000000000000000',
         status: debt.status,
@@ -71,7 +76,7 @@ function LoansList() {
     () =>
       othersData?.map(debt => ({
         loan: debt.total,
-        duePayment: '3000000000000000',
+        duePayment: getDuePayment(debt.last_update, duePayment).toLocaleDateString(),
         borrowApr: Number(debt.apr),
         earn: '7000000000000000',
         status: debt.status,
@@ -81,7 +86,7 @@ function LoansList() {
   );
 
   return (
-    <Loading meta={accountMeta} gqlResults={[myLoansResult]}>
+    <Loading meta={[accountMeta, duePaymentMeta]} gqlResults={[myLoansResult]}>
       {account ? (
         <Grid container>
           <Grid item xs={12}>
@@ -90,7 +95,6 @@ function LoansList() {
               account={account}
               list={loans}
               expanded
-              withPaymentDate
               paginationView={myLoansPaginationView}
             />
           </Grid>

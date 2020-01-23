@@ -27,7 +27,10 @@ async function createMockApolloClient() {
         new MockList(10, () => ({
           lBalance: () => '12345',
         })),
-      debts: () => new MockList(10),
+      debts: () =>
+        new MockList(10, () => ({
+          last_update: () => new Date(),
+        })),
     }),
     BigInt: () => '123456',
     Bytes: () => '0x0000000000000000000000000000000000000000000000000000000000000000',

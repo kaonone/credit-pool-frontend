@@ -9,5 +9,6 @@ query MyLoans($first: Int!, $skip: Int!, $currentAddress: Bytes!) {
     pledges
     staked
     status
+    last_update
   }
 }

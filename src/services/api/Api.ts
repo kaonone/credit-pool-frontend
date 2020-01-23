@@ -275,6 +275,13 @@ export class Api {
   @memoize(R.identity)
   @autobind
   // eslint-disable-next-line class-methods-use-this
+  public getDuePayment$(): Observable<number> {
+    return of(7776000000);
+  }
+
+  @memoize(R.identity)
+  @autobind
+  // eslint-disable-next-line class-methods-use-this
   public getDaiByPtkForLocked$(value: string): Observable<BN> {
     return of(new BN(value).divn(2)).pipe(delay(2000));
   }
