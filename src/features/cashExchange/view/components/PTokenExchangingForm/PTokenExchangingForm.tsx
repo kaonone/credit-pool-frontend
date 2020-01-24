@@ -37,19 +37,17 @@ const fieldNames: { [K in keyof IFormData]: K } = {
   triggerRevalidateByFormatMax: 'triggerRevalidateByFormatMax',
 };
 
-export type Direction = 'PtkToDai' | 'DaiToPtk' | 'DaiToLoanCollateral';
-
 export interface ISubmittedFormData {
   sourceAmount: BN;
 }
 
 interface IProps<ExtraFormData extends Record<string, any> = {}> {
   account: string;
-  direction: Direction;
   title: string;
   sourcePlaceholder: string;
   additionalFields?: React.ReactNode[];
   additionalInitialValues?: ExtraFormData;
+  getMaxSourceValue: (account: string) => Observable<BN>;
   onSubmit: (values: ISubmittedFormData & Omit<ExtraFormData, keyof ISubmittedFormData>) => void;
   onCancel: () => void;
 }
@@ -59,11 +57,11 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
 ) {
   const {
     account,
-    direction,
     title,
     onSubmit,
     onCancel,
     sourcePlaceholder,
+    getMaxSourceValue,
     additionalFields,
     additionalInitialValues = {} as ExtraFormData,
   } = props;
@@ -73,13 +71,10 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
 
   const api = useApi();
 
-  const methodByDirection: Record<Direction, () => Observable<BN>> = {
-    DaiToPtk: () => api.getBalance$('dai', account),
-    PtkToDai: () => api.getPtkBalanceInDai$(account),
-    DaiToLoanCollateral: () => api.getMaxAvailableLoanSizeInDai$(account),
-  };
-
-  const [maxValue] = useSubscribable(() => methodByDirection[direction](), []);
+  const [maxValue] = useSubscribable(() => getMaxSourceValue(account), [
+    getMaxSourceValue,
+    account,
+  ]);
 
   const initialValues = useMemo<IFormData & ExtraFormData>(
     () => ({

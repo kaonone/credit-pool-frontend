@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 
 import { useApi } from 'services/api';
@@ -16,6 +16,8 @@ function PTokenBuyingButton(props: IProps) {
   const { t } = useTranslate();
   const api = useApi();
 
+  const getMaxSourceValue = useCallback((account: string) => api.getBalance$('dai', account), []);
+
   return (
     <ModalButton
       startIcon={<BuyCashIcon />}
@@ -27,7 +29,7 @@ function PTokenBuyingButton(props: IProps) {
         <PTokenExchanging
           title={t(tKeys.formTitle.getKey())}
           sourcePlaceholder={t(tKeys.placeholder.getKey())}
-          direction="DaiToPtk"
+          getMaxSourceValue={getMaxSourceValue}
           confirmMessageTKey={tKeys.confirmMessage.getKey()}
           onExchangeRequest={api.buyPtk}
           onCancel={closeModal}

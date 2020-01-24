@@ -11,14 +11,12 @@ import { Hint } from 'components/Hint/Hint';
 import { PTokenExchangingConfirmation } from '../PTokenExchangingConfirmation/PTokenExchangingConfirmation';
 import {
   PTokenExchangingForm,
-  Direction,
   ISubmittedFormData,
 } from '../PTokenExchangingForm/PTokenExchangingForm';
 
 interface IProps<ExtraFormData> {
   title: string;
   sourcePlaceholder: string;
-  direction: Direction;
   confirmMessageTKey:
     | string
     | ((
@@ -26,6 +24,7 @@ interface IProps<ExtraFormData> {
       ) => Observable<string>);
   additionalFields?: React.ReactNode[];
   initialValues?: ExtraFormData;
+  getMaxSourceValue: (account: string) => Observable<BN>;
   onExchangeRequest: (
     account: string,
     values: ISubmittedFormData & Omit<ExtraFormData, keyof ISubmittedFormData>,
@@ -41,7 +40,7 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
   const {
     title,
     sourcePlaceholder,
-    direction,
+    getMaxSourceValue,
     confirmMessageTKey,
     onExchangeRequest,
     onCancel,
@@ -88,9 +87,9 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
           <>
             <PTokenExchangingForm<ExtraFormData>
               account={account}
-              direction={direction}
               title={title}
               sourcePlaceholder={sourcePlaceholder}
+              getMaxSourceValue={getMaxSourceValue}
               onSubmit={setValues}
               onCancel={onCancel}
               additionalFields={additionalFields}

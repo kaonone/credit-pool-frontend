@@ -5,6 +5,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import { of } from 'rxjs';
 
 import { useMyUserSubscription, useMyUserBalancesSubscription } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
@@ -34,7 +35,7 @@ function PersonalInformation() {
 
   const balanceInPtk = myUser?.pBalance || '0';
   const [availableBalance, availableBalanceMeta] = useSubscribable(
-    () => api.convertPtkToDaiExit$(balanceInPtk),
+    () => (new BN(balanceInPtk).isZero() ? of(new BN(0)) : api.convertPtkToDaiExit$(balanceInPtk)),
     [balanceInPtk],
     new BN(0),
   );

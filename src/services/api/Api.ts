@@ -5,7 +5,7 @@ import * as R from 'ramda';
 import PromiEvent from 'web3/promiEvent';
 import { autobind } from 'core-decorators';
 
-import { decimalsToWei } from 'utils/bn';
+import { decimalsToWei, min } from 'utils/bn';
 import { memoize } from 'utils/decorators';
 import {
   createErc20,
@@ -93,7 +93,23 @@ export class Api {
     await promiEvent;
   }
 
-  public async approvePtk(fromAddress: string, spender: string, value: BN): Promise<void> {
+  private async approveAllPtk(fromAddress: string, spender: string) {
+    const allowance = await first(
+      this.readonlyContracts.ptk.methods.allowance({
+        _owner: fromAddress,
+        _spender: spender,
+      }),
+    );
+
+    const minAllowance = new BN(2).pow(new BN(250));
+
+    if (allowance.lt(minAllowance)) {
+      const maxAllowance = new BN(2).pow(new BN(256)).subn(1);
+      await this.approvePtk(fromAddress, spender, maxAllowance);
+    }
+  }
+
+  private async approvePtk(fromAddress: string, spender: string, value: BN): Promise<void> {
     const txPtk = getCurrentValueOrThrow(this.txContracts).ptk;
 
     const promiEvent = txPtk.methods.approve(
@@ -146,22 +162,17 @@ export class Api {
   }
 
   @autobind
-  // eslint-disable-next-line class-methods-use-this
-  public getInterestPercentDecimals$(): Observable<number> {
-    return of(3);
-  }
-
-  @autobind
   public async sellPtk$(fromAddress: string, values: { sourceAmount: BN }): Promise<void> {
     const { sourceAmount } = values;
     const txLiquidityModule = getCurrentValueOrThrow(this.txContracts).liquidityModule;
 
     const pAmount = await first(this.convertDaiToPtkExit$(sourceAmount.toString()));
+    const pBalance = await first(this.getBalance$('ptk', fromAddress));
 
-    await this.approvePtk(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, pAmount);
+    await this.approveAllPtk(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule);
 
     const promiEvent = txLiquidityModule.methods.withdraw(
-      { lAmountMin: new BN(0), pAmount },
+      { lAmountMin: new BN(0), pAmount: min(pAmount, pBalance) },
       { from: fromAddress },
     );
 
@@ -194,8 +205,34 @@ export class Api {
   }
 
   @autobind
-  public async stakePtk$(address: string, values: { sourceAmount: BN }): Promise<void> {
-    this.sendMockTransaction$('pool.stakePtk', { address, ...values });
+  public async stakePtk(
+    fromAddress: string,
+    values: { sourceAmount: BN; borrower: string; proposalId: string },
+  ): Promise<void> {
+    const { sourceAmount, borrower, proposalId } = values;
+    const txLoanModule = getCurrentValueOrThrow(this.txContracts).loanModule;
+
+    const pAmount = await first(this.convertDaiToPtkExit$(sourceAmount.toString()));
+    const pBalance = await first(this.getBalance$('ptk', fromAddress));
+
+    await this.approveAllPtk(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule);
+
+    const promiEvent = txLoanModule.methods.addPledge(
+      {
+        borrower,
+        lAmountMin: new BN(0),
+        pAmount: min(pAmount, pBalance),
+        proposal: new BN(proposalId),
+      },
+      { from: fromAddress },
+    );
+
+    this.pushToSubmittedTransactions$('loan.addPledge', promiEvent, {
+      address: fromAddress,
+      ...values,
+    });
+
+    await promiEvent;
   }
 
   @autobind
@@ -210,11 +247,17 @@ export class Api {
       this.getMinLoanCollateralByDaiInDai$(sourceAmount.toString()),
     );
     const pAmount = await first(this.convertDaiToPtkExit$(minLCollateral.toString()));
+    const pBalance = await first(this.getBalance$('ptk', fromAddress));
 
-    await this.approvePtk(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, pAmount);
+    await this.approveAllPtk(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule);
 
     const promiEvent = txLoanModule.methods.createDebtProposal(
-      { debtLAmount: sourceAmount, interest: new BN(apr), lAmountMin: new BN(0), pAmount },
+      {
+        debtLAmount: sourceAmount,
+        interest: new BN(apr),
+        lAmountMin: new BN(0),
+        pAmount: min(pAmount, pBalance),
+      },
       { from: fromAddress },
     );
 
@@ -339,26 +382,6 @@ export class Api {
   // eslint-disable-next-line class-methods-use-this
   public getMinLoanCollateralByDaiInDai$(value: string): Observable<BN> {
     return of(new BN(value).muln(MIN_COLLATERAL_PERCENT_FOR_BORROWER).divn(100));
-  }
-
-  @autobind
-  private async sendMockTransaction$<T extends SubmittedTransactionType>(
-    transactionName: T,
-    payload: ExtractSubmittedTransaction<T>['payload'],
-  ): Promise<void> {
-    const promiEvent = new Promise(resolve =>
-      setTimeout(() => {
-        resolve();
-        // eslint-disable-next-line no-console
-        console.log(`Send transaction ${transactionName}`, payload);
-      }, 1000),
-    );
-
-    (promiEvent as any).on = () => {};
-
-    this.pushToSubmittedTransactions$(transactionName, promiEvent as PromiEvent<boolean>, payload);
-
-    await promiEvent;
   }
 
   private pushToSubmittedTransactions$<T extends SubmittedTransactionType>(

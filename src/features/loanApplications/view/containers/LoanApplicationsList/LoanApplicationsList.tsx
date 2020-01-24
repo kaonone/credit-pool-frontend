@@ -11,11 +11,12 @@ const tKeys = tKeysAll.features.loanApplications;
 
 interface Activity {
   lendValue: string;
-  address: string;
+  borrower: string;
   aprValue: string;
   stakedValue: string;
   expansionPanelDetails: string;
   status: Status;
+  proposalId: string;
 }
 
 function LoanApplicationsList() {
@@ -26,14 +27,15 @@ function LoanApplicationsList() {
 
   const activities: Activity[] = React.useMemo(
     () =>
-      debts?.map(debt => ({
+      debts?.map<Activity>(debt => ({
         lendValue: debt.total,
-        address: debt.borrower,
+        borrower: debt.borrower,
         aprValue: debt.apr,
         stakedValue: debt.staked,
         expansionPanelDetails:
           'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
         status: debt.status,
+        proposalId: '0', // TODO take from debt
       })) || [],
     [debts],
   );
