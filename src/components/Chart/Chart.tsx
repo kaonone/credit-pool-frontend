@@ -31,7 +31,9 @@ function Chart(props: IProps) {
   const firstTick = R.head(ticks);
   const lastTick = R.last(ticks);
 
-  // onPeriodChange && onPeriodChange(firstTick, lastTick, period);
+  React.useEffect(() => {
+    onPeriodChange && onPeriodChange(firstTick, lastTick, period);
+  }, []);
 
   const handlePeriodSwitchSelect = React.useCallback(
     (newPeriod: Period) => {

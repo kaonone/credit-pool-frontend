@@ -2,6 +2,7 @@ import * as React from 'react';
 import BN from 'bn.js';
 
 import { Profit } from 'components/Profit/Profit';
+import { formatBalance } from 'utils/format';
 
 interface IProps {
   previous: BN;
@@ -17,10 +18,17 @@ function Growth(props: IProps) {
     ? new BN(0)
     : current
         .sub(previous)
-        .div(previous)
-        .muln(100);
+        .muln(10000)
+        .div(previous);
 
-  return growth.toNumber() ? <Profit value={growth.toNumber()} className={className} /> : null;
+  const formattedGrowth = formatBalance({
+    amountInBaseUnits: growth,
+    baseDecimals: 2,
+  });
+
+  return growth.toNumber() ? (
+    <Profit value={Number(formattedGrowth)} className={className} />
+  ) : null;
 }
 
 export { Growth };

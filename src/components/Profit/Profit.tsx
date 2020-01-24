@@ -13,12 +13,14 @@ function Profit(props: IProps) {
   const { value, className } = props;
   const classes = useStyles();
 
-  return (
-    <span className={cn(classes.root, className)}>
-      <CallMadeIcon className={classes.icon} />
+  const variant = value && value < 0 ? 'decrease' : 'increase';
+
+  return value ? (
+    <span className={cn(classes.root, classes[variant], className)}>
+      <CallMadeIcon className={cn(classes.icon, classes[variant])} />
       {`${value}%`}
     </span>
-  );
+  ) : null;
 }
 
 export { Profit };
