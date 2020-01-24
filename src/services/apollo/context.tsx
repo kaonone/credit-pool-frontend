@@ -28,6 +28,12 @@ async function createMockApolloClient() {
           lBalance: () => '12345',
         })),
       debts: () => new MockList(10),
+      pools: () =>
+        new MockList(10, () => ({
+          id: new Date(Number(new Date()) - Math.floor(Math.random() * 100000000000)),
+          lBalance: () => (Math.random() * 100).toFixed().concat('00000000000'),
+          lDebt: () => '1000000000000000000000',
+        })),
     }),
     BigInt: () => '123456',
     Bytes: () => '0x0000000000000000000000000000000000000000000000000000000000000000',
@@ -35,8 +41,8 @@ async function createMockApolloClient() {
     Subscription: () => ({
       users: () => new MockList(10),
       pools: () =>
-        new MockList(1, () => ({
-          lBalance: () => '1192000000000000000000',
+        new MockList(10, () => ({
+          lBalance: () => (Math.random() * 10).toString().concat('0000000000000000000'),
           lDebt: () => '1000000000000000000000',
         })),
     }),

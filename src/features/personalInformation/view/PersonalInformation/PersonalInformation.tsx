@@ -53,6 +53,7 @@ function PersonalInformation() {
 
   const balancesResult = useMyUserBalancesSubscription({
     variables: {
+      first: 1,
       address: account || '',
     },
   });

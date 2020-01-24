@@ -1,0 +1,7 @@
+query PoolBalances($date: ID!) {
+  pools(first: 1000, orderBy: id, where: {id_gt: $date}) {
+    lBalance
+    id
+    usersLength
+  }
+}

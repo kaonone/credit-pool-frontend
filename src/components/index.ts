@@ -27,5 +27,6 @@ export * from './Table/Table';
 export * from './ShortAddress/ShortAddress';
 export * from './Pagination/Pagination';
 export * from './Chart/Chart';
+export * from './BalanceChart/BalanceChart';
 export * from './Metric/Metric';
 export * from './CashMetric/CashMetric';
