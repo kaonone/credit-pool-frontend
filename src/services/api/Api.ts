@@ -384,6 +384,13 @@ export class Api {
     return of(new BN(value).muln(MIN_COLLATERAL_PERCENT_FOR_BORROWER).divn(100));
   }
 
+  @memoize(R.identity)
+  @autobind
+  // eslint-disable-next-line class-methods-use-this
+  public getDuePaymentTimeout$(): Observable<BN> {
+    return this.readonlyContracts.loanModule.methods.DEBT_REPAY_DEADLINE_PERIOD();
+  }
+
   private pushToSubmittedTransactions$<T extends SubmittedTransactionType>(
     transactionName: T,
     promiEvent: PromiEvent<any>,
