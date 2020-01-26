@@ -18,7 +18,7 @@ function MyLoans(props: IProps) {
   const tKeys = tKeysAll.features.loans.loansList;
 
   const { result, paginationView } = useSubgraphPagination(useMyLoansQuery, {
-    address: account,
+    address: account.toLowerCase(),
   });
 
   const loans = result.data?.debts || [];
@@ -27,7 +27,6 @@ function MyLoans(props: IProps) {
     <Loading gqlResults={result} progressVariant="circle">
       <LoansPanel
         title={<LoansTitle title={t(tKeys.myLoans.getKey())} />}
-        account={account}
         list={loans}
         expanded
         paginationView={paginationView}

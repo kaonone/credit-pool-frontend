@@ -18,8 +18,8 @@ function MyGuarantees(props: IProps) {
   const tKeys = tKeysAll.features.loans.loansList;
 
   const { result, paginationView } = useSubgraphPagination(useMyGuaranteesQuery, {
-    pledgers: [account],
-    borrower: account,
+    pledgers: [account.toLowerCase()],
+    borrower: account.toLowerCase(),
   });
 
   const guarantees = result.data?.debts || [];
@@ -28,7 +28,6 @@ function MyGuarantees(props: IProps) {
     <Loading gqlResults={result} progressVariant="circle">
       <LoansPanel
         title={<LoansTitle title={t(tKeys.myGuarantees.getKey())} />}
-        account={account}
         list={guarantees}
         withEarn
         paginationView={paginationView}

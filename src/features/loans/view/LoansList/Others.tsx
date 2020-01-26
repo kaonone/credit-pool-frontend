@@ -18,8 +18,8 @@ function Others(props: IProps) {
   const tKeys = tKeysAll.features.loans.loansList;
 
   const { result, paginationView } = useSubgraphPagination(useOthersDebtsQuery, {
-    pledgers: [account],
-    borrower: account,
+    pledgers: [account.toLowerCase()],
+    borrower: account.toLowerCase(),
   });
   const others = result.data?.debts || [];
 
@@ -27,9 +27,7 @@ function Others(props: IProps) {
     <Loading gqlResults={result} progressVariant="circle">
       <LoansPanel
         title={<LoansTitle title={t(tKeys.others.getKey())} />}
-        account={account}
         list={others}
-        withEarn
         paginationView={paginationView}
       />
     </Loading>

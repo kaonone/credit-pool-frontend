@@ -7,7 +7,7 @@ import { MakeTableType } from 'components/Table/Table';
 import { Table as GeneralTable, Typography, Hint, Grid, Loading } from 'components';
 import { ExpansionPanel } from 'components/ExpansionPanel/ExpansionPanel';
 import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
-import { Status, Debt } from 'generated/gql/pool';
+import { Debt } from 'generated/gql/pool';
 import { formatBalance } from 'utils/format';
 import { useSubscribable } from 'utils/react';
 
@@ -16,18 +16,8 @@ import { useStyles } from './LoansPanel.style';
 
 const Table = GeneralTable as MakeTableType<Debt>;
 
-export interface ILoan {
-  loan: string;
-  duePayment: string;
-  borrowApr: string;
-  earn?: string;
-  status: Status;
-  myStake: string;
-}
-
 interface IProps {
   title: React.ReactNode;
-  account: string;
   list: Debt[];
   withEarn?: boolean;
   expanded?: boolean;
@@ -35,7 +25,7 @@ interface IProps {
 }
 
 function LoansPanel(props: IProps) {
-  const { title, account, list, withEarn, expanded, paginationView } = props;
+  const { title, list, withEarn, expanded, paginationView } = props;
   const classes = useStyles();
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.loans.loansPanel;
@@ -46,12 +36,12 @@ function LoansPanel(props: IProps) {
   const [duePaymentTimeout, duePaymentTimeoutMeta] = useSubscribable(
     () => api.getDuePaymentTimeout$(),
     [],
-    0,
+    new BN(0),
   );
 
-  const getDuePayment = (lastUpdate: string | null | undefined, paymentTimeout: number) => {
+  const getDuePayment = (lastUpdate: string | null | undefined, paymentTimeout: BN) => {
     return lastUpdate
-      ? new Date(new BN(lastUpdate).add(new BN(paymentTimeout)).toNumber()).toLocaleDateString()
+      ? new Date(new BN(lastUpdate).add(paymentTimeout).toNumber()).toLocaleDateString()
       : '–';
   };
 
@@ -74,7 +64,7 @@ function LoansPanel(props: IProps) {
                 </Table.Column>
                 <Table.Column>
                   <Table.Head>{t(tKeys.address.getKey())}</Table.Head>
-                  <Table.Cell>{() => <AddressCell address={account} />}</Table.Cell>
+                  <Table.Cell>{({ data }) => <AddressCell address={data.borrower} />}</Table.Cell>
                 </Table.Column>
                 <Table.Column>
                   <Table.Head>{t(tKeys.loan.getKey())}</Table.Head>
