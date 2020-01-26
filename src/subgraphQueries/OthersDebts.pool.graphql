@@ -1,6 +1,6 @@
 # TODO pledgers in string, borrower in bytes
-query OthersDebts($first: Int!, $skip: Int!, $address: String!, $addressInBytes: Bytes!) {
-  debts(first: $first, skip: $skip, where: {pledgers_not: [$address], borrower_not: $addressInBytes}) {
+query OthersDebts($first: Int!, $skip: Int!, $pledgers: [String!]!, $borrower: Bytes!) {
+  debts(first: $first, skip: $skip, where: {pledgers_not_contains: $pledgers, borrower_not: $borrower}) {
     id
     debt_id
     apr
