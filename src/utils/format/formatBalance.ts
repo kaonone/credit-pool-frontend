@@ -32,10 +32,11 @@ export function formatBalance({
   const mid = balanceString.length - (baseDecimals + si.power);
   const prefix = balanceString.substr(0, mid);
   const padding = mid < 0 ? 0 - mid : 0;
+  const decimalsZerosLength = si.value === '-' && baseDecimals < 3 ? baseDecimals : 3;
 
   const postfix = `${`${'0'.repeat(padding)}${balanceString}`.substr(mid < 0 ? 0 : mid)}000`.substr(
     0,
-    3,
+    decimalsZerosLength,
   );
 
   const units = si.value === '-' ? ` ${tokenSymbol}` : `${si.value} ${tokenSymbol}`;

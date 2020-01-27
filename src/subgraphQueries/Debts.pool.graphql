@@ -2,6 +2,7 @@ query Debts($first: Int!, $skip: Int!) {
   debts(first: $first, skip: $skip) {
     id
     debt_id
+    proposal_id
     apr
     borrower
     total
@@ -9,5 +10,6 @@ query Debts($first: Int!, $skip: Int!) {
     pledges
     staked
     status
+    last_update
   }
 }

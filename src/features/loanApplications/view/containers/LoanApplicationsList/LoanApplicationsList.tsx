@@ -16,7 +16,7 @@ interface Activity {
   stakedValue: string;
   expansionPanelDetails: string;
   status: Status;
-  proposalId: string;
+  proposalId?: string | null;
 }
 
 function LoanApplicationsList() {
@@ -35,7 +35,7 @@ function LoanApplicationsList() {
         expansionPanelDetails:
           'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
         status: debt.status,
-        proposalId: '0', // TODO take from debt
+        proposalId: debt.proposal_id,
       })) || [],
     [debts],
   );

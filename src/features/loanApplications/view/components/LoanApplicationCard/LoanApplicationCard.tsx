@@ -24,7 +24,7 @@ interface IProps {
   stakedValue: string;
   expansionPanelDetails: string;
   status: Status;
-  proposalId: string;
+  proposalId?: string | null;
 }
 
 const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
@@ -96,16 +96,18 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
           <Grid item>
             <Progress progressInPercents={progressInPercents} />
           </Grid>
-          <Grid item>
-            <StakeButton
-              maxStakeSize={maxStakeSize}
-              proposalId={proposalId}
-              borrower={borrower}
-              variant="contained"
-              color="primary"
-              fullWidth
-            />
-          </Grid>
+          {proposalId && (
+            <Grid item>
+              <StakeButton
+                maxStakeSize={maxStakeSize}
+                proposalId={proposalId}
+                borrower={borrower}
+                variant="contained"
+                color="primary"
+                fullWidth
+              />
+            </Grid>
+          )}
         </Grid>
       ),
     [t, isOver, status, progressInPercents],
