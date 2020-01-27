@@ -26,7 +26,7 @@ function Growth(props: IProps) {
     baseDecimals: 2,
   });
 
-  return growth.toNumber() ? (
+  return !growth.isZero() ? (
     <Profit
       value={formattedGrowth}
       variant={growth.isNeg() ? 'decrease' : 'increase'}

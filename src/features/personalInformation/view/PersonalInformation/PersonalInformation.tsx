@@ -12,7 +12,6 @@ import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { GetLoanButton } from 'features/cashExchange';
 import { useSubscribable } from 'utils/react';
-import { formatBalance } from 'utils/format';
 import { CashMetric, ICashMetricProps, Loading } from 'components';
 
 import { useStyles } from './PersonalInformation.style';
@@ -62,14 +61,7 @@ function PersonalInformation() {
 
   const balanceDayAgo = balancesResult.data?.balances[0];
 
-  const balanceInDaiDayAgo = new BN(balanceDayAgo?.lBalance || '0');
-
-  const userProfit = balanceInDaiDayAgo.isZero()
-    ? new BN(0)
-    : availableBalance
-        .sub(balanceInDaiDayAgo)
-        .muln(10000)
-        .div(balanceInDaiDayAgo);
+  const balanceInDaiDayAgo = balanceDayAgo?.lBalance || '0';
 
   const metrics: ICashMetricProps[] = React.useMemo(
     () => [
@@ -81,10 +73,8 @@ function PersonalInformation() {
       {
         title: t(tKeys.availableBalance.getKey()),
         value: availableBalance.toString(),
+        previousValue: balanceInDaiDayAgo,
         token: 'dai',
-        profit: userProfit.isZero()
-          ? undefined
-          : formatBalance({ amountInBaseUnits: userProfit.abs(), baseDecimals: 2 }),
       },
       {
         title: t(tKeys.locked.getKey()),
@@ -97,7 +87,7 @@ function PersonalInformation() {
         token: 'dai',
       },
     ],
-    [t, deposit, availableBalance, userProfit, locked, myUser],
+    [t, deposit, availableBalance, balanceInDaiDayAgo, locked, myUser],
   );
 
   return (
@@ -114,9 +104,14 @@ function PersonalInformation() {
             </Typography>
           </Box>
           <Grid container spacing={2} className={classes.metrics}>
-            {metrics.map(({ title, value, token, profit }, index) => (
+            {metrics.map(({ title, value, previousValue, token }, index) => (
               <Grid key={index} item xs={12}>
-                <CashMetric title={title} value={value} token={token} profit={profit} />
+                <CashMetric
+                  title={title}
+                  value={value}
+                  previousValue={previousValue}
+                  token={token}
+                />
               </Grid>
             ))}
             <Grid item xs={12}>

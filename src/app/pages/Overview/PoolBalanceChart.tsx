@@ -5,8 +5,15 @@ import * as R from 'ramda';
 
 import { BalanceChart, IChartPoint, Loading } from 'components';
 import { usePoolBalancesQuery } from 'generated/gql/pool';
+import { useApi } from 'services/api';
+import { useSubscribable } from 'utils/react';
 
 function PoolBalanceChart() {
+  const api = useApi();
+
+  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(() => api.getTokenInfo$('dai'), []);
+  const decimals = daiTokenInfo?.decimals || 0;
+
   const lastYear = moment()
     .subtract(1, 'years')
     .unix(); // Date in seconds
@@ -31,7 +38,7 @@ function PoolBalanceChart() {
       (pools.length &&
         pools.map(pool => ({
           date: parseInt(pool.id, 16) * 1000, // Date in milliseconds
-          value: Number(pool.lBalance), // TODO need to divide on 10^decimals before casting
+          value: new BN(pool.lBalance).div(new BN(10).pow(new BN(decimals))).toNumber(),
         }))) ||
       mockedPoints,
     [pools],
@@ -41,7 +48,7 @@ function PoolBalanceChart() {
   const membersLength = (lastPool && new BN(lastPool.usersLength)) || new BN(0);
 
   return (
-    <Loading gqlResults={balancesResult}>
+    <Loading gqlResults={balancesResult} meta={daiTokenInfoMeta}>
       <BalanceChart
         chartPoints={chartPoints}
         title="Pool balance"

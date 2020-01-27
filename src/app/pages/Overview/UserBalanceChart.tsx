@@ -1,5 +1,6 @@
 import * as React from 'react';
 import moment from 'moment';
+import BN from 'bn.js';
 
 import { BalanceChart, IChartPoint, Loading } from 'components';
 import { useMyUserBalancesSubscription } from 'generated/gql/pool';
@@ -9,6 +10,9 @@ import { useSubscribable } from 'utils/react';
 function UserBalanceChart() {
   const api = useApi();
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
+
+  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(() => api.getTokenInfo$('dai'), []);
+  const decimals = daiTokenInfo?.decimals || 0;
 
   const lastYear = moment()
     .subtract(1, 'years')
@@ -44,14 +48,14 @@ function UserBalanceChart() {
       (balances.length &&
         balances.map(balance => ({
           date: parseInt(balance.id, 16) * 1000, // Date in milliseconds
-          value: Number(balance.lBalance), // TODO need to divide on 10^decimals before casting
+          value: new BN(balance.lBalance).div(new BN(10).pow(new BN(decimals))).toNumber(),
         }))) ||
       mockedPoints,
     [balances, mockedPoints],
   );
 
   return (
-    <Loading gqlResults={balancesResult} meta={accountMeta}>
+    <Loading gqlResults={balancesResult} meta={[accountMeta, daiTokenInfoMeta]}>
       <BalanceChart chartPoints={chartPoints} title="My balance" />
     </Loading>
   );

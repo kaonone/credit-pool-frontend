@@ -11,9 +11,9 @@ import { useStyles } from './MetricsList.style';
 export interface IMetric {
   title: React.ReactNode;
   value: string;
+  previousValue?: string;
   subValue?: React.ReactNode;
   isCashMetric?: boolean;
-  profit?: string;
   token?: Token;
 }
 
@@ -28,7 +28,7 @@ function MetricsList(props: IProps) {
 
   return (
     <Grid container spacing={2} alignItems="center" className={className}>
-      {metrics.map(({ title, value, subValue, isCashMetric, profit, token }, index) => (
+      {metrics.map(({ title, value, previousValue, subValue, isCashMetric, token }, index) => (
         <React.Fragment key={index}>
           {!!index && (
             <Grid item className={classes.dividerItem}>
@@ -37,7 +37,7 @@ function MetricsList(props: IProps) {
           )}
           <Grid item className={classes.metric}>
             {isCashMetric && token ? (
-              <CashMetric title={title} value={value} profit={profit} token={token} />
+              <CashMetric title={title} value={value} previousValue={previousValue} token={token} />
             ) : (
               <Metric title={title} value={value} subValue={subValue} />
             )}
