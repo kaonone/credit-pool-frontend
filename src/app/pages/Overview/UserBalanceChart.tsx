@@ -14,13 +14,13 @@ function UserBalanceChart() {
 
   const lastYear = moment()
     .subtract(1, 'years')
-    .unix();
+    .unix(); // Date in seconds
 
   const balancesResult = useMyUserBalancesSubscription({
     variables: {
       first: 1000,
       address: account || '',
-      date: `0x${lastYear.toString(16)}`,
+      date: `0x${lastYear.toString(16)}`, // Date in seconds
     },
   });
   const balances = balancesResult.data?.balances || [];
@@ -30,10 +30,10 @@ function UserBalanceChart() {
       {
         date: moment()
           .subtract(1, 'years')
-          .valueOf(),
+          .valueOf(), // Date in milliseconds
         value: 0,
       },
-      { date: Date.now(), value: 0 },
+      { date: Date.now(), value: 0 }, // Date in milliseconds
     ],
     [Date],
   );
@@ -42,7 +42,7 @@ function UserBalanceChart() {
     () =>
       (balances.length &&
         balances.map(balance => ({
-          date: parseInt(balance.id, 16),
+          date: parseInt(balance.id, 16) * 1000, // Date in milliseconds
           value: Number(balance.lBalance),
         }))) ||
       mockedPoints,

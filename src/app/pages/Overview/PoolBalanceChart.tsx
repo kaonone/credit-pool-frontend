@@ -9,11 +9,11 @@ import { usePoolBalancesQuery } from 'generated/gql/pool';
 function PoolBalanceChart() {
   const lastYear = moment()
     .subtract(1, 'years')
-    .unix();
+    .unix(); // Date in seconds
 
   const balancesResult = usePoolBalancesQuery({
     variables: {
-      date: `0x${lastYear.toString(16)}`,
+      date: `0x${lastYear.toString(16)}`, // Date in seconds
     },
   });
   const pools = balancesResult.data?.pools || [];
@@ -23,10 +23,10 @@ function PoolBalanceChart() {
       {
         date: moment()
           .subtract(1, 'years')
-          .valueOf(),
+          .valueOf(), // Date in milliseconds
         value: 0,
       },
-      { date: Date.now(), value: 0 },
+      { date: Date.now(), value: 0 }, // Date in milliseconds
     ],
     [Date],
   );
@@ -35,7 +35,7 @@ function PoolBalanceChart() {
     () =>
       (pools.length &&
         pools.map(pool => ({
-          date: parseInt(pool.id, 16),
+          date: parseInt(pool.id, 16) * 1000, // Date in milliseconds
           value: Number(pool.lBalance),
         }))) ||
       mockedPoints,
