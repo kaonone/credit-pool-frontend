@@ -33,15 +33,7 @@ function Chart(props: IProps) {
 
   React.useEffect(() => {
     onPeriodChange && onPeriodChange(firstTick, lastTick, period);
-  }, []);
-
-  const handlePeriodSwitchSelect = React.useCallback(
-    (newPeriod: Period) => {
-      setPeriod(newPeriod);
-      onPeriodChange && onPeriodChange(firstTick, lastTick, period);
-    },
-    [firstTick, lastTick, period, setPeriod, onPeriodChange],
-  );
+  }, [...Object.values(firstTick), ...Object.values(firstTick), period, onPeriodChange]);
 
   if (!firstTick) {
     return null;
@@ -74,7 +66,7 @@ function Chart(props: IProps) {
         </g>
       );
     },
-    [formatTick],
+    [formatTick, realPeriod],
   );
 
   return (
@@ -106,7 +98,7 @@ function Chart(props: IProps) {
           </LineChart>
         </ResponsiveContainer>
       </div>
-      <PeriodSwitch period={period} onSelect={handlePeriodSwitchSelect} />
+      <PeriodSwitch period={period} onSelect={setPeriod} />
     </div>
   );
 }

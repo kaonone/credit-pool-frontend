@@ -12,6 +12,7 @@ import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { GetLoanButton } from 'features/cashExchange';
 import { useSubscribable } from 'utils/react';
+import { formatBalance } from 'utils/format';
 import { CashMetric, ICashMetricProps, Loading } from 'components';
 
 import { useStyles } from './PersonalInformation.style';
@@ -67,8 +68,8 @@ function PersonalInformation() {
     ? new BN(0)
     : availableBalance
         .sub(balanceInDaiDayAgo)
-        .div(balanceInDaiDayAgo)
-        .muln(100);
+        .muln(10000)
+        .div(balanceInDaiDayAgo);
 
   const metrics: ICashMetricProps[] = React.useMemo(
     () => [
@@ -81,7 +82,9 @@ function PersonalInformation() {
         title: t(tKeys.availableBalance.getKey()),
         value: availableBalance.toString(),
         token: 'dai',
-        profit: userProfit.toNumber() || 0,
+        profit: userProfit.isZero()
+          ? undefined
+          : formatBalance({ amountInBaseUnits: userProfit.abs(), baseDecimals: 2 }),
       },
       {
         title: t(tKeys.locked.getKey()),

@@ -11,7 +11,7 @@ export interface ICashMetricProps {
   token: Token;
   needed?: string;
   icon?: React.ReactNode;
-  profit?: number;
+  profit?: string;
 }
 
 function CashMetric(props: ICashMetricProps) {
@@ -23,7 +23,7 @@ function CashMetric(props: ICashMetricProps) {
       value={<FormattedBalance sum={value} token={token} />}
       icon={icon}
       subValue={
-        (profit && <Profit value={profit} />) ||
+        (profit && <Profit value={profit} variant="increase" />) ||
         (needed && (
           <>
             <FormattedBalance sum={needed} token={token} /> needed

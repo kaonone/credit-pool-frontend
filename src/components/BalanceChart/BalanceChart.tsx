@@ -14,7 +14,6 @@ import { useStyles } from './BalanceChart.style';
 interface IProps {
   title: string;
   membersLength?: number;
-  balance: BN;
   chartPoints: IChartPoint[];
 }
 
@@ -30,7 +29,7 @@ interface IPeriodInfo {
 }
 
 const BalanceChart = (props: IProps) => {
-  const { title, membersLength, balance, chartPoints } = props;
+  const { title, membersLength, chartPoints } = props;
   const classes = useStyles();
   const [periodInfo, setPeriodInfo] = React.useState<IPeriodInfo | null>(null);
 
@@ -66,13 +65,15 @@ const BalanceChart = (props: IProps) => {
             null}
           <Grid item xs={12}>
             <Typography className={classes.balanceValue} variant="h4">
-              <FormattedBalance sum={balance} token="dai" />{' '}
               {periodInfo && (
-                <Growth
-                  className={classes.growth}
-                  previous={new BN(periodInfo.firstPoint.value.toString())}
-                  current={new BN(periodInfo.lastPoint.value.toString())}
-                />
+                <>
+                  <FormattedBalance sum={periodInfo.lastPoint.value.toString()} token="dai" />{' '}
+                  <Growth
+                    className={classes.growth}
+                    previous={new BN(periodInfo.firstPoint.value.toString())}
+                    current={new BN(periodInfo.lastPoint.value.toString())}
+                  />
+                </>
               )}
             </Typography>
           </Grid>

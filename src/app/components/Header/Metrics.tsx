@@ -25,21 +25,21 @@ export function Metrics({ data }: MetricsProps) {
         title: t(tKeys.total.getKey()),
         value: new BN(lBalance).add(new BN(lDebt)).toString(),
         isCashMetric: true,
-        profit: 12.81,
+        profit: '12.81', // TODO Calculate
         token: 'dai',
       },
       {
         title: t(tKeys.availableBalance.getKey()),
         value: lBalance,
         isCashMetric: true,
-        profit: 12.81,
+        profit: '12.81', // TODO Calculate
         token: 'dai',
       },
       {
         title: t(tKeys.issued.getKey()),
         value: lDebt,
         isCashMetric: true,
-        profit: 12.81,
+        profit: '12.81', // TODO Calculate
         token: 'dai',
       },
     ],

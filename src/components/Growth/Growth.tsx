@@ -22,12 +22,16 @@ function Growth(props: IProps) {
         .div(previous);
 
   const formattedGrowth = formatBalance({
-    amountInBaseUnits: growth,
+    amountInBaseUnits: growth.abs(),
     baseDecimals: 2,
   });
 
   return growth.toNumber() ? (
-    <Profit value={Number(formattedGrowth)} className={className} />
+    <Profit
+      value={formattedGrowth}
+      variant={growth.isNeg() ? 'decrease' : 'increase'}
+      className={className}
+    />
   ) : null;
 }
 

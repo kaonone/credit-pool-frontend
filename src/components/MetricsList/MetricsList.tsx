@@ -13,7 +13,7 @@ export interface IMetric {
   value: string;
   subValue?: React.ReactNode;
   isCashMetric?: boolean;
-  profit?: number;
+  profit?: string;
   token?: Token;
 }
 

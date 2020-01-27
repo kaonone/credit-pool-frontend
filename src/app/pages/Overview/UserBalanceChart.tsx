@@ -1,7 +1,5 @@
 import * as React from 'react';
-import BN from 'bn.js';
 import moment from 'moment';
-import * as R from 'ramda';
 
 import { BalanceChart, IChartPoint, Loading } from 'components';
 import { useMyUserBalancesSubscription } from 'generated/gql/pool';
@@ -28,9 +26,12 @@ function UserBalanceChart() {
   const mockedPoints = React.useMemo(
     () => [
       {
-        date: moment()
-          .subtract(1, 'years')
-          .valueOf(), // Date in milliseconds
+        date:
+          Date.now() -
+          moment()
+            .subtract(1, 'days')
+            .unix() *
+            1000, // Date in milliseconds
         value: 0,
       },
       { date: Date.now(), value: 0 }, // Date in milliseconds
@@ -43,17 +44,15 @@ function UserBalanceChart() {
       (balances.length &&
         balances.map(balance => ({
           date: parseInt(balance.id, 16) * 1000, // Date in milliseconds
-          value: Number(balance.lBalance),
+          value: Number(balance.lBalance), // TODO need to divide on 10^decimals before casting
         }))) ||
       mockedPoints,
     [balances, mockedPoints],
   );
 
-  const currentBalance = (R.last(balances) && new BN(R.last(balances).lBalance)) || new BN(0);
-
   return (
     <Loading gqlResults={balancesResult} meta={accountMeta}>
-      <BalanceChart chartPoints={chartPoints} title="My balance" balance={currentBalance} />
+      <BalanceChart chartPoints={chartPoints} title="My balance" />
     </Loading>
   );
 }

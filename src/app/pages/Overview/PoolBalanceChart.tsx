@@ -20,15 +20,10 @@ function PoolBalanceChart() {
 
   const mockedPoints = React.useMemo(
     () => [
-      {
-        date: moment()
-          .subtract(1, 'years')
-          .valueOf(), // Date in milliseconds
-        value: 0,
-      },
+      { date: Date.now() - 1, value: 0 },
       { date: Date.now(), value: 0 }, // Date in milliseconds
     ],
-    [Date],
+    [],
   );
 
   const chartPoints: IChartPoint[] = React.useMemo(
@@ -36,22 +31,20 @@ function PoolBalanceChart() {
       (pools.length &&
         pools.map(pool => ({
           date: parseInt(pool.id, 16) * 1000, // Date in milliseconds
-          value: Number(pool.lBalance),
+          value: Number(pool.lBalance), // TODO need to divide on 10^decimals before casting
         }))) ||
       mockedPoints,
     [pools],
   );
 
-  const currentBalance = (R.last(pools) && new BN(R.last(pools).lBalance)) || new BN(0);
-
-  const membersLength = (R.last(pools) && new BN(R.last(pools).usersLength)) || new BN(0);
+  const lastPool = R.last(pools);
+  const membersLength = (lastPool && new BN(lastPool.usersLength)) || new BN(0);
 
   return (
     <Loading gqlResults={balancesResult}>
       <BalanceChart
         chartPoints={chartPoints}
         title="Pool balance"
-        balance={currentBalance}
         membersLength={membersLength.toNumber()}
       />
     </Loading>
