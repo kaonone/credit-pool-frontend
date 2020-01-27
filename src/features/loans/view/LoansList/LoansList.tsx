@@ -7,7 +7,7 @@ import { Loading, Hint, Grid } from 'components';
 
 import { MyLoans } from './MyLoans';
 import { MyGuarantees } from './MyGuarantees';
-import { Others } from './Others';
+// import { Others } from './Others';
 
 function LoansList() {
   const { t } = useTranslate();
@@ -26,9 +26,10 @@ function LoansList() {
           <Grid item xs={12}>
             <MyGuarantees account={account} />
           </Grid>
-          <Grid item xs={12}>
+          {/* // TODO uncomment after fixing subgraph bug for _non_contains filters */}
+          {/* <Grid item xs={12}>
             <Others account={account} />
-          </Grid>
+          </Grid> */}
         </Grid>
       ) : (
         <Hint>{t(tKeysApp.connectingWarning.getKey())}</Hint>
