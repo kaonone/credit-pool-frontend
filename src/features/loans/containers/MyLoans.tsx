@@ -1,12 +1,10 @@
 import React from 'react';
 
-import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useSubgraphPagination } from 'utils/react';
 import { Loading } from 'components';
 import { useMyLoansQuery } from 'generated/gql/pool';
 
-import { LoansPanel } from '../LoansPanel/LoansPanel';
-import { LoansTitle } from '../LoansTitle/LoansTitle';
+import { LoansTable } from '../components/LoansTable';
 
 interface IProps {
   account: string;
@@ -14,8 +12,6 @@ interface IProps {
 
 function MyLoans(props: IProps) {
   const { account } = props;
-  const { t } = useTranslate();
-  const tKeys = tKeysAll.features.loans.loansList;
 
   const { result, paginationView } = useSubgraphPagination(useMyLoansQuery, {
     address: account.toLowerCase(),
@@ -25,12 +21,7 @@ function MyLoans(props: IProps) {
 
   return (
     <Loading gqlResults={result} progressVariant="circle">
-      <LoansPanel
-        title={<LoansTitle title={t(tKeys.myLoans.getKey())} />}
-        list={loans}
-        expanded
-        paginationView={paginationView}
-      />
+      <LoansTable list={loans} paginationView={paginationView} />
     </Loading>
   );
 }

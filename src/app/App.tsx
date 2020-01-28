@@ -6,8 +6,9 @@ import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { DemoPage } from './pages/Demo/DemoPage';
 import { OverviewPage } from './pages/Overview/OverviewPage';
 import { ActivitiesPage } from './pages/Activities/ActivitiesPage';
-import { LoansPage } from './pages/Loans/LoansPage';
-import { KeepersPage } from './pages/Keepers/KeepersPage';
+import { MyLoansPage } from './pages/MyLoans/MyLoans';
+import { MyGuaranteesPage } from './pages/MyGuarantees/MyGuarantees';
+import { LiquidationsPage } from './pages/Liquidations/Liquidations';
 import { routes } from './routes';
 import { BaseLayout } from './components/BaseLayout/BaseLayout';
 
@@ -23,9 +24,10 @@ export function App() {
           <Route exact path={routes.demo.getRoutePath()} component={DemoPage} />
         )}
         <Route exact path={routes.overview.getRoutePath()} component={OverviewPage} />
-        <Route exact path={routes.activities.getRoutePath()} component={ActivitiesPage} />
-        <Route exact path={routes.loans.getRoutePath()} component={LoansPage} />
-        <Route exact path={routes.keepers.getRoutePath()} component={KeepersPage} />
+        <Route exact path={routes.proposals.getRoutePath()} component={ActivitiesPage} />
+        <Route exact path={routes['my-loans'].getRoutePath()} component={MyLoansPage} />
+        <Route exact path={routes['my-guarantees'].getRoutePath()} component={MyGuaranteesPage} />
+        <Route exact path={routes.liquidations.getRoutePath()} component={LiquidationsPage} />
         <Redirect to={routes.overview.getRedirectPath()} />
       </Switch>
     </BaseLayout>

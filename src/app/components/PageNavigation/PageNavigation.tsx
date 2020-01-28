@@ -28,24 +28,31 @@ function PageNavigation() {
           />
           <Tab
             className={classes.tab}
-            label="Activities"
+            label="Proposals"
             component={Link}
-            value={routes.activities.getElementKey()}
-            to={routes.activities.getRedirectPath()}
+            value={routes.proposals.getElementKey()}
+            to={routes.proposals.getRedirectPath()}
           />
           <Tab
             className={classes.tab}
-            label="Loans"
+            label="My loans"
             component={Link}
-            value={routes.loans.getElementKey()}
-            to={routes.loans.getRedirectPath()}
+            value={routes['my-loans'].getElementKey()}
+            to={routes['my-loans'].getRedirectPath()}
           />
           <Tab
             className={classes.tab}
-            label="Keepers"
+            label="My guarantees"
             component={Link}
-            value={routes.keepers.getElementKey()}
-            to={routes.keepers.getRedirectPath()}
+            value={routes['my-guarantees'].getElementKey()}
+            to={routes['my-guarantees'].getRedirectPath()}
+          />
+          <Tab
+            className={classes.tab}
+            label="Liquidations"
+            component={Link}
+            value={routes.liquidations.getElementKey()}
+            to={routes.liquidations.getRedirectPath()}
           />
         </Tabs>
       )}
