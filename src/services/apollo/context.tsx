@@ -38,7 +38,7 @@ async function createMockApolloClient() {
     Subscription: () => ({
       users: () => new MockList(10),
       pools: () =>
-        new MockList(1, () => ({
+        new MockList(10, () => ({
           lBalance: () => '1192000000000000000000',
           lDebt: () => '1000000000000000000000',
         })),

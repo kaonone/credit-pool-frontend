@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { Period } from '../BalanceChart';
+import { Period } from '../Chart';
 
 export function makeFormatDateByPeriod(period: Period, firstDate: number) {
   const monthAgo = moment(Date.now())
