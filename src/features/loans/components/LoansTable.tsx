@@ -1,36 +1,30 @@
 import React from 'react';
 import BN from 'bn.js';
 
-import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { useApi } from 'services/api';
-import { MakeTableType } from 'components/Table/Table';
-import { Table as GeneralTable, Typography, Hint, Grid, Loading } from 'components';
-import { ExpansionPanel } from 'components/ExpansionPanel/ExpansionPanel';
+import { Typography, Hint, Grid, Loading, Table as GeneralTable, MakeTableType } from 'components';
 import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
 import { Debt } from 'generated/gql/pool';
 import { formatBalance } from 'utils/format';
+import { useApi } from 'services/api';
+import { useTranslate } from 'services/i18n';
 import { useSubscribable } from 'utils/react';
 
 import { AddressCell } from './LoansTableCells';
-import { useStyles } from './LoansPanel.style';
 
-const Table = GeneralTable as MakeTableType<Debt>;
+export const Table = GeneralTable as MakeTableType<Debt>;
 
-interface IProps {
-  title: React.ReactNode;
+interface Props {
   list: Debt[];
   withEarn?: boolean;
-  expanded?: boolean;
-  paginationView?: React.ReactNode;
+  paginationView: React.ReactNode;
 }
 
-function LoansPanel(props: IProps) {
-  const { title, list, withEarn, expanded, paginationView } = props;
-  const classes = useStyles();
-  const { t } = useTranslate();
+export function LoansTable({ list, withEarn, paginationView }: Props) {
+  const { t, tKeys: tKeysAll } = useTranslate();
   const tKeys = tKeysAll.features.loans.loansPanel;
 
   const api = useApi();
+
   const [aprDecimals, aprDecimalsMeta] = useSubscribable(() => api.getAprDecimals$(), [], 0);
 
   const [duePaymentTimeout, duePaymentTimeoutMeta] = useSubscribable(
@@ -39,13 +33,7 @@ function LoansPanel(props: IProps) {
     new BN(0),
   );
 
-  const getDuePayment = (lastUpdate: string | null | undefined, paymentTimeout: BN) => {
-    return lastUpdate
-      ? new Date(new BN(lastUpdate).add(paymentTimeout).toNumber()).toLocaleDateString()
-      : '–';
-  };
-
-  const LoansTable = (
+  return (
     <>
       {!list.length ? (
         <Hint>
@@ -126,15 +114,10 @@ function LoansPanel(props: IProps) {
       )}
     </>
   );
-
-  return (
-    <ExpansionPanel
-      title={title}
-      details={LoansTable}
-      detailsClassName={classes.details}
-      expanded={expanded}
-    />
-  );
 }
 
-export { LoansPanel };
+function getDuePayment(lastUpdate: string | null | undefined, paymentTimeout: BN) {
+  return lastUpdate
+    ? new Date(new BN(lastUpdate).add(paymentTimeout).toNumber()).toLocaleDateString()
+    : '–';
+}
