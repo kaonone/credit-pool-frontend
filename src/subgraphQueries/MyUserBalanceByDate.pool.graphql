@@ -1,0 +1,8 @@
+subscription MyUserBalanceByDate($address: String!, $date: BigInt) {
+  balances(first: 1, orderBy: date, orderDirection: desc, where: {user: $address, date_lt: $date}) {
+    user
+    date
+    lBalance
+    pBalance
+  }
+}

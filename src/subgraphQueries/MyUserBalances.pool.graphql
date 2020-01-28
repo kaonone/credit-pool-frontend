@@ -1,7 +1,7 @@
-subscription MyUserBalances($first: Int!, $address: String!, $date: ID = "0x00") {
-  balances(first: $first, orderBy: id, where: {user: $address, id_gt: $date}) {
-    id
+subscription MyUserBalances($first: Int!, $address: String!, $fromDate: BigInt) {
+  balances(first: $first, orderBy: date, where: {user: $address, date_gt: $fromDate}) {
     user
+    date
     lBalance
     pBalance
   }

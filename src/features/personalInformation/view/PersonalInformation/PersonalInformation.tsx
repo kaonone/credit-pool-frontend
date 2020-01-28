@@ -1,18 +1,23 @@
 import React, { useMemo } from 'react';
 import BN from 'bn.js';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import { of } from 'rxjs';
+import moment from 'moment';
 
-import { useMyUserSubscription, useMyUserBalancesSubscription } from 'generated/gql/pool';
+import { useMyUserSubscription, useMyUserBalanceByDateSubscription } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { GetLoanButton } from 'features/cashExchange';
 import { useSubscribable } from 'utils/react';
-import { CashMetric, ICashMetricProps, Loading } from 'components';
+import {
+  CashMetric,
+  ICashMetricProps,
+  Loading,
+  Box,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+} from 'components';
 
 import { useStyles } from './PersonalInformation.style';
 
@@ -52,14 +57,22 @@ function PersonalInformation() {
     locked,
   ]);
 
-  const balancesResult = useMyUserBalancesSubscription({
+  const dayAgoDate = React.useMemo(
+    () =>
+      moment()
+        .subtract(1, 'day')
+        .unix(),
+    [],
+  ); // Date in seconds
+
+  const balancesDayAgoResult = useMyUserBalanceByDateSubscription({
     variables: {
-      first: 1,
       address: account || '',
+      date: dayAgoDate.toString(),
     },
   });
 
-  const balanceDayAgo = balancesResult.data?.balances[0];
+  const balanceDayAgo = balancesDayAgoResult.data?.balances[0];
 
   const balanceInDaiDayAgo = balanceDayAgo?.lBalance || '0';
 

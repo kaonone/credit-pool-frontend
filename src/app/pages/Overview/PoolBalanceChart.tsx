@@ -4,7 +4,7 @@ import moment from 'moment';
 import * as R from 'ramda';
 
 import { BalanceChart, IChartPoint, Loading } from 'components';
-import { usePoolBalancesQuery } from 'generated/gql/pool';
+import { usePoolBalancesSubscription } from 'generated/gql/pool';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 import { decimalsToWei } from 'utils/bn';
@@ -15,13 +15,17 @@ function PoolBalanceChart() {
   const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(() => api.getTokenInfo$('dai'), []);
   const decimals = daiTokenInfo?.decimals || 0;
 
-  const lastYear = moment()
-    .subtract(1, 'years')
-    .unix(); // Date in seconds
+  const yearAgoDate = React.useMemo(
+    () =>
+      moment()
+        .subtract(1, 'years')
+        .unix(),
+    [],
+  ); // Date in seconds
 
-  const balancesResult = usePoolBalancesQuery({
+  const balancesResult = usePoolBalancesSubscription({
     variables: {
-      date: `0x${lastYear.toString(16)}`, // Date in seconds
+      date: `0x${yearAgoDate.toString(16)}`, // Date in seconds
     },
   });
   const pools = balancesResult.data?.pools || [];
@@ -44,10 +48,14 @@ function PoolBalanceChart() {
 
   const chartPoints: IChartPoint[] = React.useMemo(
     () =>
-      pools.length
+      pools.length && decimals
         ? pools.map(pool => ({
             date: parseInt(pool.id, 16) * 1000, // Date in milliseconds
-            value: new BN(pool.lBalance).div(decimalsToWei(decimals)).toNumber(),
+            value:
+              new BN(pool.lBalance)
+                .muln(100)
+                .div(decimalsToWei(decimals))
+                .toNumber() / 100,
           }))
         : mockedPoints,
     [pools, decimals],

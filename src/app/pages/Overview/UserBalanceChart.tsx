@@ -12,18 +12,26 @@ function UserBalanceChart() {
   const api = useApi();
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
+  const [currentBalance, currentBalanceMeta] = useSubscribable(
+    () => api.getPtkBalanceInDai$(account || '0x0000000000000000000000000000000000000000'),
+    [account],
+  );
   const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(() => api.getTokenInfo$('dai'), []);
-  const decimals = daiTokenInfo?.decimals || 0;
+  const decimals = daiTokenInfo?.decimals;
 
-  const lastYear = moment()
-    .subtract(1, 'years')
-    .unix(); // Date in seconds
+  const yearAgoDate = React.useMemo(
+    () =>
+      moment()
+        .subtract(1, 'years')
+        .unix(),
+    [],
+  ); // Date in seconds
 
   const balancesResult = useMyUserBalancesSubscription({
     variables: {
       first: 1000,
       address: account || '',
-      date: `0x${lastYear.toString(16)}`, // Date in seconds
+      fromDate: new BN(yearAgoDate).toString(), // Date in seconds
     },
   });
   const balances = balancesResult.data?.balances || [];
@@ -46,17 +54,30 @@ function UserBalanceChart() {
 
   const chartPoints: IChartPoint[] = React.useMemo(
     () =>
-      balances.length
-        ? balances.map(balance => ({
-            date: parseInt(balance.id, 16) * 1000, // Date in milliseconds
-            value: new BN(balance.lBalance).div(decimalsToWei(decimals)).toNumber(),
-          }))
+      balances.length && decimals
+        ? balances
+            .map(balance => ({
+              date: parseInt(balance.date, 10) * 1000, // Date in milliseconds
+              value:
+                new BN(balance.lBalance)
+                  .muln(100)
+                  .div(decimalsToWei(decimals))
+                  .toNumber() / 100,
+            }))
+            .concat({
+              value:
+                (currentBalance
+                  ?.muln(100)
+                  .div(decimalsToWei(decimals))
+                  .toNumber() || 0) / 100,
+              date: Date.now(),
+            })
         : mockedPoints,
-    [balances, decimals],
+    [balances, decimals, currentBalance?.toString()],
   );
 
   return (
-    <Loading gqlResults={balancesResult} meta={[accountMeta, daiTokenInfoMeta]}>
+    <Loading gqlResults={balancesResult} meta={[accountMeta, daiTokenInfoMeta, currentBalanceMeta]}>
       <BalanceChart chartPoints={chartPoints} title="My balance" />
     </Loading>
   );

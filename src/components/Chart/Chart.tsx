@@ -23,17 +23,16 @@ function Chart(props: IProps) {
   const { points, onPeriodChange } = props;
   const classes = useStyles();
 
-  const initialPeriod = React.useMemo(() => getTicks(points, 'all').realPeriod, []);
-  const [period, setPeriod] = React.useState<Period>(initialPeriod);
+  const [period, setPeriod] = React.useState<Period>(() => getTicks(points, 'all').realPeriod);
 
-  const { ticks, realPeriod } = getTicks(points, period);
+  const { ticks, realPeriod } = React.useMemo(() => getTicks(points, period), [points, period]);
 
   const firstTick = R.head(ticks);
   const lastTick = R.last(ticks);
 
   React.useEffect(() => {
     onPeriodChange && onPeriodChange(firstTick, lastTick, period);
-  }, [...Object.values(firstTick), ...Object.values(firstTick), period, onPeriodChange]);
+  }, [...Object.values(firstTick), ...Object.values(lastTick), period, onPeriodChange]);
 
   if (!firstTick) {
     return null;

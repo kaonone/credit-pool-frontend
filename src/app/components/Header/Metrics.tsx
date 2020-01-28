@@ -3,13 +3,13 @@ import React from 'react';
 
 import { Typography, MetricsList, IMetric } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { PoolMetricsSubscription, PoolMetricsDayAgoSubscription } from 'generated/gql/pool';
+import { PoolMetricsSubscription, PoolMetricByDateSubscription } from 'generated/gql/pool';
 
 const tKeys = tKeysAll.app.components.header;
 
 interface MetricsProps {
   data: PoolMetricsSubscription;
-  dayAgoData: PoolMetricsDayAgoSubscription;
+  dayAgoData?: PoolMetricByDateSubscription;
 }
 
 export function Metrics({ data, dayAgoData }: MetricsProps) {
@@ -21,8 +21,8 @@ export function Metrics({ data, dayAgoData }: MetricsProps) {
 
   const { lBalance, lDebt } = data.pools[0];
 
-  const lBalanceDayAgo = (dayAgoData.pools[0] && dayAgoData.pools[0].lBalance) || lBalance;
-  const lDebtDayAgo = (dayAgoData.pools[0] && dayAgoData.pools[0].lDebt) || lDebt;
+  const lBalanceDayAgo = (dayAgoData?.pools[0] && dayAgoData.pools[0].lBalance) || lBalance;
+  const lDebtDayAgo = (dayAgoData?.pools[0] && dayAgoData.pools[0].lDebt) || lDebt;
 
   const metrics: IMetric[] = React.useMemo(
     () => [

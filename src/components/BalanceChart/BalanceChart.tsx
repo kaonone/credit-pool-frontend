@@ -67,11 +67,14 @@ const BalanceChart = (props: IProps) => {
             <Typography className={classes.balanceValue} variant="h4">
               {periodInfo && (
                 <>
-                  <FormattedBalance sum={periodInfo.lastPoint.value.toString()} token="dai" />{' '}
+                  <FormattedBalance
+                    sum={new BN(periodInfo.lastPoint.value).toString()}
+                    token="dai"
+                  />{' '}
                   <Growth
                     className={classes.growth}
-                    previous={new BN(periodInfo.firstPoint.value.toString())}
-                    current={new BN(periodInfo.lastPoint.value.toString())}
+                    previous={new BN(periodInfo.firstPoint.value)}
+                    current={new BN(periodInfo.lastPoint.value)}
                   />
                 </>
               )}
