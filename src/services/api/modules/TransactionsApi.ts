@@ -6,7 +6,7 @@ import {
   SubmittedTransaction,
   SubmittedTransactionType,
   ExtractSubmittedTransaction,
-} from './types';
+} from '../types';
 
 export class TransactionsApi {
   private submittedTransaction = new ReplaySubject<SubmittedTransaction>();

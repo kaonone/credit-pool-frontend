@@ -6,18 +6,18 @@ import { autobind } from 'core-decorators';
 
 import { memoize } from 'utils/decorators';
 import { createFundsModule } from 'generated/contracts';
-import { ETH_NETWORK_CONFIG, MIN_COLLATERAL_PERCENT_FOR_BORROWER } from 'env';
+import { ETH_NETWORK_CONFIG } from 'env';
 import { decimalsToWei } from 'utils/bn';
 
 import { TokensApi } from './TokensApi';
-import { Contracts, ModuleWeb3Manager } from './types';
+import { Contracts, Web3ManagerModule } from '../types';
 
 export class FundsModuleApi {
-  private fundsModule: Contracts['fundsModule'];
+  private readonlyContract: Contracts['fundsModule'];
   private txContract = new BehaviorSubject<null | Contracts['fundsModule']>(null);
 
-  constructor(private web3Manager: ModuleWeb3Manager, private tokensApi: TokensApi) {
-    this.fundsModule = createFundsModule(
+  constructor(private web3Manager: Web3ManagerModule, private tokensApi: TokensApi) {
+    this.readonlyContract = createFundsModule(
       this.web3Manager.web3,
       ETH_NETWORK_CONFIG.contracts.fundsModule,
     );
@@ -35,19 +35,8 @@ export class FundsModuleApi {
   @autobind
   public getPtkBalanceInDai$(address: string): Observable<BN> {
     return this.tokensApi
-      .getPtkBalance$(address)
+      .getBalance$('ptk', address)
       .pipe(switchMap(balance => this.convertPtkToDaiExit$(balance.toString())));
-  }
-
-  @memoize(R.identity)
-  @autobind
-  public getMaxAvailableLoanSizeInDai$(address: string): Observable<BN> {
-    return this.tokensApi.getBalance$('ptk', address).pipe(
-      switchMap(balance => {
-        return this.convertPtkToDaiExit$(balance.toString());
-      }),
-      map(item => item.muln(100).divn(MIN_COLLATERAL_PERCENT_FOR_BORROWER)),
-    );
   }
 
   @memoize(R.identity)
@@ -56,24 +45,6 @@ export class FundsModuleApi {
     return this.convertDaiToPtkExit$(daiValue).pipe(
       switchMap(ptkValue => this.getPtkToDaiExitInfo$(ptkValue.toString())),
     );
-  }
-
-  @memoize(R.identity)
-  @autobind
-  public convertDaiToPtkEnter$(value: string): Observable<BN> {
-    return this.fundsModule.methods.calculatePoolEnter({ lAmount: new BN(value) }, { Status: {} });
-  }
-
-  @memoize(R.identity)
-  @autobind
-  public convertDaiToPtkExit$(value: string): Observable<BN> {
-    return this.fundsModule.methods.calculatePoolExit({ lAmount: new BN(value) }, { Status: {} });
-  }
-
-  @memoize(R.identity)
-  @autobind
-  public convertPtkToDaiExit$(value: string): Observable<BN> {
-    return this.getPtkToDaiExitInfo$(value).pipe(map(({ total }) => total));
   }
 
   @memoize(R.identity)
@@ -97,8 +68,32 @@ export class FundsModuleApi {
 
   @memoize(R.identity)
   @autobind
+  public convertPtkToDaiExit$(value: string): Observable<BN> {
+    return this.getPtkToDaiExitInfo$(value).pipe(map(({ total }) => total));
+  }
+
+  @memoize(R.identity)
+  @autobind
+  public convertDaiToPtkEnter$(value: string): Observable<BN> {
+    return this.readonlyContract.methods.calculatePoolEnter(
+      { lAmount: new BN(value) },
+      { Status: {} },
+    );
+  }
+
+  @memoize(R.identity)
+  @autobind
+  public convertDaiToPtkExit$(value: string): Observable<BN> {
+    return this.readonlyContract.methods.calculatePoolExit(
+      { lAmount: new BN(value) },
+      { Status: {} },
+    );
+  }
+
+  @memoize(R.identity)
+  @autobind
   public getPtkToDaiExitInfo$(value: string): Observable<{ total: BN; user: BN; fee: BN }> {
-    return this.fundsModule.methods
+    return this.readonlyContract.methods
       .calculatePoolExitInverse({ pAmount: new BN(value) }, { Status: {} })
       .pipe(
         map(([total, user, fee]) => ({

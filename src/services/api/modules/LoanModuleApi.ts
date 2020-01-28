@@ -1,5 +1,5 @@
-import { Observable, BehaviorSubject } from 'rxjs';
-import { map, first as firstOperator } from 'rxjs/operators';
+import { Observable, BehaviorSubject, of } from 'rxjs';
+import { map, first as firstOperator, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
 import { autobind } from 'core-decorators';
@@ -7,9 +7,9 @@ import { autobind } from 'core-decorators';
 import { min } from 'utils/bn';
 import { memoize } from 'utils/decorators';
 import { createLoanModule } from 'generated/contracts';
-import { ETH_NETWORK_CONFIG } from 'env';
+import { ETH_NETWORK_CONFIG, MIN_COLLATERAL_PERCENT_FOR_BORROWER } from 'env';
 
-import { Contracts, ModuleWeb3Manager } from './types';
+import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
 import { TokensApi } from './TokensApi';
 import { FundsModuleApi } from './FundsModuleApi';
@@ -29,16 +29,16 @@ function first<T>(input: Observable<T>): Promise<T> {
 }
 
 export class LoanModuleApi {
-  private loanModule: Contracts['loanModule'];
+  private readonlyContract: Contracts['loanModule'];
   private txContract = new BehaviorSubject<null | Contracts['loanModule']>(null);
 
   constructor(
-    private web3Manager: ModuleWeb3Manager,
+    private web3Manager: Web3ManagerModule,
     private tokensApi: TokensApi,
     private transactionsApi: TransactionsApi,
     private fundsModuleApi: FundsModuleApi,
   ) {
-    this.loanModule = createLoanModule(
+    this.readonlyContract = createLoanModule(
       this.web3Manager.web3,
       ETH_NETWORK_CONFIG.contracts.loanModule,
     );
@@ -56,7 +56,7 @@ export class LoanModuleApi {
     // on the contract, apr is measured in fractions of a unit, so we need to shift the decimals by 2
     const toPercentMultiplierDivider = 2;
 
-    return this.loanModule.methods.INTEREST_MULTIPLIER().pipe(
+    return this.readonlyContract.methods.INTEREST_MULTIPLIER().pipe(
       map(multiplier => {
         // the multiplier is 10^n
         const decimals = multiplier.toString().length - 1 - toPercentMultiplierDivider;
@@ -105,7 +105,7 @@ export class LoanModuleApi {
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
     const minLCollateral = await first(
-      this.tokensApi.getMinLoanCollateralByDaiInDai$(sourceAmount.toString()),
+      this.getMinLoanCollateralByDaiInDai$(sourceAmount.toString()),
     );
     const pAmount = await first(
       this.fundsModuleApi.convertDaiToPtkExit$(minLCollateral.toString()),
@@ -135,6 +135,23 @@ export class LoanModuleApi {
   @memoize(R.identity)
   @autobind
   public getDuePaymentTimeout$(): Observable<BN> {
-    return this.loanModule.methods.DEBT_REPAY_DEADLINE_PERIOD();
+    return this.readonlyContract.methods.DEBT_REPAY_DEADLINE_PERIOD();
+  }
+
+  @memoize(R.identity)
+  @autobind
+  public getMaxAvailableLoanSizeInDai$(address: string): Observable<BN> {
+    return this.tokensApi.getBalance$('ptk', address).pipe(
+      switchMap(balance => {
+        return this.fundsModuleApi.convertPtkToDaiExit$(balance.toString());
+      }),
+      map(item => item.muln(100).divn(MIN_COLLATERAL_PERCENT_FOR_BORROWER)),
+    );
+  }
+
+  @memoize(R.identity)
+  // eslint-disable-next-line class-methods-use-this
+  public getMinLoanCollateralByDaiInDai$(ptkBalanceInDai: string): Observable<BN> {
+    return of(new BN(ptkBalanceInDai).muln(MIN_COLLATERAL_PERCENT_FOR_BORROWER).divn(100));
   }
 }

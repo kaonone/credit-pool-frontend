@@ -8,7 +8,9 @@ import { useSubscribable, ISubscriptionMeta } from './useSubscribable';
 
 export function useFormattedBalance(token: Token, value: string | BN): [string, ISubscriptionMeta] {
   const api = useApi();
-  const [tokenInfo, tokenInfoMeta] = useSubscribable(() => api.getTokenInfo$(token), [token]);
+  const [tokenInfo, tokenInfoMeta] = useSubscribable(() => api.tokens.getTokenInfo$(token), [
+    token,
+  ]);
 
   return [
     (tokenInfo &&

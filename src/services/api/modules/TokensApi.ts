@@ -1,4 +1,4 @@
-import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { map, first as firstOperator } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
@@ -7,9 +7,9 @@ import { autobind } from 'core-decorators';
 import { memoize } from 'utils/decorators';
 import { createErc20 } from 'generated/contracts';
 import { Token, ITokenInfo } from 'model/types';
-import { ETH_NETWORK_CONFIG, MIN_COLLATERAL_PERCENT_FOR_BORROWER } from 'env';
+import { ETH_NETWORK_CONFIG } from 'env';
 
-import { Contracts, ModuleWeb3Manager } from './types';
+import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
 
 function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNullable<T> {
@@ -30,7 +30,7 @@ export class TokensApi {
   private readonlyContracts: Pick<Contracts, 'dai' | 'ptk'>;
   private txContracts = new BehaviorSubject<null | Pick<Contracts, 'dai' | 'ptk'>>(null);
 
-  constructor(private web3Manager: ModuleWeb3Manager, private transactionsApi: TransactionsApi) {
+  constructor(private web3Manager: Web3ManagerModule, private transactionsApi: TransactionsApi) {
     this.readonlyContracts = {
       dai: createErc20(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.dai),
       ptk: createErc20(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.ptk),
@@ -131,33 +131,12 @@ export class TokensApi {
     );
   }
 
-  @memoize((token: 'ptk' | 'dai', address: string) => token + address)
+  @memoize((token: Token, address: string) => token + address)
   @autobind
-  public getBalance$(token: 'ptk' | 'dai', address: string): Observable<BN> {
-    return token === 'ptk' ? this.getPtkBalance$(address) : this.getDaiBalance$(address);
-  }
-
-  @memoize(R.identity)
-  @autobind
-  private getDaiBalance$(address: string): Observable<BN> {
-    return this.readonlyContracts.dai.methods.balanceOf(
+  public getBalance$(token: Token, address: string): Observable<BN> {
+    return this.readonlyContracts[token].methods.balanceOf(
       { _owner: address },
       { Transfer: [{ filter: { _from: address } }, { filter: { _to: address } }] },
     );
-  }
-
-  @memoize(R.identity)
-  @autobind
-  public getPtkBalance$(address: string): Observable<BN> {
-    return this.readonlyContracts.ptk.methods.balanceOf(
-      { _owner: address },
-      { Transfer: [{ filter: { _from: address } }, { filter: { _to: address } }] },
-    );
-  }
-
-  @memoize(R.identity)
-  // eslint-disable-next-line class-methods-use-this
-  public getMinLoanCollateralByDaiInDai$(value: string): Observable<BN> {
-    return of(new BN(value).muln(MIN_COLLATERAL_PERCENT_FOR_BORROWER).divn(100));
   }
 }

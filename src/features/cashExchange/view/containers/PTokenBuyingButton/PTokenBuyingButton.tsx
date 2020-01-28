@@ -16,7 +16,10 @@ function PTokenBuyingButton(props: IProps) {
   const { t } = useTranslate();
   const api = useApi();
 
-  const getMaxSourceValue = useCallback((account: string) => api.getBalance$('dai', account), []);
+  const getMaxSourceValue = useCallback(
+    (account: string) => api.tokens.getBalance$('dai', account),
+    [],
+  );
 
   return (
     <ModalButton
@@ -31,7 +34,7 @@ function PTokenBuyingButton(props: IProps) {
           sourcePlaceholder={t(tKeys.placeholder.getKey())}
           getMaxSourceValue={getMaxSourceValue}
           confirmMessageTKey={tKeys.confirmMessage.getKey()}
-          onExchangeRequest={api.buyPtk}
+          onExchangeRequest={api.liquidityModule.buyPtk}
           onCancel={closeModal}
         />
       )}

@@ -7,7 +7,7 @@ import { min } from 'utils/bn';
 import { ETH_NETWORK_CONFIG } from 'env';
 import { createLiquidityModule } from 'generated/contracts';
 
-import { Contracts, ModuleWeb3Manager } from './types';
+import { Contracts, Web3ManagerModule } from '../types';
 import { TokensApi } from './TokensApi';
 import { TransactionsApi } from './TransactionsApi';
 import { FundsModuleApi } from './FundsModuleApi';
@@ -30,7 +30,7 @@ export class LiquidityModuleApi {
   private txContract = new BehaviorSubject<null | Contracts['liquidityModule']>(null);
 
   constructor(
-    private web3Manager: ModuleWeb3Manager,
+    private web3Manager: Web3ManagerModule,
     private tokensApi: TokensApi,
     private transactionsApi: TransactionsApi,
     private fundsModuleApi: FundsModuleApi,
@@ -46,7 +46,7 @@ export class LiquidityModuleApi {
   }
 
   @autobind
-  public async sellPtk$(fromAddress: string, values: { sourceAmount: BN }): Promise<void> {
+  public async sellPtk(fromAddress: string, values: { sourceAmount: BN }): Promise<void> {
     const { sourceAmount } = values;
     const txLiquidityModule = getCurrentValueOrThrow(this.txContract);
 

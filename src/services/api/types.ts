@@ -47,7 +47,7 @@ export type ExtractSubmittedTransaction<T extends SubmittedTransactionType> = Ex
   IGenericSubmittedTransaction<T, any>
 >;
 
-export interface ModuleWeb3Manager {
+export interface Web3ManagerModule {
   web3: Web3;
   txWeb3: BehaviorSubject<Web3 | null>;
 }

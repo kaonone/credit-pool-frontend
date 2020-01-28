@@ -87,7 +87,7 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
   );
 
   const [sourceTokenInfo, sourceTokenInfoMeta] = useSubscribable(
-    () => api.getTokenInfo$('dai'),
+    () => api.tokens.getTokenInfo$('dai'),
     [],
   );
 

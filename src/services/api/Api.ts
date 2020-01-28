@@ -1,111 +1,35 @@
-import { Web3Manager } from './Web3Manager';
-import { FundsModuleApi } from './FundsModuleApi';
-import { LoanModuleApi } from './LoanModuleApi';
-import { LiquidityModuleApi } from './LiquidityModuleApi';
-import { TokensApi } from './TokensApi';
-import { TransactionsApi } from './TransactionsApi';
+import { Web3Manager } from './modules/Web3Manager';
+import { FundsModuleApi } from './modules/FundsModuleApi';
+import { LoanModuleApi } from './modules/LoanModuleApi';
+import { LiquidityModuleApi } from './modules/LiquidityModuleApi';
+import { TokensApi } from './modules/TokensApi';
+import { TransactionsApi } from './modules/TransactionsApi';
 
 export class Api {
   public web3Manager = new Web3Manager();
-  private transactionsApi: TransactionsApi;
-  private tokensApi: TokensApi;
-  private fundsModuleApi: FundsModuleApi;
-  private loanModuleApi: LoanModuleApi;
-  private liquidityModuleApi: LiquidityModuleApi;
+  public transactions: TransactionsApi;
+  public tokens: TokensApi;
+  public fundsModule: FundsModuleApi;
+  public loanModule: LoanModuleApi;
+  public liquidityModule: LiquidityModuleApi;
 
   constructor() {
-    this.transactionsApi = new TransactionsApi();
-    this.tokensApi = new TokensApi(this.web3Manager, this.transactionsApi);
-    this.fundsModuleApi = new FundsModuleApi(this.web3Manager, this.tokensApi);
+    this.transactions = new TransactionsApi();
+    this.tokens = new TokensApi(this.web3Manager, this.transactions);
+    this.fundsModule = new FundsModuleApi(this.web3Manager, this.tokens);
 
-    this.loanModuleApi = new LoanModuleApi(
+    this.loanModule = new LoanModuleApi(
       this.web3Manager,
-      this.tokensApi,
-      this.transactionsApi,
-      this.fundsModuleApi,
+      this.tokens,
+      this.transactions,
+      this.fundsModule,
     );
 
-    this.liquidityModuleApi = new LiquidityModuleApi(
+    this.liquidityModule = new LiquidityModuleApi(
       this.web3Manager,
-      this.tokensApi,
-      this.transactionsApi,
-      this.fundsModuleApi,
+      this.tokens,
+      this.transactions,
+      this.fundsModule,
     );
-  }
-
-  get getSubmittedTransaction$() {
-    return this.transactionsApi.getSubmittedTransaction$;
-  }
-
-  get transferDai$() {
-    return this.tokensApi.transferDai$;
-  }
-
-  get getTokenInfo$() {
-    return this.tokensApi.getTokenInfo$;
-  }
-
-  get getAprDecimals$() {
-    return this.loanModuleApi.getAprDecimals$;
-  }
-
-  get sellPtk$() {
-    return this.liquidityModuleApi.sellPtk$;
-  }
-
-  get buyPtk() {
-    return this.liquidityModuleApi.buyPtk;
-  }
-
-  get stakePtk() {
-    return this.loanModuleApi.stakePtk;
-  }
-
-  get createLoanProposal() {
-    return this.loanModuleApi.createLoanProposal;
-  }
-
-  get getBalance$() {
-    return this.tokensApi.getBalance$;
-  }
-
-  get getMaxAvailableLoanSizeInDai$() {
-    return this.fundsModuleApi.getMaxAvailableLoanSizeInDai$;
-  }
-
-  get getPtkBalanceInDai$() {
-    return this.fundsModuleApi.getPtkBalanceInDai$;
-  }
-
-  get convertDaiToPtkEnter$() {
-    return this.fundsModuleApi.convertDaiToPtkEnter$;
-  }
-
-  get convertDaiToPtkExit$() {
-    return this.fundsModuleApi.convertDaiToPtkExit$;
-  }
-
-  get convertPtkToDaiExit$() {
-    return this.fundsModuleApi.convertPtkToDaiExit$;
-  }
-
-  get convertPtkToDaiForLocked$() {
-    return this.fundsModuleApi.convertPtkToDaiForLocked$;
-  }
-
-  get getPtkToDaiExitInfo$() {
-    return this.fundsModuleApi.getPtkToDaiExitInfo$;
-  }
-
-  get getDaiToDaiExitInfo$() {
-    return this.fundsModuleApi.getDaiToDaiExitInfo$;
-  }
-
-  get getMinLoanCollateralByDaiInDai$() {
-    return this.tokensApi.getMinLoanCollateralByDaiInDai$;
-  }
-
-  get getDuePaymentTimeout$() {
-    return this.loanModuleApi.getDuePaymentTimeout$;
   }
 }

@@ -25,13 +25,13 @@ function StakeButton(props: IProps) {
 
   const getMaxSourceValue = useCallback(
     (account: string) =>
-      api.getPtkBalanceInDai$(account).pipe(map(balance => min(balance, maxStakeSize))),
+      api.fundsModule.getPtkBalanceInDai$(account).pipe(map(balance => min(balance, maxStakeSize))),
     [maxStakeSize],
   );
 
   const onStakeRequest = useCallback(
     (address: string, values: { sourceAmount: BN }): Promise<void> => {
-      return api.stakePtk(address, { borrower, proposalId, ...values });
+      return api.loanModule.stakePtk(address, { borrower, proposalId, ...values });
     },
     [borrower, proposalId],
   );
