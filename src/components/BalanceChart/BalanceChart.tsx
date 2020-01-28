@@ -1,138 +1,92 @@
 import * as React from 'react';
-import * as R from 'ramda';
+import BN from 'bn.js';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import { LineChart, XAxis, YAxis, CartesianGrid, Line, ResponsiveContainer } from 'recharts';
+import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 
-import { makeFormatDateByPeriod, getTicks } from './helpers';
+import { Chart, IPoint } from 'components/Chart/Chart';
+import { Growth } from 'components/Growth/Growth';
+import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
+
 import { useStyles } from './BalanceChart.style';
 
-export type Period = '24h' | '1w' | '1m' | '6m' | 'all';
+interface IProps {
+  title: string;
+  membersLength?: number;
+  chartPoints: IChartPoint[];
+}
 
-export interface IPoint {
+export interface IChartPoint {
   date: number;
   value: number;
 }
 
-interface IProps {
-  points: IPoint[];
+interface IPeriodInfo {
+  firstPoint: IPoint;
+  lastPoint: IPoint;
+  period: string;
 }
 
-function BalanceChart(props: IProps) {
-  const { points } = props;
+const BalanceChart = (props: IProps) => {
+  const { title, membersLength, chartPoints } = props;
   const classes = useStyles();
+  const [periodInfo, setPeriodInfo] = React.useState<IPeriodInfo | null>(null);
 
-  const initialPeriod = React.useMemo(() => getTicks(points, 'all').realPeriod, []);
-  const [period, setPeriod] = React.useState<Period>(initialPeriod);
-
-  const { ticks, realPeriod } = getTicks(points, period);
-
-  const firstTick = R.head(ticks);
-
-  if (!firstTick) {
-    return null;
-  }
-
-  const formatTick = React.useMemo(() => makeFormatDateByPeriod(realPeriod, firstTick.date), [
-    realPeriod,
-    firstTick.date,
-  ]);
-
-  const renderTick = React.useCallback(
-    ({ x, y, payload, index, visibleTicksCount }) => {
-      const display =
-        visibleTicksCount > 12 && (realPeriod === '24h' || realPeriod === '1m') && index % 2 !== 0
-          ? 'none'
-          : 'block';
-
-      return (
-        <g transform={`translate(${x},${y})`}>
-          <text
-            x={0}
-            y={0}
-            dy={16}
-            textAnchor="middle"
-            className={classes.tick}
-            style={{ display }}
-          >
-            {formatTick(payload.value)}
-          </text>
-        </g>
-      );
+  const handleChartPeriodChange = React.useCallback(
+    (firstPoint: IPoint, lastPoint: IPoint, period: string) => {
+      setPeriodInfo({
+        firstPoint,
+        lastPoint,
+        period,
+      });
     },
-    [formatTick],
+    [],
   );
 
   return (
-    <div className={classes.root}>
-      <div className={classes.graphic}>
-        <ResponsiveContainer>
-          <LineChart data={ticks} margin={{ left: 18, right: 18 }}>
-            <XAxis
-              dataKey="date"
-              type="number"
-              axisLine={false}
-              interval={0}
-              domain={[ticks[0].date, ticks[ticks.length - 1].date]}
-              allowDataOverflow
-              ticks={R.pluck('date', ticks)}
-              tickSize={0}
-              tick={renderTick}
-            />
-            <YAxis padding={{ top: 30, bottom: 1 }} hide />
-            <CartesianGrid stroke="#EAE9ED" horizontal={false} />
-            <Line
-              dataKey="value"
-              stroke="#613AAF"
-              strokeWidth={2}
-              dot={false}
-              connectNulls
-              isAnimationActive={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-      <PeriodSwitch period={period} onSelect={setPeriod} />
-    </div>
-  );
-}
-
-interface IPeriodSwitchProps {
-  period: Period;
-  onSelect(period: Period): void;
-}
-
-const periods: Period[] = ['24h', '1w', '1m', '6m', 'all'];
-
-function PeriodSwitch(props: IPeriodSwitchProps) {
-  const { period: selectedPeriod, onSelect } = props;
-  const classes = useStyles();
-
-  const selectPeriod = React.useCallback(
-    (period: Period) => () => {
-      onSelect(period);
-    },
-    [onSelect],
-  );
-
-  return (
-    <Grid container wrap="nowrap" spacing={2} justify="space-between">
-      {periods.map(period => (
-        <Grid item xs key={period}>
-          <Button
-            variant="contained"
-            color={period === selectedPeriod ? 'primary' : undefined}
-            onClick={selectPeriod(period)}
-            className={classes.switchButton}
-            size="small"
-            fullWidth
-          >
-            {period}
-          </Button>
+    <Card className={classes.root}>
+      <CardContent>
+        <Grid container spacing={3} alignItems="center">
+          <Grid item xs={6}>
+            <Typography className={classes.title} variant="subtitle2">
+              {title}
+            </Typography>
+          </Grid>
+          {(membersLength && (
+            <Grid item xs={6}>
+              <Grid container wrap="nowrap" direction="row-reverse">
+                <div className={classes.membersCount}>
+                  <Typography variant="subtitle2">{membersLength}</Typography>
+                </div>
+              </Grid>
+            </Grid>
+          )) ||
+            null}
+          <Grid item xs={12}>
+            <Typography className={classes.balanceValue} variant="h4">
+              {periodInfo && (
+                <>
+                  <FormattedBalance
+                    sum={new BN(periodInfo.lastPoint.value).toString()}
+                    token="dai"
+                  />{' '}
+                  <Growth
+                    className={classes.growth}
+                    previous={new BN(periodInfo.firstPoint.value)}
+                    current={new BN(periodInfo.lastPoint.value)}
+                  />
+                </>
+              )}
+            </Typography>
+          </Grid>
         </Grid>
-      ))}
-    </Grid>
+        <div className={classes.graphic}>
+          <Chart points={chartPoints} onPeriodChange={handleChartPeriodChange} />
+        </div>
+      </CardContent>
+    </Card>
   );
-}
+};
 
 export { BalanceChart };
