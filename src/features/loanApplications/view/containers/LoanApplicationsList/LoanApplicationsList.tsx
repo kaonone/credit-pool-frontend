@@ -27,16 +27,18 @@ function LoanApplicationsList() {
 
   const activities: Activity[] = React.useMemo(
     () =>
-      debts?.map<Activity>(debt => ({
-        lendValue: debt.total,
-        borrower: debt.borrower,
-        aprValue: debt.apr,
-        stakedValue: debt.staked,
-        expansionPanelDetails:
-          'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
-        status: debt.status,
-        proposalId: debt.proposal_id,
-      })) || [],
+      debts
+        ?.map<Activity>(debt => ({
+          lendValue: debt.total,
+          borrower: debt.borrower,
+          aprValue: debt.apr,
+          stakedValue: debt.staked,
+          expansionPanelDetails:
+            'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
+          status: debt.status,
+          proposalId: debt.proposal_id,
+        }))
+        .filter(debt => debt.status === 'PROPOSED') || [],
     [debts],
   );
 

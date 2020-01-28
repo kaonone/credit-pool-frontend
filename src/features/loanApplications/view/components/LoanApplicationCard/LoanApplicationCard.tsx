@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import BN from 'bn.js';
 
 import { Status } from 'generated/gql/pool';
@@ -8,7 +7,7 @@ import { useApi } from 'services/api';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { StakeButton } from 'features/cashExchange';
 import { CashMetric, Metric, ShortAddress, ActivitiesCard, Loading } from 'components';
-import { LendIcon, Checked, ContainedCross } from 'components/icons';
+import { LendIcon } from 'components/icons';
 import { useSubscribable } from 'utils/react';
 import { formatBalance } from 'utils/format';
 
@@ -44,8 +43,6 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
   const api = useApi();
   const [aprDecimals, aprDecimalsMeta] = useSubscribable(() => api.getAprDecimals$(), [], 0);
 
-  const isOver = status !== 'PROPOSED';
-
   const metricsList = React.useMemo(
     () => [
       <CashMetric
@@ -78,39 +75,26 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
   const maxStakeSize = new BN(lendValue).sub(new BN(stakedValue)).toString();
 
   const asideContent = React.useMemo(
-    () =>
-      isOver ? (
-        <Grid container spacing={3} justify="center" direction="column">
-          <Grid item>
-            <Grid container wrap="nowrap" alignItems="center" justify="center">
-              {(status === 'APPROVED' || status === 'PARTIALLY_REPAYED' || status === 'CLOSED') && (
-                <Checked className={classes.votingForIcon} />
-              )}
-              {status === 'DECLINED' && <ContainedCross className={classes.votingAgainstIcon} />}
-              <Typography variant="h6">{t(tKeys.status[status].getKey())}</Typography>
-            </Grid>
-          </Grid>
+    () => (
+      <Grid container spacing={2} justify="center" direction="column">
+        <Grid item>
+          <Progress progressInPercents={progressInPercents} />
         </Grid>
-      ) : (
-        <Grid container spacing={2} justify="center" direction="column">
+        {proposalId && (
           <Grid item>
-            <Progress progressInPercents={progressInPercents} />
+            <StakeButton
+              maxStakeSize={maxStakeSize}
+              proposalId={proposalId}
+              borrower={borrower}
+              variant="contained"
+              color="primary"
+              fullWidth
+            />
           </Grid>
-          {proposalId && (
-            <Grid item>
-              <StakeButton
-                maxStakeSize={maxStakeSize}
-                proposalId={proposalId}
-                borrower={borrower}
-                variant="contained"
-                color="primary"
-                fullWidth
-              />
-            </Grid>
-          )}
-        </Grid>
-      ),
-    [t, isOver, status, progressInPercents],
+        )}
+      </Grid>
+    ),
+    [t, status, progressInPercents],
   );
 
   return (
