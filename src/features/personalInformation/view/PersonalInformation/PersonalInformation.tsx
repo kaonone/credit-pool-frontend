@@ -104,14 +104,9 @@ function PersonalInformation() {
             </Typography>
           </Box>
           <Grid container spacing={2} className={classes.metrics}>
-            {metrics.map(({ title, value, previousValue, token }, index) => (
+            {metrics.map((metric, index) => (
               <Grid key={index} item xs={12}>
-                <CashMetric
-                  title={title}
-                  value={value}
-                  previousValue={previousValue}
-                  token={token}
-                />
+                <CashMetric {...metric} />
               </Grid>
             ))}
             <Grid item xs={12}>

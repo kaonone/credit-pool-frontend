@@ -1,5 +1,5 @@
 subscription PoolMetricsDayAgo($date: ID!) @pool {
-  pools(orderBy: id, where: {id_gt: $date}) {
+  pools(first: 1, orderBy: id, orderDirection: desc, where: {id_lt: $date}) {
     lBalance
     lDebt
   }

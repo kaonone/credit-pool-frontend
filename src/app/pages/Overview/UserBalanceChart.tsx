@@ -6,6 +6,7 @@ import { BalanceChart, IChartPoint, Loading } from 'components';
 import { useMyUserBalancesSubscription } from 'generated/gql/pool';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
+import { decimalsToWei } from 'utils/bn';
 
 function UserBalanceChart() {
   const api = useApi();
@@ -40,18 +41,18 @@ function UserBalanceChart() {
       },
       { date: Date.now(), value: 0 }, // Date in milliseconds
     ],
-    [Date],
+    [],
   );
 
   const chartPoints: IChartPoint[] = React.useMemo(
     () =>
-      (balances.length &&
-        balances.map(balance => ({
-          date: parseInt(balance.id, 16) * 1000, // Date in milliseconds
-          value: new BN(balance.lBalance).div(new BN(10).pow(new BN(decimals))).toNumber(),
-        }))) ||
-      mockedPoints,
-    [balances, mockedPoints],
+      balances.length
+        ? balances.map(balance => ({
+            date: parseInt(balance.id, 16) * 1000, // Date in milliseconds
+            value: new BN(balance.lBalance).div(decimalsToWei(decimals)).toNumber(),
+          }))
+        : mockedPoints,
+    [balances, decimals],
   );
 
   return (

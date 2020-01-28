@@ -7,6 +7,7 @@ import { BalanceChart, IChartPoint, Loading } from 'components';
 import { usePoolBalancesQuery } from 'generated/gql/pool';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
+import { decimalsToWei } from 'utils/bn';
 
 function PoolBalanceChart() {
   const api = useApi();
@@ -27,7 +28,15 @@ function PoolBalanceChart() {
 
   const mockedPoints = React.useMemo(
     () => [
-      { date: Date.now() - 1, value: 0 },
+      {
+        date:
+          Date.now() -
+          moment()
+            .subtract(1, 'days')
+            .unix() *
+            1000, // Date in milliseconds
+        value: 0,
+      },
       { date: Date.now(), value: 0 }, // Date in milliseconds
     ],
     [],
@@ -35,13 +44,13 @@ function PoolBalanceChart() {
 
   const chartPoints: IChartPoint[] = React.useMemo(
     () =>
-      (pools.length &&
-        pools.map(pool => ({
-          date: parseInt(pool.id, 16) * 1000, // Date in milliseconds
-          value: new BN(pool.lBalance).div(new BN(10).pow(new BN(decimals))).toNumber(),
-        }))) ||
-      mockedPoints,
-    [pools],
+      pools.length
+        ? pools.map(pool => ({
+            date: parseInt(pool.id, 16) * 1000, // Date in milliseconds
+            value: new BN(pool.lBalance).div(decimalsToWei(decimals)).toNumber(),
+          }))
+        : mockedPoints,
+    [pools, decimals],
   );
 
   const lastPool = R.last(pools);
