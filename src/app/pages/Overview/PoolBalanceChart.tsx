@@ -12,7 +12,10 @@ import { decimalsToWei } from 'utils/bn';
 function PoolBalanceChart() {
   const api = useApi();
 
-  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(() => api.getTokenInfo$('dai'), []);
+  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
+    () => api.tokens.getTokenInfo$('dai'),
+    [],
+  );
   const decimals = daiTokenInfo?.decimals || 0;
 
   const yearAgoDate = React.useMemo(

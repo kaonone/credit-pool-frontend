@@ -13,10 +13,14 @@ function UserBalanceChart() {
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
   const [currentBalance, currentBalanceMeta] = useSubscribable(
-    () => api.getPtkBalanceInDai$(account || '0x0000000000000000000000000000000000000000'),
+    () =>
+      api.fundsModule.getPtkBalanceInDai$(account || '0x0000000000000000000000000000000000000000'),
     [account],
   );
-  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(() => api.getTokenInfo$('dai'), []);
+  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
+    () => api.tokens.getTokenInfo$('dai'),
+    [],
+  );
   const decimals = daiTokenInfo?.decimals;
 
   const yearAgoDate = React.useMemo(

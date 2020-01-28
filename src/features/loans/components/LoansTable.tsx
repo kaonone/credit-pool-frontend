@@ -25,10 +25,14 @@ export function LoansTable({ list, withEarn, paginationView }: Props) {
 
   const api = useApi();
 
-  const [aprDecimals, aprDecimalsMeta] = useSubscribable(() => api.getAprDecimals$(), [], 0);
+  const [aprDecimals, aprDecimalsMeta] = useSubscribable(
+    () => api.loanModule.getAprDecimals$(),
+    [],
+    0,
+  );
 
   const [duePaymentTimeout, duePaymentTimeoutMeta] = useSubscribable(
-    () => api.getDuePaymentTimeout$(),
+    () => api.loanModule.getDuePaymentTimeout$(),
     [],
     new BN(0),
   );

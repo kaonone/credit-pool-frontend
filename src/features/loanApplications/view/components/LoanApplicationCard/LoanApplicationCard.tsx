@@ -42,7 +42,11 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
   const { t } = useTranslate();
 
   const api = useApi();
-  const [aprDecimals, aprDecimalsMeta] = useSubscribable(() => api.getAprDecimals$(), [], 0);
+  const [aprDecimals, aprDecimalsMeta] = useSubscribable(
+    () => api.loanModule.getAprDecimals$(),
+    [],
+    0,
+  );
 
   const isOver = status !== 'PROPOSED';
 

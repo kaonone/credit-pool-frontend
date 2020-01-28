@@ -37,11 +37,14 @@ function GetLoanButton(props: IProps) {
   const api = useApi();
 
   const getMaxSourceValue = useCallback(
-    (account: string) => api.getMaxAvailableLoanSizeInDai$(account),
+    (account: string) => api.loanModule.getMaxAvailableLoanSizeInDai$(account),
     [],
   );
 
-  const [percentDecimals, percentDecimalsMeta] = useSubscribable(() => api.getAprDecimals$(), []);
+  const [percentDecimals, percentDecimalsMeta] = useSubscribable(
+    () => api.loanModule.getAprDecimals$(),
+    [],
+  );
 
   const validatePercent = useMemo(() => {
     return composeValidators(
@@ -60,13 +63,13 @@ function GetLoanButton(props: IProps) {
     [],
   );
 
-  const [daiTokenInfo] = useSubscribable(() => api.getTokenInfo$('dai'), []);
+  const [daiTokenInfo] = useSubscribable(() => api.tokens.getTokenInfo$('dai'), []);
 
   const getConfirmMessage = useCallback(
     (values: (ISubmittedFormData & IExtraFormData) | null) => {
       const rawSourceAmount = values?.sourceAmount?.toString() || '0';
 
-      return api.getMinLoanCollateralByDaiInDai$(rawSourceAmount).pipe(
+      return api.loanModule.getMinLoanCollateralByDaiInDai$(rawSourceAmount).pipe(
         map(rawCollateral => {
           const collateral =
             (daiTokenInfo &&
@@ -143,7 +146,7 @@ function GetLoanButton(props: IProps) {
           title={t(tKeys.formTitle.getKey())}
           sourcePlaceholder={t(tKeys.amountPlaceholder.getKey())}
           getMaxSourceValue={getMaxSourceValue}
-          onExchangeRequest={api.createLoanProposal}
+          onExchangeRequest={api.loanModule.createLoanProposal}
           onCancel={closeModal}
           confirmMessageTKey={getConfirmMessage}
           additionalFields={additionalFields}

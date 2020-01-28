@@ -11,7 +11,7 @@ function TransactionsNotifications() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const api = useApi();
   const [transaction] = useSubscribable<SubmittedTransaction>(
-    () => api.getSubmittedTransaction$(),
+    () => api.transactions.getSubmittedTransaction$(),
     [],
   );
 
