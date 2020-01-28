@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
+import moment from 'moment';
 
 import { Back, InfoIcon } from 'components/icons';
 import { Grid, IconButton, Typography, Tooltip, Loading } from 'components';
 import { PTokenBuyingButton, PTokenSellingButton } from 'features/cashExchange';
 import { AuthButton } from 'features/auth';
-import { usePoolMetricsSubscription } from 'generated/gql/pool';
+import { usePoolMetricsSubscription, usePoolMetricByDateSubscription } from 'generated/gql/pool';
 
 import { useStyles } from './Header.style';
 import { Metrics } from './Metrics';
@@ -22,6 +23,16 @@ function HeaderComponent(props: IProps) {
   const classes = useStyles();
 
   const poolMetricsGqlResult = usePoolMetricsSubscription();
+
+  const lastDay = moment()
+    .subtract(1, 'day')
+    .unix(); // Date in seconds
+
+  const poolMetricsDayAgoGqlResult = usePoolMetricByDateSubscription({
+    variables: {
+      date: `0x${lastDay.toString(16)}`, // Date in seconds
+    },
+  });
 
   return (
     <div className={classes.root}>
@@ -55,8 +66,13 @@ function HeaderComponent(props: IProps) {
         <Grid item xs={12}>
           <Grid container alignItems="center" justify="space-between" spacing={2}>
             <Grid item>
-              <Loading gqlResults={poolMetricsGqlResult}>
-                {poolMetricsGqlResult.data && <Metrics data={poolMetricsGqlResult.data} />}
+              <Loading gqlResults={[poolMetricsGqlResult]}>
+                {poolMetricsGqlResult.data ? (
+                  <Metrics
+                    data={poolMetricsGqlResult.data}
+                    dayAgoData={poolMetricsDayAgoGqlResult.data}
+                  />
+                ) : null}
               </Loading>
             </Grid>
             <Grid item>

@@ -14,6 +14,8 @@ export { default as Tabs } from '@material-ui/core/Tabs';
 export { default as Tab } from '@material-ui/core/Tab';
 export { default as Badge } from '@material-ui/core/Badge';
 export { default as Tooltip } from '@material-ui/core/Tooltip';
+export { default as Card } from '@material-ui/core/Card';
+export { default as CardContent } from '@material-ui/core/CardContent';
 
 export * from './ErrorBoundary';
 export * from './Hint/Hint';
@@ -27,6 +29,7 @@ export * from './Table/Table';
 export * from './ShortAddress/ShortAddress';
 export * from './Pagination/Pagination';
 export * from './Chart/Chart';
+export * from './BalanceChart/BalanceChart';
 export * from './Metric/Metric';
 export * from './CashMetric/CashMetric';
 export * from './ExpansionPanel/ExpansionPanel';
