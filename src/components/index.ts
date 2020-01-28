@@ -30,3 +30,4 @@ export * from './Chart/Chart';
 export * from './BalanceChart/BalanceChart';
 export * from './Metric/Metric';
 export * from './CashMetric/CashMetric';
+export * from './ExpansionPanel/ExpansionPanel';

@@ -1,1 +1,3 @@
-export { LoansList } from './view/LoansList/LoansList';
+export { MyGuarantees } from './containers/MyGuarantees';
+export { MyLoans } from './containers/MyLoans';
+export { Liquidations } from './containers/Liquidations';

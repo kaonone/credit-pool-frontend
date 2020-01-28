@@ -5,4 +5,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
     paddingRight: theme.spacing(2),
     fontWeight: 500,
   },
+
+  details: {
+    display: 'block',
+    padding: 0,
+  },
 }));
