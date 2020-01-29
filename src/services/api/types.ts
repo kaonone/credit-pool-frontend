@@ -1,5 +1,7 @@
 import PromiEvent from 'web3/promiEvent';
 import BN from 'bn.js';
+import Web3 from 'web3';
+import { BehaviorSubject } from 'rxjs';
 
 import {
   createErc20,
@@ -44,3 +46,8 @@ export type ExtractSubmittedTransaction<T extends SubmittedTransactionType> = Ex
   SubmittedTransaction,
   IGenericSubmittedTransaction<T, any>
 >;
+
+export interface Web3ManagerModule {
+  web3: Web3;
+  txWeb3: BehaviorSubject<Web3 | null>;
+}

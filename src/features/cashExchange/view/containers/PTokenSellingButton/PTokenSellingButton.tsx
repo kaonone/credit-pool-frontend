@@ -22,14 +22,17 @@ function PTokenSellingButton(props: IProps) {
   const { t } = useTranslate();
   const api = useApi();
 
-  const getMaxSourceValue = useCallback((account: string) => api.getPtkBalanceInDai$(account), []);
+  const getMaxSourceValue = useCallback(
+    (account: string) => api.fundsModule.getPtkBalanceInDai$(account),
+    [],
+  );
 
-  const [daiTokenInfo] = useSubscribable(() => api.getTokenInfo$('dai'), []);
+  const [daiTokenInfo] = useSubscribable(() => api.tokens.getTokenInfo$('dai'), []);
 
   const confirmMessageTKey = useCallback(
     (values: ISubmittedFormData | null) => {
       const rawSourceAmount = values?.sourceAmount?.toString() || '0';
-      return api.getDaiToDaiExitInfo$(rawSourceAmount).pipe(
+      return api.fundsModule.getDaiToDaiExitInfo$(rawSourceAmount).pipe(
         map(({ total, user, fee }) => {
           const sourceAmount =
             (daiTokenInfo &&
@@ -78,7 +81,7 @@ function PTokenSellingButton(props: IProps) {
           sourcePlaceholder={t(tKeys.placeholder.getKey())}
           getMaxSourceValue={getMaxSourceValue}
           confirmMessageTKey={confirmMessageTKey}
-          onExchangeRequest={api.sellPtk$}
+          onExchangeRequest={api.liquidityModule.sellPtk}
           onCancel={closeModal}
         />
       )}

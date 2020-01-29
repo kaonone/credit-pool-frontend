@@ -12,7 +12,7 @@ import { LoansTable } from '../components/LoansTable';
 export function Liquidations() {
   const api = useApi();
   const [dueTimeout, dueTimeoutMeta] = useSubscribable(
-    () => api.getDuePaymentTimeout$(),
+    () => api.loanModule.getDuePaymentTimeout$(),
     [],
     new BN(0),
   );

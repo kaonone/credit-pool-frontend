@@ -40,14 +40,17 @@ function PersonalInformation() {
 
   const balanceInPtk = myUser?.pBalance || '0';
   const [availableBalance, availableBalanceMeta] = useSubscribable(
-    () => (new BN(balanceInPtk).isZero() ? of(new BN(0)) : api.convertPtkToDaiExit$(balanceInPtk)),
+    () =>
+      new BN(balanceInPtk).isZero()
+        ? of(new BN(0))
+        : api.fundsModule.convertPtkToDaiExit$(balanceInPtk),
     [balanceInPtk],
     new BN(0),
   );
 
   const lockedInPtk = myUser?.locked || '0';
   const [locked, lockedMeta] = useSubscribable(
-    () => api.convertPtkToDaiForLocked$(lockedInPtk),
+    () => api.fundsModule.convertPtkToDaiForLocked$(lockedInPtk),
     [lockedInPtk],
     new BN(0),
   );
