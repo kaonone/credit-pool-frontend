@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Grid, Hint, Typography, Box, Loading } from 'components';
-import { useDebtsQuery, Status } from 'generated/gql/pool';
+import { useDebtProposalsQuery, Status } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useSubgraphPagination } from 'utils/react';
 
@@ -22,7 +22,7 @@ interface Activity {
 function LoanApplicationsList() {
   const { t } = useTranslate();
 
-  const { result, paginationView } = useSubgraphPagination(useDebtsQuery, {});
+  const { result, paginationView } = useSubgraphPagination(useDebtProposalsQuery, {});
   const debts = result.data?.debts;
 
   const activities: Activity[] = React.useMemo(
