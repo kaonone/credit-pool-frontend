@@ -72,16 +72,8 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
   );
 
   const rawProgressInPercents = new BN(stakedValue).muln(10000).div(new BN(lendValue));
-
-  const formattedProgressInPercents = Number(
-    formatBalance({
-      amountInBaseUnits: rawProgressInPercents,
-      baseDecimals: 2,
-    }),
-  );
-
-  const isCollateralReceived = formattedProgressInPercents >= 100;
-  const progressInPercents = isCollateralReceived ? 100 : formattedProgressInPercents;
+  const progressInPercents = Math.min(100, rawProgressInPercents.toNumber() / 100);
+  const isCollateralReceived = progressInPercents === 100;
 
   const maxStakeSize = new BN(lendValue).sub(new BN(stakedValue)).toString();
 
