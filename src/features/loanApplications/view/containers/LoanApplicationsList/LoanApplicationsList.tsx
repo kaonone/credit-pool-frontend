@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Grid, Hint, Typography, Box, Loading } from 'components';
-import { useDebtsQuery, Status } from 'generated/gql/pool';
+import { useDebtProposalsQuery, Status } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useSubgraphPagination } from 'utils/react';
 
@@ -22,23 +22,21 @@ interface Activity {
 function LoanApplicationsList() {
   const { t } = useTranslate();
 
-  const { result, paginationView } = useSubgraphPagination(useDebtsQuery, {});
+  const { result, paginationView } = useSubgraphPagination(useDebtProposalsQuery, {});
   const debts = result.data?.debts;
 
   const activities: Activity[] = React.useMemo(
     () =>
-      debts
-        ?.map<Activity>(debt => ({
-          lendValue: debt.total,
-          borrower: debt.borrower,
-          aprValue: debt.apr,
-          stakedValue: debt.staked,
-          expansionPanelDetails:
-            'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
-          status: debt.status,
-          proposalId: debt.proposal_id,
-        }))
-        .filter(debt => debt.status === 'PROPOSED') || [],
+      debts?.map<Activity>(debt => ({
+        lendValue: debt.total,
+        borrower: debt.borrower,
+        aprValue: debt.apr,
+        stakedValue: debt.staked,
+        expansionPanelDetails:
+          'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
+        status: debt.status,
+        proposalId: debt.proposal_id,
+      })) || [],
     [debts],
   );
 

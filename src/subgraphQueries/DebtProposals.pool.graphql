@@ -1,5 +1,5 @@
-query Debts($first: Int!, $skip: Int!) {
-  debts(first: $first, skip: $skip) {
+query DebtProposals($first: Int!, $skip: Int!) {
+  debts(first: $first, skip: $skip, where: {status: PROPOSED}) {
     id
     debt_id
     proposal_id
