@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { GetProps } from '_helpers';
 
 import { CommunicationState } from 'utils/react';
 import {
@@ -78,7 +79,12 @@ export function AuthModal(props: AuthModalProps) {
           )}
           {wallets.map((type, index) => (
             <Grid item xs key={index}>
-              <ConnectButton connect={connect} type={type} key={type} />
+              <ConnectButton
+                connect={connect}
+                type={type}
+                key={type}
+                disabled={type === connectedWallet}
+              />
             </Grid>
           ))}
         </Grid>
@@ -87,16 +93,18 @@ export function AuthModal(props: AuthModalProps) {
   );
 }
 
-interface ConnectButtonProps {
+type ButtonProps = Pick<GetProps<typeof Button>, 'disabled'>;
+
+interface ConnectButtonProps extends ButtonProps {
   connect(wallet: WalletType): void;
   type: WalletType;
 }
 
-function ConnectButton({ type, connect }: ConnectButtonProps) {
+function ConnectButton({ type, connect, disabled }: ConnectButtonProps) {
   const handleClick = React.useCallback(() => connect(type), [type]);
 
   return (
-    <Button fullWidth color="primary" variant="contained" onClick={handleClick}>
+    <Button fullWidth color="primary" variant="contained" onClick={handleClick} disabled={disabled}>
       <Box component="span" whiteSpace="nowrap">
         {type}
       </Box>
