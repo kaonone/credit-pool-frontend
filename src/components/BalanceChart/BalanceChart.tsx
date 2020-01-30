@@ -74,8 +74,8 @@ const BalanceChart = (props: IProps) => {
                   />{' '}
                   <Growth
                     className={classes.growth}
-                    previous={new BN(periodInfo.firstPoint.value)}
-                    current={new BN(periodInfo.lastPoint.value)}
+                    previous={new BN(periodInfo.firstPoint.value * 100)}
+                    current={new BN(periodInfo.lastPoint.value * 100)}
                   />
                 </>
               )}
