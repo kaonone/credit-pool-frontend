@@ -4,7 +4,7 @@ import { bnToBn } from 'utils/bn/bnToBn';
 
 import { formatDecimal } from './formatDecimal';
 
-interface IformatBalanceOptions {
+interface IFormatBalanceOptions {
   amountInBaseUnits: string | BN;
   baseDecimals: number;
   tokenSymbol?: string;
@@ -14,7 +14,7 @@ export function formatBalance({
   amountInBaseUnits,
   baseDecimals,
   tokenSymbol = '',
-}: IformatBalanceOptions): string {
+}: IFormatBalanceOptions): string {
   let balanceString = bnToBn(amountInBaseUnits).toString();
 
   if (balanceString.length === 0 || balanceString === '0') {

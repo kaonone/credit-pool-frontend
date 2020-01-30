@@ -5,7 +5,7 @@ import { bnToBn } from 'utils/bn/bnToBn';
 import { SI, calcSi, getSiMidIndex } from './si';
 import { formatDecimal } from './formatDecimal';
 
-interface IformatBalanceSIOptions {
+interface IFormatBalanceSIOptions {
   amountInBaseUnits: string | BN;
   baseDecimals: number;
   tokenSymbol?: string;
@@ -15,7 +15,7 @@ export function formatBalanceSI({
   amountInBaseUnits,
   baseDecimals,
   tokenSymbol = '',
-}: IformatBalanceSIOptions): string {
+}: IFormatBalanceSIOptions): string {
   let balanceString = bnToBn(amountInBaseUnits).toString();
 
   if (balanceString.length === 0 || balanceString === '0') {
