@@ -5,12 +5,16 @@ import * as R from 'ramda';
 
 import { BalanceChart, IChartPoint, Loading } from 'components';
 import { usePoolBalancesSubscription } from 'generated/gql/pool';
+import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 import { decimalsToWei } from 'utils/bn';
 
+const tKeys = tKeysAll.app.pages.overview;
+
 function PoolBalanceChart() {
   const api = useApi();
+  const { t } = useTranslate();
 
   const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
     () => api.tokens.getTokenInfo$('dai'),
@@ -71,7 +75,7 @@ function PoolBalanceChart() {
     <Loading gqlResults={balancesResult} meta={daiTokenInfoMeta}>
       <BalanceChart
         chartPoints={chartPoints}
-        title="Pool balance"
+        title={t(tKeys.poolBalanceTitle.getKey())}
         membersLength={membersLength.toNumber()}
       />
     </Loading>

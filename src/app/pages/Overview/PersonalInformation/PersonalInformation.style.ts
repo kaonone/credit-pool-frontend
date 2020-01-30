@@ -3,6 +3,8 @@ import { makeStyles, colors } from 'utils/styles';
 export const useStyles = makeStyles(() => ({
   root: {
     height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
   },
 
   title: {
@@ -10,7 +12,7 @@ export const useStyles = makeStyles(() => ({
     color: colors.topaz,
   },
 
-  metrics: {
-    color: colors.haiti,
+  actions: {
+    marginTop: 'auto',
   },
 }));

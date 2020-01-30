@@ -6,25 +6,14 @@ import moment from 'moment';
 import { useMyUserSubscription, useMyUserBalanceByDateSubscription } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { GetLoanButton } from 'features/cashExchange';
 import { useSubscribable } from 'utils/react';
-import {
-  CashMetric,
-  ICashMetricProps,
-  Loading,
-  Box,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-} from 'components';
-
-import { useStyles } from './PersonalInformation.style';
+import { IMetric, Loading, MetricsList } from 'components';
 
 const tKeys = tKeysAll.features.personalInformation;
 
-function PersonalInformation() {
-  const classes = useStyles();
+type Props = Pick<React.ComponentProps<typeof MetricsList>, 'orientation' | 'withDividers'>;
+
+function PersonalMetrics(props: Props) {
   const { t } = useTranslate();
 
   const api = useApi();
@@ -79,28 +68,32 @@ function PersonalInformation() {
 
   const balanceInDaiDayAgo = balanceDayAgo?.lBalance || '0';
 
-  const metrics: ICashMetricProps[] = React.useMemo(
+  const metrics = React.useMemo<IMetric[]>(
     () => [
       {
         title: t(tKeys.deposit.getKey()),
         value: deposit.toString(),
         token: 'dai',
+        isCashMetric: true,
       },
       {
         title: t(tKeys.availableBalance.getKey()),
         value: availableBalance.toString(),
         previousValue: balanceInDaiDayAgo,
         token: 'dai',
+        isCashMetric: true,
       },
       {
         title: t(tKeys.locked.getKey()),
         value: locked.toString(),
         token: 'dai',
+        isCashMetric: true,
       },
       {
         title: t(tKeys.credit.getKey()),
         value: myUser?.credit || '0',
         token: 'dai',
+        isCashMetric: true,
       },
     ],
     [t, deposit, availableBalance, balanceInDaiDayAgo, locked, myUser],
@@ -112,27 +105,9 @@ function PersonalInformation() {
       meta={[accountMeta, availableBalanceMeta, lockedMeta]}
       progressVariant="circle"
     >
-      <Card className={classes.root}>
-        <CardContent>
-          <Box mb={3}>
-            <Typography className={classes.title} variant="subtitle2">
-              {t(tKeys.title.getKey())}
-            </Typography>
-          </Box>
-          <Grid container spacing={2} className={classes.metrics}>
-            {metrics.map((metric, index) => (
-              <Grid key={index} item xs={12}>
-                <CashMetric {...metric} />
-              </Grid>
-            ))}
-            <Grid item xs={12}>
-              <GetLoanButton />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+      <MetricsList {...props} metrics={metrics} />
     </Loading>
   );
 }
 
-export { PersonalInformation };
+export { PersonalMetrics };

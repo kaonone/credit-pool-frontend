@@ -4,12 +4,16 @@ import BN from 'bn.js';
 
 import { BalanceChart, IChartPoint, Loading } from 'components';
 import { useMyUserBalancesSubscription } from 'generated/gql/pool';
+import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 import { decimalsToWei } from 'utils/bn';
 
+const tKeys = tKeysAll.app.pages.overview;
+
 function UserBalanceChart() {
   const api = useApi();
+  const { t } = useTranslate();
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
   const [currentBalance, currentBalanceMeta] = useSubscribable(
@@ -82,7 +86,7 @@ function UserBalanceChart() {
 
   return (
     <Loading gqlResults={balancesResult} meta={[accountMeta, daiTokenInfoMeta, currentBalanceMeta]}>
-      <BalanceChart chartPoints={chartPoints} title="My balance" />
+      <BalanceChart chartPoints={chartPoints} title={t(tKeys.myBalanceTitle.getKey())} />
     </Loading>
   );
 }
