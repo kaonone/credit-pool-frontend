@@ -13,6 +13,9 @@ const en = {
     },
   },
   features: {
+    auth: {
+      applicationNetwork: 'This application works with the network "%{networkName}"',
+    },
     notifications: {
       'dai.transfer': {
         pending: 'dai.transfer transaction pending',
