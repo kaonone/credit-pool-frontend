@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 
 import { CommunicationState } from 'utils/react';
 import {
@@ -105,11 +104,10 @@ export function AuthModal(props: AuthModalProps) {
   );
 }
 
-type ButtonProps = Pick<GetProps<typeof Button>, 'disabled'>;
-
-interface ConnectButtonProps extends ButtonProps {
+interface ConnectButtonProps {
   connect(wallet: WalletType): void;
   type: WalletType;
+  disabled: boolean;
 }
 
 function ConnectButton({ type, connect, disabled }: ConnectButtonProps) {
