@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import { PersonalInformation } from 'features/personalInformation';
 import { Grid } from 'components';
 
 import { PoolBalanceChart } from './PoolBalanceChart';
 import { UserBalanceChart } from './UserBalanceChart';
+import { PersonalInformation } from './PersonalInformation/PersonalInformation';
 
 export function OverviewPage() {
   return (

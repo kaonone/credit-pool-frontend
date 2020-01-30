@@ -3,7 +3,13 @@ const en = {
   app: {
     mainTitle: 'Akropolis Pool',
     connectingWarning: 'You need connect to wallet',
-    pages: {},
+    pages: {
+      overview: {
+        poolBalanceTitle: 'Pool balance',
+        myBalanceTitle: 'My balance',
+        poolInfoTitle: 'Pool information',
+      },
+    },
     components: {
       header: {
         total: 'Total',
@@ -97,7 +103,6 @@ const en = {
       },
     },
     personalInformation: {
-      title: 'Personal Information',
       deposit: 'Deposit',
       availableBalance: 'Available balance',
       locked: 'Locked',

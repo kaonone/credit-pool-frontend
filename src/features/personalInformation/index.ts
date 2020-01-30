@@ -1,1 +1,1 @@
-export { PersonalInformation } from './view/PersonalInformation/PersonalInformation';
+export { PersonalMetrics } from './PersonalMetrics';
