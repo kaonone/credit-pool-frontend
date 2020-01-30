@@ -2,10 +2,9 @@ import BN from 'bn.js';
 
 import { bnToBn } from 'utils/bn/bnToBn';
 
-import { SI, calcSi, getSiMidIndex } from './si';
 import { formatDecimal } from './formatDecimal';
 
-interface IFormatBalanceOptions {
+interface IformatBalanceOptions {
   amountInBaseUnits: string | BN;
   baseDecimals: number;
   tokenSymbol?: string;
@@ -15,7 +14,7 @@ export function formatBalance({
   amountInBaseUnits,
   baseDecimals,
   tokenSymbol = '',
-}: IFormatBalanceOptions): string {
+}: IformatBalanceOptions): string {
   let balanceString = bnToBn(amountInBaseUnits).toString();
 
   if (balanceString.length === 0 || balanceString === '0') {
@@ -28,26 +27,17 @@ export function formatBalance({
     balanceString = balanceString.substr(1);
   }
 
-  const si = calcSi(balanceString, baseDecimals);
-  const mid = balanceString.length - (baseDecimals + si.power);
+  const mid = balanceString.length - baseDecimals;
   const prefix = balanceString.substr(0, mid);
   const padding = mid < 0 ? 0 - mid : 0;
-  const decimalsZerosLength = si.value === '-' && baseDecimals < 3 ? baseDecimals : 3;
+  const decimalsZerosLength = baseDecimals < 2 ? baseDecimals : 2;
 
   const postfix = `${`${'0'.repeat(padding)}${balanceString}`.substr(mid < 0 ? 0 : mid)}000`.substr(
     0,
     decimalsZerosLength,
   );
 
-  const units = si.value === '-' ? ` ${tokenSymbol}` : `${si.value} ${tokenSymbol}`;
-
-  return `${isNegative ? '-' : ''}${formatDecimal(prefix || '0')}.${postfix}${units.trimEnd()}`;
+  return `${isNegative ? '-' : ''}${formatDecimal(prefix || '0')}${
+    baseDecimals ? `.${postfix}` : ''
+  } ${tokenSymbol.trimEnd()}`;
 }
-
-formatBalance.getOptions = (baseDecimals: number, baseUnitName?: string) => {
-  const mid = getSiMidIndex();
-
-  return SI.map((siItem, index) =>
-    baseUnitName && index === mid ? { ...siItem, text: baseUnitName } : siItem,
-  ).filter(({ power }): boolean => (power < 0 ? baseDecimals + power >= 0 : true));
-};

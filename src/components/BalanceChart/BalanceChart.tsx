@@ -70,6 +70,7 @@ const BalanceChart = (props: IProps) => {
                   <FormattedBalance
                     sum={new BN(periodInfo.lastPoint.value).toString()}
                     token="dai"
+                    isWei={false}
                   />{' '}
                   <Growth
                     className={classes.growth}

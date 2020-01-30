@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import { fromBaseUnit, toBaseUnit } from 'utils/bn';
-import { formatBalance } from 'utils/format';
+import { formatBalanceSI } from 'utils/format';
 import { useOnChangeState } from 'utils/react';
 
 import { TextInput } from './TextInput';
@@ -99,7 +99,7 @@ function DecimalsInput(props: IProps) {
 
   const options = React.useMemo(
     () =>
-      formatBalance.getOptions(baseDecimals, baseUnitName).map(
+      formatBalanceSI.getOptions(baseDecimals, baseUnitName).map(
         ({ power, text }): IOption<number> => ({
           value: power,
           text,

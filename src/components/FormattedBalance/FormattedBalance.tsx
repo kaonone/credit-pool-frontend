@@ -8,12 +8,13 @@ import { Token } from 'model/types';
 interface IProps {
   sum: BN | string;
   token: Token;
+  isWei?: boolean;
   children?: FunctionComponent<{ formattedBalance: string }>;
 }
 
 function FormattedBalance(props: IProps) {
-  const { sum, token, children } = props;
-  const [formattedBalance, formattedBalanceMeta] = useFormattedBalance(token, sum);
+  const { sum, token, children, isWei = true } = props;
+  const [formattedBalance, formattedBalanceMeta] = useFormattedBalance(token, sum, isWei);
 
   return (
     <Loading
