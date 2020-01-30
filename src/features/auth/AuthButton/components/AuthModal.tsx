@@ -15,6 +15,8 @@ import {
   Grid,
 } from 'components';
 import { WalletType, wallets, Web3ConnectionStatus } from 'services/api';
+import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
+import { ETH_NETWORK_CONFIG } from 'env';
 
 interface AuthModalProps {
   isOpened: boolean;
@@ -27,6 +29,8 @@ interface AuthModalProps {
   disconnect(): void;
 }
 
+const tKeys = tKeysAll.features.auth;
+
 export function AuthModal(props: AuthModalProps) {
   const {
     isOpened,
@@ -38,6 +42,7 @@ export function AuthModal(props: AuthModalProps) {
     status,
     connectedWallet,
   } = props;
+  const { t } = useTranslate();
   const isLogged: boolean = !!account && !!connectedWallet;
 
   return (
@@ -63,6 +68,13 @@ export function AuthModal(props: AuthModalProps) {
           </Hint>
         </DialogContent>
       )}
+      <DialogContent>
+        <Hint>
+          <Typography>
+            {t(tKeys.applicationNetwork.getKey(), { networkName: ETH_NETWORK_CONFIG.name })}.
+          </Typography>
+        </Hint>
+      </DialogContent>
       <DialogContent>
         <Hint>
           <Typography>By connecting to the wallet you accept Terms of Service.</Typography>
