@@ -22,7 +22,7 @@ function MyGuarantees(props: IProps) {
 
   return (
     <Loading gqlResults={result} progressVariant="circle">
-      <LoansTable list={guarantees} withEarn paginationView={paginationView} />
+      <LoansTable account={account} list={guarantees} withEarn paginationView={paginationView} />
     </Loading>
   );
 }

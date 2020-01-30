@@ -154,4 +154,37 @@ export class LoanModuleApi {
   public getMinLoanCollateralByDaiInDai$(ptkBalanceInDai: string): Observable<BN> {
     return of(new BN(ptkBalanceInDai).muln(MIN_COLLATERAL_PERCENT_FOR_BORROWER).divn(100));
   }
+
+  @memoize(R.identity)
+  @autobind
+  public getStakeInfo$(
+    borrower: string,
+    debt: BN,
+    supporter: string,
+  ): Observable<{ earn: BN; myStake: BN; availableForUnlock: BN }> {
+    return this.getPledgeInfo$(borrower, debt, supporter).pipe(
+      map(({ pLocked, pUnlocked, pInterest, pWithdrawn }) => ({
+        earn: pInterest,
+        myStake: pLocked.add(pInterest).sub(pWithdrawn),
+        availableForUnlock: pUnlocked.add(pInterest).sub(pWithdrawn),
+      })),
+    );
+  }
+
+  @memoize(R.identity)
+  @autobind
+  private getPledgeInfo$(
+    borrower: string,
+    debt: BN,
+    supporter: string,
+  ): Observable<{ pLocked: BN; pUnlocked: BN; pInterest: BN; pWithdrawn: BN }> {
+    return this.readonlyContract.methods.calculatePledgeInfo({ borrower, debt, supporter }).pipe(
+      map(([pLocked, pUnlocked, pInterest, pWithdrawn]) => ({
+        pLocked,
+        pUnlocked,
+        pInterest,
+        pWithdrawn,
+      })),
+    );
+  }
 }

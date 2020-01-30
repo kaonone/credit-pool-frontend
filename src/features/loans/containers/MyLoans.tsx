@@ -21,7 +21,7 @@ function MyLoans(props: IProps) {
 
   return (
     <Loading gqlResults={result} progressVariant="circle">
-      <LoansTable list={loans} paginationView={paginationView} />
+      <LoansTable account={account} list={loans} paginationView={paginationView} withEarn />
     </Loading>
   );
 }

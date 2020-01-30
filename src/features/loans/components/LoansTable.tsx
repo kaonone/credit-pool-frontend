@@ -9,17 +9,18 @@ import { useApi } from 'services/api';
 import { useTranslate } from 'services/i18n';
 import { useSubscribable } from 'utils/react';
 
-import { AddressCell } from './LoansTableCells';
+import { AddressCell, EarnCell, MyStakeCell } from './LoansTableCells';
 
 export const Table = GeneralTable as MakeTableType<Debt>;
 
 interface Props {
+  account: string;
   list: Debt[];
   withEarn?: boolean;
   paginationView: React.ReactNode;
 }
 
-export function LoansTable({ list, withEarn, paginationView }: Props) {
+export function LoansTable({ account, list, withEarn, paginationView }: Props) {
   const { t, tKeys: tKeysAll } = useTranslate();
   const tKeys = tKeysAll.features.loans.loansPanel;
 
@@ -92,7 +93,17 @@ export function LoansTable({ list, withEarn, paginationView }: Props) {
                   <Table.Column>
                     <Table.Head>{t(tKeys.earn.getKey())}</Table.Head>
                     <Table.Cell>
-                      {() => <FormattedBalance sum="7000000000000000" token="dai" />}
+                      {({ data }) =>
+                        data.debt_id ? (
+                          <EarnCell
+                            borrower={data.borrower}
+                            debt={new BN(data.debt_id)}
+                            supporter={account}
+                          />
+                        ) : (
+                          '–'
+                        )
+                      }
                     </Table.Cell>
                   </Table.Column>
                 )}
@@ -103,7 +114,17 @@ export function LoansTable({ list, withEarn, paginationView }: Props) {
                 <Table.Column>
                   <Table.Head>{t(tKeys.myStake.getKey())}</Table.Head>
                   <Table.Cell>
-                    {({ data }) => <FormattedBalance sum={data.staked} token="dai" />}
+                    {({ data }) =>
+                      data.debt_id ? (
+                        <MyStakeCell
+                          borrower={data.borrower}
+                          debt={new BN(data.debt_id)}
+                          supporter={account}
+                        />
+                      ) : (
+                        '–'
+                      )
+                    }
                   </Table.Cell>
                 </Table.Column>
               </Table>

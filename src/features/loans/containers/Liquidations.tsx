@@ -9,7 +9,13 @@ import { useApi } from 'services/api';
 
 import { LoansTable } from '../components/LoansTable';
 
-export function Liquidations() {
+interface IProps {
+  account: string;
+}
+
+export function Liquidations(props: IProps) {
+  const { account } = props;
+
   const api = useApi();
   const [dueTimeout, dueTimeoutMeta] = useSubscribable(
     () => api.loanModule.getDuePaymentTimeout$(),
@@ -28,7 +34,7 @@ export function Liquidations() {
 
   return (
     <Loading gqlResults={result} meta={dueTimeoutMeta} progressVariant="circle">
-      <LoansTable list={others} paginationView={paginationView} />
+      <LoansTable account={account} list={others} paginationView={paginationView} />
     </Loading>
   );
 }
