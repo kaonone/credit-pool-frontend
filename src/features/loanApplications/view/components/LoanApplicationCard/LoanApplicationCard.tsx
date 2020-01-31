@@ -21,21 +21,13 @@ interface IProps {
   borrower: string;
   aprValue: string;
   stakedValue: string;
-  expansionPanelDetails: string;
+  descriptionHash: string;
   status: Status;
   proposalId?: string | null;
 }
 
 const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
-  const {
-    lendValue,
-    borrower,
-    proposalId,
-    aprValue,
-    stakedValue,
-    expansionPanelDetails,
-    status,
-  } = props;
+  const { lendValue, borrower, proposalId, aprValue, stakedValue, descriptionHash, status } = props;
 
   const classes = useStyles();
   const { t } = useTranslate();
@@ -46,6 +38,14 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
     [],
     0,
   );
+
+  const [description, descriptionMeta] = useSubscribable(
+    () => api.swarmApi.read<string>(descriptionHash),
+    [descriptionHash],
+  );
+
+  const expansionPanelDetails =
+    descriptionMeta.error || descriptionMeta.loaded ? description : '⏳';
 
   const metricsList = React.useMemo(
     () => [

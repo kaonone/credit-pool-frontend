@@ -14,7 +14,7 @@ interface Activity {
   borrower: string;
   aprValue: string;
   stakedValue: string;
-  expansionPanelDetails: string;
+  descriptionHash: string;
   status: Status;
   proposalId?: string | null;
 }
@@ -32,8 +32,7 @@ function LoanApplicationsList() {
         borrower: debt.borrower,
         aprValue: debt.apr,
         stakedValue: debt.staked,
-        expansionPanelDetails:
-          'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti alias aut ab placeat exercitationem minus illo repudiandae molestias delectus perferendis harum qui quis, quasi vero mollitia rem, temporibus odio excepturi?',
+        descriptionHash: 'b2fde6c9b9d74af2e49cc0e9ebc64112b523165066785d6f286b3d6c08660529',
         status: debt.status,
         proposalId: debt.proposal_id,
       })) || [],

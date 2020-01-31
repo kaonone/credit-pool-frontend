@@ -10,7 +10,13 @@ import { useSubscribable } from 'utils/react';
 import { ModalButton } from 'components/ModalButton/ModalButton';
 import { Loading } from 'components/Loading';
 import { DecimalsField, TextInputField } from 'components/form';
-import { isRequired, validateInteger, composeValidators, moreThen } from 'utils/validators';
+import {
+  isRequired,
+  validateInteger,
+  composeValidators,
+  moreThen,
+  onEnglishPlease,
+} from 'utils/validators';
 import { formatBalance } from 'utils/format';
 
 import {
@@ -53,6 +59,10 @@ function GetLoanButton(props: IProps) {
       // eslint-disable-next-line no-underscore-dangle
       R.curry(moreThen)(new BN(0), R.__, undefined as any),
     );
+  }, []);
+
+  const validateDescription = useMemo(() => {
+    return composeValidators(isRequired, onEnglishPlease);
   }, []);
 
   const initialValues = useMemo<IExtraFormData>(
@@ -117,7 +127,7 @@ function GetLoanButton(props: IProps) {
       <Loading meta={percentDecimalsMeta}>
         {percentDecimals && (
           <TextInputField
-            validate={isRequired}
+            validate={validateDescription}
             name={fieldNames.description}
             label={t(tKeys.descriptionLabel.getKey())}
             placeholder={t(tKeys.descriptionPlaceholder.getKey())}
