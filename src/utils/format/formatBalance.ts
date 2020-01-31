@@ -8,12 +8,14 @@ interface IFormatBalanceOptions {
   amountInBaseUnits: string | BN;
   baseDecimals: number;
   tokenSymbol?: string;
+  precision?: number;
 }
 
 export function formatBalance({
   amountInBaseUnits,
   baseDecimals,
   tokenSymbol = '',
+  precision = 2,
 }: IFormatBalanceOptions): string {
   let balanceString = bnToBn(amountInBaseUnits).toString();
 
@@ -30,14 +32,16 @@ export function formatBalance({
   const mid = balanceString.length - baseDecimals;
   const prefix = balanceString.substr(0, mid);
   const padding = mid < 0 ? 0 - mid : 0;
-  const decimalsZerosLength = baseDecimals < 2 ? baseDecimals : 2;
+  const decimalsZerosLength = baseDecimals < precision ? baseDecimals : precision;
 
   const postfix = `${`${'0'.repeat(padding)}${balanceString}`.substr(mid < 0 ? 0 : mid)}000`.substr(
     0,
     decimalsZerosLength,
   );
 
+  const units = ` ${tokenSymbol}`;
+
   return `${isNegative ? '-' : ''}${formatDecimal(prefix || '0')}${
     baseDecimals ? `.${postfix}` : ''
-  } ${tokenSymbol.trimEnd()}`;
+  }${units.trimEnd()}`;
 }

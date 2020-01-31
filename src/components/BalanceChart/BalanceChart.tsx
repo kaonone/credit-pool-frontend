@@ -15,6 +15,7 @@ interface IProps {
   title: string;
   membersLength?: number;
   chartPoints: IChartPoint[];
+  currentBalance: string;
 }
 
 export interface IChartPoint {
@@ -29,7 +30,7 @@ interface IPeriodInfo {
 }
 
 const BalanceChart = (props: IProps) => {
-  const { title, membersLength, chartPoints } = props;
+  const { title, membersLength, chartPoints, currentBalance } = props;
   const classes = useStyles();
   const [periodInfo, setPeriodInfo] = React.useState<IPeriodInfo | null>(null);
 
@@ -67,11 +68,7 @@ const BalanceChart = (props: IProps) => {
             <Typography className={classes.balanceValue} variant="h4">
               {periodInfo && (
                 <>
-                  <FormattedBalance
-                    sum={new BN(periodInfo.lastPoint.value).toString()}
-                    token="dai"
-                    isWei={false}
-                  />{' '}
+                  <FormattedBalance sum={currentBalance} token="dai" />{' '}
                   <Growth
                     className={classes.growth}
                     previous={new BN(periodInfo.firstPoint.value * 100)}

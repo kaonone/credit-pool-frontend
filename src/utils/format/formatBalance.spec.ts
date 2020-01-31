@@ -94,4 +94,23 @@ describe('formatBalance', (): void => {
       }),
     ).toEqual('-123.45 Unit');
   });
+
+  it('formats 123,456,789,000 without whitespace (decimals=12)', (): void => {
+    expect(
+      formatBalance({
+        amountInBaseUnits: TESTVAL,
+        baseDecimals: 12,
+      }),
+    ).toEqual('0.12');
+  });
+
+  it('formats 123,456,789,000 with precision (decimals=12, precision=12)', (): void => {
+    expect(
+      formatBalance({
+        amountInBaseUnits: TESTVAL,
+        baseDecimals: 12,
+        precision: 12,
+      }),
+    ).toEqual('0.123456789000');
+  });
 });
