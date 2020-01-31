@@ -87,7 +87,7 @@ function UserBalanceChart() {
   return (
     <Loading gqlResults={balancesResult} meta={[accountMeta, daiTokenInfoMeta, currentBalanceMeta]}>
       <BalanceChart
-        currentBalance={currentBalance?.toString() || ''}
+        currentBalance={currentBalance?.toString() || '0'}
         chartPoints={chartPoints}
         title={t(tKeys.myBalanceTitle.getKey())}
       />

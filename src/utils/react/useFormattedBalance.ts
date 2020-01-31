@@ -14,8 +14,7 @@ type FormattedBalance = {
 export function useFormattedBalance(
   token: Token,
   value: string | BN,
-  isWei: boolean = true,
-  precision?: number,
+  precision: number = 2,
 ): [FormattedBalance, ISubscriptionMeta] {
   const api = useApi();
   const [tokenInfo, tokenInfoMeta] = useSubscribable(() => api.tokens.getTokenInfo$(token), [
@@ -24,13 +23,8 @@ export function useFormattedBalance(
 
   return [
     (tokenInfo && {
-      formattedBalance: getFormattedBalance(isWei, value.toString(), tokenInfo),
-      notRoundedBalance: getFormattedBalance(
-        isWei,
-        value.toString(),
-        tokenInfo,
-        precision || tokenInfo.decimals,
-      ),
+      formattedBalance: getFormattedBalance(value.toString(), tokenInfo, precision),
+      notRoundedBalance: getFormattedBalance(value.toString(), tokenInfo, tokenInfo.decimals),
     }) || {
       formattedBalance: '⏳',
       notRoundedBalance: '⏳',
@@ -39,17 +33,9 @@ export function useFormattedBalance(
   ];
 }
 
-const getValueInWei = (value: string, tokenInfo: ITokenInfo) =>
-  `${value}${'0'.repeat(tokenInfo.decimals)}`;
-
-const getFormattedBalance = (
-  isWei: boolean,
-  value: string,
-  tokenInfo: ITokenInfo,
-  precision?: number,
-) =>
+const getFormattedBalance = (value: string | BN, tokenInfo: ITokenInfo, precision?: number) =>
   formatBalance({
-    amountInBaseUnits: isWei ? value : getValueInWei(value.toString(), tokenInfo),
+    amountInBaseUnits: value,
     baseDecimals: tokenInfo.decimals,
     tokenSymbol: tokenInfo.symbol,
     precision: precision || 2,
