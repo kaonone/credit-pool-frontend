@@ -70,6 +70,7 @@ function PoolBalanceChart() {
 
   const lastPool = R.last(pools);
   const membersLength = (lastPool && new BN(lastPool.usersLength)) || new BN(0);
+  const currentBalance = (lastPool && lastPool.lBalance) || '';
 
   return (
     <Loading gqlResults={balancesResult} meta={daiTokenInfoMeta}>
@@ -77,6 +78,7 @@ function PoolBalanceChart() {
         chartPoints={chartPoints}
         title={t(tKeys.poolBalanceTitle.getKey())}
         membersLength={membersLength.toNumber()}
+        currentBalance={currentBalance}
       />
     </Loading>
   );
