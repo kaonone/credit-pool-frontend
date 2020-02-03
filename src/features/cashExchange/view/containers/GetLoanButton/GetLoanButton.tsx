@@ -12,6 +12,7 @@ import { Loading } from 'components/Loading';
 import { DecimalsField, TextInputField } from 'components/form';
 import { isRequired, validateInteger, composeValidators, moreThen } from 'utils/validators';
 import { formatBalance } from 'utils/format';
+import { decimalsToWei } from 'utils/bn';
 
 import {
   PTokenExchanging,
@@ -36,9 +37,19 @@ function GetLoanButton(props: IProps) {
   const { t } = useTranslate();
   const api = useApi();
 
+  const [daiTokenInfo] = useSubscribable(() => api.tokens.getTokenInfo$('dai'), []);
+  const decimals = daiTokenInfo?.decimals || 0;
+
   const getMaxSourceValue = useCallback(
-    (account: string) => api.loanModule.getMaxAvailableLoanSizeInDai$(account),
-    [],
+    (account: string) =>
+      api.loanModule
+        .getMaxAvailableLoanSizeInDai$(account)
+        .pipe(
+          map(loanSize =>
+            loanSize.div(decimalsToWei(decimals - 2)).mul(decimalsToWei(decimals - 2)),
+          ),
+        ),
+    [decimals],
   );
 
   const [percentDecimals, percentDecimalsMeta] = useSubscribable(
@@ -62,8 +73,6 @@ function GetLoanButton(props: IProps) {
     }),
     [],
   );
-
-  const [daiTokenInfo] = useSubscribable(() => api.tokens.getTokenInfo$('dai'), []);
 
   const getConfirmMessage = useCallback(
     (values: (ISubmittedFormData & IExtraFormData) | null) => {

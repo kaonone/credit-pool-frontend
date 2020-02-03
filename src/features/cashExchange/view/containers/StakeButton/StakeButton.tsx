@@ -6,7 +6,8 @@ import BN from 'bn.js';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { ModalButton } from 'components/ModalButton/ModalButton';
-import { min } from 'utils/bn';
+import { min, decimalsToWei } from 'utils/bn';
+import { useSubscribable } from 'utils/react';
 
 import { PTokenExchanging } from '../../components/PTokenExcahnging/PTokenExcahnging';
 
@@ -23,10 +24,29 @@ function StakeButton(props: IProps) {
   const { t } = useTranslate();
   const api = useApi();
 
+  const [ptkTokenInfo] = useSubscribable(() => api.tokens.getTokenInfo$('ptk'), []);
+  const decimals = ptkTokenInfo?.decimals || 0;
+
   const getMaxSourceValue = useCallback(
     (account: string) =>
-      api.fundsModule.getPtkBalanceInDai$(account).pipe(map(balance => min(balance, maxStakeSize))),
-    [maxStakeSize],
+      api.fundsModule.getPtkBalanceInDai$(account).pipe(
+        map(balance => {
+          const roundedBalance = balance
+            .div(decimalsToWei(decimals - 2))
+            .mul(decimalsToWei(decimals - 2));
+
+          const roundedDownMaxStakeSize = new BN(maxStakeSize)
+            .div(decimalsToWei(decimals - 2))
+            .mul(decimalsToWei(decimals - 2));
+
+          const roundedMaxStakeSize = roundedDownMaxStakeSize.lt(new BN(maxStakeSize))
+            ? roundedDownMaxStakeSize.add(decimalsToWei(decimals - 2))
+            : maxStakeSize;
+
+          return min(roundedBalance, roundedMaxStakeSize);
+        }),
+      ),
+    [maxStakeSize, decimals],
   );
 
   const onStakeRequest = useCallback(
