@@ -12,7 +12,7 @@ import { Loading } from 'components/Loading';
 import { DecimalsField, TextInputField } from 'components/form';
 import { isRequired, validateInteger, composeValidators, moreThen } from 'utils/validators';
 import { formatBalance } from 'utils/format';
-import { decimalsToWei } from 'utils/bn';
+import { roundWei } from 'utils/bn';
 
 import {
   PTokenExchanging,
@@ -44,11 +44,7 @@ function GetLoanButton(props: IProps) {
     (account: string) =>
       api.loanModule
         .getMaxAvailableLoanSizeInDai$(account)
-        .pipe(
-          map(loanSize =>
-            loanSize.div(decimalsToWei(decimals - 2)).mul(decimalsToWei(decimals - 2)),
-          ),
-        ),
+        .pipe(map(loanSize => roundWei(loanSize, decimals, 'floor', 2))),
     [decimals],
   );
 
