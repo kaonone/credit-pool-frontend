@@ -5,7 +5,7 @@ import { tKeys, ITranslateKey } from 'services/i18n';
 export const lessThenOrEqual = (
   value: number | BN,
   currentValue: string | number,
-  formatValue?: (value: number | BN) => any,
+  formatValue?: (value: number | BN) => string,
 ): ITranslateKey | undefined => {
   const isValid = BN.isBN(value) ? value.gte(new BN(currentValue)) : Number(currentValue) <= value;
 

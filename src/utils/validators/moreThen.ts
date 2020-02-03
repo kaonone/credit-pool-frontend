@@ -2,7 +2,7 @@ import BN from 'bn.js';
 
 import { tKeys, ITranslateKey } from 'services/i18n';
 
-type FormatValue = (value: number | BN) => any;
+type FormatValue = (value: number | BN) => string;
 
 export function moreThen(
   value: number | BN,

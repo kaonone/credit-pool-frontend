@@ -91,7 +91,7 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
     [],
   );
 
-  const [formattedMax] = useFormattedBalance('dai', maxValue || new BN(0));
+  const [{ formattedBalance: formattedMax }] = useFormattedBalance('dai', maxValue || new BN(0));
   const formatMax = useCallback(() => formattedMax, [formattedMax]);
 
   const validateAmount = useMemo(() => {
