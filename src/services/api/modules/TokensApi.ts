@@ -50,24 +50,6 @@ export class TokensApi {
   }
 
   @autobind
-  public async transferDai$(fromAddress: string, toAddress: string, value: BN): Promise<void> {
-    const txDai = getCurrentValueOrThrow(this.txContracts).dai;
-
-    const promiEvent = txDai.methods.transfer(
-      { _to: toAddress, _value: value },
-      { from: fromAddress },
-    );
-
-    this.transactionsApi.pushToSubmittedTransactions$('dai.transfer', promiEvent, {
-      fromAddress,
-      toAddress,
-      value,
-    });
-
-    await promiEvent;
-  }
-
-  @autobind
   public async approveAllPtk(fromAddress: string, spender: string) {
     const allowance = await first(
       this.readonlyContracts.ptk.methods.allowance({
