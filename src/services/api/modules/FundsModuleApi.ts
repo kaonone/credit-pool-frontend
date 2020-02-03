@@ -33,6 +33,15 @@ export class FundsModuleApi {
 
   @memoize(R.identity)
   @autobind
+  public getMaxWithdrawAmountInDai$(address: string): Observable<BN> {
+    return this.tokensApi.getBalance$('ptk', address).pipe(
+      switchMap(balance => this.getPtkToDaiExitInfo$(balance.toString())),
+      map(({ user }) => user),
+    );
+  }
+
+  @memoize(R.identity)
+  @autobind
   public getPtkBalanceInDai$(address: string): Observable<BN> {
     return this.tokensApi
       .getBalance$('ptk', address)

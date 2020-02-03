@@ -8,6 +8,7 @@ import {
   createFundsModule,
   createLiquidityModule,
   createLoanModule,
+  createCurveModule,
 } from 'generated/contracts';
 
 export type Contracts = {
@@ -16,6 +17,7 @@ export type Contracts = {
   fundsModule: ReturnType<typeof createFundsModule>;
   liquidityModule: ReturnType<typeof createLiquidityModule>;
   loanModule: ReturnType<typeof createLoanModule>;
+  curveModule: ReturnType<typeof createCurveModule>;
 };
 
 export type SubmittedTransaction =

@@ -65,8 +65,7 @@ const en = {
         buttonTitle: 'Withdraw',
         formTitle: 'Withdraw from Pool',
         placeholder: 'Enter sum',
-        confirmMessage:
-          'Are you sure you want withdraw %{sourceAmount}? You will get %{targetAmount} and will pay %{feeAmount} fee.',
+        confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
       },
       stakeButton: {
         buttonTitle: 'Stake',

@@ -4,12 +4,14 @@ import { LoanModuleApi } from './modules/LoanModuleApi';
 import { LiquidityModuleApi } from './modules/LiquidityModuleApi';
 import { TokensApi } from './modules/TokensApi';
 import { TransactionsApi } from './modules/TransactionsApi';
+import { CurveModuleApi } from './modules/CurveModuleApi';
 
 export class Api {
   public web3Manager = new Web3Manager();
   public transactions: TransactionsApi;
   public tokens: TokensApi;
   public fundsModule: FundsModuleApi;
+  public curveModule: CurveModuleApi;
   public loanModule: LoanModuleApi;
   public liquidityModule: LiquidityModuleApi;
 
@@ -17,6 +19,7 @@ export class Api {
     this.transactions = new TransactionsApi();
     this.tokens = new TokensApi(this.web3Manager, this.transactions);
     this.fundsModule = new FundsModuleApi(this.web3Manager, this.tokens);
+    this.curveModule = new CurveModuleApi(this.web3Manager);
 
     this.loanModule = new LoanModuleApi(
       this.web3Manager,
@@ -30,6 +33,7 @@ export class Api {
       this.tokens,
       this.transactions,
       this.fundsModule,
+      this.curveModule,
     );
   }
 }

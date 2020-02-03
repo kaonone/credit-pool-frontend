@@ -11,6 +11,7 @@ import { Contracts, Web3ManagerModule } from '../types';
 import { TokensApi } from './TokensApi';
 import { TransactionsApi } from './TransactionsApi';
 import { FundsModuleApi } from './FundsModuleApi';
+import { CurveModuleApi } from './CurveModuleApi';
 
 function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNullable<T> {
   const value = subject.getValue();
@@ -34,6 +35,7 @@ export class LiquidityModuleApi {
     private tokensApi: TokensApi,
     private transactionsApi: TransactionsApi,
     private fundsModuleApi: FundsModuleApi,
+    private curveModuleApi: CurveModuleApi,
   ) {
     this.web3Manager.txWeb3
       .pipe(
@@ -47,16 +49,21 @@ export class LiquidityModuleApi {
 
   @autobind
   public async sellPtk(fromAddress: string, values: { sourceAmount: BN }): Promise<void> {
-    const { sourceAmount } = values;
+    const { sourceAmount: lAmountWithoutFee } = values;
     const txLiquidityModule = getCurrentValueOrThrow(this.txContract);
 
-    const pAmount = await first(this.fundsModuleApi.convertDaiToPtkExit$(sourceAmount.toString()));
+    const { percentDivider, withdrawFeePercent } = await first(this.curveModuleApi.getConfig$());
+    const lAmountWithFee = lAmountWithoutFee.mul(percentDivider).div(withdrawFeePercent);
+
+    const pAmountWithFee = await first(
+      this.fundsModuleApi.convertDaiToPtkExit$(lAmountWithFee.toString()),
+    );
     const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
 
     await this.tokensApi.approveAllPtk(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule);
 
     const promiEvent = txLiquidityModule.methods.withdraw(
-      { lAmountMin: new BN(0), pAmount: min(pAmount, pBalance) },
+      { lAmountMin: new BN(0), pAmount: min(pAmountWithFee, pBalance) },
       { from: fromAddress },
     );
 
