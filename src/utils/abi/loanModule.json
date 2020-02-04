@@ -47,6 +47,12 @@
         "internalType": "uint256",
         "name": "interest",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "descriptionHash",
+        "type": "bytes32"
       }
     ],
     "name": "DebtProposalCreated",
@@ -202,6 +208,12 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "lInterestPaid",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "pInterestPaid",
         "type": "uint256"
       },
       {
@@ -369,6 +381,19 @@
   },
   {
     "constant": true,
+    "inputs": [],
+    "name": "PLEDGE_PERCENT_MIN_MULTIPLIER",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
     "inputs": [{
         "internalType": "address",
         "name": "",
@@ -390,6 +415,11 @@
         "internalType": "uint256",
         "name": "interest",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "descriptionHash",
+        "type": "bytes32"
       },
       {
         "internalType": "uint256",
@@ -481,6 +511,35 @@
       "name": "",
       "type": "bool"
     }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "limits",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "lDebtAmountMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "debtInterestMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pledgePercentMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lMinPledgeMax",
+        "type": "uint256"
+      }
+    ],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -582,13 +641,13 @@
       },
       {
         "internalType": "uint256",
-        "name": "pAmount",
+        "name": "pAmountMax",
         "type": "uint256"
       },
       {
-        "internalType": "uint256",
-        "name": "lAmountMin",
-        "type": "uint256"
+        "internalType": "bytes32",
+        "name": "descriptionHash",
+        "type": "bytes32"
       }
     ],
     "name": "createDebtProposal",
@@ -729,6 +788,59 @@
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "lDebtAmountMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "debtInterestMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pledgePercentMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lMinPledgeMax",
+        "type": "uint256"
+      }
+    ],
+    "name": "setLimits",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "internalType": "address",
+        "name": "borrower",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "debt",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "newDate",
+        "type": "uint256"
+      }
+    ],
+    "name": "__changeDebtLastPaymentDate",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [{
         "internalType": "address",
@@ -814,6 +926,35 @@
       "name": "",
       "type": "uint256"
     }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+        "internalType": "address",
+        "name": "borrower",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "proposal",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPledgeRequirements",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "minLPledge",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxLPledge",
+        "type": "uint256"
+      }
+    ],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
