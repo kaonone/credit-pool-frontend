@@ -31,13 +31,13 @@ export class CurveModuleApi {
       this.readonlyContract.methods.curveA(),
       this.readonlyContract.methods.curveB(),
       this.readonlyContract.methods.withdrawFeePercent(),
-      // this.readonlyContract.methods.PERCENT_DIVIDER(), // TODO uncomment after contracts updating
+      this.readonlyContract.methods.PERCENT_DIVIDER(),
     ]).pipe(
-      map(([curveA, curveB, withdrawFeePercent]) => ({
+      map(([curveA, curveB, withdrawFeePercent, percentDivider]) => ({
         curveA,
         curveB,
         withdrawFeePercent,
-        percentDivider: new BN(100),
+        percentDivider,
       })),
     );
   }

@@ -52,6 +52,24 @@ export class LoanModuleApi {
 
   @memoize()
   @autobind
+  public getConfig$(): Observable<{
+    lDebtAmountMin: BN;
+    debtInterestMin: BN;
+    pledgePercentMin: BN;
+    lMinPledgeMax: BN;
+  }> {
+    return this.readonlyContract.methods.limits().pipe(
+      map(([lDebtAmountMin, debtInterestMin, pledgePercentMin, lMinPledgeMax]) => ({
+        lDebtAmountMin,
+        debtInterestMin,
+        pledgePercentMin,
+        lMinPledgeMax,
+      })),
+    );
+  }
+
+  @memoize()
+  @autobind
   public getAprDecimals$(): Observable<number> {
     // on the contract, apr is measured in fractions of a unit, so we need to shift the decimals by 2
     const toPercentMultiplierDivider = 2;
@@ -116,10 +134,10 @@ export class LoanModuleApi {
 
     const promiEvent = txLoanModule.methods.createDebtProposal(
       {
+        pAmountMax: min(pAmount, pBalance),
         debtLAmount: sourceAmount,
         interest: new BN(apr),
-        lAmountMin: new BN(0),
-        pAmount: min(pAmount, pBalance),
+        descriptionHash: '0xb2fde6c9b9d74af2e49cc0e9ebc64112b523165066785d6f286b3d6c08660529',
       },
       { from: fromAddress },
     );
@@ -147,6 +165,19 @@ export class LoanModuleApi {
       }),
       map(item => item.muln(100).divn(MIN_COLLATERAL_PERCENT_FOR_BORROWER)),
     );
+  }
+
+  @memoize(R.identity)
+  public getPledgeRequirements$(
+    borrower: string,
+    proposalId: string,
+  ): Observable<{ minLPledge: BN; maxLPledge: BN }> {
+    return this.readonlyContract.methods
+      .getPledgeRequirements({
+        borrower,
+        proposal: new BN(proposalId),
+      })
+      .pipe(map(([minLPledge, maxLPledge]) => ({ minLPledge, maxLPledge })));
   }
 
   @memoize(R.identity)

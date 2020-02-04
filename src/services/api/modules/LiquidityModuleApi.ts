@@ -6,6 +6,7 @@ import { autobind } from 'core-decorators';
 import { min } from 'utils/bn';
 import { ETH_NETWORK_CONFIG } from 'env';
 import { createLiquidityModule } from 'generated/contracts';
+import { memoize } from 'utils/decorators';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TokensApi } from './TokensApi';
@@ -28,6 +29,7 @@ function first<T>(input: Observable<T>): Promise<T> {
 }
 
 export class LiquidityModuleApi {
+  private readonlyContract: Contracts['liquidityModule'];
   private txContract = new BehaviorSubject<null | Contracts['liquidityModule']>(null);
 
   constructor(
@@ -37,6 +39,11 @@ export class LiquidityModuleApi {
     private fundsModuleApi: FundsModuleApi,
     private curveModuleApi: CurveModuleApi,
   ) {
+    this.readonlyContract = createLiquidityModule(
+      web3Manager.web3,
+      ETH_NETWORK_CONFIG.contracts.liquidityModule,
+    );
+
     this.web3Manager.txWeb3
       .pipe(
         map(
@@ -45,6 +52,17 @@ export class LiquidityModuleApi {
         ),
       )
       .subscribe(this.txContract);
+  }
+
+  @memoize()
+  @autobind
+  public getConfig$(): Observable<{ lDepositMin: BN; pWithdrawMin: BN }> {
+    return this.readonlyContract.methods.limits().pipe(
+      map(([lDepositMin, pWithdrawMin]) => ({
+        lDepositMin,
+        pWithdrawMin,
+      })),
+    );
   }
 
   @autobind

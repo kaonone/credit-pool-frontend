@@ -21,20 +21,19 @@ import {
   composeValidators,
   isRequired,
   moreThen,
+  moreThenOrEqual,
+  Validator,
 } from 'utils/validators';
 import { useSubscribable, useFormattedBalance } from 'utils/react';
-import { compareBn } from 'utils/bn';
 
 export interface IFormData {
   sourceAmount: string;
-  triggerRevalidateByMax: BN | undefined;
-  triggerRevalidateByFormatMax: () => string;
+  triggerRevalidateSourceAmount: Validator;
 }
 
 const fieldNames: { [K in keyof IFormData]: K } = {
   sourceAmount: 'sourceAmount',
-  triggerRevalidateByMax: 'triggerRevalidateByMax',
-  triggerRevalidateByFormatMax: 'triggerRevalidateByFormatMax',
+  triggerRevalidateSourceAmount: 'triggerRevalidateSourceAmount',
 };
 
 export interface ISubmittedFormData {
@@ -48,7 +47,8 @@ interface IProps<ExtraFormData extends Record<string, any> = {}> {
   additionalFields?: React.ReactNode[];
   additionalInitialValues?: ExtraFormData;
   getMaxSourceValue: (account: string) => Observable<BN>;
-  onSubmit: (values: ISubmittedFormData & Omit<ExtraFormData, keyof ISubmittedFormData>) => void;
+  getMinSourceValue: (account: string) => Observable<BN>;
+  onSubmit: (values: ISubmittedFormData & ExtraFormData) => void;
   onCancel: () => void;
 }
 
@@ -62,6 +62,7 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
     onCancel,
     sourcePlaceholder,
     getMaxSourceValue,
+    getMinSourceValue,
     additionalFields,
     additionalInitialValues = {} as ExtraFormData,
   } = props;
@@ -75,16 +76,10 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
     getMaxSourceValue,
     account,
   ]);
-
-  const initialValues = useMemo<IFormData & ExtraFormData>(
-    () => ({
-      sourceAmount: '',
-      triggerRevalidateByMax: maxValue,
-      triggerRevalidateByFormatMax: () => '0',
-      ...additionalInitialValues,
-    }),
-    [],
-  );
+  const [minValue] = useSubscribable(() => getMinSourceValue(account), [
+    getMinSourceValue,
+    account,
+  ]);
 
   const [sourceTokenInfo, sourceTokenInfoMeta] = useSubscribable(
     () => api.tokens.getTokenInfo$('dai'),
@@ -93,6 +88,8 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
 
   const [{ formattedBalance: formattedMax }] = useFormattedBalance('dai', maxValue || new BN(0));
   const formatMax = useCallback(() => formattedMax, [formattedMax]);
+  const [{ formattedBalance: formattedMin }] = useFormattedBalance('dai', minValue || new BN(0));
+  const formatMin = useCallback(() => formattedMin, [formattedMin]);
 
   const validateAmount = useMemo(() => {
     return composeValidators(
@@ -102,16 +99,30 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
       /* eslint-disable no-underscore-dangle */
       R.curry(moreThen)(new BN(0), R.__, undefined as any),
       ...(maxValue ? [R.curry(lessThenOrEqual)(maxValue, R.__, formatMax)] : []),
+      ...(minValue ? [R.curry(moreThenOrEqual)(minValue, R.__, formatMin)] : []),
       /* eslint-enable no-underscore-dangle */
     );
-  }, [maxValue, formatMax]);
+  }, [maxValue, formatMax, minValue, formatMin]);
+
+  const initialValues = useMemo<IFormData & ExtraFormData>(
+    () => ({
+      sourceAmount: '',
+      triggerRevalidateSourceAmount: validateAmount,
+      ...additionalInitialValues,
+    }),
+    [],
+  );
 
   const handleFormSubmit = useCallback(
     ({
       sourceAmount,
+      triggerRevalidateSourceAmount,
       ...restValues
     }: IFormData & ExtraFormData): { [FORM_ERROR]: string } | void => {
-      onSubmit({ sourceAmount: new BN(sourceAmount), ...restValues });
+      onSubmit({
+        sourceAmount: new BN(sourceAmount),
+        ...((restValues as unknown) as ExtraFormData),
+      });
     },
     [onSubmit],
   );
@@ -142,11 +153,9 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
                   />
                 )}
                 <SpyField
-                  name={fieldNames.triggerRevalidateByMax}
-                  fieldValue={maxValue}
-                  compare={compareBn}
+                  name={fieldNames.triggerRevalidateSourceAmount}
+                  fieldValue={validateAmount}
                 />
-                <SpyField name={fieldNames.triggerRevalidateByFormatMax} fieldValue={formatMax} />
               </Grid>
               {additionalFields?.map((item, index) => (
                 <Grid key={index} item xs={12}>
