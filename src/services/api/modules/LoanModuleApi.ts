@@ -94,8 +94,6 @@ export class LoanModuleApi {
     const pAmount = await first(this.fundsModuleApi.convertDaiToPtkExit$(sourceAmount.toString()));
     const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
 
-    await this.tokensApi.approveAllPtk(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule);
-
     const promiEvent = txLoanModule.methods.addPledge(
       {
         borrower,
@@ -129,8 +127,6 @@ export class LoanModuleApi {
       this.fundsModuleApi.convertDaiToPtkExit$(minLCollateral.toString()),
     );
     const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
-
-    await this.tokensApi.approveAllPtk(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule);
 
     const promiEvent = txLoanModule.methods.createDebtProposal(
       {

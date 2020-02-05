@@ -22,7 +22,6 @@ export type Contracts = {
 
 export type SubmittedTransaction =
   | IGenericSubmittedTransaction<'dai.approve', { spender: string; fromAddress: string; value: BN }>
-  | IGenericSubmittedTransaction<'ptk.approve', { spender: string; fromAddress: string; value: BN }>
   | IGenericSubmittedTransaction<'liquidity.sellPtk', { address: string; sourceAmount: BN }>
   | IGenericSubmittedTransaction<'liquidity.buyPtk', { address: string; sourceAmount: BN }>
   | IGenericSubmittedTransaction<'loan.addPledge', { address: string; sourceAmount: BN }>

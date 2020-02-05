@@ -78,8 +78,6 @@ export class LiquidityModuleApi {
     );
     const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
 
-    await this.tokensApi.approveAllPtk(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule);
-
     const promiEvent = txLiquidityModule.methods.withdraw(
       { lAmountMin: new BN(0), pAmount: min(pAmountWithFee, pBalance) },
       { from: fromAddress },
