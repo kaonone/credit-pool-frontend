@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import { map } from 'rxjs/operators';
 import BN from 'bn.js';
+import { combineLatest } from 'rxjs';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
@@ -12,7 +13,6 @@ import { useSubscribable } from 'utils/react';
 import { PTokenExchanging } from '../../components/PTokenExcahnging/PTokenExcahnging';
 
 type IProps = React.ComponentPropsWithoutRef<typeof Button> & {
-  maxStakeSize: string;
   proposalId: string;
   borrower: string;
 };
@@ -20,7 +20,7 @@ type IProps = React.ComponentPropsWithoutRef<typeof Button> & {
 const tKeys = tKeysAll.features.cashExchange.stakeButton;
 
 function StakeButton(props: IProps) {
-  const { maxStakeSize, borrower, proposalId, ...restProps } = props;
+  const { borrower, proposalId, ...restProps } = props;
   const { t } = useTranslate();
   const api = useApi();
 
@@ -29,15 +29,25 @@ function StakeButton(props: IProps) {
 
   const getMaxSourceValue = useCallback(
     (account: string) =>
-      api.fundsModule.getPtkBalanceInDai$(account).pipe(
-        map(balance => {
+      combineLatest([
+        api.fundsModule.getPtkBalanceInDai$(account),
+        api.loanModule.getPledgeRequirements$(borrower, proposalId),
+      ]).pipe(
+        map(([balance, { maxLPledge }]) => {
           const roundedBalance = roundWei(balance, decimals, 'floor', 2);
-          const roundedMaxStakeSize = roundWei(maxStakeSize, decimals, 'ceil', 2);
+          const roundedMaxStakeSize = roundWei(maxLPledge, decimals, 'ceil', 2);
 
           return min(roundedBalance, roundedMaxStakeSize);
         }),
       ),
-    [maxStakeSize, decimals],
+    [borrower, proposalId, decimals],
+  );
+  const getMinSourceValue = useCallback(
+    () =>
+      api.loanModule
+        .getPledgeRequirements$(borrower, proposalId)
+        .pipe(map(({ minLPledge }) => minLPledge)),
+    [borrower, proposalId],
   );
 
   const onStakeRequest = useCallback(
@@ -54,6 +64,7 @@ function StakeButton(props: IProps) {
           title={t(tKeys.formTitle.getKey())}
           sourcePlaceholder={t(tKeys.placeholder.getKey())}
           getMaxSourceValue={getMaxSourceValue}
+          getMinSourceValue={getMinSourceValue}
           confirmMessageTKey={tKeys.confirmMessage.getKey()}
           onExchangeRequest={onStakeRequest}
           onCancel={closeModal}

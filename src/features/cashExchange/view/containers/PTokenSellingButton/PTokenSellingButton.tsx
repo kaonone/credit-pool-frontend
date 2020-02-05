@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import Button from '@material-ui/core/Button';
+import { switchMap } from 'rxjs/operators';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
@@ -20,6 +21,17 @@ function PTokenSellingButton(props: IProps) {
     (account: string) => api.fundsModule.getMaxWithdrawAmountInDai$(account),
     [],
   );
+  const getMinSourceValue = useCallback(
+    () =>
+      api.liquidityModule
+        .getConfig$()
+        .pipe(
+          switchMap(({ pWithdrawMin }) =>
+            api.fundsModule.getUserWithdrawAmountInDai$(pWithdrawMin.toString()),
+          ),
+        ),
+    [],
+  );
 
   return (
     <ModalButton
@@ -33,6 +45,7 @@ function PTokenSellingButton(props: IProps) {
           title={t(tKeys.formTitle.getKey())}
           sourcePlaceholder={t(tKeys.placeholder.getKey())}
           getMaxSourceValue={getMaxSourceValue}
+          getMinSourceValue={getMinSourceValue}
           confirmMessageTKey={tKeys.confirmMessage.getKey()}
           onExchangeRequest={api.liquidityModule.sellPtk}
           onCancel={closeModal}
