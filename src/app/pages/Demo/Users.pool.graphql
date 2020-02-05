@@ -2,8 +2,7 @@ query Users($first: Int!, $skip: Int!) @pool {
   users(first: $first, skip: $skip) {
     id
     pBalance
-    locked
+    pLockedSum
     credit
-    history
   }
 }
