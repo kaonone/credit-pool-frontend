@@ -382,6 +382,19 @@
   {
     "constant": true,
     "inputs": [],
+    "name": "MODULE_PTOKEN",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
     "name": "PLEDGE_PERCENT_MIN_MULTIPLIER",
     "outputs": [{
       "internalType": "uint256",
