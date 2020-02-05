@@ -13,6 +13,7 @@ import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
 import { TokensApi } from './TokensApi';
 import { FundsModuleApi } from './FundsModuleApi';
+import { SwarmApi } from './SwarmApi';
 
 function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNullable<T> {
   const value = subject.getValue();
@@ -37,6 +38,7 @@ export class LoanModuleApi {
     private tokensApi: TokensApi,
     private transactionsApi: TransactionsApi,
     private fundsModuleApi: FundsModuleApi,
+    private swarmApi: SwarmApi,
   ) {
     this.readonlyContract = createLoanModule(
       this.web3Manager.web3,
@@ -117,8 +119,10 @@ export class LoanModuleApi {
     fromAddress: string,
     values: { sourceAmount: BN; apr: string; description: string },
   ): Promise<void> {
-    const { sourceAmount, apr } = values;
+    const { sourceAmount, apr, description } = values;
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
+
+    const hash = await this.swarmApi.upload<string>(description);
 
     const minLCollateral = await first(
       this.getMinLoanCollateralByDaiInDai$(sourceAmount.toString()),
@@ -133,7 +137,7 @@ export class LoanModuleApi {
         pAmountMax: min(pAmount, pBalance),
         debtLAmount: sourceAmount,
         interest: new BN(apr),
-        descriptionHash: '0xb2fde6c9b9d74af2e49cc0e9ebc64112b523165066785d6f286b3d6c08660529',
+        descriptionHash: hash,
       },
       { from: fromAddress },
     );
