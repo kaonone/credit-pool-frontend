@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react';
 import BN from 'bn.js';
 import { of } from 'rxjs';
-import moment from 'moment';
 
-import { useMyUserSubscription, useMyUserBalanceByDateSubscription } from 'generated/gql/pool';
+import { useMyUserSubscription } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
@@ -27,82 +26,82 @@ function PersonalMetrics(props: Props) {
 
   const myUser = myUserResult.data?.user;
 
-  const balanceInPtk = myUser?.pBalance || '0';
-  const [availableBalance, availableBalanceMeta] = useSubscribable(
+  const lCredit = new BN(myUser?.credit || '0');
+
+  const prevLAvailableBalance = new BN(myUser?.lBalance || '0');
+  const prevLLocked = new BN(myUser?.lLockedSum || '0').add(new BN(myUser?.lInterestSum || '0'));
+  const prevLTotal = prevLAvailableBalance.add(prevLLocked);
+
+  const pAvailableBalance = new BN(myUser?.pBalance || '0');
+  const pLocked = new BN(myUser?.pLockedSum || '0').add(new BN(myUser?.pInterestSum || '0'));
+
+  const [lAvailableBalance, lAvailableBalanceMeta] = useSubscribable(
     () =>
-      new BN(balanceInPtk).isZero()
+      pAvailableBalance.isZero()
         ? of(new BN(0))
-        : api.fundsModule.convertPtkToDaiExit$(balanceInPtk),
-    [balanceInPtk],
+        : api.fundsModule.convertPtkToDaiExit$(pAvailableBalance.toString()),
+    [pAvailableBalance.toString()],
     new BN(0),
   );
 
-  const lockedInPtk = myUser?.pLockedSum || '0';
-  const [locked, lockedMeta] = useSubscribable(
-    () => api.fundsModule.convertPtkToDaiForLocked$(lockedInPtk),
-    [lockedInPtk],
-    new BN(0),
-  );
-
-  const deposit = useMemo(() => availableBalance.add(locked).toString(), [
-    availableBalance,
-    locked,
-  ]);
-
-  const dayAgoDate = React.useMemo(
+  const [lLocked, lLockedMeta] = useSubscribable(
     () =>
-      moment()
-        .subtract(1, 'day')
-        .unix(),
-    [],
-  ); // Date in seconds
+      pLocked.isZero() ? of(new BN(0)) : api.fundsModule.convertPtkToDaiExit$(pLocked.toString()),
+    [pLocked.toString()],
+    new BN(0),
+  );
 
-  const balancesDayAgoResult = useMyUserBalanceByDateSubscription({
-    variables: {
-      address: account || '',
-      date: dayAgoDate.toString(),
-    },
-  });
-
-  const balanceDayAgo = balancesDayAgoResult.data?.balances[0];
-
-  const balanceInDaiDayAgo = balanceDayAgo?.lBalance || '0';
+  const lTotal = useMemo(() => lAvailableBalance.add(lLocked), [
+    lAvailableBalance.toString(),
+    lLocked.toString(),
+  ]);
 
   const metrics = React.useMemo<IMetric[]>(
     () => [
       {
         title: t(tKeys.deposit.getKey()),
-        value: deposit.toString(),
+        value: lTotal.toString(),
+        previousValue: prevLTotal.toString(),
         token: 'dai',
         isCashMetric: true,
       },
       {
         title: t(tKeys.availableBalance.getKey()),
-        value: availableBalance.toString(),
-        previousValue: balanceInDaiDayAgo,
+        value: lAvailableBalance.toString(),
+        previousValue: prevLAvailableBalance.toString(),
         token: 'dai',
         isCashMetric: true,
       },
       {
         title: t(tKeys.locked.getKey()),
-        value: locked.toString(),
+        value: lLocked.toString(),
+        previousValue: prevLLocked.toString(),
         token: 'dai',
         isCashMetric: true,
       },
       {
         title: t(tKeys.credit.getKey()),
-        value: myUser?.credit || '0',
+        value: lCredit.toString(),
         token: 'dai',
         isCashMetric: true,
       },
     ],
-    [t, deposit, availableBalance, balanceInDaiDayAgo, locked, myUser],
+    [
+      t,
+      lTotal.toString(),
+      prevLTotal.toString(),
+      lAvailableBalance.toString(),
+      prevLAvailableBalance.toString(),
+      lLocked.toString(),
+      prevLLocked.toString(),
+      lCredit.toString(),
+    ],
   );
 
   return (
     <Loading
       gqlResults={myUserResult}
-      meta={[accountMeta, availableBalanceMeta, lockedMeta]}
+      meta={[accountMeta, lAvailableBalanceMeta, lLockedMeta]}
       progressVariant="circle"
     >
       <MetricsList {...props} metrics={metrics} />
