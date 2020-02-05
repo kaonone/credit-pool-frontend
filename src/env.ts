@@ -46,5 +46,6 @@ const ethNetworkConfigs: Record<number, INetworkConfig> = {
 
 export const NETWORK_ID = 4;
 export const ETH_NETWORK_CONFIG = ethNetworkConfigs[NETWORK_ID];
+export const SWARM_GATEWAY_URL = 'https://swarm-gateways.net';
 // TODO take from contract
 export const MIN_COLLATERAL_PERCENT_FOR_BORROWER = 50;

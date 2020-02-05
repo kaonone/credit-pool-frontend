@@ -4,36 +4,31 @@ import { LoanModuleApi } from './modules/LoanModuleApi';
 import { LiquidityModuleApi } from './modules/LiquidityModuleApi';
 import { TokensApi } from './modules/TokensApi';
 import { TransactionsApi } from './modules/TransactionsApi';
+import { SwarmApi } from './modules/SwarmApi';
 import { CurveModuleApi } from './modules/CurveModuleApi';
 
 export class Api {
   public web3Manager = new Web3Manager();
-  public transactions: TransactionsApi;
-  public tokens: TokensApi;
-  public fundsModule: FundsModuleApi;
-  public curveModule: CurveModuleApi;
-  public loanModule: LoanModuleApi;
-  public liquidityModule: LiquidityModuleApi;
+  public swarmApi = new SwarmApi();
 
-  constructor() {
-    this.transactions = new TransactionsApi();
-    this.tokens = new TokensApi(this.web3Manager, this.transactions);
-    this.fundsModule = new FundsModuleApi(this.web3Manager, this.tokens);
-    this.curveModule = new CurveModuleApi(this.web3Manager);
+  public transactions = new TransactionsApi();
+  public tokens = new TokensApi(this.web3Manager, this.transactions);
 
-    this.loanModule = new LoanModuleApi(
-      this.web3Manager,
-      this.tokens,
-      this.transactions,
-      this.fundsModule,
-    );
+  public curveModule = new CurveModuleApi(this.web3Manager);
+  public fundsModule = new FundsModuleApi(this.web3Manager, this.tokens);
+  public loanModule = new LoanModuleApi(
+    this.web3Manager,
+    this.tokens,
+    this.transactions,
+    this.fundsModule,
+    this.swarmApi,
+  );
 
-    this.liquidityModule = new LiquidityModuleApi(
-      this.web3Manager,
-      this.tokens,
-      this.transactions,
-      this.fundsModule,
-      this.curveModule,
-    );
-  }
+  public liquidityModule = new LiquidityModuleApi(
+    this.web3Manager,
+    this.tokens,
+    this.transactions,
+    this.fundsModule,
+    this.curveModule,
+  );
 }

@@ -148,7 +148,7 @@ const en = {
       lessThenOrEqual: 'Should be less then or equal %{value}',
       notDefault: 'Value must be different from initial',
       maxStringLength: 'Text should be less then %{max} letters',
-      onEnglishPlease: 'Should contain only english letters and numbers',
+      onEnglishPlease: 'Should contain only english letters, numbers and ",.!:\'""',
       isNumber: 'Enter a valid number',
       decimalsMoreThen: 'Enter a valid number with decimals less than %{decimals} digits',
       mustBeAnInteger: 'Enter an integer',

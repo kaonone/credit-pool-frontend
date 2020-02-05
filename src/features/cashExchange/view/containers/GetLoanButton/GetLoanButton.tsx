@@ -15,6 +15,7 @@ import {
   validateInteger,
   composeValidators,
   moreThen,
+  onEnglishPlease,
   moreThenOrEqual,
   Validator,
 } from 'utils/validators';
@@ -89,6 +90,10 @@ function GetLoanButton(props: IProps) {
     );
   }, [minApr, formattedMinPercent]);
 
+  const validateDescription = useMemo(() => {
+    return composeValidators(isRequired, onEnglishPlease);
+  }, []);
+
   const initialValues = useMemo<IExtraFormData>(
     () => ({
       apr: '',
@@ -153,7 +158,7 @@ function GetLoanButton(props: IProps) {
       <Loading meta={percentDecimalsMeta}>
         {percentDecimals && (
           <TextInputField
-            validate={isRequired}
+            validate={validateDescription}
             name={fieldNames.description}
             label={t(tKeys.descriptionLabel.getKey())}
             placeholder={t(tKeys.descriptionPlaceholder.getKey())}

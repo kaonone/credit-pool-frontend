@@ -460,6 +460,13 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@^7.8.3":
+  version "7.8.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.8.4.tgz#d79f5a2040f7caa24d53e563aad49cbc05581308"
+  integrity sha512-neAp3zt80trRVBI1x0azq6c57aNBqYZH8KhMm3TaB7wEI5Q4A2SHfBHE8w9gOhI/lrqxtEbXZgQIrHP+wvSGwQ==
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@babel/template@^7.1.0", "@babel/template@^7.4.0", "@babel/template@^7.4.4", "@babel/template@^7.6.0":
   version "7.6.0"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.6.0.tgz#7f0159c7f5012230dad64cca42ec9bdb5c9536e6"
@@ -535,6 +542,13 @@
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/@emotion/hash/-/hash-0.7.3.tgz#a166882c81c0c6040975dd30df24fae8549bd96f"
   integrity sha512-14ZVlsB9akwvydAdaEnVnvqu6J2P6ySv39hYyl/aoB6w/V+bXX0tay8cF6paqbgZsN2n5Xh15uF4pE+GvE+itw==
+
+"@erebos/bzz@^0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@erebos/bzz/-/bzz-0.13.0.tgz#8ddd4e685c8ed53b5147653e041c21fc35553468"
+  integrity sha512-ETjXxeNzT7wGofz0CcrNEc/dLeLg0DALuxpMymrzK+AvLvP8PZUfiFn+tZoupSMGaLldfSLJXweOfs3BimVaRg==
+  dependencies:
+    "@babel/runtime" "^7.8.3"
 
 "@ethersproject/address@^5.0.0-beta.125":
   version "5.0.0-beta.134"
