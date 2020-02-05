@@ -125,7 +125,6 @@ export class LoanModuleApi {
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
     const hash = await this.swarmApi.upload<string>(description);
-    console.log('description hash', hash);
 
     const minLCollateral = await first(
       this.getMinLoanCollateralByDaiInDai$(sourceAmount.toString()),
@@ -142,7 +141,7 @@ export class LoanModuleApi {
         pAmountMax: min(pAmount, pBalance),
         debtLAmount: sourceAmount,
         interest: new BN(apr),
-        descriptionHash: '0xb2fde6c9b9d74af2e49cc0e9ebc64112b523165066785d6f286b3d6c08660529',
+        descriptionHash: `0x${hash}`,
       },
       { from: fromAddress },
     );
