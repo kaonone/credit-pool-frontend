@@ -124,6 +124,19 @@
   },
   {
     "constant": true,
+    "inputs": [],
+    "name": "MODULE_PTOKEN",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
     "inputs": [{
       "internalType": "string",
       "name": "module",
@@ -148,6 +161,25 @@
       "name": "",
       "type": "bool"
     }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "limits",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "lDepositMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pWithdrawMin",
+        "type": "uint256"
+      }
+    ],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -268,6 +300,25 @@
       }
     ],
     "name": "withdraw",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "lDepositMin",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pWithdrawMin",
+        "type": "uint256"
+      }
+    ],
+    "name": "setLimits",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",

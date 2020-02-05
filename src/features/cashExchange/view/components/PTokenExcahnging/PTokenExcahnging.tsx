@@ -25,6 +25,7 @@ interface IProps<ExtraFormData> {
   additionalFields?: React.ReactNode[];
   initialValues?: ExtraFormData;
   getMaxSourceValue: (account: string) => Observable<BN>;
+  getMinSourceValue: (account: string) => Observable<BN>;
   onExchangeRequest: (
     account: string,
     values: ISubmittedFormData & Omit<ExtraFormData, keyof ISubmittedFormData>,
@@ -41,6 +42,7 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
     title,
     sourcePlaceholder,
     getMaxSourceValue,
+    getMinSourceValue,
     confirmMessageTKey,
     onExchangeRequest,
     onCancel,
@@ -90,6 +92,7 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
               title={title}
               sourcePlaceholder={sourcePlaceholder}
               getMaxSourceValue={getMaxSourceValue}
+              getMinSourceValue={getMinSourceValue}
               onSubmit={setValues}
               onCancel={onCancel}
               additionalFields={additionalFields}

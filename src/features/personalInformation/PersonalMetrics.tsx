@@ -37,7 +37,7 @@ function PersonalMetrics(props: Props) {
     new BN(0),
   );
 
-  const lockedInPtk = myUser?.locked || '0';
+  const lockedInPtk = myUser?.pLockedSum || '0';
   const [locked, lockedMeta] = useSubscribable(
     () => api.fundsModule.convertPtkToDaiForLocked$(lockedInPtk),
     [lockedInPtk],

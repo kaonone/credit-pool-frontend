@@ -77,8 +77,6 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
   const isCollateralReceived = progressInPercents === 100;
   const isMyProposal = !!account && account.toLowerCase() === borrower.toLowerCase();
 
-  const maxStakeSize = new BN(lendValue).sub(new BN(stakedValue)).toString();
-
   const asideContent = React.useMemo(
     () => (
       <Grid container spacing={2} justify="center" direction="column">
@@ -89,7 +87,6 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
           <Grid item>
             <Loading meta={accountMeta} progressVariant="linear">
               <StakeButton
-                maxStakeSize={maxStakeSize}
                 proposalId={proposalId}
                 borrower={borrower}
                 disabled={isCollateralReceived || isMyProposal}
