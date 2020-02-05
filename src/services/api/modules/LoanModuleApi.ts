@@ -137,7 +137,7 @@ export class LoanModuleApi {
         pAmountMax: min(pAmount, pBalance),
         debtLAmount: sourceAmount,
         interest: new BN(apr),
-        descriptionHash: `0x${hash}`,
+        descriptionHash: hash,
       },
       { from: fromAddress },
     );

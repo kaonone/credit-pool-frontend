@@ -10,13 +10,15 @@ export class SwarmApi {
   bzz = new Bzz<any, any>({ url: SWARM_GATEWAY_URL });
 
   @autobind
-  public upload<T>(data: T): Promise<string> {
-    return this.bzz.uploadData(data);
+  public async upload<T>(data: T): Promise<string> {
+    const hash = await this.bzz.uploadData(data);
+    return `0x${hash}`;
   }
 
   @memoize(R.identity)
   @autobind
-  public read<T>(hash: string): Observable<T> {
+  public read<T>(inputHash: string): Observable<T> {
+    const hash = inputHash.startsWith('0x') ? inputHash.slice(2) : inputHash;
     return from(this.bzz.downloadData<T>(hash));
   }
 }

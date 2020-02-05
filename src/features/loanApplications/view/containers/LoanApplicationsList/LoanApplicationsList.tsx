@@ -32,7 +32,7 @@ function LoanApplicationsList() {
         borrower: debt.borrower,
         aprValue: debt.apr,
         stakedValue: debt.staked,
-        descriptionHash: 'b2fde6c9b9d74af2e49cc0e9ebc64112b523165066785d6f286b3d6c08660529',
+        descriptionHash: debt.description,
         status: debt.status,
         proposalId: debt.proposal_id,
       })) || [],

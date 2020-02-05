@@ -10,6 +10,7 @@ query DebtProposals($first: Int!, $skip: Int!) {
     pledges
     staked
     status
+    description
     last_update
   }
 }

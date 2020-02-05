@@ -13,8 +13,8 @@ export class Api {
 
   public transactions = new TransactionsApi();
   public tokens = new TokensApi(this.web3Manager, this.transactions);
-  public curveModule = new CurveModuleApi(this.web3Manager);
 
+  public curveModule = new CurveModuleApi(this.web3Manager);
   public fundsModule = new FundsModuleApi(this.web3Manager, this.tokens);
   public loanModule = new LoanModuleApi(
     this.web3Manager,
