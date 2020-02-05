@@ -1,5 +1,5 @@
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { map, first as firstOperator } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
 import { autobind } from 'core-decorators';
@@ -20,10 +20,6 @@ function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNulla
   }
 
   return value as NonNullable<T>;
-}
-
-function first<T>(input: Observable<T>): Promise<T> {
-  return input.pipe(firstOperator()).toPromise();
 }
 
 export class TokensApi {
@@ -47,41 +43,6 @@ export class TokensApi {
         ),
       )
       .subscribe(this.txContracts);
-  }
-
-  @autobind
-  public async approveAllPtk(fromAddress: string, spender: string) {
-    const allowance = await first(
-      this.readonlyContracts.ptk.methods.allowance({
-        _owner: fromAddress,
-        _spender: spender,
-      }),
-    );
-
-    const minAllowance = new BN(2).pow(new BN(250));
-
-    if (allowance.lt(minAllowance)) {
-      const maxAllowance = new BN(2).pow(new BN(256)).subn(1);
-      await this.approvePtk(fromAddress, spender, maxAllowance);
-    }
-  }
-
-  @autobind
-  private async approvePtk(fromAddress: string, spender: string, value: BN): Promise<void> {
-    const txPtk = getCurrentValueOrThrow(this.txContracts).ptk;
-
-    const promiEvent = txPtk.methods.approve(
-      { _spender: spender, _value: value },
-      { from: fromAddress },
-    );
-
-    this.transactionsApi.pushToSubmittedTransactions$('ptk.approve', promiEvent, {
-      spender,
-      fromAddress,
-      value,
-    });
-
-    await promiEvent;
   }
 
   @autobind

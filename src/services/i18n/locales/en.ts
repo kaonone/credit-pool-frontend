@@ -28,11 +28,6 @@ const en = {
         success: 'Approving %{amount} transfer. Succeeded',
         error: 'Approving %{amount} transfer. Failed',
       },
-      'ptk.approve': {
-        pending: 'Getting approval to perform actions in the pool. Pending',
-        success: 'Getting approval to perform actions in the pool. Succeeded',
-        error: 'Getting approval to perform actions in the pool. Failed',
-      },
       'liquidity.sellPtk': {
         pending: 'Withdrawing %{amount} from the pool. Pending',
         success: 'Withdrawing %{amount} from the pool. Succeeded',
