@@ -38,6 +38,7 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
     [],
     0,
   );
+  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
   const [description, descriptionMeta] = useSubscribable(
     () => api.swarmApi.read<string>(descriptionHash),
@@ -74,6 +75,7 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
   const rawProgressInPercents = new BN(stakedValue).muln(10000).div(new BN(lendValue));
   const progressInPercents = Math.min(100, rawProgressInPercents.toNumber() / 100);
   const isCollateralReceived = progressInPercents === 100;
+  const isMyProposal = !!account && account.toLowerCase() === borrower.toLowerCase();
 
   const maxStakeSize = new BN(lendValue).sub(new BN(stakedValue)).toString();
 
@@ -85,20 +87,22 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
         </Grid>
         {proposalId && (
           <Grid item>
-            <StakeButton
-              maxStakeSize={maxStakeSize}
-              proposalId={proposalId}
-              borrower={borrower}
-              disabled={isCollateralReceived}
-              variant="contained"
-              color="primary"
-              fullWidth
-            />
+            <Loading meta={accountMeta} progressVariant="linear">
+              <StakeButton
+                maxStakeSize={maxStakeSize}
+                proposalId={proposalId}
+                borrower={borrower}
+                disabled={isCollateralReceived || isMyProposal}
+                variant="contained"
+                color="primary"
+                fullWidth
+              />
+            </Loading>
           </Grid>
         )}
       </Grid>
     ),
-    [t, status, progressInPercents],
+    [t, status, progressInPercents, isMyProposal, accountMeta],
   );
 
   return (

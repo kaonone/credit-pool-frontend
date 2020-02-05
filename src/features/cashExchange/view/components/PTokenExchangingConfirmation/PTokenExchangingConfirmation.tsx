@@ -36,11 +36,14 @@ function PTokenExchangingConfirmation<ExtraFormData extends Record<string, any> 
   const communication = useCommunication(onConfirm, []);
   const { status, error } = communication;
 
-  const [sourceAmount] = useFormattedBalance('dai', values?.sourceAmount || '0');
+  const [{ formattedBalance: formattedSourceAmount }] = useFormattedBalance(
+    'dai',
+    values?.sourceAmount || '0',
+  );
 
   const [message, messageMeta] =
     typeof messageTKey === 'string'
-      ? [t(messageTKey, { sourceAmount }), { loaded: true }]
+      ? [t(messageTKey, { sourceAmount: formattedSourceAmount }), { loaded: true }]
       : useSubscribable(() => messageTKey(values), [values]);
 
   const handleCancel = useCallback(() => {

@@ -16,19 +16,19 @@ export function Root(): React.ReactElement<{}> {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <Snackbar>
-          <I18nProvider>
-            <MuiThemeProvider theme={theme}>
-              <ApiContext.Provider value={api}>
+        <ApiContext.Provider value={api}>
+          <Snackbar>
+            <I18nProvider>
+              <MuiThemeProvider theme={theme}>
                 <ApolloProvider>
                   <CssBaseline />
                   <App />
                   <TransactionsNotifications />
                 </ApolloProvider>
-              </ApiContext.Provider>
-            </MuiThemeProvider>
-          </I18nProvider>
-        </Snackbar>
+              </MuiThemeProvider>
+            </I18nProvider>
+          </Snackbar>
+        </ApiContext.Provider>
       </BrowserRouter>
     </ErrorBoundary>
   );

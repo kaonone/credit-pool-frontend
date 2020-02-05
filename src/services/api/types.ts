@@ -8,6 +8,7 @@ import {
   createFundsModule,
   createLiquidityModule,
   createLoanModule,
+  createCurveModule,
 } from 'generated/contracts';
 
 export type Contracts = {
@@ -16,13 +17,10 @@ export type Contracts = {
   fundsModule: ReturnType<typeof createFundsModule>;
   liquidityModule: ReturnType<typeof createLiquidityModule>;
   loanModule: ReturnType<typeof createLoanModule>;
+  curveModule: ReturnType<typeof createCurveModule>;
 };
 
 export type SubmittedTransaction =
-  | IGenericSubmittedTransaction<
-      'dai.transfer',
-      { fromAddress: string; toAddress: string; value: BN }
-    >
   | IGenericSubmittedTransaction<'dai.approve', { spender: string; fromAddress: string; value: BN }>
   | IGenericSubmittedTransaction<'ptk.approve', { spender: string; fromAddress: string; value: BN }>
   | IGenericSubmittedTransaction<'liquidity.sellPtk', { address: string; sourceAmount: BN }>

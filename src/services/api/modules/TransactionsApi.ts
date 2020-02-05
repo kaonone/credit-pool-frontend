@@ -26,7 +26,7 @@ export class TransactionsApi {
     );
 
     this.submittedTransaction.next({
-      type: transactionName as 'dai.transfer',
+      type: transactionName as 'dai.approve',
       tx: promise,
       promiEvent,
       payload,
