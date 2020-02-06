@@ -3,6 +3,7 @@ query MyGuarantees($first: Int!, $skip: Int!, $pledgers: [String!]!, $borrower: 
   debts(first: $first, skip: $skip, where: {pledgers_contains: $pledgers, borrower_not: $borrower}) {
     id
     debt_id
+    proposal_id
     apr
     borrower
     total

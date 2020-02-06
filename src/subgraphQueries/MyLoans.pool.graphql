@@ -2,6 +2,7 @@ query MyLoans($first: Int!, $skip: Int!, $address: String!) {
   debts(first: $first, skip: $skip, where: {borrower: $address}) {
     id
     debt_id
+    proposal_id
     apr
     borrower
     total

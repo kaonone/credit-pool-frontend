@@ -9,21 +9,25 @@ import { useApi } from 'services/api';
 import { useTranslate } from 'services/i18n';
 import { useSubscribable } from 'utils/react';
 
-import { AddressCell } from './LoansTableCells';
+import { AddressCell, MyStakeCell, MyEarnCell } from './LoansTableCells';
 
 export const Table = GeneralTable as MakeTableType<Debt>;
 
+type HidableColumn = 'address' | 'earn' | 'myStake';
+
 interface Props {
   list: Debt[];
-  withEarn?: boolean;
+  hideColumns?: HidableColumn[];
   paginationView: React.ReactNode;
 }
 
-export function LoansTable({ list, withEarn, paginationView }: Props) {
+export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
   const { t, tKeys: tKeysAll } = useTranslate();
   const tKeys = tKeysAll.features.loans.loansPanel;
 
   const api = useApi();
+
+  const [account] = useSubscribable(() => api.web3Manager.account, []);
 
   const [aprDecimals, aprDecimalsMeta] = useSubscribable(
     () => api.loanModule.getAprDecimals$(),
@@ -54,10 +58,12 @@ export function LoansTable({ list, withEarn, paginationView }: Props) {
                     {({ index }) => <Typography variant="body1">{index + 1}</Typography>}
                   </Table.Cell>
                 </Table.Column>
-                <Table.Column>
-                  <Table.Head>{t(tKeys.address.getKey())}</Table.Head>
-                  <Table.Cell>{({ data }) => <AddressCell address={data.borrower} />}</Table.Cell>
-                </Table.Column>
+                {!hideColumns.includes('address') && (
+                  <Table.Column>
+                    <Table.Head>{t(tKeys.address.getKey())}</Table.Head>
+                    <Table.Cell>{({ data }) => <AddressCell address={data.borrower} />}</Table.Cell>
+                  </Table.Column>
+                )}
                 <Table.Column>
                   <Table.Head>{t(tKeys.loan.getKey())}</Table.Head>
                   <Table.Cell>
@@ -88,11 +94,17 @@ export function LoansTable({ list, withEarn, paginationView }: Props) {
                     )}
                   </Table.Cell>
                 </Table.Column>
-                {withEarn && (
+                {account && !hideColumns.includes('earn') && (
                   <Table.Column>
                     <Table.Head>{t(tKeys.earn.getKey())}</Table.Head>
                     <Table.Cell>
-                      {() => <FormattedBalance sum="7000000000000000" token="dai" />}
+                      {({ data }) => (
+                        <MyEarnCell
+                          supporter={account}
+                          borrower={data.borrower}
+                          proposalId={data.proposal_id}
+                        />
+                      )}
                     </Table.Cell>
                   </Table.Column>
                 )}
@@ -100,12 +112,20 @@ export function LoansTable({ list, withEarn, paginationView }: Props) {
                   <Table.Head>{t(tKeys.status.getKey())}</Table.Head>
                   <Table.Cell>{({ data }) => t(tKeys.statuses[data.status].getKey())}</Table.Cell>
                 </Table.Column>
-                <Table.Column>
-                  <Table.Head>{t(tKeys.myStake.getKey())}</Table.Head>
-                  <Table.Cell>
-                    {({ data }) => <FormattedBalance sum={data.lStaked} token="dai" />}
-                  </Table.Cell>
-                </Table.Column>
+                {account && !hideColumns.includes('myStake') && (
+                  <Table.Column>
+                    <Table.Head>{t(tKeys.myStake.getKey())}</Table.Head>
+                    <Table.Cell>
+                      {({ data }) => (
+                        <MyStakeCell
+                          supporter={account}
+                          borrower={data.borrower}
+                          proposalId={data.proposal_id}
+                        />
+                      )}
+                    </Table.Cell>
+                  </Table.Column>
+                )}
               </Table>
             </Grid>
             {paginationView && (
