@@ -40,10 +40,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
     lineHeight: 1.15,
   },
 
-  growth: {
-    fontSize: '0.8em',
-  },
-
   graphic: {
     width: '100%',
     marginTop: theme.spacing(2),

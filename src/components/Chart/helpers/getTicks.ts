@@ -6,10 +6,11 @@ import { Period, IPoint } from '../Chart';
 
 const POINTS_LENGTH = 7;
 
-export function getTicks(
-  points: IPoint[],
+export function getTicks<P extends IPoint>(
+  points: P[],
+  valueKeys: Array<keyof P>,
   selectedPeriod: Period,
-): { ticks: IPoint[]; realPeriod: Period } {
+): { ticks: P[]; realPeriod: Period } {
   const firstPoint = R.head(points);
   if (!firstPoint) {
     return { ticks: [], realPeriod: 'all' };
@@ -38,14 +39,17 @@ export function getTicks(
   };
 
   const firstPointDate = Math.max(firstPointDateByPeriod[selectedPeriod](), firstPoint.date);
-  const lastPoint: IPoint = {
+  // eslint-disable-next-line no-underscore-dangle
+  const zeroPoint = getZeroPoint(currentDate, valueKeys);
+  const lastPoint: P = {
+    ...(R.last(points) || zeroPoint),
     date: currentDate,
-    value: (R.last(points) || { value: 0 }).value,
   };
 
   const realPeriod = calculatePeriodByDuration(moment(lastPoint.date).diff(firstPointDate));
   const ticks = calculateTicks(
     [...points, lastPoint],
+    valueKeys,
     firstPointDate,
     lastPoint.date,
     POINTS_LENGTH,
@@ -75,7 +79,13 @@ function calculatePeriodByDuration(duration: number): Period {
   return 'all';
 }
 
-function calculateTicks(points: IPoint[], start: number, stop: number, length: number) {
+function calculateTicks<P extends IPoint>(
+  points: P[],
+  valueKeys: Array<keyof P>,
+  start: number,
+  stop: number,
+  length: number,
+): P[] {
   const scale = d3Scale
     .scaleLinear()
     .domain([start, stop])
@@ -83,11 +93,15 @@ function calculateTicks(points: IPoint[], start: number, stop: number, length: n
 
   const tickDates = Array.from(new Array(length), (_, i) => Math.floor(scale.invert(i)));
 
-  return tickDates.map(getAnyPointOnScale.bind(null, points));
+  return tickDates.map(date => getAnyPointOnScale(points, valueKeys, date));
 }
 
-function getAnyPointOnScale(points: IPoint[], date: number): IPoint {
-  const zeroPoint = { date, value: 0 };
+function getAnyPointOnScale<P extends IPoint>(
+  points: P[],
+  valueKeys: Array<keyof P>,
+  date: number,
+): P {
+  const zeroPoint = getZeroPoint(date, valueKeys);
 
   if (points.length <= 1) {
     return zeroPoint;
@@ -103,7 +117,21 @@ function getAnyPointOnScale(points: IPoint[], date: number): IPoint {
   const rightPoint = sorted[leftPointIndex + 1] || zeroPoint;
 
   const coefficient = (date - leftPoint.date) / (rightPoint.date - leftPoint.date);
-  const value = leftPoint.value + (rightPoint.value - leftPoint.value) * coefficient;
 
-  return { date, value };
+  return valueKeys.reduce<P>(
+    (acc, cur) => ({
+      ...acc,
+      [cur]:
+        Number(leftPoint[cur]) + (Number(rightPoint[cur]) - Number(leftPoint[cur])) * coefficient,
+    }),
+    {
+      date,
+    } as P,
+  );
+}
+
+function getZeroPoint<P extends IPoint>(date: number, valueKeys: Array<keyof P>) {
+  return valueKeys.reduce<P>((acc, cur) => ({ ...acc, [cur]: 0 }), {
+    date,
+  } as P);
 }

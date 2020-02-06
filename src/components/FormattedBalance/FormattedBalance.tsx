@@ -9,11 +9,12 @@ import { Token } from 'model/types';
 interface IProps {
   sum: BN | string;
   token: Token;
+  className?: string;
   children?: FunctionComponent<{ formattedBalance: string }>;
 }
 
 function FormattedBalance(props: IProps) {
-  const { sum, token, children } = props;
+  const { sum, token, children, className } = props;
   const [{ formattedBalance, notRoundedBalance }, formattedBalanceMeta] = useFormattedBalance(
     token,
     sum,
@@ -26,7 +27,9 @@ function FormattedBalance(props: IProps) {
       progressProps={{ size: '0.8em', color: 'inherit' }}
     >
       <Tooltip title={notRoundedBalance}>
-        <span>{children ? children({ formattedBalance }) : formattedBalance}</span>
+        <span className={className}>
+          {children ? children({ formattedBalance }) : formattedBalance}
+        </span>
       </Tooltip>
     </Loading>
   );

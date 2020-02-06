@@ -1,41 +1,42 @@
 import * as React from 'react';
-import BN from 'bn.js';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 
 import { Chart, IPoint } from 'components/Chart/Chart';
-import { Growth } from 'components/Growth/Growth';
-import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
 
 import { useStyles } from './BalanceChart.style';
 
-interface IProps {
+interface IProps<P extends IPoint> {
   title: string;
   membersLength?: number;
-  chartPoints: IChartPoint[];
-  currentBalance: string;
+  chartPoints: P[];
+  chartLines: Array<keyof P>;
+  chartLineColors?: Partial<Record<keyof P, string>>;
+  renderCurrentBalance(periodInfo: IPeriodInfo<P>): React.ReactNode;
 }
 
-export interface IChartPoint {
-  date: number;
-  value: number;
-}
-
-interface IPeriodInfo {
-  firstPoint: IPoint;
-  lastPoint: IPoint;
+export interface IPeriodInfo<P extends IPoint> {
+  firstPoint: P;
+  lastPoint: P;
   period: string;
 }
 
-const BalanceChart = (props: IProps) => {
-  const { title, membersLength, chartPoints, currentBalance } = props;
+function BalanceChart<P extends IPoint>(props: IProps<P>) {
+  const {
+    title,
+    membersLength,
+    chartPoints,
+    chartLines,
+    chartLineColors,
+    renderCurrentBalance,
+  } = props;
   const classes = useStyles();
-  const [periodInfo, setPeriodInfo] = React.useState<IPeriodInfo | null>(null);
+  const [periodInfo, setPeriodInfo] = React.useState<IPeriodInfo<P> | null>(null);
 
   const handleChartPeriodChange = React.useCallback(
-    (firstPoint: IPoint, lastPoint: IPoint, period: string) => {
+    (firstPoint: P, lastPoint: P, period: string) => {
       setPeriodInfo({
         firstPoint,
         lastPoint,
@@ -66,25 +67,21 @@ const BalanceChart = (props: IProps) => {
             null}
           <Grid item xs={12}>
             <Typography className={classes.balanceValue} variant="h4">
-              {periodInfo && (
-                <>
-                  <FormattedBalance sum={currentBalance} token="dai" />{' '}
-                  <Growth
-                    className={classes.growth}
-                    previous={new BN(periodInfo.firstPoint.value * 100)}
-                    current={new BN(periodInfo.lastPoint.value * 100)}
-                  />
-                </>
-              )}
+              {periodInfo && renderCurrentBalance(periodInfo)}
             </Typography>
           </Grid>
         </Grid>
         <div className={classes.graphic}>
-          <Chart points={chartPoints} onPeriodChange={handleChartPeriodChange} />
+          <Chart
+            points={chartPoints}
+            lines={chartLines}
+            lineColors={chartLineColors}
+            onPeriodChange={handleChartPeriodChange}
+          />
         </div>
       </CardContent>
     </Card>
   );
-};
+}
 
 export { BalanceChart };

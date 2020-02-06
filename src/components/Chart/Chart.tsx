@@ -11,21 +11,33 @@ export type Period = '24h' | '1w' | '1m' | '6m' | 'all';
 
 export interface IPoint {
   date: number;
-  value: number;
 }
 
-interface IProps {
-  points: IPoint[];
-  onPeriodChange?: (firstPoint: IPoint, lastPoint: IPoint, period: string) => any;
+interface IProps<P extends IPoint> {
+  points: P[];
+  lines: Array<keyof P>;
+  lineColors?: Partial<Record<keyof P, string>>;
+  onPeriodChange?: (firstPoint: P, lastPoint: P, period: string) => any;
 }
 
-function Chart(props: IProps) {
-  const { points, onPeriodChange } = props;
+function Chart<P extends IPoint>(props: IProps<P>) {
+  const {
+    points,
+    lines,
+    lineColors = {} as Partial<Record<keyof P, string>>,
+    onPeriodChange,
+  } = props;
   const classes = useStyles();
 
-  const [period, setPeriod] = React.useState<Period>(() => getTicks(points, 'all').realPeriod);
+  const [period, setPeriod] = React.useState<Period>(
+    () => getTicks(points, lines, 'all').realPeriod,
+  );
 
-  const { ticks, realPeriod } = React.useMemo(() => getTicks(points, period), [points, period]);
+  const { ticks, realPeriod } = React.useMemo(() => getTicks(points, lines, period), [
+    points,
+    lines.toString(),
+    period,
+  ]);
 
   const firstTick = R.head(ticks);
   const lastTick = R.last(ticks);
@@ -86,14 +98,17 @@ function Chart(props: IProps) {
             />
             <YAxis padding={{ top: 30, bottom: 1 }} hide />
             <CartesianGrid stroke="#EAE9ED" horizontal={false} />
-            <Line
-              dataKey="value"
-              stroke="#613AAF"
-              strokeWidth={2}
-              dot={false}
-              connectNulls
-              isAnimationActive={false}
-            />
+            {lines.map(line => (
+              <Line
+                key={String(line)}
+                dataKey={String(line)}
+                stroke={lineColors[line] || '#613AAF'}
+                strokeWidth={2}
+                dot={false}
+                connectNulls
+                isAnimationActive={false}
+              />
+            ))}
           </LineChart>
         </ResponsiveContainer>
       </div>

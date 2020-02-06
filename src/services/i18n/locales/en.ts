@@ -5,7 +5,7 @@ const en = {
     connectingWarning: 'You need connect to wallet',
     pages: {
       overview: {
-        poolBalanceTitle: 'Pool balance',
+        poolBalanceTitle: 'Input/Output costs',
         myBalanceTitle: 'My balance',
         poolInfoTitle: 'Pool information',
       },

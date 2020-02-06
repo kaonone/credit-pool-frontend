@@ -56,6 +56,15 @@ export class FundsModuleApi {
 
   @memoize(R.identity)
   @autobind
+  public getPtkBalanceInDaiWithFee$(address: string): Observable<BN> {
+    return this.tokensApi.getBalance$('ptk', address).pipe(
+      switchMap(balance => this.getPtkToDaiExitInfo$(balance.toString())),
+      map(item => item.user),
+    );
+  }
+
+  @memoize(R.identity)
+  @autobind
   public getDaiToDaiExitInfo$(daiValue: string): Observable<{ total: BN; user: BN; fee: BN }> {
     return this.convertDaiToPtkExit$(daiValue).pipe(
       switchMap(ptkValue => this.getPtkToDaiExitInfo$(ptkValue.toString())),

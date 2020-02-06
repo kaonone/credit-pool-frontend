@@ -2,23 +2,36 @@ import * as React from 'react';
 import moment from 'moment';
 import BN from 'bn.js';
 
-import { BalanceChart, IChartPoint, Loading } from 'components';
+import { BalanceChart, Loading, FormattedBalance, Growth, IPeriodInfo } from 'components';
 import { useMyUserBalancesSubscription } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
+import { makeStyles } from 'utils/styles';
 import { useSubscribable } from 'utils/react';
 import { decimalsToWei } from 'utils/bn';
 
+export const useStyles = makeStyles({
+  growth: {
+    fontSize: '0.8em',
+  },
+});
+
 const tKeys = tKeysAll.app.pages.overview;
 
+interface IUserBalancePoint {
+  date: number;
+  value: number;
+}
+
 function UserBalanceChart() {
+  const classes = useStyles();
   const api = useApi();
   const { t } = useTranslate();
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
   const [currentBalance, currentBalanceMeta] = useSubscribable(
     () =>
-      api.fundsModule.getPtkBalanceInDaiWithoutFee$(
+      api.fundsModule.getPtkBalanceInDaiWithFee$(
         account || '0x0000000000000000000000000000000000000000',
       ),
     [account],
@@ -46,7 +59,7 @@ function UserBalanceChart() {
   });
   const balances = balancesResult.data?.exitBalances || [];
 
-  const mockedPoints = React.useMemo(
+  const mockedPoints = React.useMemo<IUserBalancePoint[]>(
     () => [
       {
         date:
@@ -62,7 +75,7 @@ function UserBalanceChart() {
     [],
   );
 
-  const chartPoints: IChartPoint[] = React.useMemo(
+  const chartPoints: IUserBalancePoint[] = React.useMemo(
     () =>
       balances.length && decimals
         ? balances
@@ -86,11 +99,26 @@ function UserBalanceChart() {
     [balances, decimals, currentBalance?.toString()],
   );
 
+  const renderCurrentBalance = React.useCallback(
+    (periodInfo: IPeriodInfo<IUserBalancePoint>) => (
+      <>
+        {currentBalance && <FormattedBalance sum={currentBalance} token="dai" />}{' '}
+        <Growth
+          className={classes.growth}
+          previous={new BN(periodInfo.firstPoint.value * 100)}
+          current={new BN(periodInfo.lastPoint.value * 100)}
+        />
+      </>
+    ),
+    [currentBalance?.toString()],
+  );
+
   return (
     <Loading gqlResults={balancesResult} meta={[accountMeta, daiTokenInfoMeta, currentBalanceMeta]}>
       <BalanceChart
-        currentBalance={currentBalance?.toString() || '0'}
+        renderCurrentBalance={renderCurrentBalance}
         chartPoints={chartPoints}
+        chartLines={['value']}
         title={t(tKeys.myBalanceTitle.getKey())}
       />
     </Loading>
