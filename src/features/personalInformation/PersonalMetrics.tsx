@@ -35,20 +35,22 @@ function PersonalMetrics(props: Props) {
   const pAvailableBalance = new BN(myUser?.pBalance || '0');
   const pLocked = new BN(myUser?.pLockedSum || '0').add(new BN(myUser?.pInterestSum || '0'));
 
-  const [lAvailableBalance, lAvailableBalanceMeta] = useSubscribable(
+  const [{ user: lAvailableBalance }, lAvailableBalanceMeta] = useSubscribable(
     () =>
       pAvailableBalance.isZero()
-        ? of(new BN(0))
-        : api.fundsModule.convertPtkToDaiExit$(pAvailableBalance.toString()),
+        ? of({ user: new BN(0) })
+        : api.fundsModule.getPtkToDaiExitInfo$(pAvailableBalance.toString()),
     [pAvailableBalance.toString()],
-    new BN(0),
+    { user: new BN(0) },
   );
 
-  const [lLocked, lLockedMeta] = useSubscribable(
+  const [{ user: lLocked }, lLockedMeta] = useSubscribable(
     () =>
-      pLocked.isZero() ? of(new BN(0)) : api.fundsModule.convertPtkToDaiExit$(pLocked.toString()),
+      pLocked.isZero()
+        ? of({ user: new BN(0) })
+        : api.fundsModule.getPtkToDaiExitInfo$(pLocked.toString()),
     [pLocked.toString()],
-    new BN(0),
+    { user: new BN(0) },
   );
 
   const lTotal = useMemo(() => lAvailableBalance.add(lLocked), [

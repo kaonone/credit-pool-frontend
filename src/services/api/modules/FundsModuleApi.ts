@@ -47,10 +47,11 @@ export class FundsModuleApi {
 
   @memoize(R.identity)
   @autobind
-  public getPtkBalanceInDai$(address: string): Observable<BN> {
-    return this.tokensApi
-      .getBalance$('ptk', address)
-      .pipe(switchMap(balance => this.convertPtkToDaiExit$(balance.toString())));
+  public getPtkBalanceInDaiWithoutFee$(address: string): Observable<BN> {
+    return this.tokensApi.getBalance$('ptk', address).pipe(
+      switchMap(balance => this.getPtkToDaiExitInfo$(balance.toString())),
+      map(item => item.total),
+    );
   }
 
   @memoize(R.identity)
@@ -78,12 +79,6 @@ export class FundsModuleApi {
         new BN(value).mul(decimalsToWei(ptkInfo.decimals)).div(oneDaiPrice),
       ),
     );
-  }
-
-  @memoize(R.identity)
-  @autobind
-  public convertPtkToDaiExit$(value: string): Observable<BN> {
-    return this.getPtkToDaiExitInfo$(value).pipe(map(({ total }) => total));
   }
 
   @memoize(R.identity)

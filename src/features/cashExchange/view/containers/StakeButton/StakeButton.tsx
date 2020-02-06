@@ -30,7 +30,7 @@ function StakeButton(props: IProps) {
   const getMaxSourceValue = useCallback(
     (account: string) =>
       combineLatest([
-        api.fundsModule.getPtkBalanceInDai$(account),
+        api.fundsModule.getPtkBalanceInDaiWithoutFee$(account),
         api.loanModule.getPledgeRequirements$(borrower, proposalId),
       ]).pipe(
         map(([balance, { maxLPledge }]) => {

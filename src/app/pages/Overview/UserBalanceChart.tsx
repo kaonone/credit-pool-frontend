@@ -18,7 +18,9 @@ function UserBalanceChart() {
 
   const [currentBalance, currentBalanceMeta] = useSubscribable(
     () =>
-      api.fundsModule.getPtkBalanceInDai$(account || '0x0000000000000000000000000000000000000000'),
+      api.fundsModule.getPtkBalanceInDaiWithoutFee$(
+        account || '0x0000000000000000000000000000000000000000',
+      ),
     [account],
   );
   const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
