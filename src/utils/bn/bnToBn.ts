@@ -10,7 +10,7 @@ export function bnToBn<ExtToBn extends ToBn>(value?: ExtToBn | BN | string | num
   if (!value) {
     return new BN(0);
   }
-  if (isHex(value)) {
+  if (isHex(value, undefined, true)) {
     return hexToBn(value.toString());
   }
 

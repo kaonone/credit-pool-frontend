@@ -4,7 +4,7 @@ import BN from 'bn.js';
 import * as R from 'ramda';
 import { autobind } from 'core-decorators';
 
-import { min } from 'utils/bn';
+import { min, bnToBn } from 'utils/bn';
 import { memoize } from 'utils/decorators';
 import { createLoanModule } from 'generated/contracts';
 import { ETH_NETWORK_CONFIG, MIN_COLLATERAL_PERCENT_FOR_BORROWER } from 'env';
@@ -101,7 +101,7 @@ export class LoanModuleApi {
         borrower,
         lAmountMin: new BN(0),
         pAmount: min(pAmount, pBalance),
-        proposal: new BN(proposalId),
+        proposal: bnToBn(proposalId),
       },
       { from: fromAddress },
     );
@@ -161,9 +161,9 @@ export class LoanModuleApi {
   public getMaxAvailableLoanSizeInDai$(address: string): Observable<BN> {
     return this.tokensApi.getBalance$('ptk', address).pipe(
       switchMap(balance => {
-        return this.fundsModuleApi.convertPtkToDaiExit$(balance.toString());
+        return this.fundsModuleApi.getPtkToDaiExitInfo$(balance.toString());
       }),
-      map(item => item.muln(100).divn(MIN_COLLATERAL_PERCENT_FOR_BORROWER)),
+      map(item => item.total.muln(100).divn(MIN_COLLATERAL_PERCENT_FOR_BORROWER)),
     );
   }
 
@@ -175,7 +175,7 @@ export class LoanModuleApi {
     return this.readonlyContract.methods
       .getPledgeRequirements({
         borrower,
-        proposal: new BN(proposalId),
+        proposal: bnToBn(proposalId),
       })
       .pipe(map(([minLPledge, maxLPledge]) => ({ minLPledge, maxLPledge })));
   }

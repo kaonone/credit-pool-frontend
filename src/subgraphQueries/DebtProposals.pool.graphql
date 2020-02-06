@@ -1,5 +1,5 @@
 query DebtProposals($first: Int!, $skip: Int!) {
-  debts(first: $first, skip: $skip, where: {status: PROPOSED}) {
+  debts(first: $first, skip: $skip, where: {status: PROPOSED, stakeProgress_lt: "0x64"}) {
     id
     debt_id
     proposal_id
