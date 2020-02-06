@@ -31,7 +31,7 @@ function LoanApplicationsList() {
         lendValue: debt.total,
         borrower: debt.borrower,
         aprValue: debt.apr,
-        stakedValue: debt.staked,
+        stakedValue: debt.lStaked,
         descriptionHash: debt.description,
         status: debt.status,
         proposalId: debt.proposal_id,

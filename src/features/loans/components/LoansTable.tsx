@@ -103,7 +103,7 @@ export function LoansTable({ list, withEarn, paginationView }: Props) {
                 <Table.Column>
                   <Table.Head>{t(tKeys.myStake.getKey())}</Table.Head>
                   <Table.Cell>
-                    {({ data }) => <FormattedBalance sum={data.staked} token="dai" />}
+                    {({ data }) => <FormattedBalance sum={data.lStaked} token="dai" />}
                   </Table.Cell>
                 </Table.Column>
               </Table>

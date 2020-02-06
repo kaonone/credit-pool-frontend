@@ -10,7 +10,8 @@ query MyLoans($first: Int!, $skip: Int!, $address: String!) {
     pledgers
     pledges
     stakeProgress
-    staked
+    lStaked
+    pStaked
     status
     last_update
   }
