@@ -11,7 +11,8 @@ query MyGuarantees($first: Int!, $skip: Int!, $pledgers: [String!]!, $borrower: 
     pledgers
     pledges
     stakeProgress
-    staked
+    lStaked
+    pStaked
     status
     last_update
   }

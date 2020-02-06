@@ -42,7 +42,7 @@ function UserBalanceChart() {
       fromDate: new BN(yearAgoDate).toString(), // Date in seconds
     },
   });
-  const balances = balancesResult.data?.balances || [];
+  const balances = balancesResult.data?.exitBalances || [];
 
   const mockedPoints = React.useMemo(
     () => [

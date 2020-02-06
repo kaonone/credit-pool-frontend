@@ -8,7 +8,8 @@ query DebtProposals($first: Int!, $skip: Int!) {
     total
     repayed
     pledges
-    staked
+    lStaked
+    pStaked
     status
     description
     last_update

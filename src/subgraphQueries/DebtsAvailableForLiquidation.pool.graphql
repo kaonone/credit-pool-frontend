@@ -11,7 +11,8 @@ query DebtsAvailableForLiquidation($first: Int!, $skip: Int!, $liquidationDate: 
     pledgers
     pledges
     stakeProgress
-    staked
+    lStaked
+    pStaked
     status
     last_update
   }

@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 
 import { Metric } from 'components/Metric/Metric';
-import { CashMetric } from 'components/CashMetric/CashMetric';
+import { CashMetric, ICashMetricProps } from 'components/CashMetric/CashMetric';
 import { Token } from 'model/types';
 
 import { useStyles } from './MetricsList.style';
@@ -14,6 +14,7 @@ export interface IMetric {
   title: React.ReactNode;
   value: string;
   previousValue?: string;
+  primaryCashMetricValue?: ICashMetricProps['primaryValue'];
   subValue?: React.ReactNode;
   isCashMetric?: boolean;
   token?: Token;
@@ -42,22 +43,36 @@ function MetricsList(props: IProps) {
 
   return (
     <Grid container spacing={2} className={className} direction={gridDirection[orientation]}>
-      {metrics.map(({ title, value, previousValue, subValue, isCashMetric, token }, index) => (
-        <React.Fragment key={index}>
-          {!!index && withDividers && (
-            <Grid item className={classes.dividerItem}>
-              <Divider orientation={dividerOrientation[orientation]} className={classes.divider} />
-            </Grid>
-          )}
-          <Grid item className={classes.metric}>
-            {isCashMetric && token ? (
-              <CashMetric title={title} value={value} previousValue={previousValue} token={token} />
-            ) : (
-              <Metric title={title} value={value} subValue={subValue} />
+      {metrics.map(
+        (
+          { title, value, previousValue, subValue, isCashMetric, token, primaryCashMetricValue },
+          index,
+        ) => (
+          <React.Fragment key={index}>
+            {!!index && withDividers && (
+              <Grid item className={classes.dividerItem}>
+                <Divider
+                  orientation={dividerOrientation[orientation]}
+                  className={classes.divider}
+                />
+              </Grid>
             )}
-          </Grid>
-        </React.Fragment>
-      ))}
+            <Grid item className={classes.metric}>
+              {isCashMetric && token ? (
+                <CashMetric
+                  title={title}
+                  value={value}
+                  previousValue={previousValue}
+                  token={token}
+                  primaryValue={primaryCashMetricValue}
+                />
+              ) : (
+                <Metric title={title} value={value} subValue={subValue} />
+              )}
+            </Grid>
+          </React.Fragment>
+        ),
+      )}
     </Grid>
   );
 }

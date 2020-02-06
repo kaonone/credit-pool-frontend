@@ -1,8 +1,12 @@
 subscription MyUser($address: ID!) {
   user(id: $address) {
     id
+    lBalance
     pBalance
+    lLockedSum
     pLockedSum
+    lInterestSum
+    pInterestSum
     credit
   }
 }

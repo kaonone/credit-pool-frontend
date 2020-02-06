@@ -10,18 +10,24 @@ export interface ICashMetricProps {
   title: React.ReactNode;
   value: string;
   previousValue?: string;
+  primaryValue?: 'value' | 'previousValue';
   token: Token;
   needed?: string;
   icon?: React.ReactNode;
 }
 
 function CashMetric(props: ICashMetricProps) {
-  const { title, value, previousValue, needed, token, icon } = props;
+  const { title, value, previousValue, needed, token, icon, primaryValue = 'value' } = props;
+
+  const primary: Record<'value' | 'previousValue', string> = {
+    previousValue: previousValue || value,
+    value,
+  };
 
   return (
     <Metric
       title={title}
-      value={<FormattedBalance sum={value} token={token} />}
+      value={<FormattedBalance sum={primary[primaryValue]} token={token} />}
       icon={icon}
       subValue={
         (previousValue && <Growth current={new BN(value)} previous={new BN(previousValue)} />) ||
