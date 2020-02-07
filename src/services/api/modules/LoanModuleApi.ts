@@ -1,4 +1,4 @@
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of, combineLatest } from 'rxjs';
 import { map, first as firstOperator, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
@@ -55,18 +55,32 @@ export class LoanModuleApi {
   @memoize()
   @autobind
   public getConfig$(): Observable<{
-    lDebtAmountMin: BN;
-    debtInterestMin: BN;
-    pledgePercentMin: BN;
-    lMinPledgeMax: BN;
+    limits: {
+      lDebtAmountMin: BN;
+      debtInterestMin: BN;
+      pledgePercentMin: BN;
+      lMinPledgeMax: BN;
+    };
+    debtRepayDeadlinePeriod: BN;
   }> {
-    return this.readonlyContract.methods.limits().pipe(
-      map(([lDebtAmountMin, debtInterestMin, pledgePercentMin, lMinPledgeMax]) => ({
-        lDebtAmountMin,
-        debtInterestMin,
-        pledgePercentMin,
-        lMinPledgeMax,
-      })),
+    return combineLatest([
+      this.readonlyContract.methods.limits(),
+      this.readonlyContract.methods.DEBT_REPAY_DEADLINE_PERIOD(),
+    ]).pipe(
+      map(
+        ([
+          [lDebtAmountMin, debtInterestMin, pledgePercentMin, lMinPledgeMax],
+          debtRepayDeadlinePeriod,
+        ]) => ({
+          limits: {
+            lDebtAmountMin,
+            debtInterestMin,
+            pledgePercentMin,
+            lMinPledgeMax,
+          },
+          debtRepayDeadlinePeriod,
+        }),
+      ),
     );
   }
 
@@ -148,12 +162,6 @@ export class LoanModuleApi {
     });
 
     await promiEvent;
-  }
-
-  @memoize(R.identity)
-  @autobind
-  public getDuePaymentTimeout$(): Observable<BN> {
-    return this.readonlyContract.methods.DEBT_REPAY_DEADLINE_PERIOD();
   }
 
   @memoize(R.identity)

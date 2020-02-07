@@ -11,14 +11,10 @@ import { LoansTable } from '../components/LoansTable';
 
 export function Liquidations() {
   const api = useApi();
-  const [dueTimeout, dueTimeoutMeta] = useSubscribable(
-    () => api.loanModule.getDuePaymentTimeout$(),
-    [],
-    new BN(0),
-  );
+  const [config, configMeta] = useSubscribable(() => api.loanModule.getConfig$(), []);
 
   const duePaymentDate = moment()
-    .subtract(dueTimeout.toNumber(), 'seconds')
+    .subtract(config?.debtRepayDeadlinePeriod?.toNumber() || 0, 'seconds')
     .unix();
 
   const { result, paginationView } = useSubgraphPagination(useDebtsAvailableForLiquidationQuery, {
@@ -27,7 +23,7 @@ export function Liquidations() {
   const others = result.data?.debts || [];
 
   return (
-    <Loading gqlResults={result} meta={dueTimeoutMeta} progressVariant="circle">
+    <Loading gqlResults={result} meta={configMeta} progressVariant="circle">
       <LoansTable list={others} paginationView={paginationView} />
     </Loading>
   );

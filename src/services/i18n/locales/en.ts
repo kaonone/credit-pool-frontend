@@ -115,8 +115,7 @@ const en = {
         paymentDate: 'Payment date',
         statuses: {
           PROPOSED: 'proposed',
-          APPROVED: 'approved',
-          DECLINED: 'declined',
+          EXECUTED: 'executed',
           PARTIALLY_REPAYED: 'partially repayed',
           CLOSED: 'closed',
         },

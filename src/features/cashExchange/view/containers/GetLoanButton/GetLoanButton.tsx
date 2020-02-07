@@ -60,7 +60,7 @@ function GetLoanButton(props: IProps) {
     [decimals],
   );
   const getMinSourceValue = useCallback(
-    () => api.loanModule.getConfig$().pipe(map(({ lDebtAmountMin }) => lDebtAmountMin)),
+    () => api.loanModule.getConfig$().pipe(map(({ limits: { lDebtAmountMin } }) => lDebtAmountMin)),
     [decimals],
   );
 
@@ -70,7 +70,7 @@ function GetLoanButton(props: IProps) {
   );
 
   const [config] = useSubscribable(() => api.loanModule.getConfig$(), []);
-  const minApr = config?.debtInterestMin || zero;
+  const minApr = config?.limits.debtInterestMin || zero;
   const formattedMinPercent = formatBalance({
     amountInBaseUnits: minApr,
     baseDecimals: percentDecimals || 0,

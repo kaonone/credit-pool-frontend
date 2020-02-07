@@ -1,5 +1,4 @@
 import React from 'react';
-import BN from 'bn.js';
 
 import { Typography, Hint, Grid, Loading, Table as GeneralTable, MakeTableType } from 'components';
 import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
@@ -8,8 +7,10 @@ import { formatBalance } from 'utils/format';
 import { useApi } from 'services/api';
 import { useTranslate } from 'services/i18n';
 import { useSubscribable } from 'utils/react';
+import { getLoanDuePaymentDate } from 'model';
 
 import { AddressCell, MyStakeCell, MyEarnCell } from './LoansTableCells';
+import { ActionsCell } from './ActionsCell';
 
 export const Table = GeneralTable as MakeTableType<Debt>;
 
@@ -35,11 +36,7 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
     0,
   );
 
-  const [duePaymentTimeout, duePaymentTimeoutMeta] = useSubscribable(
-    () => api.loanModule.getDuePaymentTimeout$(),
-    [],
-    new BN(0),
-  );
+  const [loansConfig, loansConfigMeta] = useSubscribable(() => api.loanModule.getConfig$(), []);
 
   return (
     <>
@@ -74,8 +71,13 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
                   <Table.Head>{t(tKeys.duePayment.getKey())}</Table.Head>
                   <Table.Cell>
                     {({ data }) => (
-                      <Loading meta={duePaymentTimeoutMeta}>
-                        {getDuePayment(data.last_update, duePaymentTimeout)}
+                      <Loading meta={loansConfigMeta}>
+                        {(loansConfig &&
+                          getLoanDuePaymentDate(
+                            data.last_update,
+                            loansConfig.debtRepayDeadlinePeriod,
+                          )?.toLocaleDateString()) ||
+                          '-'}
                       </Loading>
                     )}
                   </Table.Cell>
@@ -126,6 +128,13 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
                     </Table.Cell>
                   </Table.Column>
                 )}
+                {account && (
+                  <Table.Column>
+                    <Table.Cell>
+                      {({ data }) => <ActionsCell debt={data} account={account} />}
+                    </Table.Cell>
+                  </Table.Column>
+                )}
               </Table>
             </Grid>
             {paginationView && (
@@ -138,10 +147,4 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
       )}
     </>
   );
-}
-
-function getDuePayment(lastUpdate: string | null | undefined, paymentTimeout: BN) {
-  return lastUpdate
-    ? new Date(new BN(lastUpdate).add(paymentTimeout).toNumber()).toLocaleDateString()
-    : '–';
 }
