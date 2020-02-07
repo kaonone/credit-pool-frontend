@@ -53,6 +53,11 @@ const en = {
         success: 'Loan activation. Succeeded',
         error: 'Loan activation. Failed',
       },
+      'loan.repay': {
+        pending: 'Loan repaying. Pending',
+        success: 'Loan repaying. Succeeded',
+        error: 'Loan repaying. Failed',
+      },
     },
     cashExchange: {
       pTokenBuyingButton: {
@@ -72,6 +77,13 @@ const en = {
         formTitle: 'Stake',
         placeholder: 'Enter sum',
         confirmMessage: 'Are you sure you want to stake %{sourceAmount}?',
+      },
+      repayButton: {
+        buttonTitle: 'Repay',
+        formTitle: 'Repay',
+        placeholder: 'Enter sum',
+        confirmMessage:
+          'Are you sure you want to repay %{sourceAmount}? Loan body: %{body}, interest: %{interest}',
       },
       getLoanButton: {
         buttonTitle: 'Get loan',

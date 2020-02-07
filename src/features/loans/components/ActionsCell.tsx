@@ -8,7 +8,7 @@ import { Grid, Loading, ModalButton, Hint } from 'components';
 import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
 import { getLoanDuePaymentDate, getPledgeId } from 'model';
-import { ActivateLoanButton } from 'features/cashExchange';
+import { ActivateLoanButton, RepayButton } from 'features/cashExchange';
 
 interface IProps {
   debt: Debt;
@@ -18,6 +18,7 @@ interface IProps {
 export function ActionsCell({ debt, account }: IProps) {
   const {
     borrower,
+    debt_id: debtId,
     last_update: lastUpdate,
     status,
     stakeProgress,
@@ -68,7 +69,9 @@ export function ActionsCell({ debt, account }: IProps) {
         Activate
       </ActivateLoanButton>
     ) : null,
-    isAvailableForRepay ? <ModalButton content="Repay" {...commonProps} /> : null,
+    isAvailableForRepay && debtId ? (
+      <RepayButton account={borrower} debtId={debtId} {...commonProps} />
+    ) : null,
     isAvailableForUnstake ? <ModalButton content="Unstake" {...commonProps} /> : null,
     isAvailableForUnlock ? <ModalButton content="Unlock" {...commonProps} /> : null,
     isAvailableForLiquidation ? <ModalButton content="Liquidate" {...commonProps} /> : null,

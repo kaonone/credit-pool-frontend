@@ -181,6 +181,26 @@ export class LoanModuleApi {
     await promiEvent;
   }
 
+  @autobind
+  public async repay(fromAddress: string, debtId: string, lAmount: BN): Promise<void> {
+    const txLoanModule = getCurrentValueOrThrow(this.txContract);
+
+    await this.tokensApi.approveDai(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, lAmount);
+
+    const promiEvent = txLoanModule.methods.repay(
+      { debt: bnToBn(debtId), lAmount },
+      { from: fromAddress },
+    );
+
+    this.transactionsApi.pushToSubmittedTransactions$('loan.repay', promiEvent, {
+      address: fromAddress,
+      debtId,
+      amount: lAmount,
+    });
+
+    await promiEvent;
+  }
+
   @memoize(R.identity)
   @autobind
   public getMaxAvailableLoanSizeInDai$(address: string): Observable<BN> {
@@ -190,6 +210,25 @@ export class LoanModuleApi {
       }),
       map(item => item.total.muln(100).divn(MIN_COLLATERAL_PERCENT_FOR_BORROWER)),
     );
+  }
+
+  @memoize(R.identity)
+  @autobind
+  public getDebtRequiredPayments$(
+    borrower: string,
+    debtId: string,
+  ): Observable<{ loanSize: BN; currentInterest: BN }> {
+    return this.readonlyContract.methods
+      .getDebtRequiredPayments({
+        borrower,
+        debt: bnToBn(debtId),
+      })
+      .pipe(
+        map(([loanSize, currentInterest]) => ({
+          loanSize,
+          currentInterest,
+        })),
+      );
   }
 
   @memoize(R.identity)

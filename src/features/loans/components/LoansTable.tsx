@@ -1,4 +1,5 @@
 import React from 'react';
+import BN from 'bn.js';
 
 import { Typography, Hint, Grid, Loading, Table as GeneralTable, MakeTableType } from 'components';
 import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
@@ -64,7 +65,12 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
                 <Table.Column>
                   <Table.Head>{t(tKeys.loan.getKey())}</Table.Head>
                   <Table.Cell>
-                    {({ data }) => <FormattedBalance sum={data.total} token="dai" />}
+                    {({ data }) => (
+                      <FormattedBalance
+                        sum={new BN(data.total).sub(new BN(data.repayed))}
+                        token="dai"
+                      />
+                    )}
                   </Table.Cell>
                 </Table.Column>
                 <Table.Column>
