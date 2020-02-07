@@ -164,6 +164,23 @@ export class LoanModuleApi {
     await promiEvent;
   }
 
+  @autobind
+  public async executeDebtProposal(fromAddress: string, proposalId: string): Promise<void> {
+    const txLoanModule = getCurrentValueOrThrow(this.txContract);
+
+    const promiEvent = txLoanModule.methods.executeDebtProposal(
+      { proposal: bnToBn(proposalId) },
+      { from: fromAddress },
+    );
+
+    this.transactionsApi.pushToSubmittedTransactions$('loan.executeProposal', promiEvent, {
+      address: fromAddress,
+      proposalId,
+    });
+
+    await promiEvent;
+  }
+
   @memoize(R.identity)
   @autobind
   public getMaxAvailableLoanSizeInDai$(address: string): Observable<BN> {

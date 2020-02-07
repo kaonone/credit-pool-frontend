@@ -1,26 +1,14 @@
-import React, { useCallback } from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import React from 'react';
 import { Observable } from 'rxjs';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { Loading, Hint } from 'components';
-import { useCommunication, useFormattedBalance, useSubscribable } from 'utils/react';
+import { ConfirmationDialog } from 'components';
+import { useFormattedBalance, useSubscribable } from 'utils/react';
 
-import { ISubmittedFormData } from '../PTokenExchangingForm/PTokenExchangingForm';
-
-interface IProps<ExtraFormData extends Record<string, any> = {}> {
+interface IProps<T> {
   isOpen: boolean;
-  values: (ISubmittedFormData & Omit<ExtraFormData, keyof ISubmittedFormData>) | null;
-  messageTKey:
-    | string
-    | ((
-        values: (ISubmittedFormData & Omit<ExtraFormData, keyof ISubmittedFormData>) | null,
-      ) => Observable<string>);
+  values: T | null;
+  messageTKey: string | ((values: T | null) => Observable<string>);
   onConfirm: () => Promise<void>;
   onCancel: () => void;
 }
@@ -33,71 +21,26 @@ function PTokenExchangingConfirmation<ExtraFormData extends Record<string, any> 
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.cashExchange.exchangingConfirmation;
 
-  const communication = useCommunication(onConfirm, []);
-  const { status, error } = communication;
-
   const [{ formattedBalance: formattedSourceAmount }] = useFormattedBalance(
     'dai',
     values?.sourceAmount || '0',
   );
 
-  const [message, messageMeta] =
+  const message =
     typeof messageTKey === 'string'
-      ? [t(messageTKey, { sourceAmount: formattedSourceAmount }), { loaded: true }]
-      : useSubscribable(() => messageTKey(values), [values]);
-
-  const handleCancel = useCallback(() => {
-    onCancel();
-    communication.reset();
-  }, [onCancel, communication.reset]);
+      ? t(messageTKey, { sourceAmount: formattedSourceAmount })
+      : useSubscribable(() => messageTKey(values), [values], '⏳');
 
   return (
-    <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={handleCancel}>
-      <DialogContent>
-        <Grid container justify="center" spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant="h5" gutterBottom>
-              {t(tKeys.title.getKey())}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Loading component={Hint} meta={messageMeta}>
-              <Typography>{message}</Typography>
-            </Loading>
-          </Grid>
-          {communication.status === 'error' && error && (
-            <Grid item xs={12}>
-              <Hint>
-                <Typography color="error">{error}</Typography>
-              </Hint>
-            </Grid>
-          )}
-          <Grid item xs={6}>
-            <Button
-              variant="outlined"
-              color="primary"
-              fullWidth
-              onClick={handleCancel}
-              disabled={status === 'pending'}
-            >
-              {t(tKeys.no.getKey())}
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              fullWidth
-              onClick={communication.execute}
-              disabled={status === 'pending' || !messageMeta.loaded}
-            >
-              {status === 'pending' ? <CircularProgress size={24} /> : t(tKeys.yes.getKey())}
-            </Button>
-          </Grid>
-        </Grid>
-      </DialogContent>
-    </Dialog>
+    <ConfirmationDialog
+      isOpen={isOpen}
+      message={message}
+      noText={t(tKeys.no.getKey())}
+      yesText={t(tKeys.yes.getKey())}
+      title={t(tKeys.title.getKey())}
+      onCancel={onCancel}
+      onConfirm={onConfirm}
+    />
   );
 }
 

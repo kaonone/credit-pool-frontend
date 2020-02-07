@@ -8,6 +8,7 @@ import { Grid, Loading, ModalButton, Hint } from 'components';
 import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
 import { getLoanDuePaymentDate, getPledgeId } from 'model';
+import { ActivateLoanButton } from 'features/cashExchange';
 
 interface IProps {
   debt: Debt;
@@ -39,7 +40,7 @@ export function ActionsCell({ debt, account }: IProps) {
 
   const isDuePaymentExpired =
     ((config && getLoanDuePaymentDate(lastUpdate, config.debtRepayDeadlinePeriod)?.getTime()) ||
-      0) > Date.now();
+      0) < Date.now();
 
   const isAvailableForLiquidation = status !== Status.Closed && isDuePaymentExpired;
 
@@ -58,11 +59,15 @@ export function ActionsCell({ debt, account }: IProps) {
     color: 'primary',
     size: 'small',
     fullWidth: true,
-    children: () => <Hint>Comming soon</Hint>,
+    children: () => <Hint>Coming soon</Hint>,
   } as const;
 
   const actions = [
-    isAvailableForActivation ? <ModalButton content="Activate" {...commonProps} /> : null,
+    isAvailableForActivation ? (
+      <ActivateLoanButton borrower={borrower} proposalId={proposalId} {...commonProps}>
+        Activate
+      </ActivateLoanButton>
+    ) : null,
     isAvailableForRepay ? <ModalButton content="Repay" {...commonProps} /> : null,
     isAvailableForUnstake ? <ModalButton content="Unstake" {...commonProps} /> : null,
     isAvailableForUnlock ? <ModalButton content="Unlock" {...commonProps} /> : null,

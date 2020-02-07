@@ -48,6 +48,11 @@ const en = {
         success: 'Creating a loan proposal. Succeeded',
         error: 'Creating a loan proposal. Failed',
       },
+      'loan.executeProposal': {
+        pending: 'Loan activation. Pending',
+        success: 'Loan activation. Succeeded',
+        error: 'Loan activation. Failed',
+      },
     },
     cashExchange: {
       pTokenBuyingButton: {
@@ -79,6 +84,9 @@ const en = {
         descriptionLabel: 'Reason',
         confirmMessage:
           'Are you sure you want get loan %{sourceAmount} with collateral %{collateral}?',
+      },
+      activateLoanButton: {
+        confirmMessage: 'Are you sure you want to activate a loan?',
       },
       exchangingForm: {
         cancelButtonText: 'Cancel',

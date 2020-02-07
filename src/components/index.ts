@@ -35,3 +35,4 @@ export * from './CashMetric/CashMetric';
 export * from './ExpansionPanel/ExpansionPanel';
 export * from './FormattedBalance/FormattedBalance';
 export * from './Growth/Growth';
+export * from './ConfirmationDialog/ConfirmationDialog';

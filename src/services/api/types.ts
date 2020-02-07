@@ -28,7 +28,8 @@ export type SubmittedTransaction =
   | IGenericSubmittedTransaction<
       'loan.createProposal',
       { address: string; sourceAmount: BN; apr: string; description: string }
-    >;
+    >
+  | IGenericSubmittedTransaction<'loan.executeProposal', { address: string; proposalId: string }>;
 
 export interface IGenericSubmittedTransaction<T extends string, P = void> {
   type: T;
