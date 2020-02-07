@@ -4,7 +4,9 @@ import { isHex } from 'utils/hex/isHex';
 
 export function getPledgeId(supproterAddress: string, borrowerAddress: string, proposalId: string) {
   return Web3.utils.keccak256(
-    `${normalizeHex(supproterAddress)}${normalizeHex(borrowerAddress)}${normalizeHex(proposalId)}`,
+    `0x${normalizeHex(supproterAddress)}${normalizeHex(borrowerAddress)}${normalizeHex(
+      proposalId,
+    )}`,
   );
 }
 
