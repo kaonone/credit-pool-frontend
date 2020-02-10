@@ -2,14 +2,15 @@ import React, { memo } from 'react';
 import Grid from '@material-ui/core/Grid';
 import BN from 'bn.js';
 
-import { Status } from 'generated/gql/pool';
+import { Status, usePledgeSubscription } from 'generated/gql/pool';
 import { useApi } from 'services/api';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { StakeButton } from 'features/cashExchange';
+import { StakeButton, UnstakeButton } from 'features/cashExchange';
 import { CashMetric, Metric, ShortAddress, ActivitiesCard, Loading } from 'components';
 import { LendIcon } from 'components/icons';
 import { useSubscribable } from 'utils/react';
 import { formatBalance } from 'utils/format';
+import { getPledgeId } from 'model';
 
 import { useStyles } from './LoanApplicationCard.style';
 import { Progress } from '../Progress/Progress';
@@ -48,6 +49,14 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
   const expansionPanelDetails =
     descriptionMeta.error || descriptionMeta.loaded ? description : '⏳';
 
+  const pledgeGqlResult = usePledgeSubscription({
+    variables: {
+      pledgeHash: account && proposalId ? getPledgeId(account, borrower, proposalId) : '',
+    },
+  });
+  const pledgeLLocked = pledgeGqlResult.data?.pledge?.lLocked;
+  const needToShowUnstake = pledgeLLocked && new BN(pledgeLLocked).gtn(0);
+
   const metricsList = React.useMemo(
     () => [
       <CashMetric
@@ -74,7 +83,6 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
 
   const rawProgressInPercents = new BN(stakedValue).muln(10000).div(new BN(lendValue));
   const progressInPercents = Math.min(100, rawProgressInPercents.toNumber() / 100);
-  const isCollateralReceived = progressInPercents === 100;
   const isMyProposal = !!account && account.toLowerCase() === borrower.toLowerCase();
 
   const asideContent = React.useMemo(
@@ -89,7 +97,22 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
               <StakeButton
                 proposalId={proposalId}
                 borrower={borrower}
-                disabled={isCollateralReceived || isMyProposal}
+                disabled={isMyProposal}
+                variant="contained"
+                color="primary"
+                fullWidth
+              />
+            </Loading>
+          </Grid>
+        )}
+        {needToShowUnstake && proposalId && (
+          <Grid item>
+            <Loading meta={[accountMeta]} progressVariant="linear">
+              <UnstakeButton
+                loanSize={lendValue}
+                proposalId={proposalId}
+                borrower={borrower}
+                disabled={isMyProposal}
                 variant="contained"
                 color="primary"
                 fullWidth
@@ -99,7 +122,17 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
         )}
       </Grid>
     ),
-    [t, status, progressInPercents, isMyProposal, accountMeta],
+    [
+      t,
+      status,
+      borrower,
+      progressInPercents,
+      isMyProposal,
+      accountMeta,
+      lendValue,
+      needToShowUnstake,
+      proposalId,
+    ],
   );
 
   return (

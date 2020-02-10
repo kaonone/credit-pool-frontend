@@ -43,6 +43,11 @@ const en = {
         success: 'Adding pledge for the loan. Succeeded',
         error: 'Adding pledge for the loan. Failed',
       },
+      'loan.unstakePledge': {
+        pending: 'Withdrawing pledge from the loan. Pending',
+        success: 'Withdrawing pledge from the loan. Succeeded',
+        error: 'Withdrawing pledge from the loan. Failed',
+      },
       'loan.createProposal': {
         pending: 'Creating a loan proposal. Pending',
         success: 'Creating a loan proposal. Succeeded',
@@ -77,6 +82,13 @@ const en = {
         formTitle: 'Stake',
         placeholder: 'Enter sum',
         confirmMessage: 'Are you sure you want to stake %{sourceAmount}?',
+      },
+      unstakeButton: {
+        buttonTitle: 'Untake',
+        formTitle: 'Untake',
+        placeholder: 'Enter sum',
+        confirmMessage:
+          'Are you sure you want to unstake %{sourceAmount}? Your interest share will decrease by %{interestShareDelta}',
       },
       repayButton: {
         buttonTitle: 'Repay',

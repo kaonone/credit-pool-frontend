@@ -8,7 +8,7 @@ import { Grid, Loading, ModalButton, Hint } from 'components';
 import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
 import { getLoanDuePaymentDate, getPledgeId } from 'model';
-import { ActivateLoanButton, RepayButton } from 'features/cashExchange';
+import { ActivateLoanButton, RepayButton, UnstakeButton } from 'features/cashExchange';
 
 interface IProps {
   debt: Debt;
@@ -17,6 +17,7 @@ interface IProps {
 
 export function ActionsCell({ debt, account }: IProps) {
   const {
+    total,
     borrower,
     debt_id: debtId,
     last_update: lastUpdate,
@@ -39,9 +40,9 @@ export function ActionsCell({ debt, account }: IProps) {
   const interest = new BN(pledgeGqlResult.data?.pledge?.lInterest || '0');
   const locked = new BN(pledgeGqlResult.data?.pledge?.lLocked || '0');
 
-  const isDuePaymentExpired =
-    ((config && getLoanDuePaymentDate(lastUpdate, config.debtRepayDeadlinePeriod)?.getTime()) ||
-      0) < Date.now();
+  const duePaymentDate =
+    config && getLoanDuePaymentDate(lastUpdate, config.debtRepayDeadlinePeriod)?.getTime();
+  const isDuePaymentExpired = duePaymentDate && duePaymentDate < Date.now();
 
   const isAvailableForLiquidation = status !== Status.Closed && isDuePaymentExpired;
 
@@ -72,7 +73,14 @@ export function ActionsCell({ debt, account }: IProps) {
     isAvailableForRepay && debtId ? (
       <RepayButton account={borrower} debtId={debtId} {...commonProps} />
     ) : null,
-    isAvailableForUnstake ? <ModalButton content="Unstake" {...commonProps} /> : null,
+    isAvailableForUnstake ? (
+      <UnstakeButton
+        borrower={borrower}
+        proposalId={proposalId}
+        loanSize={total}
+        {...commonProps}
+      />
+    ) : null,
     isAvailableForUnlock ? <ModalButton content="Unlock" {...commonProps} /> : null,
     isAvailableForLiquidation ? <ModalButton content="Liquidate" {...commonProps} /> : null,
   ].filter(Boolean);

@@ -62,15 +62,21 @@ export class LoanModuleApi {
       lMinPledgeMax: BN;
     };
     debtRepayDeadlinePeriod: BN;
+    collateralToDebtRatio: BN;
+    collateralToDebtRatioMultiplier: BN;
   }> {
     return combineLatest([
       this.readonlyContract.methods.limits(),
       this.readonlyContract.methods.DEBT_REPAY_DEADLINE_PERIOD(),
+      this.readonlyContract.methods.COLLATERAL_TO_DEBT_RATIO(),
+      this.readonlyContract.methods.COLLATERAL_TO_DEBT_RATIO_MULTIPLIER(),
     ]).pipe(
       map(
         ([
           [lDebtAmountMin, debtInterestMin, pledgePercentMin, lMinPledgeMax],
           debtRepayDeadlinePeriod,
+          collateralToDebtRatio,
+          collateralToDebtRatioMultiplier,
         ]) => ({
           limits: {
             lDebtAmountMin,
@@ -79,6 +85,8 @@ export class LoanModuleApi {
             lMinPledgeMax,
           },
           debtRepayDeadlinePeriod,
+          collateralToDebtRatio,
+          collateralToDebtRatioMultiplier,
         }),
       ),
     );
@@ -121,6 +129,39 @@ export class LoanModuleApi {
     );
 
     this.transactionsApi.pushToSubmittedTransactions$('loan.addPledge', promiEvent, {
+      address: fromAddress,
+      ...values,
+    });
+
+    await promiEvent;
+  }
+
+  @autobind
+  public async unstakePtk(
+    fromAddress: string,
+    values: {
+      sourceAmount: BN; // in DAI
+      borrower: string;
+      proposalId: string;
+      lLocked: string;
+      pLocked: string;
+    },
+  ): Promise<void> {
+    const { sourceAmount, borrower, proposalId, lLocked, pLocked } = values;
+    const txLoanModule = getCurrentValueOrThrow(this.txContract);
+
+    const pAmount = new BN(pLocked).mul(sourceAmount).div(new BN(lLocked));
+
+    const promiEvent = txLoanModule.methods.withdrawPledge(
+      {
+        borrower,
+        pAmount,
+        proposal: bnToBn(proposalId),
+      },
+      { from: fromAddress },
+    );
+
+    this.transactionsApi.pushToSubmittedTransactions$('loan.unstakePledge', promiEvent, {
       address: fromAddress,
       ...values,
     });
@@ -248,5 +289,17 @@ export class LoanModuleApi {
   // eslint-disable-next-line class-methods-use-this
   public getMinLoanCollateralByDaiInDai$(ptkBalanceInDai: string): Observable<BN> {
     return of(new BN(ptkBalanceInDai).muln(MIN_COLLATERAL_PERCENT_FOR_BORROWER).divn(100));
+  }
+
+  @memoize(R.identity)
+  // eslint-disable-next-line class-methods-use-this
+  public calculateFullLoanStake$(loanSize: string): Observable<BN> {
+    return this.getConfig$().pipe(
+      map(({ collateralToDebtRatio, collateralToDebtRatioMultiplier }) =>
+        new BN(loanSize)
+          .mul(new BN(collateralToDebtRatio))
+          .div(new BN(collateralToDebtRatioMultiplier)),
+      ),
+    );
   }
 }
