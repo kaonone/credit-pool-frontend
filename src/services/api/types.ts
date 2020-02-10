@@ -25,6 +25,7 @@ export type SubmittedTransaction =
   | IGenericSubmittedTransaction<'liquidity.sellPtk', { address: string; sourceAmount: BN }>
   | IGenericSubmittedTransaction<'liquidity.buyPtk', { address: string; sourceAmount: BN }>
   | IGenericSubmittedTransaction<'loan.addPledge', { address: string; sourceAmount: BN }>
+  | IGenericSubmittedTransaction<'loan.unstakePledge', { address: string; sourceAmount: BN }>
   | IGenericSubmittedTransaction<
       'loan.createProposal',
       { address: string; sourceAmount: BN; apr: string; description: string }
