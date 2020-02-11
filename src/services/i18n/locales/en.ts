@@ -158,7 +158,7 @@ const en = {
       lend: 'lend',
       to: 'to',
       apr: 'apr',
-      staked: 'staked',
+      myInterest: 'My interest share',
       collateral: 'Collateral',
       timeLeft: 'Time left',
       expansionPanelTitle: 'Reason',

@@ -9,7 +9,7 @@ import { ModalButton } from 'components/ModalButton/ModalButton';
 import { useSubscribable } from 'utils/react';
 import { formatBalance } from 'utils/format';
 import { usePledgeSubscription } from 'generated/gql/pool';
-import { getPledgeId } from 'model';
+import { getPledgeId, calcInterestShare } from 'model';
 import { Loading } from 'components';
 
 import {
@@ -51,17 +51,18 @@ function UnstakeButton(props: IProps) {
   const getConfirmMessage = useCallback(
     (values: ISubmittedFormData | null) => {
       const rawSourceAmount = new BN(values?.sourceAmount?.toString() || '0');
-      const rawInterestShareDelta = rawSourceAmount
-        .muln(10000)
-        .mul(new BN(lInitialLocked))
-        .div(new BN(lLocked))
-        .div(fullLoanStake);
+      const interestShareDecimals = 2;
+      const rawInterestShareDelta = calcInterestShare(
+        rawSourceAmount.mul(new BN(lInitialLocked)).div(new BN(lLocked)),
+        fullLoanStake,
+        interestShareDecimals,
+      );
 
       const interestShareDelta =
         (daiTokenInfo &&
           `${formatBalance({
             amountInBaseUnits: rawInterestShareDelta,
-            baseDecimals: 2,
+            baseDecimals: interestShareDecimals,
           })}%`) ||
         '⏳';
 

@@ -10,7 +10,7 @@ import { CashMetric, Metric, ShortAddress, ActivitiesCard, Loading } from 'compo
 import { LendIcon } from 'components/icons';
 import { useSubscribable } from 'utils/react';
 import { formatBalance } from 'utils/format';
-import { getPledgeId } from 'model';
+import { getPledgeId, calcInterestShare } from 'model';
 
 import { useStyles } from './LoanApplicationCard.style';
 import { Progress } from '../Progress/Progress';
@@ -54,8 +54,17 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
       pledgeHash: account && proposalId ? getPledgeId(account, borrower, proposalId) : '',
     },
   });
-  const pledgeLLocked = pledgeGqlResult.data?.pledge?.lLocked;
-  const needToShowUnstake = pledgeLLocked && new BN(pledgeLLocked).gtn(0);
+  const pledgeLLocked = new BN(pledgeGqlResult.data?.pledge?.lLocked || '0');
+  const pledgeLInitialLocked = new BN(pledgeGqlResult.data?.pledge?.lInitialLocked || '0');
+  const needToShowUnstake = pledgeLLocked.gtn(0);
+
+  const [fullLoanStake, fullLoanStakeMeta] = useSubscribable(
+    () => api.loanModule.calculateFullLoanStake$(lendValue),
+    [lendValue],
+  );
+  const interestShareDecimals = 2;
+  const rawInterestShareDelta =
+    fullLoanStake && calcInterestShare(pledgeLInitialLocked, fullLoanStake, interestShareDecimals);
 
   const metricsList = React.useMemo(
     () => [
@@ -75,10 +84,32 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
         }
       />,
       <span className={classes.highlightedMetric}>
-        <CashMetric title={t(tKeys.staked.getKey())} value={stakedValue} token="dai" />
+        <Metric
+          title={t(tKeys.myInterest.getKey())}
+          value={
+            <Loading meta={fullLoanStakeMeta}>
+              {rawInterestShareDelta &&
+                formatBalance({
+                  amountInBaseUnits: rawInterestShareDelta,
+                  baseDecimals: interestShareDecimals,
+                })}
+              %
+            </Loading>
+          }
+        />
       </span>,
     ],
-    [t, lendValue, borrower, aprValue, stakedValue, aprDecimals, aprDecimalsMeta],
+    [
+      t,
+      lendValue,
+      borrower,
+      aprValue,
+      stakedValue,
+      aprDecimals,
+      rawInterestShareDelta,
+      aprDecimalsMeta,
+      fullLoanStakeMeta,
+    ],
   );
 
   const rawProgressInPercents = new BN(stakedValue).muln(10000).div(new BN(lendValue));
