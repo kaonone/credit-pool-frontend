@@ -10,12 +10,12 @@ import { useTranslate } from 'services/i18n';
 import { useSubscribable } from 'utils/react';
 import { getLoanDuePaymentDate } from 'model';
 
-import { AddressCell, MyStakeCell, MyEarnCell } from './LoansTableCells';
+import { AddressCell, MyStakeCell, MyEarnCell, MyInterestShareCell } from './LoansTableCells';
 import { ActionsCell } from './ActionsCell';
 
 export const Table = GeneralTable as MakeTableType<Debt>;
 
-type HidableColumn = 'address' | 'earn' | 'myStake';
+type HidableColumn = 'address' | 'earn' | 'myStake' | 'myInterestShare';
 
 interface Props {
   list: Debt[];
@@ -126,6 +126,21 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
                     <Table.Cell>
                       {({ data }) => (
                         <MyStakeCell
+                          supporter={account}
+                          borrower={data.borrower}
+                          proposalId={data.proposal_id}
+                        />
+                      )}
+                    </Table.Cell>
+                  </Table.Column>
+                )}
+                {account && !hideColumns.includes('myInterestShare') && (
+                  <Table.Column>
+                    <Table.Head>{t(tKeys.myInterestShare.getKey())}</Table.Head>
+                    <Table.Cell>
+                      {({ data }) => (
+                        <MyInterestShareCell
+                          loanSize={data.total}
                           supporter={account}
                           borrower={data.borrower}
                           proposalId={data.proposal_id}

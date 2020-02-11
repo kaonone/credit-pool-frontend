@@ -145,6 +145,7 @@ const en = {
         earn: 'Earn',
         status: 'Status',
         myStake: 'My stake',
+        myInterestShare: 'Interest share',
         paymentDate: 'Payment date',
         statuses: {
           PROPOSED: 'proposed',
