@@ -86,9 +86,19 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
     [],
   );
 
-  const [{ formattedBalance: formattedMax }] = useFormattedBalance('dai', maxValue || new BN(0));
+  const [{ formattedBalance: formattedMax }] = useFormattedBalance(
+    'dai',
+    maxValue || new BN(0),
+    sourceTokenInfo?.decimals,
+    'short',
+  );
   const formatMax = useCallback(() => formattedMax, [formattedMax]);
-  const [{ formattedBalance: formattedMin }] = useFormattedBalance('dai', minValue || new BN(0));
+  const [{ formattedBalance: formattedMin }] = useFormattedBalance(
+    'dai',
+    minValue || new BN(0),
+    sourceTokenInfo?.decimals,
+    'short',
+  );
   const formatMin = useCallback(() => formattedMin, [formattedMin]);
 
   const validateAmount = useMemo(() => {

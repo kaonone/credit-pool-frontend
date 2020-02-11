@@ -126,6 +126,7 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
           <Grid item>
             <Loading meta={accountMeta} progressVariant="linear">
               <StakeButton
+                loanSize={lendValue}
                 proposalId={proposalId}
                 borrower={borrower}
                 disabled={isMyProposal}

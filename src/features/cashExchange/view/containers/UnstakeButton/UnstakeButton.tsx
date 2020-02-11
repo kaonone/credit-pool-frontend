@@ -31,7 +31,10 @@ function UnstakeButton(props: IProps) {
   const api = useApi();
 
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
-  const [daiTokenInfo] = useSubscribable(() => api.tokens.getTokenInfo$('dai'), []);
+  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
+    () => api.tokens.getTokenInfo$('dai'),
+    [],
+  );
 
   const [fullLoanStake, fullLoanStakeMeta] = useSubscribable(
     () => api.loanModule.calculateFullLoanStake$(loanSize),
@@ -97,7 +100,7 @@ function UnstakeButton(props: IProps) {
   );
 
   return (
-    <Loading meta={[accountMeta, fullLoanStakeMeta]} progressVariant="linear">
+    <Loading meta={[accountMeta, daiTokenInfoMeta, fullLoanStakeMeta]} progressVariant="linear">
       <ModalButton content={t(tKeys.buttonTitle.getKey())} fullWidth {...restProps}>
         {({ closeModal }) => (
           <PTokenExchanging

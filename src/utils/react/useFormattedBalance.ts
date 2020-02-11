@@ -15,6 +15,7 @@ export function useFormattedBalance(
   token: Token,
   value: string | BN,
   precision: number = 2,
+  variant: 'short' | 'long' = 'long',
 ): [FormattedBalance, ISubscriptionMeta] {
   const api = useApi();
   const [tokenInfo, tokenInfoMeta] = useSubscribable(() => api.tokens.getTokenInfo$(token), [
@@ -23,8 +24,13 @@ export function useFormattedBalance(
 
   return [
     (tokenInfo && {
-      formattedBalance: getFormattedBalance(value.toString(), tokenInfo, precision),
-      notRoundedBalance: getFormattedBalance(value.toString(), tokenInfo, tokenInfo.decimals),
+      formattedBalance: getFormattedBalance(value.toString(), tokenInfo, precision, variant),
+      notRoundedBalance: getFormattedBalance(
+        value.toString(),
+        tokenInfo,
+        tokenInfo.decimals,
+        variant,
+      ),
     }) || {
       formattedBalance: '⏳',
       notRoundedBalance: '⏳',
@@ -33,10 +39,16 @@ export function useFormattedBalance(
   ];
 }
 
-const getFormattedBalance = (value: string | BN, tokenInfo: ITokenInfo, precision?: number) =>
+const getFormattedBalance = (
+  value: string | BN,
+  tokenInfo: ITokenInfo,
+  precision: number,
+  variant: 'short' | 'long',
+) =>
   formatBalance({
     amountInBaseUnits: value,
     baseDecimals: tokenInfo.decimals,
     tokenSymbol: tokenInfo.symbol,
     precision: precision || 2,
+    variant,
   });

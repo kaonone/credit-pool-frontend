@@ -9,6 +9,7 @@ interface IFormatBalanceOptions {
   baseDecimals: number;
   tokenSymbol?: string;
   precision?: number;
+  variant?: 'short' | 'long';
 }
 
 export function formatBalance({
@@ -16,6 +17,7 @@ export function formatBalance({
   baseDecimals,
   tokenSymbol = '',
   precision = 2,
+  variant = 'long',
 }: IFormatBalanceOptions): string {
   let balanceString = bnToBn(amountInBaseUnits).toString();
 
@@ -41,7 +43,10 @@ export function formatBalance({
 
   const units = ` ${tokenSymbol}`;
 
-  return `${isNegative ? '-' : ''}${formatDecimal(prefix || '0')}${
+  const long = `${isNegative ? '-' : ''}${formatDecimal(prefix || '0')}${
     baseDecimals ? `.${postfix}` : ''
-  }${units.trimEnd()}`;
+  }`;
+  const short = long.replace(/^(\d+?\.\d*?)0*$/, '$1').replace(/^(\d+?)\.$/, '$1');
+
+  return `${variant === 'short' ? short : long}${units.trimEnd()}`;
 }

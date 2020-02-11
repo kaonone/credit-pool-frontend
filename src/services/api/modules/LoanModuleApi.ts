@@ -110,12 +110,18 @@ export class LoanModuleApi {
   @autobind
   public async stakePtk(
     fromAddress: string,
-    values: { sourceAmount: BN; borrower: string; proposalId: string },
+    values: {
+      sourceAmount: BN;
+      borrower: string;
+      proposalId: string;
+      lUserBalance: string;
+      pUserBalance: string;
+    },
   ): Promise<void> {
-    const { sourceAmount, borrower, proposalId } = values;
+    const { sourceAmount, borrower, proposalId, lUserBalance, pUserBalance } = values;
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
-    const pAmount = await first(this.fundsModuleApi.convertDaiToPtkExit$(sourceAmount.toString()));
+    const pAmount = new BN(pUserBalance).mul(sourceAmount).div(new BN(lUserBalance));
     const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
 
     const promiEvent = txLoanModule.methods.addPledge(
@@ -276,13 +282,27 @@ export class LoanModuleApi {
   public getPledgeRequirements$(
     borrower: string,
     proposalId: string,
-  ): Observable<{ minLPledge: BN; maxLPledge: BN }> {
+  ): Observable<{ minLPledge: BN; maxLPledge: BN; minPPledge: BN; maxPPledge: BN }> {
     return this.readonlyContract.methods
       .getPledgeRequirements({
         borrower,
         proposal: bnToBn(proposalId),
       })
-      .pipe(map(([minLPledge, maxLPledge]) => ({ minLPledge, maxLPledge })));
+      .pipe(
+        switchMap(([minLPledge, maxLPledge]) =>
+          combineLatest([
+            of([minLPledge, maxLPledge]),
+            this.fundsModuleApi.convertDaiToPtkExit$(minLPledge.toString()),
+            this.fundsModuleApi.convertDaiToPtkExit$(maxLPledge.toString()),
+          ]),
+        ),
+        map(([[minLPledge, maxLPledge], minPPledge, maxPPledge]) => ({
+          minLPledge,
+          maxLPledge,
+          minPPledge,
+          maxPPledge,
+        })),
+      );
   }
 
   @memoize(R.identity)

@@ -9,6 +9,7 @@ import { useApi } from 'services/api';
 import { makeStyles } from 'utils/styles';
 import { useSubscribable } from 'utils/react';
 import { decimalsToWei } from 'utils/bn';
+import { zeroAddress } from 'utils/mock';
 
 export const useStyles = makeStyles({
   growth: {
@@ -30,10 +31,7 @@ function UserBalanceChart() {
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
   const [currentBalance, currentBalanceMeta] = useSubscribable(
-    () =>
-      api.fundsModule.getPtkBalanceInDaiWithFee$(
-        account || '0x0000000000000000000000000000000000000000',
-      ),
+    () => api.fundsModule.getPtkBalanceInDaiWithFee$(account || zeroAddress),
     [account],
   );
   const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
