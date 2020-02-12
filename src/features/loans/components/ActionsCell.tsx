@@ -52,7 +52,7 @@ export function ActionsCell({ debt, account }: IProps) {
   const isAvailableForLiquidation = status !== Status.Closed && isDuePaymentExpired;
 
   const isAvailableForActivation =
-    isMyLoan && status === Status.Proposed && bnToBn(stakeProgress).lten(100);
+    isMyLoan && status === Status.Proposed && bnToBn(stakeProgress).gten(100);
 
   const isAvailableForRepay =
     isMyLoan && (status === Status.Executed || status === Status.PartiallyRepayed);
