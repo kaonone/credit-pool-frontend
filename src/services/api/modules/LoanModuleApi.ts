@@ -4,7 +4,7 @@ import BN from 'bn.js';
 import * as R from 'ramda';
 import { autobind } from 'core-decorators';
 
-import { min, bnToBn } from 'utils/bn';
+import { min, bnToBn, max } from 'utils/bn';
 import { memoize } from 'utils/decorators';
 import { createLoanModule } from 'generated/contracts';
 import { ETH_NETWORK_CONFIG, MIN_COLLATERAL_PERCENT_FOR_BORROWER } from 'env';
@@ -176,6 +176,33 @@ export class LoanModuleApi {
   }
 
   @autobind
+  public async unlockPtkFromPledge(
+    fromAddress: string,
+    values: {
+      borrower: string;
+      debtId: string;
+    },
+  ): Promise<void> {
+    const { borrower, debtId } = values;
+    const txLoanModule = getCurrentValueOrThrow(this.txContract);
+
+    const promiEvent = txLoanModule.methods.withdrawUnlockedPledge(
+      {
+        borrower,
+        debt: bnToBn(debtId),
+      },
+      { from: fromAddress },
+    );
+
+    this.transactionsApi.pushToSubmittedTransactions$('loan.withdrawUnlockedPledge', promiEvent, {
+      address: fromAddress,
+      ...values,
+    });
+
+    await promiEvent;
+  }
+
+  @autobind
   public async createLoanProposal(
     fromAddress: string,
     values: { sourceAmount: BN; apr: string; description: string },
@@ -321,5 +348,54 @@ export class LoanModuleApi {
           .div(new BN(collateralToDebtRatioMultiplier)),
       ),
     );
+  }
+
+  @memoize((...args: string[]) => args.join())
+  // eslint-disable-next-line class-methods-use-this
+  public calculatePAvailableForUnlock$(
+    borrower: string,
+    supporter: string,
+    debtId: string,
+  ): Observable<BN> {
+    return this.calculatePledgeInfo$(borrower, supporter, debtId).pipe(
+      map(({ pUnlocked, pInterest, pWithdrawn }) =>
+        max('0', pUnlocked.add(pInterest).sub(pWithdrawn)),
+      ),
+    );
+  }
+
+  @memoize((...args: string[]) => args.join())
+  // eslint-disable-next-line class-methods-use-this
+  private calculatePledgeInfo$(
+    borrower: string,
+    supporter: string,
+    debtId: string,
+  ): Observable<{
+    pLocked: BN;
+    pUnlocked: BN;
+    pInterest: BN;
+    pWithdrawn: BN;
+  }> {
+    return this.readonlyContract.methods
+      .calculatePledgeInfo(
+        {
+          borrower,
+          debt: bnToBn(debtId),
+          supporter,
+        },
+        {
+          Repay: { filter: { sender: borrower } },
+          DebtDefaultExecuted: { filter: { borrower } },
+          UnlockedPledgeWithdraw: { filter: { sender: supporter } },
+        },
+      )
+      .pipe(
+        map(([pLocked, pUnlocked, pInterest, pWithdrawn]) => ({
+          pLocked,
+          pUnlocked,
+          pInterest,
+          pWithdrawn,
+        })),
+      );
   }
 }

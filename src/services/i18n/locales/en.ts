@@ -48,6 +48,11 @@ const en = {
         success: 'Withdrawing pledge from the loan. Succeeded',
         error: 'Withdrawing pledge from the loan. Failed',
       },
+      'loan.withdrawUnlockedPledge': {
+        pending: 'Withdraw unlocked stake and earn from the loan. Pending',
+        success: 'Withdraw unlocked stake and earn from the loan. Succeeded',
+        error: 'Withdraw unlocked stake and earn from the loan. Failed',
+      },
       'loan.createProposal': {
         pending: 'Creating a loan proposal. Pending',
         success: 'Creating a loan proposal. Succeeded',
@@ -85,8 +90,8 @@ const en = {
           'Are you sure you want to stake %{sourceAmount}? Your interest share will increase by %{interestShareDelta}',
       },
       unstakeButton: {
-        buttonTitle: 'Untake',
-        formTitle: 'Untake',
+        buttonTitle: 'Unstake',
+        formTitle: 'Unstake',
         placeholder: 'Enter sum',
         confirmMessage:
           'Are you sure you want to unstake %{sourceAmount}? Your interest share will decrease by %{interestShareDelta}',
@@ -112,6 +117,11 @@ const en = {
       },
       activateLoanButton: {
         confirmMessage: 'Are you sure you want to activate a loan?',
+      },
+      unlockButton: {
+        buttonTitle: 'Unlock',
+        confirmMessage:
+          'Are you sure you want to withdraw unlocked stake %{pledgeForUnlock} and earn %{earnForUnlock}?',
       },
       exchangingForm: {
         cancelButtonText: 'Cancel',
