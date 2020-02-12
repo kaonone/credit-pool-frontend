@@ -75,8 +75,13 @@ export function ActionsCell({ debt, account }: IProps) {
         Activate
       </ActivateLoanButton>
     ) : null,
-    isAvailableForRepay && debtId ? (
-      <RepayButton account={borrower} debtId={debtId} {...commonProps} />
+    isAvailableForRepay && lastUpdate && debtId ? (
+      <RepayButton
+        account={borrower}
+        debtId={debtId}
+        lastPaymentDate={lastUpdate}
+        {...commonProps}
+      />
     ) : null,
     isAvailableForUnstake ? (
       <UnstakeButton

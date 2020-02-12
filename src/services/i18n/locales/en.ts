@@ -101,7 +101,7 @@ const en = {
         formTitle: 'Repay',
         placeholder: 'Enter sum',
         confirmMessage:
-          'Are you sure you want to repay %{sourceAmount}? Loan body: %{body}, interest: %{interest}',
+          'Are you sure you want to repay %{sourceAmount}? Loan body: ~%{body}, interest: ~%{interest}',
       },
       getLoanButton: {
         buttonTitle: 'Get loan',

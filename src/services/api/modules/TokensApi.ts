@@ -74,7 +74,7 @@ export class TokensApi {
     );
   }
 
-  @memoize((token: Token, address: string) => token + address)
+  @memoize((...args: string[]) => args.join())
   @autobind
   public getBalance$(token: Token, address: string): Observable<BN> {
     return this.readonlyContracts[token].methods.balanceOf(

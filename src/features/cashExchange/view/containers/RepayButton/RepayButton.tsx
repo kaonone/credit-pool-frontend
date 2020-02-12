@@ -18,13 +18,14 @@ import {
 
 type IProps = React.ComponentPropsWithoutRef<typeof Button> & {
   debtId: string;
+  lastPaymentDate: string;
   account: string;
 };
 
 const tKeys = tKeysAll.features.cashExchange.repayButton;
 
 function RepayButton(props: IProps) {
-  const { debtId, account, ...restProps } = props;
+  const { debtId, account, lastPaymentDate, ...restProps } = props;
   const { t } = useTranslate();
   const api = useApi();
 
@@ -34,7 +35,7 @@ function RepayButton(props: IProps) {
     (values: ISubmittedFormData | null) => {
       const rawSourceAmount = new BN(values?.sourceAmount?.toString() || '0');
 
-      return api.loanModule.getDebtRequiredPayments$(account, debtId).pipe(
+      return api.loanModule.getDebtRequiredPayments$(account, debtId, lastPaymentDate).pipe(
         map(({ currentInterest }) => {
           const rawBody = max('0', rawSourceAmount.sub(currentInterest));
           const rawInterest = min(rawSourceAmount, currentInterest);
@@ -65,6 +66,7 @@ function RepayButton(props: IProps) {
                 amountInBaseUnits: rawSourceAmount,
                 baseDecimals: daiTokenInfo.decimals,
                 tokenSymbol: daiTokenInfo.symbol,
+                precision: 4,
               })) ||
             '⏳';
 
@@ -72,15 +74,15 @@ function RepayButton(props: IProps) {
         }),
       );
     },
-    [daiTokenInfo, account],
+    [daiTokenInfo, account, lastPaymentDate],
   );
 
   const getMaxSourceValue = useCallback(
     () =>
       api.loanModule
-        .getDebtRequiredPayments$(account, debtId)
+        .getDebtRequiredPayments$(account, debtId, lastPaymentDate)
         .pipe(map(({ currentInterest, loanSize }) => currentInterest.add(loanSize))),
-    [debtId, account],
+    [debtId, account, lastPaymentDate],
   );
   const getMinSourceValue = useCallback(() => of(new BN(0)), []);
 

@@ -1,4 +1,4 @@
-import { Observable, BehaviorSubject, of, combineLatest } from 'rxjs';
+import { Observable, BehaviorSubject, of, combineLatest, timer } from 'rxjs';
 import { map, first as firstOperator, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
@@ -286,26 +286,43 @@ export class LoanModuleApi {
     );
   }
 
-  @memoize(R.identity)
+  @memoize((...args: string[]) => args.join())
   @autobind
   public getDebtRequiredPayments$(
     borrower: string,
     debtId: string,
+    lastPayment: string,
   ): Observable<{ loanSize: BN; currentInterest: BN }> {
-    return this.readonlyContract.methods
-      .getDebtRequiredPayments({
-        borrower,
-        debt: bnToBn(debtId),
-      })
-      .pipe(
-        map(([loanSize, currentInterest]) => ({
+    const marginOfSeconds = 30 * 60;
+    const recalcInterestIntervalInMs = 10 * 60 * 1000;
+
+    return timer(0, recalcInterestIntervalInMs).pipe(
+      switchMap(() =>
+        this.readonlyContract.methods.getDebtRequiredPayments(
+          {
+            borrower,
+            debt: bnToBn(debtId),
+          },
+          {
+            Repay: { filter: { sender: borrower } },
+            DebtDefaultExecuted: { filter: { borrower } },
+          },
+        ),
+      ),
+      map(([loanSize, currentInterest]) => {
+        const secondsAfterPayment = new BN(Date.now() / 1000 - parseInt(lastPayment, 10));
+
+        return {
           loanSize,
-          currentInterest,
-        })),
-      );
+          currentInterest: currentInterest
+            .mul(secondsAfterPayment.addn(marginOfSeconds))
+            .div(secondsAfterPayment),
+        };
+      }),
+    );
   }
 
-  @memoize(R.identity)
+  @memoize((...args: string[]) => args.join())
   public getPledgeRequirements$(
     borrower: string,
     proposalId: string,
