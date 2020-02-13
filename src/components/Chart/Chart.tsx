@@ -7,7 +7,7 @@ import { LineChart, XAxis, YAxis, CartesianGrid, Line, ResponsiveContainer } fro
 import { makeFormatDateByPeriod, getTicks } from './helpers';
 import { useStyles } from './Chart.style';
 
-export type Period = '24h' | '1w' | '1m' | '6m' | 'all';
+export type Period = '24h' | '3d' | '1w' | '2w' | '1m' | '3m' | '6m' | 'all';
 
 export interface IPoint {
   date: number;
@@ -122,7 +122,7 @@ interface IPeriodSwitchProps {
   onSelect(period: Period): void;
 }
 
-const periods: Period[] = ['24h', '1w', '1m', '6m', 'all'];
+const periods: Period[] = ['24h', '3d', '1w', '2w', '1m', '3m', '6m', 'all'];
 
 function PeriodSwitch(props: IPeriodSwitchProps) {
   const { period: selectedPeriod, onSelect } = props;

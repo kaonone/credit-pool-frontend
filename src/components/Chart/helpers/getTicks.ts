@@ -4,7 +4,7 @@ import * as d3Scale from 'd3-scale';
 
 import { Period, IPoint } from '../Chart';
 
-const POINTS_LENGTH = 7;
+const POINTS_LENGTH = 14;
 
 export function getTicks<P extends IPoint>(
   points: P[],
@@ -24,13 +24,25 @@ export function getTicks<P extends IPoint>(
       moment(currentDate)
         .subtract(1, 'day')
         .valueOf(),
+    '3d': () =>
+      moment(currentDate)
+        .subtract(3, 'day')
+        .valueOf(),
     '1w': () =>
       moment(currentDate)
         .subtract(1, 'week')
         .valueOf(),
+    '2w': () =>
+      moment(currentDate)
+        .subtract(2, 'week')
+        .valueOf(),
     '1m': () =>
       moment(currentDate)
         .subtract(1, 'month')
+        .valueOf(),
+    '3m': () =>
+      moment(currentDate)
+        .subtract(3, 'month')
         .valueOf(),
     '6m': () =>
       moment(currentDate)
