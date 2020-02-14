@@ -38,12 +38,19 @@ function PersonalMetrics(props: Props) {
     { user: new BN(0) },
   );
 
+  const currentProfit = lAvailableBalance.sub(prevLAvailableBalance);
+
   const metrics = useMemo<IMetric[]>(
     () => [
       {
         title: t(tKeys.availableBalance.getKey()),
         value: lAvailableBalance.toString(),
-        previousValue: prevLAvailableBalance.toString(),
+        token: 'dai',
+        isCashMetric: true,
+      },
+      {
+        title: t(tKeys.currentProfit.getKey()),
+        value: currentProfit.toString(),
         token: 'dai',
         isCashMetric: true,
       },

@@ -137,6 +137,7 @@ const en = {
     personalInformation: {
       deposit: 'Deposit',
       availableBalance: 'Available balance',
+      currentProfit: 'Current profit',
       locked: 'Locked',
       credit: 'Credit',
     },
