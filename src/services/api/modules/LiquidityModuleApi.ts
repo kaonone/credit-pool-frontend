@@ -71,7 +71,9 @@ export class LiquidityModuleApi {
     const txLiquidityModule = getCurrentValueOrThrow(this.txContract);
 
     const { percentDivider, withdrawFeePercent } = await first(this.curveModuleApi.getConfig$());
-    const lAmountWithFee = lAmountWithoutFee.mul(percentDivider).div(withdrawFeePercent);
+    const lAmountWithFee = lAmountWithoutFee
+      .mul(percentDivider)
+      .div(percentDivider.sub(withdrawFeePercent));
 
     const pAmountWithFee = await first(
       this.fundsModuleApi.convertDaiToPtkExit$(lAmountWithFee.toString()),
