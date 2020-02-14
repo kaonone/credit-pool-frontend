@@ -44,7 +44,6 @@ function PersonalMetrics(props: Props) {
         title: t(tKeys.availableBalance.getKey()),
         value: lAvailableBalance.toString(),
         previousValue: prevLAvailableBalance.toString(),
-        primaryCashMetricValue: 'previousValue',
         token: 'dai',
         isCashMetric: true,
       },

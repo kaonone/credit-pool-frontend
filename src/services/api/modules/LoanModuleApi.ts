@@ -110,18 +110,12 @@ export class LoanModuleApi {
   @autobind
   public async stakePtk(
     fromAddress: string,
-    values: {
-      sourceAmount: BN;
-      borrower: string;
-      proposalId: string;
-      lUserBalance: string;
-      pUserBalance: string;
-    },
+    values: { sourceAmount: BN; borrower: string; proposalId: string },
   ): Promise<void> {
-    const { sourceAmount, borrower, proposalId, lUserBalance, pUserBalance } = values;
+    const { sourceAmount, borrower, proposalId } = values;
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
-    const pAmount = new BN(pUserBalance).mul(sourceAmount).div(new BN(lUserBalance));
+    const pAmount = await first(this.fundsModuleApi.convertDaiToPtkExit$(sourceAmount.toString()));
     const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
 
     const promiEvent = txLoanModule.methods.addPledge(
@@ -146,17 +140,25 @@ export class LoanModuleApi {
   public async unstakePtk(
     fromAddress: string,
     values: {
-      sourceAmount: BN; // in DAI
+      sourceAmount: BN; // in DAI by currentFullStakeCost
       borrower: string;
       proposalId: string;
-      lLocked: string;
-      pLocked: string;
+      lInitialLocked: string;
+      pInitialLocked: string;
     },
   ): Promise<void> {
-    const { sourceAmount, borrower, proposalId, lLocked, pLocked } = values;
+    const { sourceAmount, borrower, proposalId, lInitialLocked, pInitialLocked } = values;
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
-    const pAmount = new BN(pLocked).mul(sourceAmount).div(new BN(lLocked));
+    const currentFullStakeCost = await first(
+      this.fundsModuleApi.getAvailableBalanceIncreasing$(
+        fromAddress,
+        pInitialLocked,
+        lInitialLocked,
+      ),
+    );
+
+    const pAmount = new BN(pInitialLocked).mul(sourceAmount).div(new BN(currentFullStakeCost));
 
     const promiEvent = txLoanModule.methods.withdrawPledge(
       {

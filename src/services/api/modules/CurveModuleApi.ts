@@ -41,4 +41,21 @@ export class CurveModuleApi {
       })),
     );
   }
+
+  @memoize((...args: string[]) => args.join())
+  @autobind
+  public calculateExitInverse$(
+    liquidAssets: string,
+    pAmount: string,
+  ): Observable<{ total: BN; user: BN; fee: BN }> {
+    return this.readonlyContract.methods
+      .calculateExitInverse({ liquidAssets: new BN(liquidAssets), pAmount: new BN(pAmount) })
+      .pipe(
+        map(([total, user, fee]) => ({
+          total,
+          user,
+          fee,
+        })),
+      );
+  }
 }
