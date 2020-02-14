@@ -147,14 +147,16 @@ export class LoanModuleApi {
       pInitialLocked: string;
     },
   ): Promise<void> {
-    const { sourceAmount, borrower, proposalId, lInitialLocked, pInitialLocked } = values;
+    const { sourceAmount, borrower, proposalId, pInitialLocked } = values;
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
     const currentFullStakeCost = await first(
       this.fundsModuleApi.getAvailableBalanceIncreasing$(
         fromAddress,
         pInitialLocked,
-        lInitialLocked,
+        '0',
+        // TODO uncomment after contracts updating
+        // lInitialLocked,
       ),
     );
 
