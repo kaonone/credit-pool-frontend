@@ -4,10 +4,14 @@ import BN from 'bn.js';
 import * as R from 'ramda';
 import { autobind } from 'core-decorators';
 
-import { min, bnToBn, max } from 'utils/bn';
+import { min, bnToBn, max, decimalsToWei } from 'utils/bn';
 import { memoize } from 'utils/decorators';
 import { createLoanModule } from 'generated/contracts';
-import { ETH_NETWORK_CONFIG, MIN_COLLATERAL_PERCENT_FOR_BORROWER } from 'env';
+import {
+  ETH_NETWORK_CONFIG,
+  MIN_COLLATERAL_PERCENT_FOR_BORROWER,
+  PLEDGE_MARGIN_DIVIDER,
+} from 'env';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
@@ -352,8 +356,8 @@ export class LoanModuleApi {
     borrower: string,
     proposalId: string,
   ): Observable<{ minLPledge: BN; maxLPledge: BN; minPPledge: BN; maxPPledge: BN }> {
-    return this.readonlyContract.methods
-      .getPledgeRequirements(
+    return combineLatest([
+      this.readonlyContract.methods.getPledgeRequirements(
         {
           borrower,
           proposal: bnToBn(proposalId),
@@ -363,22 +367,28 @@ export class LoanModuleApi {
           PledgeWithdrawn: {},
         },
         1000,
-      )
-      .pipe(
-        switchMap(([minLPledge, maxLPledge]) =>
-          combineLatest([
-            of([minLPledge, maxLPledge]),
-            this.fundsModuleApi.convertDaiToPtkExit$(minLPledge.toString()),
-            this.fundsModuleApi.convertDaiToPtkExit$(maxLPledge.toString()),
-          ]),
-        ),
-        map(([[minLPledge, maxLPledge], minPPledge, maxPPledge]) => ({
-          minLPledge,
-          maxLPledge,
-          minPPledge,
-          maxPPledge,
-        })),
-      );
+      ),
+      this.tokensApi.getTokenInfo$('dai'),
+    ]).pipe(
+      switchMap(([[minLPledge, maxLPledge], daiInfo]) => {
+        const pledgeMargin = decimalsToWei(daiInfo.decimals).divn(PLEDGE_MARGIN_DIVIDER);
+
+        const minLPledgeWithMargin = minLPledge.add(pledgeMargin);
+        const maxLPledgeWithMargin = maxLPledge.add(pledgeMargin);
+
+        return combineLatest([
+          of([minLPledgeWithMargin, maxLPledgeWithMargin]),
+          this.fundsModuleApi.convertDaiToPtkExit$(minLPledgeWithMargin.toString()),
+          this.fundsModuleApi.convertDaiToPtkExit$(maxLPledgeWithMargin.toString()),
+        ]);
+      }),
+      map(([[minLPledge, maxLPledge], minPPledge, maxPPledge]) => ({
+        minLPledge,
+        maxLPledge,
+        minPPledge,
+        maxPPledge,
+      })),
+    );
   }
 
   @memoize(R.identity)
