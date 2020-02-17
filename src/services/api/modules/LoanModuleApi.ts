@@ -353,10 +353,17 @@ export class LoanModuleApi {
     proposalId: string,
   ): Observable<{ minLPledge: BN; maxLPledge: BN; minPPledge: BN; maxPPledge: BN }> {
     return this.readonlyContract.methods
-      .getPledgeRequirements({
-        borrower,
-        proposal: bnToBn(proposalId),
-      })
+      .getPledgeRequirements(
+        {
+          borrower,
+          proposal: bnToBn(proposalId),
+        },
+        {
+          PledgeAdded: {},
+          PledgeWithdrawn: {},
+        },
+        1000,
+      )
       .pipe(
         switchMap(([minLPledge, maxLPledge]) =>
           combineLatest([
