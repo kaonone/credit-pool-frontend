@@ -260,6 +260,27 @@ export class LoanModuleApi {
   }
 
   @autobind
+  public async liquidateDebt(fromAddress: string, borrower: string, debtId: string): Promise<void> {
+    const txLoanModule = getCurrentValueOrThrow(this.txContract);
+
+    const promiEvent = txLoanModule.methods.executeDebtDefault(
+      {
+        borrower,
+        debt: bnToBn(debtId),
+      },
+      { from: fromAddress },
+    );
+
+    this.transactionsApi.pushToSubmittedTransactions$('loan.liquidateDebt', promiEvent, {
+      address: fromAddress,
+      borrower,
+      debtId,
+    });
+
+    await promiEvent;
+  }
+
+  @autobind
   public async repay(fromAddress: string, debtId: string, lAmount: BN): Promise<void> {
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
