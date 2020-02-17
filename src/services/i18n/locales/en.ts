@@ -63,6 +63,11 @@ const en = {
         success: 'Loan activation. Succeeded',
         error: 'Loan activation. Failed',
       },
+      'loan.liquidateDebt': {
+        pending: 'Loan liquidation. Pending',
+        success: 'Loan liquidation. Succeeded',
+        error: 'Loan liquidation. Failed',
+      },
       'loan.repay': {
         pending: 'Loan repaying. Pending',
         success: 'Loan repaying. Succeeded',
@@ -117,6 +122,9 @@ const en = {
       },
       activateLoanButton: {
         confirmMessage: 'Are you sure you want to activate a loan?',
+      },
+      liquidateLoanButton: {
+        confirmMessage: 'Are you sure you want to liquidate a loan?',
       },
       unlockButton: {
         buttonTitle: 'Unlock',
