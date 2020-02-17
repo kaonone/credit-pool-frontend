@@ -119,7 +119,13 @@ export class LoanModuleApi {
     const { sourceAmount, borrower, proposalId } = values;
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
-    const pAmount = await first(this.fundsModuleApi.convertDaiToPtkExit$(sourceAmount.toString()));
+    const daiInfo = await first(this.tokensApi.getTokenInfo$('dai'));
+
+    const pledgeMargin = decimalsToWei(daiInfo.decimals).divn(PLEDGE_MARGIN_DIVIDER);
+
+    const pAmount = await first(
+      this.fundsModuleApi.convertDaiToPtkExit$(sourceAmount.add(pledgeMargin).toString()),
+    );
     const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
 
     const promiEvent = txLoanModule.methods.addPledge(
@@ -356,8 +362,8 @@ export class LoanModuleApi {
     borrower: string,
     proposalId: string,
   ): Observable<{ minLPledge: BN; maxLPledge: BN; minPPledge: BN; maxPPledge: BN }> {
-    return combineLatest([
-      this.readonlyContract.methods.getPledgeRequirements(
+    return this.readonlyContract.methods
+      .getPledgeRequirements(
         {
           borrower,
           proposal: bnToBn(proposalId),
@@ -367,28 +373,22 @@ export class LoanModuleApi {
           PledgeWithdrawn: {},
         },
         1000,
-      ),
-      this.tokensApi.getTokenInfo$('dai'),
-    ]).pipe(
-      switchMap(([[minLPledge, maxLPledge], daiInfo]) => {
-        const pledgeMargin = decimalsToWei(daiInfo.decimals).divn(PLEDGE_MARGIN_DIVIDER);
-
-        const minLPledgeWithMargin = minLPledge.add(pledgeMargin);
-        const maxLPledgeWithMargin = maxLPledge.add(pledgeMargin);
-
-        return combineLatest([
-          of([minLPledgeWithMargin, maxLPledgeWithMargin]),
-          this.fundsModuleApi.convertDaiToPtkExit$(minLPledgeWithMargin.toString()),
-          this.fundsModuleApi.convertDaiToPtkExit$(maxLPledgeWithMargin.toString()),
-        ]);
-      }),
-      map(([[minLPledge, maxLPledge], minPPledge, maxPPledge]) => ({
-        minLPledge,
-        maxLPledge,
-        minPPledge,
-        maxPPledge,
-      })),
-    );
+      )
+      .pipe(
+        switchMap(([minLPledge, maxLPledge]) => {
+          return combineLatest([
+            of([minLPledge, maxLPledge]),
+            this.fundsModuleApi.convertDaiToPtkExit$(minLPledge.toString()),
+            this.fundsModuleApi.convertDaiToPtkExit$(maxLPledge.toString()),
+          ]);
+        }),
+        map(([[minLPledge, maxLPledge], minPPledge, maxPPledge]) => ({
+          minLPledge,
+          maxLPledge,
+          minPPledge,
+          maxPPledge,
+        })),
+      );
   }
 
   @memoize(R.identity)
