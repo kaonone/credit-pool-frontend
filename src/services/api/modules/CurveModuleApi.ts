@@ -49,7 +49,7 @@ export class CurveModuleApi {
     pAmount: string,
   ): Observable<{ total: BN; user: BN; fee: BN }> {
     return this.readonlyContract.methods
-      .calculateExitInverse({ liquidAssets: new BN(liquidAssets), pAmount: new BN(pAmount) })
+      .calculateExitInverseWithFee({ liquidAssets: new BN(liquidAssets), pAmount: new BN(pAmount) })
       .pipe(
         map(([total, user, fee]) => ({
           total,

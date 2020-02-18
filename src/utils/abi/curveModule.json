@@ -19,32 +19,6 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "CURVE_A",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "CURVE_B",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
     "name": "MODULE_CURVE",
     "outputs": [{
       "internalType": "string",
@@ -97,6 +71,19 @@
   {
     "constant": true,
     "inputs": [],
+    "name": "MODULE_LTOKEN",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
     "name": "MODULE_PTOKEN",
     "outputs": [{
       "internalType": "string",
@@ -111,19 +98,6 @@
     "constant": true,
     "inputs": [],
     "name": "PERCENT_DIVIDER",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "WITHDRAW_FEE_PERCENT",
     "outputs": [{
       "internalType": "uint256",
       "name": "",
@@ -199,21 +173,10 @@
     ],
     "name": "calculateExitInverse",
     "outputs": [{
-        "internalType": "uint256",
-        "name": "withdraw",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "withdrawU",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "withdrawP",
-        "type": "uint256"
-      }
-    ],
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -384,30 +347,6 @@
   },
   {
     "constant": false,
-    "inputs": [{
-        "internalType": "uint256",
-        "name": "_curveA",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_curveB",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_withdrawFeePercent",
-        "type": "uint256"
-      }
-    ],
-    "name": "initialize",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
     "inputs": [],
     "name": "initialize",
     "outputs": [],
@@ -426,6 +365,91 @@
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_curveA",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_curveB",
+        "type": "uint256"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "_withdrawFeePercent",
+      "type": "uint256"
+    }],
+    "name": "setWithdrawFee",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_curveA",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_curveB",
+        "type": "uint256"
+      }
+    ],
+    "name": "setCurveParams",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "liquidAssets",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "calculateExitInverseWithFee",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "withdraw",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "withdrawU",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "withdrawP",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   }
 ]
