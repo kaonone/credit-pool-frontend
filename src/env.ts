@@ -50,3 +50,7 @@ export const SWARM_GATEWAY_URL = 'https://swarm-gateways.net';
 // TODO take from contract
 export const MIN_COLLATERAL_PERCENT_FOR_BORROWER = 50;
 export const PLEDGE_MARGIN_DIVIDER = 1000000;
+
+export const SUBGRAPH_HTTP_URL =
+  'https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os2';
+export const SUBGRAPH_WS_URL = 'wss://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os2';
