@@ -9,6 +9,7 @@ import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 
 const forGhPages = true;
 const pageTitle = 'Credit Pool';
+const isStaging = process.env.IS_STAGING === 'true';
 
 function sortChunks(a: webpack.compilation.Chunk, b: webpack.compilation.Chunk): number {
   const order = ['app', 'vendors', 'runtime'];
@@ -79,6 +80,9 @@ const config: webpack.Configuration = {
       failOnError: true,
     }),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.IS_STAGING': JSON.stringify(process.env.IS_STAGING),
+    }),
     new FileManagerWebpackPlugin({
       onEnd: {
         copy: [
@@ -103,7 +107,7 @@ const config: webpack.Configuration = {
             onEnd: {
               copy: [
                 {
-                  source: `assets/ghPageRoot/**`,
+                  source: `assets/${isStaging ? 'ghPageRootStaging' : 'ghPageRoot'}/**`,
                   destination: `build`,
                 },
               ],

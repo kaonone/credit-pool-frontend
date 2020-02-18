@@ -1,3 +1,5 @@
+import { getEnv } from 'core/getEnv';
+
 interface INetworkConfig {
   id: 1 | 4;
   name: 'mainnet' | 'rinkeby';
@@ -51,6 +53,9 @@ export const SWARM_GATEWAY_URL = 'https://swarm-gateways.net';
 export const MIN_COLLATERAL_PERCENT_FOR_BORROWER = 50;
 export const PLEDGE_MARGIN_DIVIDER = 1000000;
 
-export const SUBGRAPH_HTTP_URL =
-  'https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os2';
-export const SUBGRAPH_WS_URL = 'wss://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os2';
+export const SUBGRAPH_HTTP_URL = getEnv().isStaging
+  ? 'https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os2'
+  : 'https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os2-stable';
+export const SUBGRAPH_WS_URL = getEnv().isStaging
+  ? 'wss://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os2'
+  : 'wss://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os2-stable';

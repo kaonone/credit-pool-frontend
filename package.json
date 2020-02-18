@@ -4,9 +4,8 @@
   "description": "Frontend starter kit for Ethereum DApps",
   "main": "index.js",
   "scripts": {
-    "node": "node --max_old_space_size=4096 ./node_modules/.bin/cross-env TS_NODE_PROJECT=\"webpack/tsconfig.json\"",
-    "dev": "npm run node -- webpack-dev-server --open --config webpack/dev.ts",
-    "build": "npm run node -- webpack --config webpack/prod.ts",
+    "dev": "better-npm-run dev",
+    "build": "better-npm-run node webpack --config webpack/prod.ts",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx && tsc --noEmit --pretty",
     "lint:autofix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "test": "jest && npm run lint",
@@ -15,8 +14,23 @@
     "test:coverage": "jest --coverage --watch",
     "codegen": "graphql-codegen --config codegen.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
     "postinstall": "npm run codegen",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -r git@github.com:akropolisio/credit-pool-frontend-v2.git -d build"
+    "predeploy:staging": "cross-env IS_STAGING=true npm run build",
+    "deploy:staging": "gh-pages -r git@github.com:akropolisio/credit-pool-frontend-v2.git -d build"
+  },
+  "betterScripts": {
+    "node": {
+      "command": "node --max_old_space_size=4096 ./node_modules/.bin/cross-env",
+      "env": {
+        "TS_NODE_PROJECT": "webpack/tsconfig.json",
+        "TS_NODE_FILES": true
+      }
+    },
+    "dev": {
+      "command": "better-npm-run node webpack-dev-server --open --config webpack/dev.ts",
+      "env": {
+        "IS_STAGING": true
+      }
+    }
   },
   "author": "Serdtsev Dmitriy",
   "license": "MIT",
@@ -101,9 +115,10 @@
     "@types/ws": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^2.9.0",
     "@typescript-eslint/parser": "^2.9.0",
+    "better-npm-run": "^0.1.1",
     "circular-dependency-plugin": "^5.2.0",
     "clean-webpack-plugin": "^3.0.0",
-    "cross-env": "^6.0.3",
+    "cross-env": "^7.0.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
     "enzyme-to-json": "^3.4.3",
