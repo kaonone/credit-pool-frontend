@@ -9,6 +9,7 @@ import { ActivitiesPage } from './pages/Activities/ActivitiesPage';
 import { MyLoansPage } from './pages/MyLoans/MyLoans';
 import { MyGuaranteesPage } from './pages/MyGuarantees/MyGuarantees';
 import { LiquidationsPage } from './pages/Liquidations/Liquidations';
+import { BalancesPage } from './pages/Balances/Balances';
 import { routes } from './routes';
 import { BaseLayout } from './components/BaseLayout/BaseLayout';
 
@@ -28,6 +29,7 @@ export function App() {
         <Route exact path={routes['my-loans'].getRoutePath()} component={MyLoansPage} />
         <Route exact path={routes['my-guarantees'].getRoutePath()} component={MyGuaranteesPage} />
         <Route exact path={routes.liquidations.getRoutePath()} component={LiquidationsPage} />
+        <Route exact path={routes.balance.getRoutePath()} component={BalancesPage} />
         <Redirect to={routes.overview.getRedirectPath()} />
       </Switch>
     </BaseLayout>

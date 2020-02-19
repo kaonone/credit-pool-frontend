@@ -9,6 +9,10 @@ const en = {
         myBalanceTitle: 'My balance',
         poolInfoTitle: 'Pool information',
       },
+      balances: {
+        balanceChangesTitle: 'Deposit/Withdraw history',
+        earningsTitle: 'Earnings',
+      },
     },
     components: {
       header: {
@@ -148,6 +152,28 @@ const en = {
       currentProfit: 'Current profit',
       locked: 'Locked',
       credit: 'Credit',
+    },
+    balance: {
+      changes: {
+        notFound: 'Balance changes not found',
+        date: 'Date',
+        type: 'Action',
+        amount: 'Amount',
+        types: {
+          DEPOSIT: 'Deposit',
+          WITHDRAW: 'Withdraw',
+        },
+      },
+      earnings: {
+        notFound: 'Earnings not found',
+        date: 'Date',
+        type: 'Type',
+        amount: 'Amount',
+        types: {
+          DEBT_INTEREST: 'Loan interest',
+          POOL_DISTRIBUTIONS: 'Pool distribution',
+        },
+      },
     },
     loans: {
       loansList: {

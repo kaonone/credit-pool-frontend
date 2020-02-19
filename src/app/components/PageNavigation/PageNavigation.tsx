@@ -54,6 +54,13 @@ function PageNavigation() {
             value={routes.liquidations.getElementKey()}
             to={routes.liquidations.getRedirectPath()}
           />
+          <Tab
+            className={classes.tab}
+            label="Balance history"
+            component={Link}
+            value={routes.balance.getElementKey()}
+            to={routes.balance.getRedirectPath()}
+          />
         </Tabs>
       )}
     </Route>

@@ -13,6 +13,10 @@ import { theme } from 'utils/styles';
 export function Root(): React.ReactElement<{}> {
   const api = new Api();
 
+  if (process.env.NODE_ENV === 'development') {
+    (window as any).api = api;
+  }
+
   return (
     <ErrorBoundary>
       <BrowserRouter>
