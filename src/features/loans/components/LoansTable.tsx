@@ -126,6 +126,8 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
                     <Table.Cell>
                       {({ data }) => (
                         <MyStakeCell
+                          loanBody={new BN(data.total).sub(new BN(data.repayed)).toString()}
+                          status={data.status}
                           supporter={account}
                           borrower={data.borrower}
                           proposalId={data.proposal_id}
@@ -140,7 +142,7 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
                     <Table.Cell>
                       {({ data }) => (
                         <MyInterestShareCell
-                          loanSize={data.total}
+                          initialLoanSize={data.total}
                           supporter={account}
                           borrower={data.borrower}
                           proposalId={data.proposal_id}

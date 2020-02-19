@@ -2,14 +2,13 @@ import React, { useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import { map } from 'rxjs/operators';
 import BN from 'bn.js';
+import { combineLatest, of } from 'rxjs';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { ModalButton } from 'components/ModalButton/ModalButton';
 import { min, roundWei } from 'utils/bn';
 import { useSubscribable } from 'utils/react';
-import { useMyUserSubscription } from 'generated/gql/pool';
-import { zeroAddress } from 'utils/mock';
 import { Loading } from 'components';
 import { formatBalance } from 'utils/format';
 import { calcInterestShare } from 'model';
@@ -32,20 +31,11 @@ function StakeButton(props: IProps) {
   const { t } = useTranslate();
   const api = useApi();
 
-  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
   const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
     () => api.tokens.getTokenInfo$('dai'),
     [],
   );
-  const [ptkTokenInfo, ptkTokenInfoMeta] = useSubscribable(
-    () => api.tokens.getTokenInfo$('ptk'),
-    [],
-  );
-  const decimals = ptkTokenInfo?.decimals || 0;
-
-  const userGqlResult = useMyUserSubscription({ variables: { address: account || zeroAddress } });
-  const lUserBalance = userGqlResult.data?.user?.lBalance || '0';
-  const pUserBalance = userGqlResult.data?.user?.pBalance || '0';
+  const decimals = daiTokenInfo?.decimals || 0;
 
   const [fullLoanStake, fullLoanStakeMeta] = useSubscribable(
     () => api.loanModule.calculateFullLoanStake$(loanSize),
@@ -57,65 +47,56 @@ function StakeButton(props: IProps) {
     (values: ISubmittedFormData | null) => {
       const rawSourceAmount = new BN(values?.sourceAmount?.toString() || '0');
 
-      const pSourceAmount = new BN(pUserBalance)
-        .mul(new BN(rawSourceAmount))
-        .div(new BN(lUserBalance));
-
-      return api.fundsModule.getPtkToDaiExitInfo$(pSourceAmount.toString()).pipe(
-        map(({ total }) => {
-          const interestShareDecimals = 2;
-          const rawInterestShareDelta = calcInterestShare(
-            total,
-            fullLoanStake,
-            interestShareDecimals,
-          );
-
-          const interestShareDelta =
-            (daiTokenInfo &&
-              `${formatBalance({
-                amountInBaseUnits: rawInterestShareDelta,
-                baseDecimals: interestShareDecimals,
-              })}%`) ||
-            '⏳';
-
-          const sourceAmount =
-            (daiTokenInfo &&
-              formatBalance({
-                amountInBaseUnits: rawSourceAmount,
-                baseDecimals: daiTokenInfo.decimals,
-                tokenSymbol: daiTokenInfo.symbol,
-              })) ||
-            '⏳';
-
-          return t(tKeys.confirmMessage.getKey(), { interestShareDelta, sourceAmount });
-        }),
+      const interestShareDecimals = 2;
+      const rawInterestShareDelta = calcInterestShare(
+        rawSourceAmount,
+        fullLoanStake,
+        interestShareDecimals,
       );
+
+      const interestShareDelta =
+        (daiTokenInfo &&
+          `${formatBalance({
+            amountInBaseUnits: rawInterestShareDelta,
+            baseDecimals: interestShareDecimals,
+          })}%`) ||
+        '⏳';
+
+      const sourceAmount =
+        (daiTokenInfo &&
+          formatBalance({
+            amountInBaseUnits: rawSourceAmount,
+            baseDecimals: daiTokenInfo.decimals,
+            tokenSymbol: daiTokenInfo.symbol,
+          })) ||
+        '⏳';
+
+      return of(t(tKeys.confirmMessage.getKey(), { interestShareDelta, sourceAmount }));
     },
-    [daiTokenInfo, account, pUserBalance, lUserBalance, fullLoanStake],
+    [t, daiTokenInfo, fullLoanStake],
   );
 
   const getMaxSourceValue = useCallback(
-    () =>
-      api.loanModule.getPledgeRequirements$(borrower, proposalId).pipe(
-        map(({ maxPPledge }) => {
-          const roundedBalance = roundWei(lUserBalance, decimals, 'floor', 2);
-
-          const maxLStakeSize = new BN(lUserBalance).mul(maxPPledge).div(new BN(pUserBalance));
-          const roundedMaxStakeSize = roundWei(maxLStakeSize, decimals, 'ceil', 2);
+    (account: string) =>
+      combineLatest([
+        api.fundsModule.getPtkBalanceInDaiWithoutFee$(account),
+        api.loanModule.getPledgeRequirements$(borrower, proposalId),
+      ]).pipe(
+        map(([balance, { maxLPledge }]) => {
+          const roundedBalance = roundWei(balance, decimals, 'floor', 2);
+          const roundedMaxStakeSize = roundWei(maxLPledge, decimals, 'ceil', 2);
 
           return min(roundedBalance, roundedMaxStakeSize);
         }),
       ),
-    [borrower, proposalId, decimals, lUserBalance, pUserBalance],
+    [borrower, proposalId, decimals],
   );
   const getMinSourceValue = useCallback(
     () =>
-      api.loanModule.getPledgeRequirements$(borrower, proposalId).pipe(
-        map(({ minPPledge }) => {
-          return new BN(lUserBalance).mul(minPPledge).div(new BN(pUserBalance));
-        }),
-      ),
-    [borrower, proposalId, lUserBalance, pUserBalance],
+      api.loanModule
+        .getPledgeRequirements$(borrower, proposalId)
+        .pipe(map(({ minLPledge }) => minLPledge)),
+    [borrower, proposalId],
   );
 
   const onStakeRequest = useCallback(
@@ -123,20 +104,14 @@ function StakeButton(props: IProps) {
       return api.loanModule.stakePtk(address, {
         borrower,
         proposalId,
-        lUserBalance,
-        pUserBalance,
         ...values,
       });
     },
-    [borrower, proposalId, lUserBalance, pUserBalance],
+    [borrower, proposalId],
   );
 
   return (
-    <Loading
-      meta={[accountMeta, daiTokenInfoMeta, ptkTokenInfoMeta, fullLoanStakeMeta]}
-      gqlResults={userGqlResult}
-      progressVariant="linear"
-    >
+    <Loading meta={[daiTokenInfoMeta, fullLoanStakeMeta]} progressVariant="linear">
       <ModalButton content={t(tKeys.buttonTitle.getKey())} fullWidth {...restProps}>
         {({ closeModal }) => (
           <PTokenExchanging

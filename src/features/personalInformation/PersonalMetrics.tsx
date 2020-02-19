@@ -25,15 +25,9 @@ function PersonalMetrics(props: Props) {
   });
 
   const myUser = myUserResult.data?.user;
-
   const lCredit = new BN(myUser?.credit || '0');
-
   const prevLAvailableBalance = new BN(myUser?.lBalance || '0');
-  const prevLLocked = new BN(myUser?.lLockedSum || '0').add(new BN(myUser?.lInterestSum || '0'));
-  const prevLTotal = prevLAvailableBalance.add(prevLLocked);
-
   const pAvailableBalance = new BN(myUser?.pBalance || '0');
-  const pLocked = new BN(myUser?.pLockedSum || '0').add(new BN(myUser?.pInterestSum || '0'));
 
   const [{ user: lAvailableBalance }, lAvailableBalanceMeta] = useSubscribable(
     () =>
@@ -44,43 +38,19 @@ function PersonalMetrics(props: Props) {
     { user: new BN(0) },
   );
 
-  const [{ user: lLocked }, lLockedMeta] = useSubscribable(
-    () =>
-      pLocked.isZero()
-        ? of({ user: new BN(0) })
-        : api.fundsModule.getPtkToDaiExitInfo$(pLocked.toString()),
-    [pLocked.toString()],
-    { user: new BN(0) },
-  );
+  const currentProfit = lAvailableBalance.sub(prevLAvailableBalance);
 
-  const lTotal = useMemo(() => lAvailableBalance.add(lLocked), [
-    lAvailableBalance.toString(),
-    lLocked.toString(),
-  ]);
-
-  const metrics = React.useMemo<IMetric[]>(
+  const metrics = useMemo<IMetric[]>(
     () => [
-      {
-        title: t(tKeys.deposit.getKey()),
-        value: lTotal.toString(),
-        previousValue: prevLTotal.toString(),
-        primaryCashMetricValue: 'previousValue',
-        token: 'dai',
-        isCashMetric: true,
-      },
       {
         title: t(tKeys.availableBalance.getKey()),
         value: lAvailableBalance.toString(),
-        previousValue: prevLAvailableBalance.toString(),
-        primaryCashMetricValue: 'previousValue',
         token: 'dai',
         isCashMetric: true,
       },
       {
-        title: t(tKeys.locked.getKey()),
-        value: lLocked.toString(),
-        previousValue: prevLLocked.toString(),
-        primaryCashMetricValue: 'previousValue',
+        title: t(tKeys.currentProfit.getKey()),
+        value: currentProfit.toString(),
         token: 'dai',
         isCashMetric: true,
       },
@@ -91,22 +61,13 @@ function PersonalMetrics(props: Props) {
         isCashMetric: true,
       },
     ],
-    [
-      t,
-      lTotal.toString(),
-      prevLTotal.toString(),
-      lAvailableBalance.toString(),
-      prevLAvailableBalance.toString(),
-      lLocked.toString(),
-      prevLLocked.toString(),
-      lCredit.toString(),
-    ],
+    [t, lAvailableBalance.toString(), prevLAvailableBalance.toString(), lCredit.toString()],
   );
 
   return (
     <Loading
       gqlResults={myUserResult}
-      meta={[accountMeta, lAvailableBalanceMeta, lLockedMeta]}
+      meta={[accountMeta, lAvailableBalanceMeta]}
       progressVariant="circle"
     >
       <MetricsList {...props} metrics={metrics} />

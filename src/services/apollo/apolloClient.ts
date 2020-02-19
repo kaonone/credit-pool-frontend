@@ -6,13 +6,15 @@ import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { getMainDefinition } from 'apollo-utilities';
 
+import { SUBGRAPH_HTTP_URL, SUBGRAPH_WS_URL } from 'env';
+
 const poolLink = makeEndpointLink(
   new HttpLink({
-    uri: 'https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os',
+    uri: SUBGRAPH_HTTP_URL,
     credentials: 'same-origin',
   }),
   new WebSocketLink({
-    uri: 'wss://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os',
+    uri: SUBGRAPH_WS_URL,
     options: {
       reconnect: true,
     },

@@ -6,3 +6,4 @@ export { GetLoanButton } from './view/containers/GetLoanButton/GetLoanButton';
 export { ActivateLoanButton } from './view/containers/ActivateLoanButton/ActivateLoanButton';
 export { RepayButton } from './view/containers/RepayButton/RepayButton';
 export { UnlockButton } from './view/containers/UnlockButton/UnlockButton';
+export { LiquidateLoanButton } from './view/containers/LiquidateLoanButton/LiquidateLoanButton';

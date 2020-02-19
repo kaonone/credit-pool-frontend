@@ -4,7 +4,7 @@ import BN from 'bn.js';
 import { Debt, Status, usePledgeSubscription } from 'generated/gql/pool';
 import { isEqualHex } from 'utils/hex';
 import { bnToBn } from 'utils/bn';
-import { Grid, Loading, ModalButton, Hint } from 'components';
+import { Grid, Loading, Hint } from 'components';
 import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
 import { getLoanDuePaymentDate, getPledgeId } from 'model';
@@ -13,6 +13,7 @@ import {
   RepayButton,
   UnstakeButton,
   UnlockButton,
+  LiquidateLoanButton,
 } from 'features/cashExchange';
 
 interface IProps {
@@ -94,7 +95,11 @@ export function ActionsCell({ debt, account }: IProps) {
     isAvailableForUnlock && debtId ? (
       <UnlockButton borrower={borrower} proposalId={proposalId} debtId={debtId} {...commonProps} />
     ) : null,
-    isAvailableForLiquidation ? <ModalButton content="Liquidate" {...commonProps} /> : null,
+    isAvailableForLiquidation && debtId ? (
+      <LiquidateLoanButton borrower={borrower} debtId={debtId} {...commonProps}>
+        Liquidate
+      </LiquidateLoanButton>
+    ) : null,
   ].filter(Boolean);
 
   return (

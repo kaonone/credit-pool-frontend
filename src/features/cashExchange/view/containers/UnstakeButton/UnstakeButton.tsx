@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import BN from 'bn.js';
 import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
@@ -11,6 +12,7 @@ import { formatBalance } from 'utils/format';
 import { usePledgeSubscription } from 'generated/gql/pool';
 import { getPledgeId, calcInterestShare } from 'model';
 import { Loading } from 'components';
+import { zeroAddress } from 'utils/mock';
 
 import {
   PTokenExchanging,
@@ -47,43 +49,67 @@ function UnstakeButton(props: IProps) {
       pledgeHash: account && proposalId ? getPledgeId(account, borrower, proposalId) : '',
     },
   });
-  const lLocked = pledgeGqlResult.data?.pledge?.lLocked || '0';
-  const pLocked = pledgeGqlResult.data?.pledge?.pLocked || '0';
+  const pInitialLocked = pledgeGqlResult.data?.pledge?.pInitialLocked || '0';
   const lInitialLocked = pledgeGqlResult.data?.pledge?.lInitialLocked || '0';
 
   const getConfirmMessage = useCallback(
     (values: ISubmittedFormData | null) => {
-      const rawSourceAmount = new BN(values?.sourceAmount?.toString() || '0');
-      const interestShareDecimals = 2;
-      const rawInterestShareDelta = calcInterestShare(
-        rawSourceAmount.mul(new BN(lInitialLocked)).div(new BN(lLocked)),
-        fullLoanStake,
-        interestShareDecimals,
+      return (
+        api.fundsModule
+          // TODO uncomment after contracts updating
+          // .getAvailableBalanceIncreasing$(account || zeroAddress, pInitialLocked, lInitialLocked)
+          .getAvailableBalanceIncreasing$(account || zeroAddress, pInitialLocked, '0')
+          .pipe(
+            map(currentFullStakeCost => {
+              const rawSourceAmount = new BN(values?.sourceAmount?.toString() || '0');
+              const interestShareDecimals = 2;
+
+              const lAmountForUnstakeByInitial = new BN(lInitialLocked)
+                .mul(rawSourceAmount)
+                .div(currentFullStakeCost);
+
+              const rawInterestShareDelta = calcInterestShare(
+                lAmountForUnstakeByInitial,
+                fullLoanStake,
+                interestShareDecimals,
+              );
+
+              const interestShareDelta =
+                (daiTokenInfo &&
+                  `${formatBalance({
+                    amountInBaseUnits: rawInterestShareDelta,
+                    baseDecimals: interestShareDecimals,
+                  })}%`) ||
+                '⏳';
+
+              const sourceAmount =
+                (daiTokenInfo &&
+                  formatBalance({
+                    amountInBaseUnits: rawSourceAmount,
+                    baseDecimals: daiTokenInfo.decimals,
+                    tokenSymbol: daiTokenInfo.symbol,
+                  })) ||
+                '⏳';
+
+              return t(tKeys.confirmMessage.getKey(), { sourceAmount, interestShareDelta });
+            }),
+          )
       );
-
-      const interestShareDelta =
-        (daiTokenInfo &&
-          `${formatBalance({
-            amountInBaseUnits: rawInterestShareDelta,
-            baseDecimals: interestShareDecimals,
-          })}%`) ||
-        '⏳';
-
-      const sourceAmount =
-        (daiTokenInfo &&
-          formatBalance({
-            amountInBaseUnits: rawSourceAmount,
-            baseDecimals: daiTokenInfo.decimals,
-            tokenSymbol: daiTokenInfo.symbol,
-          })) ||
-        '⏳';
-
-      return of(t(tKeys.confirmMessage.getKey(), { sourceAmount, interestShareDelta }));
     },
-    [daiTokenInfo, fullLoanStake.toString(), lInitialLocked, lLocked],
+    [account, daiTokenInfo, fullLoanStake.toString(), pInitialLocked, lInitialLocked],
   );
 
-  const getMaxSourceValue = useCallback(() => of(new BN(lLocked)), [lLocked]);
+  const getMaxSourceValue = useCallback(
+    () =>
+      api.fundsModule.getAvailableBalanceIncreasing$(
+        account || zeroAddress,
+        pInitialLocked,
+        '0',
+        // TODO uncomment after contracts updating
+        // lInitialLocked,
+      ),
+    [account, pInitialLocked, lInitialLocked],
+  );
   const getMinSourceValue = useCallback(() => of(new BN(0)), []);
 
   const onUnstakeRequest = useCallback(
@@ -91,12 +117,12 @@ function UnstakeButton(props: IProps) {
       return api.loanModule.unstakePtk(address, {
         borrower,
         proposalId,
-        lLocked,
-        pLocked,
+        lInitialLocked,
+        pInitialLocked,
         ...values,
       });
     },
-    [borrower, proposalId, lLocked, pLocked],
+    [borrower, proposalId, lInitialLocked, pInitialLocked],
   );
 
   return (

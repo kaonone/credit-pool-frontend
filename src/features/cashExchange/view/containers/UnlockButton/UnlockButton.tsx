@@ -20,7 +20,7 @@ type IProps = React.ComponentPropsWithoutRef<typeof Button> & {
 const tKeysConfirmation = tKeysAll.features.cashExchange.exchangingConfirmation;
 const tKeys = tKeysAll.features.cashExchange.unlockButton;
 
-function UnlockButton(props: IProps) {
+export function UnlockButton(props: IProps) {
   const { borrower, proposalId, debtId, ...restProps } = props;
   const { t } = useTranslate();
   const api = useApi();
@@ -41,46 +41,46 @@ function UnlockButton(props: IProps) {
     },
   });
 
-  const lInterest = pledgeGqlResult.data?.pledge?.lInterest;
-  const pInterest = pledgeGqlResult.data?.pledge?.pInterest;
-  const lLocked = pledgeGqlResult.data?.pledge?.lLocked;
-  const pLocked = pledgeGqlResult.data?.pledge?.pLocked;
+  const pInterest = pledgeGqlResult.data?.pledge?.pInterest || '0';
 
   const [pAvailableForUnlock, pAvailableForUnlockMeta] = useSubscribable(
     () => api.loanModule.calculatePAvailableForUnlock$(borrower, account || zeroAddress, debtId),
     [borrower, account, debtId],
+    new BN(0),
   );
 
-  const lPledgeForUnlock =
-    lLocked &&
-    pAvailableForUnlock &&
-    pInterest &&
-    pLocked &&
-    calculatePledgeForUnlock({
-      lLocked,
-      pAvailableForUnlock: pAvailableForUnlock.toString(),
-      pInterest,
-      pLocked,
-    }).lPledgeForUnlock;
+  const [interestCost, interestCostMeta] = useSubscribable(
+    () => api.fundsModule.getAvailableBalanceIncreasing$(account || zeroAddress, pInterest, '0'),
+    [account, pInterest],
+  );
 
-  const lAvailableForUnlock =
-    lInterest && lPledgeForUnlock && new BN(lInterest).add(lPledgeForUnlock);
+  // includes interestCost
+  const [availableForUnlockCost, availableForUnlockCostMeta] = useSubscribable(
+    () =>
+      api.fundsModule.getAvailableBalanceIncreasing$(
+        account || zeroAddress,
+        pAvailableForUnlock.toString(),
+        '0',
+      ),
+    [account, pAvailableForUnlock.toString()],
+  );
 
   const confirmMessage = t(tKeys.confirmMessage.getKey(), {
     pledgeForUnlock:
-      (lPledgeForUnlock &&
+      (availableForUnlockCost &&
+        interestCost &&
         daiTokenInfo &&
         formatBalance({
-          amountInBaseUnits: lPledgeForUnlock,
+          amountInBaseUnits: availableForUnlockCost.sub(interestCost),
           baseDecimals: daiTokenInfo.decimals,
           tokenSymbol: daiTokenInfo.symbol,
         })) ||
       '⏳',
     earnForUnlock:
-      (lInterest &&
+      (interestCost &&
         daiTokenInfo &&
         formatBalance({
-          amountInBaseUnits: lInterest,
+          amountInBaseUnits: interestCost,
           baseDecimals: daiTokenInfo.decimals,
           tokenSymbol: daiTokenInfo.symbol,
         })) ||
@@ -95,12 +95,20 @@ function UnlockButton(props: IProps) {
   return (
     <>
       <Loading
-        meta={[daiTokenInfoMeta, accountMeta, pAvailableForUnlockMeta]}
+        meta={[
+          daiTokenInfoMeta,
+          accountMeta,
+          pAvailableForUnlockMeta,
+          interestCostMeta,
+          availableForUnlockCostMeta,
+        ]}
         gqlResults={pledgeGqlResult}
       >
         <Button {...restProps} onClick={open}>
           {t(tKeys.buttonTitle.getKey())}&nbsp;
-          {lAvailableForUnlock && <FormattedBalance sum={lAvailableForUnlock} token="dai" />}
+          {availableForUnlockCost && (
+            <FormattedBalance sum={availableForUnlockCost.toString()} token="dai" />
+          )}
         </Button>
       </Loading>
       <ConfirmationDialog
@@ -115,19 +123,3 @@ function UnlockButton(props: IProps) {
     </>
   );
 }
-
-function calculatePledgeForUnlock(options: {
-  pAvailableForUnlock: string;
-  pInterest: string;
-  lLocked: string;
-  pLocked: string;
-}) {
-  const { lLocked, pAvailableForUnlock, pInterest, pLocked } = options;
-
-  const pPledgeForUnlock = new BN(pAvailableForUnlock).sub(new BN(pInterest));
-
-  const lPledgeForUnlock = new BN(lLocked).mul(pPledgeForUnlock).div(new BN(pLocked));
-  return { pPledgeForUnlock, lPledgeForUnlock };
-}
-
-export { UnlockButton };

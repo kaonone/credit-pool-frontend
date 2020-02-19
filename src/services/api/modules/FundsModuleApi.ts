@@ -10,13 +10,18 @@ import { ETH_NETWORK_CONFIG } from 'env';
 import { decimalsToWei } from 'utils/bn';
 
 import { TokensApi } from './TokensApi';
+import { CurveModuleApi } from './CurveModuleApi';
 import { Contracts, Web3ManagerModule } from '../types';
 
 export class FundsModuleApi {
   private readonlyContract: Contracts['fundsModule'];
   private txContract = new BehaviorSubject<null | Contracts['fundsModule']>(null);
 
-  constructor(private web3Manager: Web3ManagerModule, private tokensApi: TokensApi) {
+  constructor(
+    private web3Manager: Web3ManagerModule,
+    private curveModuleApi: CurveModuleApi,
+    private tokensApi: TokensApi,
+  ) {
     this.readonlyContract = createFundsModule(
       this.web3Manager.web3,
       ETH_NETWORK_CONFIG.contracts.fundsModule,
@@ -120,5 +125,44 @@ export class FundsModuleApi {
           fee,
         })),
       );
+  }
+
+  // TODO Check after contracts updating
+  /**
+   * Calculates how much the available balance of the user will increase after the return of illiquid funds
+   * @param address user address for getting current PTK balance
+   * @param additionalPtkBalance how many tokens increase the balance
+   * @param additionalLiquidity how much illiquid funds will be returned to liquidity
+   */
+  @memoize(R.identity)
+  @autobind
+  public getAvailableBalanceIncreasing$(
+    address: string,
+    additionalPtkBalance: string,
+    additionalLiquidity: string,
+  ): Observable<BN> {
+    return combineLatest([
+      this.tokensApi.getBalance$('ptk', address),
+      this.getCurrentLiquidity$(),
+    ]).pipe(
+      switchMap(([ptkBalance, currentLiquidity]) =>
+        combineLatest([
+          this.curveModuleApi.calculateExitInverse$(
+            currentLiquidity.toString(),
+            ptkBalance.toString(),
+          ),
+          this.curveModuleApi.calculateExitInverse$(
+            currentLiquidity.add(new BN(additionalLiquidity)).toString(),
+            ptkBalance.add(new BN(additionalPtkBalance)).toString(),
+          ),
+        ]).pipe(map(([currentInfo, increasedInfo]) => increasedInfo.user.sub(currentInfo.user))),
+      ),
+    );
+  }
+
+  @memoize()
+  @autobind
+  public getCurrentLiquidity$(): Observable<BN> {
+    return this.readonlyContract.methods.lBalance(undefined, { Status: {} });
   }
 }

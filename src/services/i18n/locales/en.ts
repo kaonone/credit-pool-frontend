@@ -25,47 +25,52 @@ const en = {
     notifications: {
       'dai.approve': {
         pending: 'Approving %{amount} transfer. Pending',
-        success: 'Approving %{amount} transfer. Succeeded',
+        success: 'Approving %{amount} transfer. Successful',
         error: 'Approving %{amount} transfer. Failed',
       },
       'liquidity.sellPtk': {
         pending: 'Withdrawing %{amount} from the pool. Pending',
-        success: 'Withdrawing %{amount} from the pool. Succeeded',
+        success: 'Withdrawing %{amount} from the pool. Successful',
         error: 'Withdrawing %{amount} from the pool. Failed',
       },
       'liquidity.buyPtk': {
         pending: 'Transferring %{amount} to the pool. Pending',
-        success: 'Transferring %{amount} to the pool. Succeeded',
+        success: 'Transferring %{amount} to the pool. Successful',
         error: 'Transferring %{amount} to the pool. Failed',
       },
       'loan.addPledge': {
         pending: 'Adding pledge for the loan. Pending',
-        success: 'Adding pledge for the loan. Succeeded',
+        success: 'Adding pledge for the loan. Successful',
         error: 'Adding pledge for the loan. Failed',
       },
       'loan.unstakePledge': {
         pending: 'Withdrawing pledge from the loan. Pending',
-        success: 'Withdrawing pledge from the loan. Succeeded',
+        success: 'Withdrawing pledge from the loan. Successful',
         error: 'Withdrawing pledge from the loan. Failed',
       },
       'loan.withdrawUnlockedPledge': {
         pending: 'Withdraw unlocked stake and earn from the loan. Pending',
-        success: 'Withdraw unlocked stake and earn from the loan. Succeeded',
+        success: 'Withdraw unlocked stake and earn from the loan. Successful',
         error: 'Withdraw unlocked stake and earn from the loan. Failed',
       },
       'loan.createProposal': {
         pending: 'Creating a loan proposal. Pending',
-        success: 'Creating a loan proposal. Succeeded',
+        success: 'Creating a loan proposal. Successful',
         error: 'Creating a loan proposal. Failed',
       },
       'loan.executeProposal': {
         pending: 'Loan activation. Pending',
-        success: 'Loan activation. Succeeded',
+        success: 'Loan activation. Successful',
         error: 'Loan activation. Failed',
+      },
+      'loan.liquidateDebt': {
+        pending: 'Loan liquidation. Pending',
+        success: 'Loan liquidation. Successful',
+        error: 'Loan liquidation. Failed',
       },
       'loan.repay': {
         pending: 'Loan repaying. Pending',
-        success: 'Loan repaying. Succeeded',
+        success: 'Loan repaying. Successful',
         error: 'Loan repaying. Failed',
       },
     },
@@ -118,6 +123,9 @@ const en = {
       activateLoanButton: {
         confirmMessage: 'Are you sure you want to activate a loan?',
       },
+      liquidateLoanButton: {
+        confirmMessage: 'Are you sure you want to liquidate a loan?',
+      },
       unlockButton: {
         buttonTitle: 'Unlock',
         confirmMessage:
@@ -137,6 +145,7 @@ const en = {
     personalInformation: {
       deposit: 'Deposit',
       availableBalance: 'Available balance',
+      currentProfit: 'Current profit',
       locked: 'Locked',
       credit: 'Credit',
     },
