@@ -5,6 +5,7 @@ const rawTree = {
   overview: null,
   proposals: null,
   liquidations: null,
+  balance: null,
   'my-loans': null,
   'my-guarantees': null,
 };
