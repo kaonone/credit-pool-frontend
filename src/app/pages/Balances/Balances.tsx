@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { BalanceChanges } from 'features/balance';
-import { Grid, Hint, Box, Typography } from 'components';
+import { BalanceChanges, Earnings } from 'features/balance';
+import { Grid, Box, Typography } from 'components';
 
 import { WithAccount } from '../../components/WithAccount/WithAccount';
 
@@ -25,7 +25,7 @@ export function BalancesPage() {
             <Box mb={3}>
               <Typography variant="subtitle2">{t(tKeys.earningsTitle.getKey())}</Typography>
             </Box>
-            <Hint>Earnings (Coming soon)</Hint>
+            <Earnings account={account} />
           </Grid>
         </Grid>
       )}

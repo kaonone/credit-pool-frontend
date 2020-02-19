@@ -164,6 +164,16 @@ const en = {
           WITHDRAW: 'Withdraw',
         },
       },
+      earnings: {
+        notFound: 'Earnings not found',
+        date: 'Date',
+        type: 'Type',
+        amount: 'Amount',
+        types: {
+          DEBT_INTEREST: 'Loan interest',
+          POOL_DISTRIBUTIONS: 'Pool distribution',
+        },
+      },
     },
     loans: {
       loansList: {

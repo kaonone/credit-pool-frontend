@@ -1,0 +1,10 @@
+query MyEarnings($first: Int!, $skip: Int!, $address: String!) {
+  earnings(first: $first, skip: $skip, orderBy: date, orderDirection: desc, where: {address: $address}) {
+    id
+    address
+    date
+    pAmount
+    lAmount
+    type
+  }
+}
