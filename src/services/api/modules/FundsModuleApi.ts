@@ -16,6 +16,7 @@ import { Contracts, Web3ManagerModule } from '../types';
 export class FundsModuleApi {
   private readonlyContract: Contracts['fundsModule'];
   private txContract = new BehaviorSubject<null | Contracts['fundsModule']>(null);
+  private getTotalLProposals$: (() => Observable<BN>) | null = null;
 
   constructor(
     private web3Manager: Web3ManagerModule,
@@ -34,6 +35,10 @@ export class FundsModuleApi {
         ),
       )
       .subscribe(this.txContract);
+  }
+
+  public setTotalLProposalGetter(getter: () => Observable<BN>) {
+    this.getTotalLProposals$ = getter;
   }
 
   @memoize(R.identity)
@@ -127,7 +132,6 @@ export class FundsModuleApi {
       );
   }
 
-  // TODO Check after contracts updating
   /**
    * Calculates how much the available balance of the user will increase after the return of illiquid funds
    * @param address user address for getting current PTK balance
@@ -163,6 +167,13 @@ export class FundsModuleApi {
   @memoize()
   @autobind
   public getCurrentLiquidity$(): Observable<BN> {
-    return this.readonlyContract.methods.lBalance(undefined, { Status: {} });
+    if (!this.getTotalLProposals$) {
+      throw new Error('Getter for totalLProposals is not found');
+    }
+
+    return combineLatest([
+      this.readonlyContract.methods.lBalance(undefined, { Status: {} }),
+      this.getTotalLProposals$(),
+    ]).pipe(map(([liquidity, totalLProposals]) => liquidity.sub(totalLProposals)));
   }
 }

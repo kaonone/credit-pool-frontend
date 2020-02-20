@@ -52,11 +52,9 @@ export function MyStakeCell({
   const pledgeGqlResult = usePledgeSubscription({ variables: { pledgeHash } });
 
   const pLocked = pledgeGqlResult.data?.pledge?.pLocked || '0';
-  // const lInitialLocked = pledgeGqlResult.data?.pledge?.lInitialLocked || '0';
+  const lInitialLocked = pledgeGqlResult.data?.pledge?.lInitialLocked || '0';
 
-  const additionalLiquidity = status === Status.Proposed ? '0' : loanBody;
-  // TODO uncomment after contracts updating
-  // const additionalLiquidity = status === Status.Proposed ? lInitialLocked : loanBody;
+  const additionalLiquidity = status === Status.Proposed ? lInitialLocked : loanBody;
 
   const [myStakeCost, myStakeCostMeta] = useSubscribable(
     () => api.fundsModule.getAvailableBalanceIncreasing$(supporter, pLocked, additionalLiquidity),

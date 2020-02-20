@@ -31,4 +31,8 @@ export class Api {
     this.fundsModule,
     this.curveModule,
   );
+
+  constructor() {
+    this.fundsModule.setTotalLProposalGetter(this.loanModule.getTotalLProposals$);
+  }
 }

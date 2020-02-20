@@ -54,47 +54,43 @@ function UnstakeButton(props: IProps) {
 
   const getConfirmMessage = useCallback(
     (values: ISubmittedFormData | null) => {
-      return (
-        api.fundsModule
-          // TODO uncomment after contracts updating
-          // .getAvailableBalanceIncreasing$(account || zeroAddress, pInitialLocked, lInitialLocked)
-          .getAvailableBalanceIncreasing$(account || zeroAddress, pInitialLocked, '0')
-          .pipe(
-            map(currentFullStakeCost => {
-              const rawSourceAmount = new BN(values?.sourceAmount?.toString() || '0');
-              const interestShareDecimals = 2;
+      return api.fundsModule
+        .getAvailableBalanceIncreasing$(account || zeroAddress, pInitialLocked, lInitialLocked)
+        .pipe(
+          map(currentFullStakeCost => {
+            const rawSourceAmount = new BN(values?.sourceAmount?.toString() || '0');
+            const interestShareDecimals = 2;
 
-              const lAmountForUnstakeByInitial = new BN(lInitialLocked)
-                .mul(rawSourceAmount)
-                .div(currentFullStakeCost);
+            const lAmountForUnstakeByInitial = new BN(lInitialLocked)
+              .mul(rawSourceAmount)
+              .div(currentFullStakeCost);
 
-              const rawInterestShareDelta = calcInterestShare(
-                lAmountForUnstakeByInitial,
-                fullLoanStake,
-                interestShareDecimals,
-              );
+            const rawInterestShareDelta = calcInterestShare(
+              lAmountForUnstakeByInitial,
+              fullLoanStake,
+              interestShareDecimals,
+            );
 
-              const interestShareDelta =
-                (daiTokenInfo &&
-                  `${formatBalance({
-                    amountInBaseUnits: rawInterestShareDelta,
-                    baseDecimals: interestShareDecimals,
-                  })}%`) ||
-                '⏳';
+            const interestShareDelta =
+              (daiTokenInfo &&
+                `${formatBalance({
+                  amountInBaseUnits: rawInterestShareDelta,
+                  baseDecimals: interestShareDecimals,
+                })}%`) ||
+              '⏳';
 
-              const sourceAmount =
-                (daiTokenInfo &&
-                  formatBalance({
-                    amountInBaseUnits: rawSourceAmount,
-                    baseDecimals: daiTokenInfo.decimals,
-                    tokenSymbol: daiTokenInfo.symbol,
-                  })) ||
-                '⏳';
+            const sourceAmount =
+              (daiTokenInfo &&
+                formatBalance({
+                  amountInBaseUnits: rawSourceAmount,
+                  baseDecimals: daiTokenInfo.decimals,
+                  tokenSymbol: daiTokenInfo.symbol,
+                })) ||
+              '⏳';
 
-              return t(tKeys.confirmMessage.getKey(), { sourceAmount, interestShareDelta });
-            }),
-          )
-      );
+            return t(tKeys.confirmMessage.getKey(), { sourceAmount, interestShareDelta });
+          }),
+        );
     },
     [account, daiTokenInfo, fullLoanStake.toString(), pInitialLocked, lInitialLocked],
   );
@@ -104,9 +100,7 @@ function UnstakeButton(props: IProps) {
       api.fundsModule.getAvailableBalanceIncreasing$(
         account || zeroAddress,
         pInitialLocked,
-        '0',
-        // TODO uncomment after contracts updating
-        // lInitialLocked,
+        lInitialLocked,
       ),
     [account, pInitialLocked, lInitialLocked],
   );

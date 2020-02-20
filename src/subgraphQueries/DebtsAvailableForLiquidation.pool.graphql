@@ -1,4 +1,3 @@
-# TODO pledgers in string, borrower in bytes
 query DebtsAvailableForLiquidation($first: Int!, $skip: Int!, $liquidationDate: BigInt!) {
   debts(first: $first, skip: $skip, where: {last_update_lt: $liquidationDate, status_not: CLOSED}) {
     id

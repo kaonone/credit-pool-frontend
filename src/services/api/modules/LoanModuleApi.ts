@@ -111,6 +111,16 @@ export class LoanModuleApi {
     );
   }
 
+  @memoize()
+  @autobind
+  public getTotalLProposals$(): Observable<BN> {
+    return this.readonlyContract.methods.totalLProposals(undefined, {
+      PledgeAdded: {},
+      PledgeWithdrawn: {},
+      DebtProposalExecuted: {},
+    });
+  }
+
   @autobind
   public async stakePtk(
     fromAddress: string,
@@ -157,16 +167,14 @@ export class LoanModuleApi {
       pInitialLocked: string;
     },
   ): Promise<void> {
-    const { sourceAmount, borrower, proposalId, pInitialLocked } = values;
+    const { sourceAmount, borrower, proposalId, pInitialLocked, lInitialLocked } = values;
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
     const currentFullStakeCost = await first(
       this.fundsModuleApi.getAvailableBalanceIncreasing$(
         fromAddress,
         pInitialLocked,
-        '0',
-        // TODO uncomment after contracts updating
-        // lInitialLocked,
+        lInitialLocked,
       ),
     );
 
