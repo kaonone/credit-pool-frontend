@@ -18,7 +18,7 @@ import { formatBalance } from 'utils/format';
 import { useSubscribable } from 'utils/react';
 import { getLoanDuePaymentDate } from 'model';
 
-import { AddressCell, MyEarnCell } from './LoansTableCells';
+import { AddressCell, MyEarnCell, StatusCell } from './LoansTableCells';
 import { ActionsCell } from './ActionsCell';
 
 export const Table = GeneralTable as MakeTableType<Debt>;
@@ -130,7 +130,14 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
                 )}
                 <Table.Column>
                   <Table.Head>{t(tKeys.status.getKey())}</Table.Head>
-                  <Table.Cell>{({ data }) => t(tKeys.statuses[data.status].getKey())}</Table.Cell>
+                  <Table.Cell>
+                    {({ data }) => (
+                      <StatusCell
+                        status={data.status}
+                        pledgeProgress={parseInt(data.stakeProgress, 16)}
+                      />
+                    )}
+                  </Table.Cell>
                 </Table.Column>
                 {account && !hideColumns.includes('myStake') && (
                   <Table.Column>

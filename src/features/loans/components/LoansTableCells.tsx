@@ -6,9 +6,10 @@ import BN from 'bn.js';
 
 import { ShortAddress, Loading, FormattedBalance } from 'components';
 import { getPledgeId } from 'model/getPledgeId';
-import { usePledgeSubscription } from 'generated/gql/pool';
+import { usePledgeSubscription, Status } from 'generated/gql/pool';
 import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
+import { useTranslate } from 'services/i18n';
 
 export function AddressCell({ address }: { address: string }) {
   return (
@@ -53,5 +54,22 @@ export function MyEarnCell({ supporter, borrower, proposalId }: MyEarnCellProps)
     <Loading gqlResults={pledgeGqlResult} meta={interestCostMeta}>
       {interestCost.gtn(0) ? <FormattedBalance sum={interestCost} token="dai" /> : '—'}
     </Loading>
+  );
+}
+
+interface StatusProps {
+  status: Status;
+  pledgeProgress: number;
+}
+
+export function StatusCell({ status, pledgeProgress }: StatusProps) {
+  const { t, tKeys } = useTranslate();
+
+  return (
+    <>
+      {t(tKeys.features.loans.loansPanel.statuses[status].getKey(), {
+        pledgeProgress,
+      })}
+    </>
   );
 }
