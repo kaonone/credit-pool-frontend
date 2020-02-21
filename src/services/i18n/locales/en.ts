@@ -205,7 +205,7 @@ const en = {
       lend: 'lend',
       to: 'to',
       apr: 'apr',
-      myInterest: 'My interest share',
+      myStake: 'My stake',
       collateral: 'Collateral',
       timeLeft: 'Time left',
       expansionPanelTitle: 'Reason',

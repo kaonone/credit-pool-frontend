@@ -16,7 +16,7 @@ interface Activity {
   stakedValue: string;
   descriptionHash: string;
   status: Status;
-  proposalId?: string | null;
+  proposalId: string;
 }
 
 function LoanApplicationsList() {

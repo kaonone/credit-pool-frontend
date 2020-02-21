@@ -2,15 +2,16 @@ import React, { memo } from 'react';
 import Grid from '@material-ui/core/Grid';
 import BN from 'bn.js';
 
-import { Status, usePledgeSubscription } from 'generated/gql/pool';
 import { useApi } from 'services/api';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
+import { MyStakeCost } from 'features/stake';
 import { StakeButton, UnstakeButton } from 'features/cashExchange';
 import { CashMetric, Metric, ShortAddress, ActivitiesCard, Loading } from 'components';
 import { LendIcon } from 'components/icons';
+import { getPledgeId, calcInterestShare } from 'model';
 import { useSubscribable } from 'utils/react';
 import { formatBalance } from 'utils/format';
-import { getPledgeId, calcInterestShare } from 'model';
+import { Status, usePledgeSubscription } from 'generated/gql/pool';
 
 import { useStyles } from './LoanApplicationCard.style';
 import { Progress } from '../Progress/Progress';
@@ -24,7 +25,7 @@ interface IProps {
   stakedValue: string;
   descriptionHash: string;
   status: Status;
-  proposalId?: string | null;
+  proposalId: string;
 }
 
 const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
@@ -51,7 +52,7 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
 
   const pledgeGqlResult = usePledgeSubscription({
     variables: {
-      pledgeHash: account && proposalId ? getPledgeId(account, borrower, proposalId) : '',
+      pledgeHash: account ? getPledgeId(account, borrower, proposalId) : '',
     },
   });
   const pledgeLLocked = new BN(pledgeGqlResult.data?.pledge?.lLocked || '0');
@@ -85,15 +86,21 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
       />,
       <span className={classes.highlightedMetric}>
         <Metric
-          title={t(tKeys.myInterest.getKey())}
+          title={t(tKeys.myStake.getKey())}
           value={
-            <Loading meta={fullLoanStakeMeta}>
-              {rawInterestShareDelta &&
-                formatBalance({
-                  amountInBaseUnits: rawInterestShareDelta,
-                  baseDecimals: interestShareDecimals,
-                })}
-              %
+            <Loading meta={accountMeta}>
+              {account ? (
+                <MyStakeCost
+                  initialLoanSize={lendValue}
+                  loanBody={lendValue}
+                  status={status}
+                  supporter={account}
+                  borrower={borrower}
+                  proposalId={proposalId}
+                />
+              ) : (
+                '—'
+              )}
             </Loading>
           }
         />
