@@ -1,21 +1,29 @@
 import React from 'react';
 import BN from 'bn.js';
 
-import { Typography, Hint, Grid, Loading, Table as GeneralTable, MakeTableType } from 'components';
-import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
-import { Debt } from 'generated/gql/pool';
-import { formatBalance } from 'utils/format';
 import { useApi } from 'services/api';
 import { useTranslate } from 'services/i18n';
+import { MyStakeCost } from 'features/stake';
+import {
+  Typography,
+  Hint,
+  Grid,
+  Loading,
+  Table as GeneralTable,
+  MakeTableType,
+  FormattedBalance,
+} from 'components';
+import { Debt } from 'generated/gql/pool';
+import { formatBalance } from 'utils/format';
 import { useSubscribable } from 'utils/react';
 import { getLoanDuePaymentDate } from 'model';
 
-import { AddressCell, MyStakeCell, MyEarnCell, MyInterestShareCell } from './LoansTableCells';
+import { AddressCell, MyEarnCell } from './LoansTableCells';
 import { ActionsCell } from './ActionsCell';
 
 export const Table = GeneralTable as MakeTableType<Debt>;
 
-type HidableColumn = 'address' | 'earn' | 'myStake' | 'myInterestShare';
+type HidableColumn = 'address' | 'earn' | 'myStake';
 
 interface Props {
   list: Debt[];
@@ -125,24 +133,10 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
                     <Table.Head>{t(tKeys.myStake.getKey())}</Table.Head>
                     <Table.Cell>
                       {({ data }) => (
-                        <MyStakeCell
+                        <MyStakeCost
+                          initialLoanSize={data.total}
                           loanBody={new BN(data.total).sub(new BN(data.repayed)).toString()}
                           status={data.status}
-                          supporter={account}
-                          borrower={data.borrower}
-                          proposalId={data.proposal_id}
-                        />
-                      )}
-                    </Table.Cell>
-                  </Table.Column>
-                )}
-                {account && !hideColumns.includes('myInterestShare') && (
-                  <Table.Column>
-                    <Table.Head>{t(tKeys.myInterestShare.getKey())}</Table.Head>
-                    <Table.Cell>
-                      {({ data }) => (
-                        <MyInterestShareCell
-                          initialLoanSize={data.total}
                           supporter={account}
                           borrower={data.borrower}
                           proposalId={data.proposal_id}

@@ -21,11 +21,7 @@ function MyLoans(props: IProps) {
 
   return (
     <Loading gqlResults={result} progressVariant="circle">
-      <LoansTable
-        list={loans}
-        paginationView={paginationView}
-        hideColumns={['address', 'earn', 'myInterestShare']}
-      />
+      <LoansTable list={loans} paginationView={paginationView} hideColumns={['address', 'earn']} />
     </Loading>
   );
 }
