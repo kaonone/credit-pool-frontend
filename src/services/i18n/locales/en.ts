@@ -125,7 +125,8 @@ const en = {
           'Are you sure you want get loan %{sourceAmount} with collateral %{collateral}?',
       },
       activateLoanButton: {
-        confirmMessage: 'Are you sure you want to activate a loan?',
+        confirmMessage:
+          'Are you sure you want to activate a loan? Please note that your loan will be transferred directly to your wallet.',
       },
       liquidateLoanButton: {
         confirmMessage: 'Are you sure you want to liquidate a loan?',
