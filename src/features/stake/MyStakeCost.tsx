@@ -2,7 +2,7 @@ import React from 'react';
 import BN from 'bn.js';
 
 import { useApi } from 'services/api';
-import { Loading, FormattedBalance } from 'components';
+import { Loading, FormattedBalance, Highlighted } from 'components';
 import { calcInterestShare, getPledgeId } from 'model';
 import { useSubscribable } from 'utils/react';
 import { formatBalance } from 'utils/format';
@@ -53,17 +53,22 @@ export function MyStakeCost({
   const interestShare =
     fullLoanStake && calcInterestShare(lInitialLocked, fullLoanStake, interestShareDecimals);
 
+  const interestShareColor = interestShare?.ltn(1500) ? 'negative' : 'positive';
+
   return (
     <Loading gqlResults={pledgeGqlResult} meta={[myStakeCostMeta, fullLoanStakeMeta]}>
       {myStakeCost.gtn(0) ? (
         <>
-          <FormattedBalance sum={myStakeCost.toString()} token="dai" /> (
-          {interestShare &&
-            formatBalance({
-              amountInBaseUnits: interestShare,
-              baseDecimals: interestShareDecimals,
-            })}
-          %)
+          <FormattedBalance sum={myStakeCost.toString()} token="dai" />{' '}
+          {interestShare && (
+            <Highlighted color={interestShareColor}>
+              {formatBalance({
+                amountInBaseUnits: interestShare,
+                baseDecimals: interestShareDecimals,
+              })}
+              %
+            </Highlighted>
+          )}
         </>
       ) : (
         '—'

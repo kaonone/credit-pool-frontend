@@ -2,9 +2,10 @@
 // https://github.com/insomnious0x01/ntc-js
 
 export const colors = {
+  apple: '#43a047',
+  persianRed: '#d32f2f',
   alabaster: '#f8f8f8',
   alto: '#e0e0e0',
-  apple: '#35BC2D',
   athensGray: '#E8E7EB',
   black: '#000',
   blackCurrant: '#2E2639',

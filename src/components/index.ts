@@ -36,3 +36,4 @@ export * from './ExpansionPanel/ExpansionPanel';
 export * from './FormattedBalance/FormattedBalance';
 export * from './Growth/Growth';
 export * from './ConfirmationDialog/ConfirmationDialog';
+export * from './Highlighted/Highlighted';
