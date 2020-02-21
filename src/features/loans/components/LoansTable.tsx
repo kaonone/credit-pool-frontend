@@ -13,7 +13,7 @@ import {
   MakeTableType,
   FormattedBalance,
 } from 'components';
-import { Debt } from 'generated/gql/pool';
+import { Debt, Status } from 'generated/gql/pool';
 import { formatBalance } from 'utils/format';
 import { useSubscribable } from 'utils/react';
 import { getLoanDuePaymentDate } from 'model';
@@ -73,12 +73,14 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
                 <Table.Column>
                   <Table.Head>{t(tKeys.loan.getKey())}</Table.Head>
                   <Table.Cell>
-                    {({ data }) => (
-                      <FormattedBalance
-                        sum={new BN(data.total).sub(new BN(data.repayed))}
-                        token="dai"
-                      />
-                    )}
+                    {({ data }) => {
+                      const loanBody = new BN(data.total).sub(new BN(data.repayed));
+                      return loanBody.gtn(0) ? (
+                        <FormattedBalance sum={loanBody} token="dai" />
+                      ) : (
+                        '—'
+                      );
+                    }}
                   </Table.Cell>
                 </Table.Column>
                 <Table.Column>
@@ -87,11 +89,13 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
                     {({ data }) => (
                       <Loading meta={loansConfigMeta}>
                         {(loansConfig &&
+                          (data.status === Status.Executed ||
+                            data.status === Status.PartiallyRepayed) &&
                           getLoanDuePaymentDate(
                             data.last_update,
                             loansConfig.debtRepayDeadlinePeriod,
                           )?.toLocaleDateString()) ||
-                          '-'}
+                          '—'}
                       </Loading>
                     )}
                   </Table.Cell>
