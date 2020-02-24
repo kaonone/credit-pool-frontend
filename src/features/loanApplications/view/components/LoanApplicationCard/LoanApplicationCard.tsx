@@ -55,9 +55,9 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
       pledgeHash: account ? getPledgeId(account, borrower, proposalId) : '',
     },
   });
-  const pledgeLLocked = new BN(pledgeGqlResult.data?.pledge?.lLocked || '0');
+  const pledgePLocked = new BN(pledgeGqlResult.data?.pledge?.pLocked || '0');
   const pledgeLInitialLocked = new BN(pledgeGqlResult.data?.pledge?.lInitialLocked || '0');
-  const needToShowUnstake = pledgeLLocked.gtn(0);
+  const needToShowUnstake = pledgePLocked.gtn(0);
 
   const [fullLoanStake, fullLoanStakeMeta] = useSubscribable(
     () => api.loanModule.calculateFullLoanStake$(lendValue),

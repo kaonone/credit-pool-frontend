@@ -43,8 +43,8 @@ export function ActionsCell({ debt, account }: IProps) {
   ]);
   const pledgeGqlResult = usePledgeSubscription({ variables: { pledgeHash } });
 
-  const interest = new BN(pledgeGqlResult.data?.pledge?.lInterest || '0');
-  const locked = new BN(pledgeGqlResult.data?.pledge?.lLocked || '0');
+  const pInterest = new BN(pledgeGqlResult.data?.pledge?.pInterest || '0');
+  const pLocked = new BN(pledgeGqlResult.data?.pledge?.pLocked || '0');
 
   const duePaymentDate =
     config && getLoanDuePaymentDate(lastUpdate, config.debtRepayDeadlinePeriod)?.getTime();
@@ -59,8 +59,8 @@ export function ActionsCell({ debt, account }: IProps) {
     isMyLoan && (status === Status.Executed || status === Status.PartiallyRepayed);
 
   const isAvailableForUnstake =
-    status === Status.Proposed && !isEqualHex(account, borrower) && locked.gtn(0);
-  const isAvailableForUnlock = interest.gtn(0);
+    status === Status.Proposed && !isEqualHex(account, borrower) && pLocked.gtn(0);
+  const isAvailableForUnlock = pInterest.gtn(0);
 
   const commonProps = {
     variant: 'contained',
