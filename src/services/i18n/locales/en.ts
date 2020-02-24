@@ -194,7 +194,7 @@ const en = {
         myInterestShare: 'Interest share',
         paymentDate: 'Payment date',
         statuses: {
-          PROPOSED: 'staked %{pledgeProgress}%',
+          PROPOSED: '%{pledgeProgress}% staked',
           EXECUTED: 'executed',
           PARTIALLY_REPAYED: 'partially repayed',
           CLOSED: 'closed',
