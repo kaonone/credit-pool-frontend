@@ -17,6 +17,17 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": false,
+      "internalType": "address",
+      "name": "newPool",
+      "type": "address"
+    }],
+    "name": "PoolAddressChanged",
+    "type": "event"
+  },
+  {
     "constant": true,
     "inputs": [],
     "name": "MODULE_CURVE",

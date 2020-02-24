@@ -41,6 +41,17 @@
   {
     "anonymous": false,
     "inputs": [{
+      "indexed": false,
+      "internalType": "address",
+      "name": "newPool",
+      "type": "address"
+    }],
+    "name": "PoolAddressChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
         "indexed": false,
         "internalType": "uint256",
         "name": "lBalance",
@@ -221,6 +232,34 @@
       "name": "",
       "type": "uint256"
     }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "internalType": "bytes32",
+      "name": "",
+      "type": "bytes32"
+    }],
+    "name": "loanLocks",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "pLockedAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pDistributed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "nextDistribution",
+        "type": "uint256"
+      }
+    ],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -439,32 +478,6 @@
   {
     "constant": false,
     "inputs": [{
-      "internalType": "uint256",
-      "name": "amount",
-      "type": "uint256"
-    }],
-    "name": "mintPTokens",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "amount",
-      "type": "uint256"
-    }],
-    "name": "burnPTokens",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
         "internalType": "address",
         "name": "from",
         "type": "address"
@@ -484,9 +497,52 @@
   {
     "constant": false,
     "inputs": [{
-        "internalType": "address",
+        "internalType": "bytes32",
+        "name": "loanHash",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address[]",
         "name": "from",
-        "type": "address"
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "amount",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "lockPTokens",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "internalType": "bytes32",
+        "name": "loanHash",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "mintAndLockPTokens",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "internalType": "bytes32",
+        "name": "loanHash",
+        "type": "bytes32"
       },
       {
         "internalType": "address",
@@ -499,7 +555,39 @@
         "type": "uint256"
       }
     ],
-    "name": "movePTokens",
+    "name": "unlockAndWithdrawPTokens",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "internalType": "bytes32",
+        "name": "loanHash",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "burnLockedPTokens",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "amount",
+      "type": "uint256"
+    }],
+    "name": "distributionClaimedNotify",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
