@@ -152,7 +152,7 @@ const en = {
       availableBalance: 'Available balance',
       currentProfit: 'Current profit',
       locked: 'Locked',
-      credit: 'Credit',
+      credit: 'Current loans',
     },
     balance: {
       changes: {
