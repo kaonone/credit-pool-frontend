@@ -502,30 +502,6 @@
         "type": "bytes32"
       },
       {
-        "internalType": "address[]",
-        "name": "from",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "amount",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "lockPTokens",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "internalType": "bytes32",
-        "name": "loanHash",
-        "type": "bytes32"
-      },
-      {
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
