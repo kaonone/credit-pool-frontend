@@ -3,12 +3,10 @@ subscription Pledge($pledgeHash: ID!) { # $pledgeHash = keccak256(supporter + bo
     id
     proposal_id
     pledger
-    withdrawn
     lInitialLocked
     pInitialLocked
-    lLocked
     pLocked
-    lInterest
     pInterest
+    unlockLiquidity
   }
 }

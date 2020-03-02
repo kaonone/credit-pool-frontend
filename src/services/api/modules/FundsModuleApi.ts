@@ -66,15 +66,6 @@ export class FundsModuleApi {
 
   @memoize(R.identity)
   @autobind
-  public getPtkBalanceInDaiWithFee$(address: string): Observable<BN> {
-    return this.tokensApi.getBalance$('ptk', address).pipe(
-      switchMap(balance => this.getPtkToDaiExitInfo$(balance.toString())),
-      map(item => item.user),
-    );
-  }
-
-  @memoize(R.identity)
-  @autobind
   public getDaiToDaiExitInfo$(daiValue: string): Observable<{ total: BN; user: BN; fee: BN }> {
     return this.convertDaiToPtkExit$(daiValue).pipe(
       switchMap(ptkValue => this.getPtkToDaiExitInfo$(ptkValue.toString())),
@@ -130,6 +121,34 @@ export class FundsModuleApi {
           fee,
         })),
       );
+  }
+
+  /**
+   * Calculates current available balance of the user with optional corrections
+   * @param address user address for getting current PTK balance
+   * @param additionalPtkBalance how many tokens increase the balance
+   * @param additionalLiquidity how much illiquid funds will be returned to liquidity
+   */
+  @memoize(R.identity)
+  @autobind
+  public getAvailableBalance$(
+    address: string,
+    additionalPtkBalance: string = '0',
+    additionalLiquidity: string = '0',
+  ): Observable<BN> {
+    return combineLatest([
+      this.tokensApi.getBalance$('ptk', address),
+      this.getCurrentLiquidity$(),
+    ]).pipe(
+      switchMap(([ptkBalance, currentLiquidity]) =>
+        this.curveModuleApi
+          .calculateExitInverse$(
+            currentLiquidity.add(new BN(additionalLiquidity)).toString(),
+            ptkBalance.add(new BN(additionalPtkBalance)).toString(),
+          )
+          .pipe(map(info => info.user)),
+      ),
+    );
   }
 
   /**
