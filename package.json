@@ -4,8 +4,9 @@
   "description": "Frontend starter kit for Ethereum DApps",
   "main": "index.js",
   "scripts": {
-    "dev": "better-npm-run dev",
+    "dev": "npm run codegen-staging && better-npm-run dev",
     "build": "better-npm-run node webpack --config webpack/prod.ts",
+    "build-staging": "cross-env IS_STAGING=true npm run build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx && tsc --noEmit --pretty",
     "lint:autofix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "test": "jest && npm run lint",
@@ -13,9 +14,8 @@
     "test:debug": "node --inspect-brk ./node_modules/.bin/jest --runInBand --watch",
     "test:coverage": "jest --coverage --watch",
     "codegen": "graphql-codegen --config codegen.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
-    "postinstall": "npm run codegen",
-    "predeploy:staging": "cross-env IS_STAGING=true npm run build",
-    "deploy:staging": "gh-pages -r git@github.com:akropolisio/credit-pool-frontend-v2.git -d build"
+    "codegen-staging": "graphql-codegen --config codegen-staging.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi-staging/*.json",
+    "postinstall": "npm run codegen"
   },
   "betterScripts": {
     "node": {
