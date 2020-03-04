@@ -14,8 +14,7 @@
     "test:debug": "node --inspect-brk ./node_modules/.bin/jest --runInBand --watch",
     "test:coverage": "jest --coverage --watch",
     "codegen": "graphql-codegen --config codegen.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
-    "codegen-staging": "graphql-codegen --config codegen-staging.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi-staging/*.json",
-    "postinstall": "npm run codegen"
+    "codegen-staging": "graphql-codegen --config codegen-staging.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi-staging/*.json"
   },
   "betterScripts": {
     "node": {
