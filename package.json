@@ -7,7 +7,7 @@
     "dev": "npm run codegen-staging && better-npm-run dev",
     "dev-stable": "npm run codegen && better-npm-run dev-stable",
     "build": "better-npm-run node webpack --config webpack/prod.ts",
-    "build-staging": "cross-env IS_STAGING=true npm run build",
+    "build:staging": "cross-env IS_STAGING=true npm run build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx && tsc --noEmit --pretty",
     "lint:autofix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "test": "jest && npm run lint",
@@ -15,7 +15,7 @@
     "test:debug": "node --inspect-brk ./node_modules/.bin/jest --runInBand --watch",
     "test:coverage": "jest --coverage --watch",
     "codegen": "graphql-codegen --config codegen.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
-    "codegen-staging": "graphql-codegen --config codegen-staging.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi-staging/*.json"
+    "codegen:staging": "graphql-codegen --config codegen-staging.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi-staging/*.json"
   },
   "betterScripts": {
     "node": {
