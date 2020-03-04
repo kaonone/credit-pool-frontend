@@ -1,3 +1,8 @@
+branches:
+  only:
+    - master
+    - dev
+
 language: node_js
 node_js:
   - "10"
@@ -7,32 +12,25 @@ script: skip
 
 before_deploy:
   - yarn
-  - yarn codegen
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then yarn codegen; fi
+  - if [ "$TRAVIS_BRANCH" = "dev" ]; then yarn codegen-staging; fi
   - yarn test
   - yarn build
 
 deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN
-  local-dir: "./build"
-  on:
-    branch: master
-
-before_deploy-staging:
-  - yarn
-  - yarn codegen-staging
-  - yarn test
-  - yarn build:staging
-
-deploy-staging:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN
-  local-dir: "./build"
-  repo: akropolisio/credit-pool-frontend-v2
-  on:
-    branch: dev
+  - provider: pages
+    skip-cleanup: true
+    github-token: $GITHUB_TOKEN
+    local-dir: "./build"
+    on:
+      branch: master
+  - provider: pages
+    skip-cleanup: true
+    github-token: $GITHUB_TOKEN
+    local-dir: "./build"
+    repo: akropolisio/credit-pool-frontend-v2
+    on:
+      branch: dev
 
 notifications:
   slack: akropolisio:xUhLQpSGEoBylmWK3DW8Kblm
