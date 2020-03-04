@@ -2,7 +2,7 @@ import * as React from 'react';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 
 import { Back, InfoIcon } from 'components/icons';
-import { Grid, IconButton, Typography, Tooltip } from 'components';
+import { Grid, IconButton, Typography, Tooltip, Button } from 'components';
 import { PersonalMetrics } from 'features/personalInformation';
 import { PTokenBuyingButton, PTokenSellingButton } from 'features/cashExchange';
 import { AuthButton } from 'features/auth';
@@ -46,7 +46,22 @@ function HeaderComponent(props: IProps) {
         </Grid>
 
         <Grid item>
-          <AuthButton color="secondary" />
+          <Grid container spacing={2}>
+            <Grid item>
+              <Button
+                href="https://wiki.akropolis.io/poolfaq/"
+                target="_blank"
+                rel="noopener noreferrer"
+                color="secondary"
+                variant="outlined"
+              >
+                FAQ
+              </Button>
+            </Grid>
+            <Grid item>
+              <AuthButton color="secondary" />
+            </Grid>
+          </Grid>
         </Grid>
 
         <Grid item xs={12}>

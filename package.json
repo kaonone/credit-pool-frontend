@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npm run codegen-staging && better-npm-run dev",
+    "dev-stable": "npm run codegen && better-npm-run dev-stable",
     "build": "better-npm-run node webpack --config webpack/prod.ts",
     "build-staging": "cross-env IS_STAGING=true npm run build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx && tsc --noEmit --pretty",
@@ -29,6 +30,9 @@
       "env": {
         "IS_STAGING": true
       }
+    },
+    "dev-stable": {
+      "command": "better-npm-run node webpack-dev-server --open --config webpack/dev.ts"
     }
   },
   "author": "Serdtsev Dmitriy",
