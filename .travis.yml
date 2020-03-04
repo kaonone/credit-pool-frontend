@@ -2,8 +2,13 @@ language: node_js
 node_js:
   - "10"
 
+install: skip
+
 before_deploy:
-  - npm run build
+  - yarn
+  - yarn codegen
+  - yarn test
+  - yarn build
 
 deploy:
   provider: pages
@@ -14,8 +19,10 @@ deploy:
     branch: master
 
 before_deploy-staging:
-  - npm run codegen-staging
-  - npm run build:staging
+  - yarn
+  - yarn codegen-staging
+  - yarn test
+  - yarn build:staging
 
 deploy-staging:
   provider: pages
