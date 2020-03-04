@@ -3,7 +3,7 @@ node_js:
   - "10"
 
 install: skip
-test: skip
+script: skip
 
 before_deploy:
   - yarn
