@@ -13,5 +13,18 @@ deploy:
   on:
     branch: master
 
+before_deploy-staging:
+  - npm run codegen-staging
+  - npm run build:staging
+
+deploy-staging:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  local-dir: "./build"
+  repo: akropolisio/credit-pool-frontend-v2
+  on:
+    branch: dev
+
 notifications:
   slack: akropolisio:xUhLQpSGEoBylmWK3DW8Kblm
