@@ -13,9 +13,10 @@ script: skip
 before_deploy:
   - yarn
   - if [ "$TRAVIS_BRANCH" = "master" ]; then yarn codegen; fi
-  - if [ "$TRAVIS_BRANCH" = "dev" ]; then yarn codegen-staging; fi
+  - if [ "$TRAVIS_BRANCH" = "dev" ]; then yarn codegen:staging; fi
   - yarn test
-  - yarn build
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then yarn build; fi
+  - if [ "$TRAVIS_BRANCH" = "dev" ]; then yarn build:staging; fi
 
 deploy:
   - provider: pages
