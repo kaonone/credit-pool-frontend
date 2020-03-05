@@ -12,6 +12,7 @@ import {
   MIN_COLLATERAL_PERCENT_FOR_BORROWER,
   PLEDGE_MARGIN_DIVIDER,
 } from 'env';
+import { RepaymentMethod } from 'model/types';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
@@ -299,7 +300,13 @@ export class LoanModuleApi {
   }
 
   @autobind
-  public async repay(fromAddress: string, debtId: string, lAmount: BN): Promise<void> {
+  public async repay(
+    fromAddress: string,
+    debtId: string,
+    lAmount: BN,
+    method: RepaymentMethod,
+  ): Promise<void> {
+    console.log(method);
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
     await this.tokensApi.approveDai(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, lAmount);

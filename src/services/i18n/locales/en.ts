@@ -111,6 +111,12 @@ const en = {
         placeholder: 'Enter sum',
         confirmMessage:
           'Are you sure you want to repay %{sourceAmount}? Loan body: ~%{body}, interest: ~%{interest}',
+        fields: {
+          repaymentMethod: {
+            fromOwnBalance: 'from own balance',
+            fromAvailablePoolBalance: 'from available pool balance',
+          },
+        },
       },
       getLoanButton: {
         buttonTitle: 'Get loan',

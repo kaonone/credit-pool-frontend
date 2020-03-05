@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Button from '@material-ui/core/Button';
 import { map } from 'rxjs/operators';
 import BN from 'bn.js';
@@ -6,10 +6,12 @@ import { of } from 'rxjs';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { ModalButton } from 'components/ModalButton/ModalButton';
+import { ModalButton, FormControlLabel, Radio } from 'components';
+import { RadioGroupInputField } from 'components/form';
 import { useSubscribable } from 'utils/react';
 import { formatBalance } from 'utils/format';
 import { max, min } from 'utils/bn';
+import { RepaymentMethod, repaymentMethods } from 'model/types';
 
 import {
   PTokenExchanging,
@@ -23,6 +25,14 @@ type IProps = React.ComponentPropsWithoutRef<typeof Button> & {
 };
 
 const tKeys = tKeysAll.features.cashExchange.repayButton;
+
+interface IExtraFormData {
+  repaymentMethod: RepaymentMethod;
+}
+
+const fieldNames: { [K in keyof IExtraFormData]: K } = {
+  repaymentMethod: 'repaymentMethod',
+};
 
 function RepayButton(props: IProps) {
   const { debtId, account, lastPaymentDate, ...restProps } = props;
@@ -77,6 +87,13 @@ function RepayButton(props: IProps) {
     [daiTokenInfo, account, lastPaymentDate],
   );
 
+  const initialValues = useMemo<IExtraFormData>(
+    () => ({
+      repaymentMethod: 'fromOwnBalance',
+    }),
+    [],
+  );
+
   const getMaxSourceValue = useCallback(
     () =>
       api.loanModule
@@ -87,16 +104,32 @@ function RepayButton(props: IProps) {
   const getMinSourceValue = useCallback(() => of(new BN(0)), []);
 
   const onRepayRequest = useCallback(
-    (address: string, values: { sourceAmount: BN }): Promise<void> => {
-      return api.loanModule.repay(address, debtId, values.sourceAmount);
+    (address: string, values: { sourceAmount: BN } & IExtraFormData): Promise<void> => {
+      return api.loanModule.repay(address, debtId, values.sourceAmount, values.repaymentMethod);
     },
     [debtId],
+  );
+
+  const additionalFields = useMemo(
+    () => [
+      <RadioGroupInputField name={fieldNames.repaymentMethod}>
+        {repaymentMethods.map(value => (
+          <FormControlLabel
+            key={value}
+            value={value}
+            control={<Radio color="primary" />}
+            label={t(tKeys.fields.repaymentMethod[value].getKey())}
+          />
+        ))}
+      </RadioGroupInputField>,
+    ],
+    [],
   );
 
   return (
     <ModalButton content={t(tKeys.buttonTitle.getKey())} fullWidth {...restProps}>
       {({ closeModal }) => (
-        <PTokenExchanging
+        <PTokenExchanging<IExtraFormData>
           title={t(tKeys.formTitle.getKey())}
           sourcePlaceholder={t(tKeys.placeholder.getKey())}
           getMaxSourceValue={getMaxSourceValue}
@@ -104,6 +137,8 @@ function RepayButton(props: IProps) {
           confirmMessageTKey={getConfirmMessage}
           onExchangeRequest={onRepayRequest}
           onCancel={closeModal}
+          additionalFields={additionalFields}
+          initialValues={initialValues}
         />
       )}
     </ModalButton>
