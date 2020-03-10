@@ -22,6 +22,7 @@ export class Api {
     this.transactions,
     this.fundsModule,
     this.swarmApi,
+    this.curveModule,
   );
 
   public liquidityModule = new LiquidityModuleApi(

@@ -3,6 +3,7 @@ import { map, first as firstOperator, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
 import { autobind } from 'core-decorators';
+import PromiEvent from 'web3/promiEvent';
 
 import { min, bnToBn, max, decimalsToWei } from 'utils/bn';
 import { memoize } from 'utils/decorators';
@@ -13,12 +14,14 @@ import {
   PLEDGE_MARGIN_DIVIDER,
 } from 'env';
 import { RepaymentMethod } from 'model/types';
+import { calcTotalWithdrawAmountByUserWithdrawAmount } from 'model';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
 import { TokensApi } from './TokensApi';
 import { FundsModuleApi } from './FundsModuleApi';
 import { SwarmApi } from './SwarmApi';
+import { CurveModuleApi } from './CurveModuleApi';
 
 function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNullable<T> {
   const value = subject.getValue();
@@ -44,6 +47,7 @@ export class LoanModuleApi {
     private transactionsApi: TransactionsApi,
     private fundsModuleApi: FundsModuleApi,
     private swarmApi: SwarmApi,
+    private curveModuleApi: CurveModuleApi,
   ) {
     this.readonlyContract = createLoanModule(
       this.web3Manager.web3,
@@ -306,15 +310,43 @@ export class LoanModuleApi {
     lAmount: BN,
     method: RepaymentMethod,
   ): Promise<void> {
-    console.log(method);
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
-    await this.tokensApi.approveDai(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, lAmount);
+    let promiEvent: PromiEvent<any>;
 
-    const promiEvent = txLoanModule.methods.repay(
-      { debt: bnToBn(debtId), lAmount },
-      { from: fromAddress },
-    );
+    if (method === 'fromAvailablePoolBalance') {
+      const daiInfo = await first(this.tokensApi.getTokenInfo$('dai'));
+      const { percentDivider, withdrawFeePercent } = await first(this.curveModuleApi.getConfig$());
+
+      const totalWithdrawAmount = calcTotalWithdrawAmountByUserWithdrawAmount({
+        percentDivider,
+        userWithdrawAmountInDai: lAmount,
+        withdrawFeePercent,
+      });
+
+      const repayMargin = new BN(0) || decimalsToWei(daiInfo.decimals).divn(PLEDGE_MARGIN_DIVIDER);
+
+      const pAmount = await first(
+        this.fundsModuleApi.convertDaiToPtkExit$(totalWithdrawAmount.add(repayMargin).toString()),
+      );
+      const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
+
+      promiEvent = txLoanModule.methods.repayPTK(
+        { debt: bnToBn(debtId), lAmountMin: lAmount, pAmount: min(pAmount, pBalance) },
+        { from: fromAddress },
+      );
+    } else {
+      await this.tokensApi.approveDai(
+        fromAddress,
+        ETH_NETWORK_CONFIG.contracts.fundsModule,
+        lAmount,
+      );
+
+      promiEvent = txLoanModule.methods.repay(
+        { debt: bnToBn(debtId), lAmount },
+        { from: fromAddress },
+      );
+    }
 
     this.transactionsApi.pushToSubmittedTransactions$('loan.repay', promiEvent, {
       address: fromAddress,
