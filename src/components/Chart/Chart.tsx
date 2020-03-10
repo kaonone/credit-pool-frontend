@@ -122,7 +122,7 @@ interface IPeriodSwitchProps {
   onSelect(period: Period): void;
 }
 
-const periods: Period[] = ['24h', '3d', '1w', '2w', '1m', '3m', '6m', 'all'];
+const periods: Period[] = ['24h', '1w', '2w', '1m', '6m', 'all'];
 
 function PeriodSwitch(props: IPeriodSwitchProps) {
   const { period: selectedPeriod, onSelect } = props;

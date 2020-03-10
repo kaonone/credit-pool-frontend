@@ -4,7 +4,7 @@
   "description": "Frontend starter kit for Ethereum DApps",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run codegen-staging && better-npm-run dev",
+    "dev": "npm run codegen:staging && better-npm-run dev",
     "dev-stable": "npm run codegen && better-npm-run dev-stable",
     "build": "better-npm-run node webpack --config webpack/prod.ts",
     "build:staging": "cross-env IS_STAGING=true npm run build",
@@ -74,6 +74,7 @@
     "ramda": "^0.26.1",
     "react": "^16.10.2",
     "react-copy-to-clipboard": "^5.0.2",
+    "react-countdown-now": "^2.1.2",
     "react-dom": "^16.10.2",
     "react-final-form": "^6.3.0",
     "react-jazzicon": "^0.1.3",

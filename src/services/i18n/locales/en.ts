@@ -6,6 +6,7 @@ const en = {
     pages: {
       overview: {
         poolBalanceTitle: 'Input/Output costs',
+        distributions: 'Distributions',
         myBalanceTitle: 'My balance',
         poolInfoTitle: 'Pool information',
       },
@@ -31,6 +32,11 @@ const en = {
         pending: 'Approving %{amount} transfer. Pending',
         success: 'Approving %{amount} transfer. Successful',
         error: 'Approving %{amount} transfer. Failed',
+      },
+      'ptk.claimDistributions': {
+        pending: 'Withdrawing distributions. Pending',
+        success: 'Withdrawing distributions. Successful',
+        error: 'Withdrawing distributions. Failed',
       },
       'liquidity.sellPtk': {
         pending: 'Withdrawing %{amount} from the pool. Pending',
@@ -153,6 +159,14 @@ const en = {
       currentProfit: 'Current profit',
       locked: 'Locked',
       credit: 'Current loans',
+    },
+    distributions: {
+      accumulated: 'Accumulated',
+      untilTheNextDistribution: 'Time to Next Distribution',
+      awaitingDistribution: 'Awaiting distribution',
+      withdrawButton: 'Withdraw my distributions',
+      withdrawConfirmationMessage:
+        'Are you sure you want to withdraw %{distributions} from distributions? This happens automatically when you change your balance.',
     },
     balance: {
       changes: {
