@@ -33,6 +33,11 @@ const en = {
         success: 'Approving %{amount} transfer. Successful',
         error: 'Approving %{amount} transfer. Failed',
       },
+      'ptk.claimDistributions': {
+        pending: 'Withdrawing distributions. Pending',
+        success: 'Withdrawing distributions. Successful',
+        error: 'Withdrawing distributions. Failed',
+      },
       'liquidity.sellPtk': {
         pending: 'Withdrawing %{amount} from the pool. Pending',
         success: 'Withdrawing %{amount} from the pool. Successful',
@@ -157,9 +162,11 @@ const en = {
     },
     distributions: {
       accumulated: 'Accumulated',
-      untilTheNextDistribution: 'Until the next distribution',
+      untilTheNextDistribution: 'Time to Next Distribution',
       awaitingDistribution: 'Awaiting distribution',
-      withdraw: 'Withdraw my distributions',
+      withdrawButton: 'Withdraw my distributions',
+      withdrawConfirmationMessage:
+        'Are you sure you want to withdraw %{distributions} from distributions? This happens automatically when you change your balance.',
     },
     balance: {
       changes: {

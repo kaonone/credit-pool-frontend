@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { Box, Typography, Card, CardContent } from 'components';
-import { DistributionMetrics } from 'features/distibutions';
+import { DistributionMetrics, WithdrawDistributionsButton } from 'features/distibutions';
 
 import { useStyles } from './Distributions.style';
 
@@ -22,7 +22,9 @@ function Distributions() {
         </Box>
         <DistributionMetrics orientation="vertical" />
       </CardContent>
-      <CardContent className={classes.actions}>Withdraw my distributions button</CardContent>
+      <CardContent className={classes.actions}>
+        <WithdrawDistributionsButton variant="contained" color="primary" fullWidth />
+      </CardContent>
     </Card>
   );
 }

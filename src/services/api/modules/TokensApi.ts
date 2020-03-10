@@ -80,6 +80,36 @@ export class TokensApi {
     );
   }
 
+  @autobind
+  public async withdrawUnclaimedDistributions(fromAddress: string): Promise<void> {
+    const txContracts = getCurrentValueOrThrow(this.txContracts);
+
+    const promiEvent = txContracts.ptk.methods.claimDistributions(
+      {
+        account: fromAddress,
+      },
+      { from: fromAddress },
+    );
+
+    this.transactionsApi.pushToSubmittedTransactions$('ptk.claimDistributions', promiEvent, {
+      fromAddress,
+    });
+
+    await promiEvent;
+  }
+
+  @memoize(R.identity)
+  @autobind
+  public getUnclaimedDistributions$(account: string): Observable<BN> {
+    return this.readonlyContracts.ptk.methods.calculateUnlcaimedDistributions(
+      { account },
+      {
+        DistributionCreated: {},
+        DistributionsClaimed: { filter: { account } },
+      },
+    );
+  }
+
   @memoize()
   @autobind
   public getAccumulatedPoolDistributions$(): Observable<BN> {
