@@ -9,11 +9,12 @@ import {
   createLiquidityModule,
   createLoanModule,
   createCurveModule,
+  createDistributionToken,
 } from 'generated/contracts';
 
 export type Contracts = {
   dai: ReturnType<typeof createErc20>;
-  ptk: ReturnType<typeof createErc20>;
+  ptk: ReturnType<typeof createDistributionToken>;
   fundsModule: ReturnType<typeof createFundsModule>;
   liquidityModule: ReturnType<typeof createLiquidityModule>;
   loanModule: ReturnType<typeof createLoanModule>;
@@ -21,6 +22,7 @@ export type Contracts = {
 };
 
 export type SubmittedTransaction =
+  | IGenericSubmittedTransaction<'ptk.claimDistributions', { fromAddress: string }>
   | IGenericSubmittedTransaction<'dai.approve', { spender: string; fromAddress: string; value: BN }>
   | IGenericSubmittedTransaction<'liquidity.sellPtk', { address: string; sourceAmount: BN }>
   | IGenericSubmittedTransaction<'liquidity.buyPtk', { address: string; sourceAmount: BN }>

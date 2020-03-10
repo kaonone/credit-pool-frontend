@@ -2,7 +2,7 @@ import BN from 'bn.js';
 import React from 'react';
 import moment from 'moment';
 
-import { Typography, MetricsList, IMetric, Loading } from 'components';
+import { Typography, MetricsList, Loading, CashMetric } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { usePoolMetricsSubscription, usePoolMetricByDateSubscription } from 'generated/gql/pool';
 
@@ -39,37 +39,29 @@ export function PoolMetrics(props: Props) {
     (poolMetricsDayAgoGqlResult.data?.pools[0] && poolMetricsDayAgoGqlResult.data.pools[0].lDebt) ||
     lDebt;
 
-  const metrics: IMetric[] = React.useMemo(
-    () => [
-      {
-        title: t(tKeys.total.getKey()),
-        value: new BN(lBalance).add(new BN(lDebt)).toString(),
-        previousValue: new BN(lBalanceDayAgo).add(new BN(lDebtDayAgo)).toString(),
-        isCashMetric: true,
-        token: 'dai',
-      },
-      {
-        title: t(tKeys.availableBalance.getKey()),
-        value: lBalance,
-        previousValue: lBalanceDayAgo,
-        isCashMetric: true,
-        token: 'dai',
-      },
-      {
-        title: t(tKeys.issued.getKey()),
-        value: lDebt,
-        previousValue: lDebtDayAgo,
-        isCashMetric: true,
-        token: 'dai',
-      },
-    ],
-    [t, lBalance, lBalanceDayAgo, lDebt, lDebtDayAgo],
-  );
-
   return (
-    <Loading gqlResults={[poolMetricsGqlResult]}>
+    <Loading gqlResults={[poolMetricsGqlResult, poolMetricsDayAgoGqlResult]}>
       {poolMetricsGqlResult.data?.pools.length ? (
-        <MetricsList {...props} metrics={metrics} />
+        <MetricsList {...props}>
+          <CashMetric
+            title={t(tKeys.total.getKey())}
+            value={new BN(lBalance).add(new BN(lDebt)).toString()}
+            previousValue={new BN(lBalanceDayAgo).add(new BN(lDebtDayAgo)).toString()}
+            token="dai"
+          />
+          <CashMetric
+            title={t(tKeys.availableBalance.getKey())}
+            value={lBalance}
+            previousValue={lBalanceDayAgo}
+            token="dai"
+          />
+          <CashMetric
+            title={t(tKeys.issued.getKey())}
+            value={lDebt}
+            previousValue={lDebtDayAgo}
+            token="dai"
+          />
+        </MetricsList>
       ) : (
         <Typography color="error">Pool metrics is not found</Typography>
       )}
