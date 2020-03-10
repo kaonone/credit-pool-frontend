@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import BN from 'bn.js';
 import { of } from 'rxjs';
 
@@ -6,7 +6,7 @@ import { useMyUserSubscription } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
-import { IMetric, Loading, MetricsList } from 'components';
+import { Loading, MetricsList, CashMetric } from 'components';
 
 const tKeys = tKeysAll.features.personalInformation;
 
@@ -40,37 +40,21 @@ function PersonalMetrics(props: Props) {
 
   const currentProfit = lAvailableBalance.sub(prevLAvailableBalance);
 
-  const metrics = useMemo<IMetric[]>(
-    () => [
-      {
-        title: t(tKeys.availableBalance.getKey()),
-        value: lAvailableBalance.toString(),
-        token: 'dai',
-        isCashMetric: true,
-      },
-      {
-        title: t(tKeys.currentProfit.getKey()),
-        value: currentProfit.toString(),
-        token: 'dai',
-        isCashMetric: true,
-      },
-      {
-        title: t(tKeys.credit.getKey()),
-        value: lCredit.toString(),
-        token: 'dai',
-        isCashMetric: true,
-      },
-    ],
-    [t, lAvailableBalance.toString(), prevLAvailableBalance.toString(), lCredit.toString()],
-  );
-
   return (
-    <Loading
-      gqlResults={myUserResult}
-      meta={[accountMeta, lAvailableBalanceMeta]}
-      progressVariant="circle"
-    >
-      <MetricsList {...props} metrics={metrics} />
+    <Loading gqlResults={myUserResult} meta={[accountMeta, lAvailableBalanceMeta]}>
+      <MetricsList {...props}>
+        <CashMetric
+          title={t(tKeys.availableBalance.getKey())}
+          value={lAvailableBalance.toString()}
+          token="dai"
+        />
+        <CashMetric
+          title={t(tKeys.currentProfit.getKey())}
+          value={currentProfit.toString()}
+          token="dai"
+        />
+        <CashMetric title={t(tKeys.credit.getKey())} value={lCredit.toString()} token="dai" />
+      </MetricsList>
     </Loading>
   );
 }

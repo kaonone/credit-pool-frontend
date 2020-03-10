@@ -6,6 +6,7 @@ const en = {
     pages: {
       overview: {
         poolBalanceTitle: 'Input/Output costs',
+        distributions: 'Distributions',
         myBalanceTitle: 'My balance',
         poolInfoTitle: 'Pool information',
       },
@@ -153,6 +154,12 @@ const en = {
       currentProfit: 'Current profit',
       locked: 'Locked',
       credit: 'Current loans',
+    },
+    distributions: {
+      accumulated: 'Accumulated',
+      untilTheNextDistribution: 'Until the next distribution',
+      awaitingDistribution: 'Awaiting distribution',
+      withdraw: 'Withdraw my distributions',
     },
     balance: {
       changes: {

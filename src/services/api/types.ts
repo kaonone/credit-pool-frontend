@@ -9,11 +9,12 @@ import {
   createLiquidityModule,
   createLoanModule,
   createCurveModule,
+  createDistributionToken,
 } from 'generated/contracts';
 
 export type Contracts = {
   dai: ReturnType<typeof createErc20>;
-  ptk: ReturnType<typeof createErc20>;
+  ptk: ReturnType<typeof createDistributionToken>;
   fundsModule: ReturnType<typeof createFundsModule>;
   liquidityModule: ReturnType<typeof createLiquidityModule>;
   loanModule: ReturnType<typeof createLoanModule>;
