@@ -43,8 +43,8 @@ function Chart<P extends IPoint>(props: IProps<P>) {
   const lastTick = R.last(ticks);
 
   React.useEffect(() => {
-    onPeriodChange && onPeriodChange(firstTick, lastTick, period);
-  }, [...Object.values(firstTick), ...Object.values(lastTick), period, onPeriodChange]);
+    onPeriodChange && firstTick && lastTick && onPeriodChange(firstTick, lastTick, period);
+  }, [...Object.values(firstTick || {}), ...Object.values(lastTick || {}), period, onPeriodChange]);
 
   if (!firstTick) {
     return null;
