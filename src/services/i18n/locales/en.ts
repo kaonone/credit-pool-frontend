@@ -123,6 +123,7 @@ const en = {
             fromAvailablePoolBalance: 'from available pool balance',
           },
         },
+        insufficientBalanceError: 'Insufficient balance. You have only %{value}.',
       },
       getLoanButton: {
         buttonTitle: 'Get loan',
