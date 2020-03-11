@@ -71,7 +71,7 @@
     "moment": "^2.24.0",
     "node-polyglot": "^2.4.0",
     "notistack": "^0.9.5",
-    "ramda": "^0.26.1",
+    "ramda": "^0.27.0",
     "react": "^16.10.2",
     "react-copy-to-clipboard": "^5.0.2",
     "react-countdown-now": "^2.1.2",
@@ -86,7 +86,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.3",
     "subscriptions-transport-ws": "^0.9.16",
-    "ts-toolbelt": "^4.13.5",
+    "ts-toolbelt": "^6.3.6",
     "web3": "^1.2.1"
   },
   "devDependencies": {

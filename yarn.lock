@@ -11411,10 +11411,10 @@ railroad-diagrams@^1.0.0:
   resolved "https://registry.yarnpkg.com/railroad-diagrams/-/railroad-diagrams-1.0.0.tgz#eb7e6267548ddedfb899c1b90e57374559cddb7e"
   integrity sha1-635iZ1SN3t+4mcG5Dlc3RVnN234=
 
-ramda@^0.26.1:
-  version "0.26.1"
-  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.26.1.tgz#8d41351eb8111c55353617fc3bbffad8e4d35d06"
-  integrity sha512-hLWjpy7EnsDBb0p+Z3B7rPi3GDeRG5ZtiI33kJhTt+ORCd38AbAIjB/9zRIUoeTbE/AVX5ZkU7m6bznsvrf8eQ==
+ramda@^0.27.0:
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.27.0.tgz#915dc29865c0800bf3f69b8fd6c279898b59de43"
+  integrity sha512-pVzZdDpWwWqEVVLshWUHjNwuVP7SfcmPraYuqocJp1yo2U1R7P+5QAfDhdItkuoGqIBnBYrtPp7rEPqDn9HlZA==
 
 randexp@0.4.6:
   version "0.4.6"
@@ -13563,10 +13563,15 @@ ts-node@^8.4.1:
     source-map-support "^0.5.6"
     yn "^3.0.0"
 
-ts-toolbelt@^4.10.7, ts-toolbelt@^4.13.5, ts-toolbelt@^4.7.7:
+ts-toolbelt@^4.10.7, ts-toolbelt@^4.7.7:
   version "4.13.5"
   resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-4.13.5.tgz#0d05d77a37a53d871502a44967e472ba1550a9c3"
   integrity sha512-qe2/3hXY+wyKTt4Pge/YKkoOED2UiKbHgZgEb3jkS3KBJVyVWMNyb90Kzp7C3KFWcc+QkeifNO7MRwXWhNW+Mw==
+
+ts-toolbelt@^6.3.6:
+  version "6.3.6"
+  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-6.3.6.tgz#2bde29106c013ed520c32f30e1248daf8fd4f5f9"
+  integrity sha512-eVzym+LyQodOCfyVyQDQ6FGYbO2Xf9Nc4dGLRKlKSUpAs+8qQWHG+grDiA3ciEuNPNZ0qJnNIYkdqBW1rCWuUA==
 
 tsconfig-paths@^3.9.0:
   version "3.9.0"

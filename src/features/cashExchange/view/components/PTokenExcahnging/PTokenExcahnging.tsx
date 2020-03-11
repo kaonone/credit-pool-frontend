@@ -3,7 +3,7 @@ import BN from 'bn.js';
 import { Observable } from 'rxjs';
 
 import { useApi } from 'services/api';
-import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
+import { useTranslate, tKeys as tKeysAll, ITranslateKey } from 'services/i18n';
 import { useSubscribable } from 'utils/react';
 import { Loading } from 'components/Loading';
 import { Hint } from 'components/Hint/Hint';
@@ -12,6 +12,7 @@ import { PTokenExchangingConfirmation } from '../PTokenExchangingConfirmation/PT
 import {
   PTokenExchangingForm,
   ISubmittedFormData,
+  IFormData,
 } from '../PTokenExchangingForm/PTokenExchangingForm';
 
 interface IProps<ExtraFormData> {
@@ -31,6 +32,9 @@ interface IProps<ExtraFormData> {
     values: ISubmittedFormData & Omit<ExtraFormData, keyof ISubmittedFormData>,
   ) => Promise<void>;
   onCancel: () => void;
+  validateForm?(
+    values: ExtraFormData & IFormData,
+  ): { [key in keyof (ExtraFormData & IFormData)]?: ITranslateKey };
 }
 
 const tKeysApp = tKeysAll.app;
@@ -48,6 +52,7 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
     onCancel,
     additionalFields,
     initialValues,
+    validateForm,
   } = props;
 
   const { t } = useTranslate();
@@ -97,6 +102,7 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
               onCancel={onCancel}
               additionalFields={additionalFields}
               additionalInitialValues={initialValues}
+              validateForm={validateForm}
             />
             <PTokenExchangingConfirmation
               isOpen={!!values}

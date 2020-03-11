@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Button from '@material-ui/core/Button';
 import { map } from 'rxjs/operators';
 import BN from 'bn.js';
@@ -6,10 +6,14 @@ import { of } from 'rxjs';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { ModalButton } from 'components/ModalButton/ModalButton';
-import { useSubscribable } from 'utils/react';
+import { ModalButton, FormControlLabel, Radio, Loading } from 'components';
+import { RadioGroupInputField, SpyField } from 'components/form';
+import { useSubscribable, useFormattedBalance } from 'utils/react';
 import { formatBalance } from 'utils/format';
 import { max, min } from 'utils/bn';
+import { RepaymentMethod, repaymentMethods } from 'model/types';
+import { lessThenOrEqual } from 'utils/validators';
+import { zeroAddress } from 'utils/mock';
 
 import {
   PTokenExchanging,
@@ -23,6 +27,16 @@ type IProps = React.ComponentPropsWithoutRef<typeof Button> & {
 };
 
 const tKeys = tKeysAll.features.cashExchange.repayButton;
+
+interface IExtraFormData {
+  repaymentMethod: RepaymentMethod;
+  triggerRevalidateForm: () => void;
+}
+
+const fieldNames: { [K in keyof IExtraFormData]: K } = {
+  repaymentMethod: 'repaymentMethod',
+  triggerRevalidateForm: 'triggerRevalidateForm',
+};
 
 function RepayButton(props: IProps) {
   const { debtId, account, lastPaymentDate, ...restProps } = props;
@@ -77,6 +91,14 @@ function RepayButton(props: IProps) {
     [daiTokenInfo, account, lastPaymentDate],
   );
 
+  const initialValues = useMemo<IExtraFormData>(
+    () => ({
+      repaymentMethod: 'fromOwnBalance',
+      triggerRevalidateForm: () => undefined,
+    }),
+    [],
+  );
+
   const getMaxSourceValue = useCallback(
     () =>
       api.loanModule
@@ -86,27 +108,79 @@ function RepayButton(props: IProps) {
   );
   const getMinSourceValue = useCallback(() => of(new BN(0)), []);
 
+  const [availableBalance, availableBalanceMeta] = useSubscribable(
+    () => api.fundsModule.getPtkBalanceInDaiWithFee$(account || zeroAddress),
+    [account],
+    new BN(0),
+  );
+
+  const [{ formattedBalance: formattedAvailableBalance }] = useFormattedBalance(
+    'dai',
+    availableBalance,
+    daiTokenInfo?.decimals,
+    'short',
+  );
+
+  const validateForm = useCallback(
+    ({ repaymentMethod, sourceAmount }: IExtraFormData & { sourceAmount: string }) => {
+      const sourceAmountError =
+        repaymentMethod === 'fromAvailablePoolBalance'
+          ? lessThenOrEqual(
+              availableBalance,
+              sourceAmount,
+              () => formattedAvailableBalance,
+              tKeys.insufficientBalanceError.getKey(),
+            )
+          : undefined;
+
+      return { sourceAmount: sourceAmountError };
+    },
+    [availableBalance.toString(), formattedAvailableBalance],
+  );
+
   const onRepayRequest = useCallback(
-    (address: string, values: { sourceAmount: BN }): Promise<void> => {
-      return api.loanModule.repay(address, debtId, values.sourceAmount);
+    (address: string, values: { sourceAmount: BN } & IExtraFormData): Promise<void> => {
+      return api.loanModule.repay(address, debtId, values.sourceAmount, values.repaymentMethod);
     },
     [debtId],
   );
 
+  const additionalFields = useMemo(
+    () => [
+      <RadioGroupInputField name={fieldNames.repaymentMethod}>
+        {repaymentMethods.map(value => (
+          <FormControlLabel
+            key={value}
+            value={value}
+            control={<Radio color="primary" />}
+            label={t(tKeys.fields.repaymentMethod[value].getKey())}
+          />
+        ))}
+      </RadioGroupInputField>,
+      <SpyField name={fieldNames.triggerRevalidateForm} fieldValue={validateForm} />,
+    ],
+    [validateForm],
+  );
+
   return (
-    <ModalButton content={t(tKeys.buttonTitle.getKey())} fullWidth {...restProps}>
-      {({ closeModal }) => (
-        <PTokenExchanging
-          title={t(tKeys.formTitle.getKey())}
-          sourcePlaceholder={t(tKeys.placeholder.getKey())}
-          getMaxSourceValue={getMaxSourceValue}
-          getMinSourceValue={getMinSourceValue}
-          confirmMessageTKey={getConfirmMessage}
-          onExchangeRequest={onRepayRequest}
-          onCancel={closeModal}
-        />
-      )}
-    </ModalButton>
+    <Loading meta={availableBalanceMeta}>
+      <ModalButton content={t(tKeys.buttonTitle.getKey())} fullWidth {...restProps}>
+        {({ closeModal }) => (
+          <PTokenExchanging<IExtraFormData>
+            title={t(tKeys.formTitle.getKey())}
+            sourcePlaceholder={t(tKeys.placeholder.getKey())}
+            getMaxSourceValue={getMaxSourceValue}
+            getMinSourceValue={getMinSourceValue}
+            confirmMessageTKey={getConfirmMessage}
+            onExchangeRequest={onRepayRequest}
+            onCancel={closeModal}
+            additionalFields={additionalFields}
+            initialValues={initialValues}
+            validateForm={validateForm}
+          />
+        )}
+      </ModalButton>
+    </Loading>
   );
 }
 
