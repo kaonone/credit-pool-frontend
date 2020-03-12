@@ -7,6 +7,8 @@ import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 import { Loading, MetricsList, CashMetric } from 'components';
+import { zeroAddress } from 'utils/mock';
+import { max } from 'utils/bn';
 
 const tKeys = tKeysAll.features.personalInformation;
 
@@ -28,6 +30,9 @@ function PersonalMetrics(props: Props) {
   const lCredit = new BN(myUser?.credit || '0');
   const prevLAvailableBalance = new BN(myUser?.lBalance || '0');
   const pAvailableBalance = new BN(myUser?.pBalance || '0');
+  const pInterestSum = new BN(myUser?.pInterestSum || '0');
+  const pLockedSum = new BN(myUser?.pLockedSum || '0');
+  const unlockLiquiditySum = new BN(myUser?.unlockLiquiditySum || '0');
 
   const [{ user: lAvailableBalance }, lAvailableBalanceMeta] = useSubscribable(
     () =>
@@ -38,10 +43,36 @@ function PersonalMetrics(props: Props) {
     { user: new BN(0) },
   );
 
-  const currentProfit = lAvailableBalance.sub(prevLAvailableBalance);
+  const [unclaimedDistributions, unclaimedDistributionsMeta] = useSubscribable(
+    () => api.tokens.getUnclaimedDistributions$(account || zeroAddress),
+    [account],
+    new BN(0),
+  );
+
+  const [lIncreasing, lIncreasingMeta] = useSubscribable(
+    () =>
+      api.fundsModule.getAvailableBalanceIncreasing$(
+        account || zeroAddress,
+        pLockedSum
+          .add(pInterestSum)
+          .add(unclaimedDistributions)
+          .toString(),
+        unlockLiquiditySum.toString(),
+      ),
+    [account],
+    new BN(0),
+  );
+
+  const currentProfit = max(
+    new BN(0),
+    lAvailableBalance.add(lIncreasing).sub(prevLAvailableBalance),
+  );
 
   return (
-    <Loading gqlResults={myUserResult} meta={[accountMeta, lAvailableBalanceMeta]}>
+    <Loading
+      gqlResults={myUserResult}
+      meta={[accountMeta, lAvailableBalanceMeta, unclaimedDistributionsMeta, lIncreasingMeta]}
+    >
       <MetricsList {...props}>
         <CashMetric
           title={t(tKeys.availableBalance.getKey())}
