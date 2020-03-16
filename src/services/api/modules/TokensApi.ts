@@ -101,7 +101,7 @@ export class TokensApi {
   @memoize(R.identity)
   @autobind
   public getUnclaimedDistributions$(account: string): Observable<BN> {
-    return this.readonlyContracts.ptk.methods.calculateUnlcaimedDistributions(
+    return this.readonlyContracts.ptk.methods.calculateUnclaimedDistributions(
       { account },
       {
         DistributionCreated: {},
@@ -123,7 +123,7 @@ export class TokensApi {
   @autobind
   public getNextDistributionTimestamp$(): Observable<number> {
     return this.readonlyContracts.ptk.methods
-      .nextDistributionTimestmap(undefined, {
+      .nextDistributionTimestamp(undefined, {
         DistributionCreated: {},
       })
       .pipe(map(item => item.toNumber()));

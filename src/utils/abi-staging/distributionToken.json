@@ -384,7 +384,7 @@
       "name": "account",
       "type": "address"
     }],
-    "name": "calculateUnlcaimedDistributions",
+    "name": "calculateUnclaimedDistributions",
     "outputs": [{
       "internalType": "uint256",
       "name": "",
@@ -644,7 +644,7 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "nextDistributionTimestmap",
+    "name": "nextDistributionTimestamp",
     "outputs": [{
       "internalType": "uint256",
       "name": "",
