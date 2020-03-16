@@ -54,8 +54,8 @@ export const MIN_COLLATERAL_PERCENT_FOR_BORROWER = 50;
 export const PLEDGE_MARGIN_DIVIDER = 1000000;
 
 export const SUBGRAPH_HTTP_URL = getEnv().isStaging
-  ? 'https://graph-node.akropolis.io/subgraphs/name/akropolisio/akropolis-os'
+  ? 'https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os2'
   : 'https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os2-stable';
 export const SUBGRAPH_WS_URL = getEnv().isStaging
-  ? 'wss://graph-node.akropolis.io/ws/subgraphs/name/akropolisio/akropolis-os'
+  ? 'wss://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os2'
   : 'wss://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os2-stable';

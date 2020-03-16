@@ -69,33 +69,39 @@ export class LoanModuleApi {
       debtInterestMin: BN;
       pledgePercentMin: BN;
       lMinPledgeMax: BN;
+      debtLoadMax: BN;
     };
     debtRepayDeadlinePeriod: BN;
     collateralToDebtRatio: BN;
     collateralToDebtRatioMultiplier: BN;
+    debtLoadMultiplier: BN;
   }> {
     return combineLatest([
       this.readonlyContract.methods.limits(),
       this.readonlyContract.methods.DEBT_REPAY_DEADLINE_PERIOD(),
       this.readonlyContract.methods.COLLATERAL_TO_DEBT_RATIO(),
       this.readonlyContract.methods.COLLATERAL_TO_DEBT_RATIO_MULTIPLIER(),
+      this.readonlyContract.methods.DEBT_LOAD_MULTIPLIER(),
     ]).pipe(
       map(
         ([
-          [lDebtAmountMin, debtInterestMin, pledgePercentMin, lMinPledgeMax],
+          [lDebtAmountMin, debtInterestMin, pledgePercentMin, lMinPledgeMax, debtLoadMax],
           debtRepayDeadlinePeriod,
           collateralToDebtRatio,
           collateralToDebtRatioMultiplier,
+          debtLoadMultiplier,
         ]) => ({
           limits: {
             lDebtAmountMin,
             debtInterestMin,
             pledgePercentMin,
             lMinPledgeMax,
+            debtLoadMax,
           },
           debtRepayDeadlinePeriod,
           collateralToDebtRatio,
           collateralToDebtRatioMultiplier,
+          debtLoadMultiplier,
         }),
       ),
     );
@@ -124,6 +130,30 @@ export class LoanModuleApi {
       PledgeWithdrawn: {},
       DebtProposalExecuted: {},
     });
+  }
+
+  @memoize()
+  @autobind
+  public getTotalLDebts$(): Observable<BN> {
+    return this.readonlyContract.methods.totalLDebts(undefined, {
+      DebtProposalExecuted: {},
+      Repay: {},
+      DebtDefaultExecuted: {},
+    });
+  }
+
+  @memoize()
+  @autobind
+  private getMaxDebts$(): Observable<BN> {
+    return combineLatest([
+      this.getConfig$(),
+      this.getTotalLDebts$(),
+      this.fundsModuleApi.getFundsLBalance$(),
+    ]).pipe(
+      map(([{ limits: { debtLoadMax }, debtLoadMultiplier }, lDebts, lBalance]) =>
+        debtLoadMax.mul(lBalance.add(lDebts)).div(debtLoadMultiplier),
+      ),
+    );
   }
 
   @autobind
@@ -266,7 +296,18 @@ export class LoanModuleApi {
   }
 
   @autobind
-  public async executeDebtProposal(fromAddress: string, proposalId: string): Promise<void> {
+  public async executeDebtProposal(
+    fromAddress: string,
+    proposalId: string,
+    loanAmount: string,
+  ): Promise<void> {
+    const currentLDebts = await first(this.getTotalLDebts$());
+    const maxLDebts = await first(this.getMaxDebts$());
+
+    if (currentLDebts.add(new BN(loanAmount)).gt(maxLDebts)) {
+      throw new Error('Proposal can not be executed now because of debt loan limit');
+    }
+
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
     const promiEvent = txLoanModule.methods.executeDebtProposal(

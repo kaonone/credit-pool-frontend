@@ -204,4 +204,10 @@ export class FundsModuleApi {
       this.getTotalLProposals$(),
     ]).pipe(map(([liquidity, totalLProposals]) => liquidity.sub(totalLProposals)));
   }
+
+  @memoize()
+  @autobind
+  public getFundsLBalance$(): Observable<BN> {
+    return this.readonlyContract.methods.lBalance(undefined, { Status: {} });
+  }
 }

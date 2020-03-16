@@ -72,7 +72,12 @@ export function ActionsCell({ debt, account }: IProps) {
 
   const actions = [
     isAvailableForActivation ? (
-      <ActivateLoanButton borrower={borrower} proposalId={proposalId} {...commonProps}>
+      <ActivateLoanButton
+        borrower={borrower}
+        proposalId={proposalId}
+        loanAmount={total}
+        {...commonProps}
+      >
         Activate
       </ActivateLoanButton>
     ) : null,
