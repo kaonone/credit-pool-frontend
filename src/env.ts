@@ -46,8 +46,27 @@ const ethNetworkConfigs: Record<number, INetworkConfig> = {
   },
 };
 
+const ethNetworkConfigsForStaging: Record<number, INetworkConfig> = {
+  '4': {
+    id: 4,
+    name: 'rinkeby',
+    contracts: {
+      dai: '0x3F5B698332572Fb6188492F5D53ba75f81797F9d',
+      pool: '0x89d6B368Db35B75373aA7ECd5cA7311EF5dBb615',
+      ptk: '0x9b1b9E0355d9fa5446F88ce2CD48017307465EDD',
+      curveModule: '0xC1BfE7636a244497BFc7D9D6C4419eD98f2fcd70',
+      liquidityModule: '0xCBA406Cd5cEc74E7F23bF7C87b60322Cc0Fb451e',
+      loanModule: '0xB7C9389735513B4313198d93e9fc835066b5F1fC',
+      fundsModule: '0x3946fC3545Cef33d379466D3DC945Ca7e0181F1c',
+    },
+    etherskanDomain: 'https://rinkeby.etherscan.io/',
+  },
+};
+
 export const NETWORK_ID = 4;
-export const ETH_NETWORK_CONFIG = ethNetworkConfigs[NETWORK_ID];
+export const ETH_NETWORK_CONFIG = (getEnv().isStaging
+  ? ethNetworkConfigsForStaging
+  : ethNetworkConfigs)[NETWORK_ID];
 export const SWARM_GATEWAY_URL = 'https://swarm-gateways.net';
 // TODO take from contract
 export const MIN_COLLATERAL_PERCENT_FOR_BORROWER = 50;
