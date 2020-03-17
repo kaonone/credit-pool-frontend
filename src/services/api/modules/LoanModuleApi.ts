@@ -356,7 +356,6 @@ export class LoanModuleApi {
     let promiEvent: PromiEvent<any>;
 
     if (method === 'fromAvailablePoolBalance') {
-      const daiInfo = await first(this.tokensApi.getTokenInfo$('dai'));
       const { percentDivider, withdrawFeePercent } = await first(this.curveModuleApi.getConfig$());
 
       const totalWithdrawAmount = calcTotalWithdrawAmountByUserWithdrawAmount({
@@ -365,10 +364,8 @@ export class LoanModuleApi {
         withdrawFeePercent,
       });
 
-      const repayMargin = new BN(0) || decimalsToWei(daiInfo.decimals).divn(PLEDGE_MARGIN_DIVIDER);
-
       const pAmount = await first(
-        this.fundsModuleApi.convertDaiToPtkExit$(totalWithdrawAmount.add(repayMargin).toString()),
+        this.fundsModuleApi.convertDaiToPtkExit$(totalWithdrawAmount.toString()),
       );
       const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
 
@@ -416,7 +413,7 @@ export class LoanModuleApi {
     debtId: string,
     lastPayment: string,
   ): Observable<{ loanSize: BN; currentInterest: BN }> {
-    const marginOfSeconds = 30 * 60;
+    const marginOfSeconds = 15 * 60;
     const recalcInterestIntervalInMs = 10 * 60 * 1000;
 
     return timer(0, recalcInterestIntervalInMs).pipe(
