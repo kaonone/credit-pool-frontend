@@ -3,7 +3,7 @@ import moment from 'moment';
 import BN from 'bn.js';
 
 import { BalanceChart, Loading, FormattedBalance, Growth, IPeriodInfo } from 'components';
-import { useMyUserBalancesSubscription } from 'generated/gql/pool';
+import { useMyUserBalancesSubscription, useMyUserSubscription } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { makeStyles } from 'utils/styles';
@@ -30,9 +30,18 @@ function UserBalanceChart() {
   const { t } = useTranslate();
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
+  const myUserResult = useMyUserSubscription({
+    variables: {
+      address: account?.toLowerCase() || '',
+    },
+  });
+  const pLockedSum = myUserResult.data?.user?.pLockedSum || '0';
+  const unlockLiquiditySum = myUserResult.data?.user?.unlockLiquiditySum || '0';
+
   const [currentBalance, currentBalanceMeta] = useSubscribable(
-    () => api.fundsModule.getPtkBalanceInDaiWithFee$(account || zeroAddress),
-    [account],
+    () =>
+      api.fundsModule.getAvailableBalance$(account || zeroAddress, pLockedSum, unlockLiquiditySum),
+    [account, pLockedSum, unlockLiquiditySum],
   );
   const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
     () => api.tokens.getTokenInfo$('dai'),
@@ -112,7 +121,10 @@ function UserBalanceChart() {
   );
 
   return (
-    <Loading gqlResults={balancesResult} meta={[accountMeta, daiTokenInfoMeta, currentBalanceMeta]}>
+    <Loading
+      gqlResults={[balancesResult, myUserResult]}
+      meta={[accountMeta, daiTokenInfoMeta, currentBalanceMeta]}
+    >
       <BalanceChart
         renderCurrentBalance={renderCurrentBalance}
         chartPoints={chartPoints}

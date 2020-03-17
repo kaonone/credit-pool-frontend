@@ -5,7 +5,7 @@ import * as R from 'ramda';
 import { autobind } from 'core-decorators';
 
 import { memoize } from 'utils/decorators';
-import { createErc20 } from 'generated/contracts';
+import { createErc20, createDistributionToken } from 'generated/contracts';
 import { Token, ITokenInfo } from 'model/types';
 import { ETH_NETWORK_CONFIG } from 'env';
 
@@ -29,7 +29,7 @@ export class TokensApi {
   constructor(private web3Manager: Web3ManagerModule, private transactionsApi: TransactionsApi) {
     this.readonlyContracts = {
       dai: createErc20(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.dai),
-      ptk: createErc20(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.ptk),
+      ptk: createDistributionToken(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.ptk),
     };
 
     this.web3Manager.txWeb3
@@ -38,7 +38,7 @@ export class TokensApi {
           txWeb3 =>
             txWeb3 && {
               dai: createErc20(txWeb3, ETH_NETWORK_CONFIG.contracts.dai),
-              ptk: createErc20(txWeb3, ETH_NETWORK_CONFIG.contracts.ptk),
+              ptk: createDistributionToken(txWeb3, ETH_NETWORK_CONFIG.contracts.ptk),
             },
         ),
       )
@@ -49,10 +49,7 @@ export class TokensApi {
   public async approveDai(fromAddress: string, spender: string, value: BN): Promise<void> {
     const txDai = getCurrentValueOrThrow(this.txContracts).dai;
 
-    const promiEvent = txDai.methods.approve(
-      { _spender: spender, _value: value },
-      { from: fromAddress },
-    );
+    const promiEvent = txDai.methods.approve({ spender, amount: value }, { from: fromAddress });
 
     this.transactionsApi.pushToSubmittedTransactions$('dai.approve', promiEvent, {
       spender,
@@ -78,8 +75,57 @@ export class TokensApi {
   @autobind
   public getBalance$(token: Token, address: string): Observable<BN> {
     return this.readonlyContracts[token].methods.balanceOf(
-      { _owner: address },
-      { Transfer: [{ filter: { _from: address } }, { filter: { _to: address } }] },
+      { account: address },
+      { Transfer: [{ filter: { from: address } }, { filter: { to: address } }] },
     );
+  }
+
+  @autobind
+  public async withdrawUnclaimedDistributions(fromAddress: string): Promise<void> {
+    const txContracts = getCurrentValueOrThrow(this.txContracts);
+
+    const promiEvent = txContracts.ptk.methods.claimDistributions(
+      {
+        account: fromAddress,
+      },
+      { from: fromAddress },
+    );
+
+    this.transactionsApi.pushToSubmittedTransactions$('ptk.claimDistributions', promiEvent, {
+      fromAddress,
+    });
+
+    await promiEvent;
+  }
+
+  @memoize(R.identity)
+  @autobind
+  public getUnclaimedDistributions$(account: string): Observable<BN> {
+    return this.readonlyContracts.ptk.methods.calculateUnclaimedDistributions(
+      { account },
+      {
+        DistributionCreated: {},
+        DistributionsClaimed: { filter: { account } },
+      },
+    );
+  }
+
+  @memoize()
+  @autobind
+  public getAccumulatedPoolDistributions$(): Observable<BN> {
+    return this.readonlyContracts.ptk.methods.distributionAccumulator(undefined, {
+      DistributionAccumulatorIncreased: {},
+      DistributionCreated: {},
+    });
+  }
+
+  @memoize()
+  @autobind
+  public getNextDistributionTimestamp$(): Observable<number> {
+    return this.readonlyContracts.ptk.methods
+      .nextDistributionTimestamp(undefined, {
+        DistributionCreated: {},
+      })
+      .pipe(map(item => item.toNumber()));
   }
 }

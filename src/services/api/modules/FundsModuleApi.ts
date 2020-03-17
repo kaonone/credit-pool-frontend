@@ -133,6 +133,34 @@ export class FundsModuleApi {
   }
 
   /**
+   * Calculates current available balance of the user with optional corrections
+   * @param address user address for getting current PTK balance
+   * @param additionalPtkBalance how many tokens increase the balance
+   * @param additionalLiquidity how much illiquid funds will be returned to liquidity
+   */
+  @memoize(R.identity)
+  @autobind
+  public getAvailableBalance$(
+    address: string,
+    additionalPtkBalance: string = '0',
+    additionalLiquidity: string = '0',
+  ): Observable<BN> {
+    return combineLatest([
+      this.tokensApi.getBalance$('ptk', address),
+      this.getCurrentLiquidity$(),
+    ]).pipe(
+      switchMap(([ptkBalance, currentLiquidity]) =>
+        this.curveModuleApi
+          .calculateExitInverse$(
+            currentLiquidity.add(new BN(additionalLiquidity)).toString(),
+            ptkBalance.add(new BN(additionalPtkBalance)).toString(),
+          )
+          .pipe(map(info => info.user)),
+      ),
+    );
+  }
+
+  /**
    * Calculates how much the available balance of the user will increase after the return of illiquid funds
    * @param address user address for getting current PTK balance
    * @param additionalPtkBalance how many tokens increase the balance
@@ -175,5 +203,11 @@ export class FundsModuleApi {
       this.readonlyContract.methods.lBalance(undefined, { Status: {} }),
       this.getTotalLProposals$(),
     ]).pipe(map(([liquidity, totalLProposals]) => liquidity.sub(totalLProposals)));
+  }
+
+  @memoize()
+  @autobind
+  public getFundsLBalance$(): Observable<BN> {
+    return this.readonlyContract.methods.lBalance(undefined, { Status: {} });
   }
 }

@@ -8,13 +8,14 @@ import { ConfirmationDialog } from 'components';
 type IProps = React.ComponentPropsWithoutRef<typeof Button> & {
   proposalId: string;
   borrower: string;
+  loanAmount: string;
 };
 
 const tKeysConfirmation = tKeysAll.features.cashExchange.exchangingConfirmation;
 const tKeys = tKeysAll.features.cashExchange.activateLoanButton;
 
 function ActivateLoanButton(props: IProps) {
-  const { borrower, proposalId, ...restProps } = props;
+  const { borrower, proposalId, loanAmount, ...restProps } = props;
   const { t } = useTranslate();
   const api = useApi();
 
@@ -24,9 +25,9 @@ function ActivateLoanButton(props: IProps) {
   const close = React.useCallback(() => setIsOpen(false), []);
 
   const handleActivate = useCallback(async (): Promise<void> => {
-    await api.loanModule.executeDebtProposal(borrower, proposalId);
+    await api.loanModule.executeDebtProposal(borrower, proposalId, loanAmount);
     close();
-  }, [borrower, proposalId]);
+  }, [borrower, proposalId, loanAmount]);
 
   return (
     <>

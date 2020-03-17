@@ -1,4 +1,4 @@
-# AkropolisOS Frontend (active development) [![Build Status](https://www.travis-ci.org/akropolisio/akropolisOS-frontend.svg?branch=master)](https://www.travis-ci.org/akropolisio/akropolisOS-frontend)
+# AkropolisOS Frontend (active development) [![Build Status](https://www.travis-ci.org/akropolisio/credit-pool-frontend.svg?branch=master)](https://www.travis-ci.org/akropolisio/credit-pool-frontend)
 
 - ```npm i``` install frontend and contracts dependencies
 - ```npm run dev``` start locally in watch mode

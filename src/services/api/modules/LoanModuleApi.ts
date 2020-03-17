@@ -3,6 +3,7 @@ import { map, first as firstOperator, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
 import { autobind } from 'core-decorators';
+import PromiEvent from 'web3/promiEvent';
 
 import { min, bnToBn, max, decimalsToWei } from 'utils/bn';
 import { memoize } from 'utils/decorators';
@@ -12,12 +13,15 @@ import {
   MIN_COLLATERAL_PERCENT_FOR_BORROWER,
   PLEDGE_MARGIN_DIVIDER,
 } from 'env';
+import { RepaymentMethod } from 'model/types';
+import { calcTotalWithdrawAmountByUserWithdrawAmount } from 'model';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
 import { TokensApi } from './TokensApi';
 import { FundsModuleApi } from './FundsModuleApi';
 import { SwarmApi } from './SwarmApi';
+import { CurveModuleApi } from './CurveModuleApi';
 
 function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNullable<T> {
   const value = subject.getValue();
@@ -43,6 +47,7 @@ export class LoanModuleApi {
     private transactionsApi: TransactionsApi,
     private fundsModuleApi: FundsModuleApi,
     private swarmApi: SwarmApi,
+    private curveModuleApi: CurveModuleApi,
   ) {
     this.readonlyContract = createLoanModule(
       this.web3Manager.web3,
@@ -64,33 +69,39 @@ export class LoanModuleApi {
       debtInterestMin: BN;
       pledgePercentMin: BN;
       lMinPledgeMax: BN;
+      debtLoadMax: BN;
     };
     debtRepayDeadlinePeriod: BN;
     collateralToDebtRatio: BN;
     collateralToDebtRatioMultiplier: BN;
+    debtLoadMultiplier: BN;
   }> {
     return combineLatest([
       this.readonlyContract.methods.limits(),
       this.readonlyContract.methods.DEBT_REPAY_DEADLINE_PERIOD(),
       this.readonlyContract.methods.COLLATERAL_TO_DEBT_RATIO(),
       this.readonlyContract.methods.COLLATERAL_TO_DEBT_RATIO_MULTIPLIER(),
+      this.readonlyContract.methods.DEBT_LOAD_MULTIPLIER(),
     ]).pipe(
       map(
         ([
-          [lDebtAmountMin, debtInterestMin, pledgePercentMin, lMinPledgeMax],
+          [lDebtAmountMin, debtInterestMin, pledgePercentMin, lMinPledgeMax, debtLoadMax],
           debtRepayDeadlinePeriod,
           collateralToDebtRatio,
           collateralToDebtRatioMultiplier,
+          debtLoadMultiplier,
         ]) => ({
           limits: {
             lDebtAmountMin,
             debtInterestMin,
             pledgePercentMin,
             lMinPledgeMax,
+            debtLoadMax,
           },
           debtRepayDeadlinePeriod,
           collateralToDebtRatio,
           collateralToDebtRatioMultiplier,
+          debtLoadMultiplier,
         }),
       ),
     );
@@ -119,6 +130,30 @@ export class LoanModuleApi {
       PledgeWithdrawn: {},
       DebtProposalExecuted: {},
     });
+  }
+
+  @memoize()
+  @autobind
+  public getTotalLDebts$(): Observable<BN> {
+    return this.readonlyContract.methods.totalLDebts(undefined, {
+      DebtProposalExecuted: {},
+      Repay: {},
+      DebtDefaultExecuted: {},
+    });
+  }
+
+  @memoize()
+  @autobind
+  private getMaxDebts$(): Observable<BN> {
+    return combineLatest([
+      this.getConfig$(),
+      this.getTotalLDebts$(),
+      this.fundsModuleApi.getFundsLBalance$(),
+    ]).pipe(
+      map(([{ limits: { debtLoadMax }, debtLoadMultiplier }, lDebts, lBalance]) =>
+        debtLoadMax.mul(lBalance.add(lDebts)).div(debtLoadMultiplier),
+      ),
+    );
   }
 
   @autobind
@@ -261,7 +296,18 @@ export class LoanModuleApi {
   }
 
   @autobind
-  public async executeDebtProposal(fromAddress: string, proposalId: string): Promise<void> {
+  public async executeDebtProposal(
+    fromAddress: string,
+    proposalId: string,
+    loanAmount: string,
+  ): Promise<void> {
+    const currentLDebts = await first(this.getTotalLDebts$());
+    const maxLDebts = await first(this.getMaxDebts$());
+
+    if (currentLDebts.add(new BN(loanAmount)).gt(maxLDebts)) {
+      throw new Error('Proposal can not be executed now because of debt loan limit');
+    }
+
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
     const promiEvent = txLoanModule.methods.executeDebtProposal(
@@ -299,15 +345,46 @@ export class LoanModuleApi {
   }
 
   @autobind
-  public async repay(fromAddress: string, debtId: string, lAmount: BN): Promise<void> {
+  public async repay(
+    fromAddress: string,
+    debtId: string,
+    lAmount: BN,
+    method: RepaymentMethod,
+  ): Promise<void> {
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
-    await this.tokensApi.approveDai(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, lAmount);
+    let promiEvent: PromiEvent<any>;
 
-    const promiEvent = txLoanModule.methods.repay(
-      { debt: bnToBn(debtId), lAmount },
-      { from: fromAddress },
-    );
+    if (method === 'fromAvailablePoolBalance') {
+      const { percentDivider, withdrawFeePercent } = await first(this.curveModuleApi.getConfig$());
+
+      const totalWithdrawAmount = calcTotalWithdrawAmountByUserWithdrawAmount({
+        percentDivider,
+        userWithdrawAmountInDai: lAmount,
+        withdrawFeePercent,
+      });
+
+      const pAmount = await first(
+        this.fundsModuleApi.convertDaiToPtkExit$(totalWithdrawAmount.toString()),
+      );
+      const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
+
+      promiEvent = txLoanModule.methods.repayPTK(
+        { debt: bnToBn(debtId), lAmountMin: lAmount, pAmount: min(pAmount, pBalance) },
+        { from: fromAddress },
+      );
+    } else {
+      await this.tokensApi.approveDai(
+        fromAddress,
+        ETH_NETWORK_CONFIG.contracts.fundsModule,
+        lAmount,
+      );
+
+      promiEvent = txLoanModule.methods.repay(
+        { debt: bnToBn(debtId), lAmount },
+        { from: fromAddress },
+      );
+    }
 
     this.transactionsApi.pushToSubmittedTransactions$('loan.repay', promiEvent, {
       address: fromAddress,
@@ -336,7 +413,7 @@ export class LoanModuleApi {
     debtId: string,
     lastPayment: string,
   ): Observable<{ loanSize: BN; currentInterest: BN }> {
-    const marginOfSeconds = 30 * 60;
+    const marginOfSeconds = 15 * 60;
     const recalcInterestIntervalInMs = 10 * 60 * 1000;
 
     return timer(0, recalcInterestIntervalInMs).pipe(

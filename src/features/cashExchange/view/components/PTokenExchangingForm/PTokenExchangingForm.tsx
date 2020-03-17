@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Observable } from 'rxjs';
 
-import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
+import { useTranslate, tKeys as tKeysAll, ITranslateKey } from 'services/i18n';
 import { useApi } from 'services/api';
 import { DecimalsField, SpyField } from 'components/form';
 import { Hint } from 'components/Hint/Hint';
@@ -50,6 +50,9 @@ interface IProps<ExtraFormData extends Record<string, any> = {}> {
   getMinSourceValue: (account: string) => Observable<BN>;
   onSubmit: (values: ISubmittedFormData & ExtraFormData) => void;
   onCancel: () => void;
+  validateForm?(
+    values: ExtraFormData & IFormData,
+  ): { [key in keyof (ExtraFormData & IFormData)]?: ITranslateKey };
 }
 
 function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
@@ -65,6 +68,7 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
     getMinSourceValue,
     additionalFields,
     additionalInitialValues = {} as ExtraFormData,
+    validateForm,
   } = props;
 
   const { t } = useTranslate();
@@ -108,7 +112,7 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
       validatePositiveNumber,
       /* eslint-disable no-underscore-dangle */
       R.curry(moreThen)(new BN(0), R.__, undefined as any),
-      ...(maxValue ? [R.curry(lessThenOrEqual)(maxValue, R.__, formatMax)] : []),
+      ...(maxValue ? [(value: string) => lessThenOrEqual(maxValue, value, formatMax)] : []),
       ...(minValue ? [R.curry(moreThenOrEqual)(minValue, R.__, formatMin)] : []),
       /* eslint-enable no-underscore-dangle */
     );
@@ -140,6 +144,7 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
   return (
     <Loading meta={sourceTokenInfoMeta}>
       <Form
+        validate={validateForm}
         onSubmit={handleFormSubmit}
         initialValues={initialValues}
         subscription={{ submitError: true, submitting: true, dirtySinceLastSubmit: true }}

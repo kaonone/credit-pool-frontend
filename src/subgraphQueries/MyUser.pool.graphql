@@ -3,10 +3,9 @@ subscription MyUser($address: ID!) {
     id
     lBalance
     pBalance
-    lLockedSum
     pLockedSum
-    lInterestSum
     pInterestSum
+    unlockLiquiditySum
     credit
   }
 }

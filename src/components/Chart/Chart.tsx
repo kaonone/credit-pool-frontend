@@ -43,8 +43,8 @@ function Chart<P extends IPoint>(props: IProps<P>) {
   const lastTick = R.last(ticks);
 
   React.useEffect(() => {
-    onPeriodChange && onPeriodChange(firstTick, lastTick, period);
-  }, [...Object.values(firstTick), ...Object.values(lastTick), period, onPeriodChange]);
+    onPeriodChange && firstTick && lastTick && onPeriodChange(firstTick, lastTick, period);
+  }, [...Object.values(firstTick || {}), ...Object.values(lastTick || {}), period, onPeriodChange]);
 
   if (!firstTick) {
     return null;
@@ -122,7 +122,7 @@ interface IPeriodSwitchProps {
   onSelect(period: Period): void;
 }
 
-const periods: Period[] = ['24h', '3d', '1w', '2w', '1m', '3m', '6m', 'all'];
+const periods: Period[] = ['24h', '1w', '2w', '1m', '6m', 'all'];
 
 function PeriodSwitch(props: IPeriodSwitchProps) {
   const { period: selectedPeriod, onSelect } = props;
