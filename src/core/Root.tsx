@@ -7,6 +7,7 @@ import { Api, ApiContext } from 'services/api';
 import { ApolloProvider } from 'services/apollo';
 import { I18nProvider } from 'services/i18n';
 import { TransactionsNotifications } from 'features/transactionsNotifications';
+import { CookiesMsg } from 'features/cookies';
 import { ErrorBoundary, Snackbar, CssBaseline } from 'components';
 import { theme } from 'utils/styles';
 
@@ -28,6 +29,7 @@ export function Root(): React.ReactElement<{}> {
                   <CssBaseline />
                   <App />
                   <TransactionsNotifications />
+                  <CookiesMsg />
                 </ApolloProvider>
               </MuiThemeProvider>
             </I18nProvider>

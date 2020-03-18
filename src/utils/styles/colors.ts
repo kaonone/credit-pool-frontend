@@ -52,4 +52,5 @@ export const colors = {
   whiteMorlac: '#F7F5FC',
   whiteWine: '#FAF9FD',
   wildSand: '#f4f4f4',
+  rhino: '#283e64',
 };

@@ -37,6 +37,14 @@ export const theme: Theme = createMuiTheme({
     },
   },
   overrides: {
+    MuiSnackbarContent: {
+      root: {
+        backgroundColor: '#fff',
+      },
+      message: {
+        color: colors.rhino,
+      },
+    },
     MuiCssBaseline: {
       '@global': {
         '@font-face': [

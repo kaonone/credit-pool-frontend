@@ -56,7 +56,7 @@ const config: webpack.Configuration = {
         use: 'file-loader?name=fonts/[hash].[ext]',
       },
       {
-        test: /\.(png|svg)/,
+        test: /\.(png|svg|pdf)/,
         loader: 'url-loader',
         options: {
           name: 'images/[name].[ext]',
