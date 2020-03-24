@@ -484,6 +484,23 @@
   {
     "constant": true,
     "inputs": [{
+      "internalType": "address",
+      "name": "",
+      "type": "address"
+    }],
+    "name": "activeDebts",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
         "internalType": "address",
         "name": "",
         "type": "address"
@@ -870,6 +887,19 @@
   {
     "constant": false,
     "inputs": [{
+      "internalType": "address",
+      "name": "borrower",
+      "type": "address"
+    }],
+    "name": "repayAllInterest",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
         "internalType": "address",
         "name": "borrower",
         "type": "address"
@@ -1115,7 +1145,7 @@
     "constant": true,
     "inputs": [{
       "internalType": "address",
-      "name": "sender",
+      "name": "borrower",
       "type": "address"
     }],
     "name": "hasActiveDebts",
@@ -1124,6 +1154,29 @@
       "name": "",
       "type": "bool"
     }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "internalType": "address",
+      "name": "borrower",
+      "type": "address"
+    }],
+    "name": "getUnpaidInterest",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "totalLInterest",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalLInterestPerSecond",
+        "type": "uint256"
+      }
+    ],
     "payable": false,
     "stateMutability": "view",
     "type": "function"

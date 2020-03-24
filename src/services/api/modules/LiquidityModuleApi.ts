@@ -7,6 +7,7 @@ import { min } from 'utils/bn';
 import { ETH_NETWORK_CONFIG } from 'env';
 import { createLiquidityModule } from 'generated/contracts';
 import { memoize } from 'utils/decorators';
+import { calcTotalWithdrawAmountByUserWithdrawAmount } from 'model';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TokensApi } from './TokensApi';
@@ -71,9 +72,11 @@ export class LiquidityModuleApi {
     const txLiquidityModule = getCurrentValueOrThrow(this.txContract);
 
     const { percentDivider, withdrawFeePercent } = await first(this.curveModuleApi.getConfig$());
-    const lAmountWithFee = lAmountWithoutFee
-      .mul(percentDivider)
-      .div(percentDivider.sub(withdrawFeePercent));
+    const lAmountWithFee = calcTotalWithdrawAmountByUserWithdrawAmount({
+      userWithdrawAmountInDai: lAmountWithoutFee,
+      percentDivider,
+      withdrawFeePercent,
+    });
 
     const pAmountWithFee = await first(
       this.fundsModuleApi.convertDaiToPtkExit$(lAmountWithFee.toString()),

@@ -96,6 +96,8 @@ const en = {
         formTitle: 'Withdraw from Pool',
         placeholder: 'Enter sum',
         confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
+        interestConfirmation:
+          ' Additional ~%{interestAmount} will be deducted from your available balance as a payment for the the accumulated interest on your outstanding loans. Full amount to be written off from your available balance will be ~%{fullAmount}.',
       },
       stakeButton: {
         buttonTitle: 'Stake',

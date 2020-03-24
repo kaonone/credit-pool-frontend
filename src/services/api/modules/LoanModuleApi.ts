@@ -132,6 +132,30 @@ export class LoanModuleApi {
     });
   }
 
+  @memoize(R.identity)
+  @autobind
+  public getUnpaidInterest$(borrower: string): Observable<BN> {
+    const marginOfSeconds = 15 * 60;
+    const recalcInterestIntervalInMs = 3 * 60 * 1000;
+
+    return timer(0, recalcInterestIntervalInMs).pipe(
+      switchMap(() =>
+        this.readonlyContract.methods.getUnpaidInterest(
+          {
+            borrower,
+          },
+          {
+            Repay: { filter: { sender: borrower } },
+            DebtDefaultExecuted: { filter: { borrower } },
+          },
+        ),
+      ),
+      map(([unpaidInterest, interestPerSecond]) =>
+        unpaidInterest.add(interestPerSecond.muln(marginOfSeconds)),
+      ),
+    );
+  }
+
   @memoize()
   @autobind
   public getTotalLDebts$(): Observable<BN> {
