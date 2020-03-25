@@ -108,15 +108,26 @@ function RepayButton(props: IProps) {
   );
   const getMinSourceValue = useCallback(() => of(new BN(0)), []);
 
-  const [availableBalance, availableBalanceMeta] = useSubscribable(
+  const [availablePoolBalance, availablePoolBalanceMeta] = useSubscribable(
     () => api.fundsModule.getPtkBalanceInDaiWithFee$(account || zeroAddress),
     [account],
     new BN(0),
   );
+  const [availableDaiBalance, availableDaiBalanceMeta] = useSubscribable(
+    () => api.tokens.getBalance$('dai', account || zeroAddress),
+    [account],
+    new BN(0),
+  );
 
-  const [{ formattedBalance: formattedAvailableBalance }] = useFormattedBalance(
+  const [{ formattedBalance: formattedAvailablePoolBalance }] = useFormattedBalance(
     'dai',
-    availableBalance,
+    availablePoolBalance,
+    daiTokenInfo?.decimals,
+    'short',
+  );
+  const [{ formattedBalance: formattedAvailableDaiBalance }] = useFormattedBalance(
+    'dai',
+    availableDaiBalance,
     daiTokenInfo?.decimals,
     'short',
   );
@@ -126,16 +137,25 @@ function RepayButton(props: IProps) {
       const sourceAmountError =
         repaymentMethod === 'fromAvailablePoolBalance'
           ? lessThenOrEqual(
-              availableBalance,
+              availablePoolBalance,
               sourceAmount,
-              () => formattedAvailableBalance,
+              () => formattedAvailablePoolBalance,
               tKeys.insufficientBalanceError.getKey(),
             )
-          : undefined;
+          : lessThenOrEqual(
+              availableDaiBalance,
+              sourceAmount,
+              () => formattedAvailableDaiBalance,
+              tKeys.insufficientBalanceError.getKey(),
+            );
 
       return { sourceAmount: sourceAmountError };
     },
-    [availableBalance.toString(), formattedAvailableBalance],
+    [
+      availablePoolBalance.toString(),
+      availableDaiBalance.toString(),
+      formattedAvailablePoolBalance,
+    ],
   );
 
   const onRepayRequest = useCallback(
@@ -163,7 +183,7 @@ function RepayButton(props: IProps) {
   );
 
   return (
-    <Loading meta={availableBalanceMeta}>
+    <Loading meta={[availablePoolBalanceMeta, availableDaiBalanceMeta]}>
       <ModalButton content={t(tKeys.buttonTitle.getKey())} fullWidth {...restProps}>
         {({ closeModal }) => (
           <PTokenExchanging<IExtraFormData>
