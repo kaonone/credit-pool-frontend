@@ -37,6 +37,7 @@ export type SubmittedTransaction =
       { address: string; sourceAmount: BN; apr: string; description: string }
     >
   | IGenericSubmittedTransaction<'loan.executeProposal', { address: string; proposalId: string }>
+  | IGenericSubmittedTransaction<'loan.cancelProposal', { address: string; proposalId: string }>
   | IGenericSubmittedTransaction<
       'loan.liquidateDebt',
       { address: string; borrower: string; debtId: string }

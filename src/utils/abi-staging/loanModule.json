@@ -35,6 +35,24 @@
         "internalType": "uint256",
         "name": "proposal",
         "type": "uint256"
+      }
+    ],
+    "name": "DebtProposalCanceled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "proposal",
+        "type": "uint256"
       },
       {
         "indexed": false,
@@ -819,6 +837,19 @@
       }
     ],
     "name": "withdrawPledge",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "proposal",
+      "type": "uint256"
+    }],
+    "name": "cancelDebtProposal",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",

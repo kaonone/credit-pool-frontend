@@ -14,6 +14,7 @@ import {
   UnstakeButton,
   UnlockButton,
   LiquidateLoanButton,
+  CancelProposalButton,
 } from 'features/cashExchange';
 
 interface IProps {
@@ -31,8 +32,6 @@ export function ActionsCell({ debt, account }: IProps) {
     stakeProgress,
     proposal_id: proposalId,
   } = debt;
-  const isMyLoan = isEqualHex(borrower, account);
-
   const api = useApi();
   const [config, configMeta] = useSubscribable(() => api.loanModule.getConfig$(), []);
 
@@ -50,16 +49,16 @@ export function ActionsCell({ debt, account }: IProps) {
     config && getLoanDuePaymentDate(lastUpdate, config.debtRepayDeadlinePeriod)?.getTime();
   const isDuePaymentExpired = duePaymentDate && duePaymentDate < Date.now();
 
-  const isAvailableForLiquidation = status !== Status.Closed && isDuePaymentExpired;
+  const isMyLoan = isEqualHex(borrower, account);
 
+  const isAvailableForUnstake = status === Status.Proposed && !isMyLoan && pLocked.gtn(0);
+  const isAvailableForProposalCanceling = status === Status.Proposed && isMyLoan;
   const isAvailableForActivation =
     isMyLoan && status === Status.Proposed && bnToBn(stakeProgress).gten(100);
 
+  const isAvailableForLiquidation = status !== Status.Closed && isDuePaymentExpired;
   const isAvailableForRepay =
     isMyLoan && (status === Status.Executed || status === Status.PartiallyRepayed);
-
-  const isAvailableForUnstake =
-    status === Status.Proposed && !isEqualHex(account, borrower) && pLocked.gtn(0);
   const isAvailableForUnlock = pInterest.gtn(0);
 
   const commonProps = {
@@ -80,6 +79,11 @@ export function ActionsCell({ debt, account }: IProps) {
       >
         Activate
       </ActivateLoanButton>
+    ) : null,
+    isAvailableForProposalCanceling ? (
+      <CancelProposalButton borrower={borrower} proposalId={proposalId} {...commonProps}>
+        Cancel
+      </CancelProposalButton>
     ) : null,
     isAvailableForRepay && lastUpdate && debtId ? (
       <RepayButton

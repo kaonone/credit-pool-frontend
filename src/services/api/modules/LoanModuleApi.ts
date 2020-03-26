@@ -348,6 +348,23 @@ export class LoanModuleApi {
   }
 
   @autobind
+  public async cancelDebtProposal(fromAddress: string, proposalId: string): Promise<void> {
+    const txLoanModule = getCurrentValueOrThrow(this.txContract);
+
+    const promiEvent = txLoanModule.methods.cancelDebtProposal(
+      { proposal: bnToBn(proposalId) },
+      { from: fromAddress },
+    );
+
+    this.transactionsApi.pushToSubmittedTransactions$('loan.cancelProposal', promiEvent, {
+      address: fromAddress,
+      proposalId,
+    });
+
+    await promiEvent;
+  }
+
+  @autobind
   public async liquidateDebt(fromAddress: string, borrower: string, debtId: string): Promise<void> {
     const txLoanModule = getCurrentValueOrThrow(this.txContract);
 
