@@ -88,7 +88,7 @@ function RepayButton(props: IProps) {
         }),
       );
     },
-    [daiTokenInfo, account, lastPaymentDate],
+    [daiTokenInfo, account, debtId, lastPaymentDate],
   );
 
   const initialValues = useMemo<IExtraFormData>(

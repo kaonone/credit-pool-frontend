@@ -35,5 +35,6 @@ export class Api {
 
   constructor() {
     this.fundsModule.setTotalLProposalGetter(this.loanModule.getTotalLProposals$);
+    this.fundsModule.setUnpaidInterestGetter(this.loanModule.getUnpaidInterest$);
   }
 }

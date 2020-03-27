@@ -57,7 +57,7 @@ export function MyStakeCost({
 
   return (
     <Loading gqlResults={pledgeGqlResult} meta={[myStakeCostMeta, fullLoanStakeMeta]}>
-      {myStakeCost.gtn(0) ? (
+      {new BN(pLocked).gtn(0) ? (
         <>
           <FormattedBalance sum={myStakeCost.toString()} token="dai" />{' '}
           {interestShare && (

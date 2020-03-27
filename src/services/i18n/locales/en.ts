@@ -73,6 +73,11 @@ const en = {
         success: 'Loan activation. Successful',
         error: 'Loan activation. Failed',
       },
+      'loan.cancelProposal': {
+        pending: 'Canceling a loan proposal. Pending',
+        success: 'Canceling a loan proposal. Successful',
+        error: 'Canceling a loan proposal. Failed',
+      },
       'loan.liquidateDebt': {
         pending: 'Loan liquidation. Pending',
         success: 'Loan liquidation. Successful',
@@ -96,6 +101,8 @@ const en = {
         formTitle: 'Withdraw from Pool',
         placeholder: 'Enter sum',
         confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
+        interestConfirmation:
+          ' Additional ~%{interestAmount} will be deducted from your available balance as a payment for the the accumulated interest on your outstanding loans. Full amount to be written off from your available balance will be ~%{fullAmount}.',
       },
       stakeButton: {
         buttonTitle: 'Stake',
@@ -140,6 +147,9 @@ const en = {
       activateLoanButton: {
         confirmMessage:
           'Are you sure you want to activate a loan? Please note that your loan will be transferred directly to your wallet.',
+      },
+      cancelProposalButton: {
+        confirmMessage: 'Are you sure you want to cancel a loan proposal?',
       },
       liquidateLoanButton: {
         confirmMessage: 'Are you sure you want to liquidate a loan?',

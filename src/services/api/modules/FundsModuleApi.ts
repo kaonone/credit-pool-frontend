@@ -7,7 +7,8 @@ import { autobind } from 'core-decorators';
 import { memoize } from 'utils/decorators';
 import { createFundsModule } from 'generated/contracts';
 import { ETH_NETWORK_CONFIG } from 'env';
-import { decimalsToWei } from 'utils/bn';
+import { decimalsToWei, max } from 'utils/bn';
+import { calcTotalWithdrawAmountByUserWithdrawAmount } from 'model';
 
 import { TokensApi } from './TokensApi';
 import { CurveModuleApi } from './CurveModuleApi';
@@ -17,6 +18,7 @@ export class FundsModuleApi {
   private readonlyContract: Contracts['fundsModule'];
   private txContract = new BehaviorSubject<null | Contracts['fundsModule']>(null);
   private getTotalLProposals$: (() => Observable<BN>) | null = null;
+  private getUnpaidInterest$: ((address: string) => Observable<BN>) | null = null;
 
   constructor(
     private web3Manager: Web3ManagerModule,
@@ -41,12 +43,31 @@ export class FundsModuleApi {
     this.getTotalLProposals$ = getter;
   }
 
+  public setUnpaidInterestGetter(getter: (address: string) => Observable<BN>) {
+    this.getUnpaidInterest$ = getter;
+  }
+
   @memoize(R.identity)
   @autobind
   public getMaxWithdrawAmountInDai$(address: string): Observable<BN> {
-    return this.tokensApi
-      .getBalance$('ptk', address)
-      .pipe(switchMap(balance => this.getUserWithdrawAmountInDai$(balance.toString())));
+    if (!this.getUnpaidInterest$) {
+      throw new Error('Getter for unpaidInterest is not found');
+    }
+
+    return combineLatest([this.getUnpaidInterest$(address), this.curveModuleApi.getConfig$()]).pipe(
+      switchMap(([unpaidInterestInDai, { percentDivider, withdrawFeePercent }]) =>
+        this.convertDaiToPtkExit$(
+          calcTotalWithdrawAmountByUserWithdrawAmount({
+            percentDivider,
+            withdrawFeePercent,
+            userWithdrawAmountInDai: unpaidInterestInDai,
+          }).toString(),
+        ),
+      ),
+      switchMap(unpaidInterestInPtk =>
+        this.getAvailableBalance$(address, unpaidInterestInPtk.muln(-1).toString()),
+      ),
+    );
   }
 
   @memoize(R.identity)
@@ -153,7 +174,7 @@ export class FundsModuleApi {
         this.curveModuleApi
           .calculateExitInverse$(
             currentLiquidity.add(new BN(additionalLiquidity)).toString(),
-            ptkBalance.add(new BN(additionalPtkBalance)).toString(),
+            max(new BN(0), ptkBalance.add(new BN(additionalPtkBalance))).toString(),
           )
           .pipe(map(info => info.user)),
       ),
