@@ -14,12 +14,12 @@ type AsyncMessage = [string, ISubscriptionMeta];
 
 interface IProps {
   isOpen: boolean;
-  title: string;
+  title?: string;
   message: string | AsyncMessage;
   yesText: string;
-  noText: string;
+  noText?: string;
   onConfirm: () => Promise<void>;
-  onCancel: () => void;
+  onCancel?: () => void;
 }
 
 function ConfirmationDialog(props: IProps) {
@@ -29,7 +29,7 @@ function ConfirmationDialog(props: IProps) {
   const { status, error } = communication;
 
   const handleCancel = useCallback(() => {
-    onCancel();
+    onCancel && onCancel();
     communication.reset();
   }, [onCancel, communication.reset]);
 
@@ -39,11 +39,13 @@ function ConfirmationDialog(props: IProps) {
     <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={handleCancel}>
       <DialogContent>
         <Grid container justify="center" spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant="h5" gutterBottom>
-              {title}
-            </Typography>
-          </Grid>
+          {title && (
+            <Grid item xs={12}>
+              <Typography variant="h5" gutterBottom>
+                {title}
+              </Typography>
+            </Grid>
+          )}
           <Grid item xs={12}>
             {typeof message === 'string' ? (
               <Typography>{message}</Typography>
@@ -60,17 +62,19 @@ function ConfirmationDialog(props: IProps) {
               </Hint>
             </Grid>
           )}
-          <Grid item xs={6}>
-            <Button
-              variant="outlined"
-              color="primary"
-              fullWidth
-              onClick={handleCancel}
-              disabled={status === 'pending'}
-            >
-              {noText}
-            </Button>
-          </Grid>
+          {onCancel && (
+            <Grid item xs={6}>
+              <Button
+                variant="outlined"
+                color="primary"
+                fullWidth
+                onClick={handleCancel}
+                disabled={status === 'pending'}
+              >
+                {noText || 'Cancel'}
+              </Button>
+            </Grid>
+          )}
           <Grid item xs={6}>
             <Button
               variant="contained"

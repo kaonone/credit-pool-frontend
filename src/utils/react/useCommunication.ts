@@ -76,7 +76,7 @@ export function useCommunication<
           setStatus('error');
         });
     },
-    [inputs],
+    [...inputs, effect],
   );
 
   return {

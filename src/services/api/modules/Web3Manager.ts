@@ -100,6 +100,10 @@ export class Web3Manager {
     return this.manager.account;
   }
 
+  get chainId() {
+    return this.manager.chainId;
+  }
+
   get status() {
     return this.manager.status;
   }

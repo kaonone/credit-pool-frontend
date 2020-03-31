@@ -1,7 +1,9 @@
 import { getEnv } from 'core/getEnv';
 
+export type NetworkID = 1 | 4;
+
 interface INetworkConfig {
-  id: 1 | 4;
+  id: NetworkID;
   name: 'mainnet' | 'rinkeby';
   contracts: {
     dai: string;
@@ -15,7 +17,7 @@ interface INetworkConfig {
   etherskanDomain: string;
 }
 
-const ethNetworkConfigs: Record<number, INetworkConfig> = {
+const ethNetworkConfigs: Record<NetworkID, INetworkConfig> = {
   '4': {
     id: 4,
     name: 'rinkeby',
@@ -46,7 +48,7 @@ const ethNetworkConfigs: Record<number, INetworkConfig> = {
   },
 };
 
-const ethNetworkConfigsForStaging: Record<number, INetworkConfig> = {
+const ethNetworkConfigsForStaging: Record<NetworkID, INetworkConfig> = {
   '4': {
     id: 4,
     name: 'rinkeby',
@@ -61,9 +63,23 @@ const ethNetworkConfigsForStaging: Record<number, INetworkConfig> = {
     },
     etherskanDomain: 'https://rinkeby.etherscan.io/',
   },
+  '1': {
+    id: 1,
+    name: 'mainnet',
+    contracts: {
+      dai: '',
+      ptk: '',
+      pool: '',
+      curveModule: '',
+      fundsModule: '',
+      liquidityModule: '',
+      loanModule: '',
+    },
+    etherskanDomain: 'https://etherscan.io/',
+  },
 };
 
-export const NETWORK_ID = 4;
+export const NETWORK_ID: NetworkID = 4;
 export const ETH_NETWORK_CONFIG = (getEnv().isStaging
   ? ethNetworkConfigsForStaging
   : ethNetworkConfigs)[NETWORK_ID];

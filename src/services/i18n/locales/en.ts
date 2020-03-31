@@ -185,6 +185,20 @@ const en = {
       withdrawConfirmationMessage:
         'Are you sure you want to withdraw %{distributions} from distributions? This happens automatically when you change your balance.',
     },
+    networkWarning: {
+      title: 'You are connected to the wrong network',
+      warning:
+        'You are connected to the wrong network. Please choose %{name} to proceed to %{type}',
+      disconnectButton: 'Disconnect',
+      networkName: {
+        1: 'Main Ethereum Network',
+        4: 'Rinkeby Network',
+      },
+      networkType: {
+        1: 'mainnet',
+        4: 'testnet',
+      },
+    },
     balance: {
       changes: {
         notFound: 'Balance changes not found',
