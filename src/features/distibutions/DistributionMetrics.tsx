@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import Countdown, { CountdownRenderProps } from 'react-countdown-now';
 import BN from 'bn.js';
+import { of } from 'rxjs';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
@@ -15,21 +16,22 @@ function DistributionMetrics(props: Props) {
   const { t } = useTranslate();
 
   const api = useApi();
+  const [account] = useSubscribable(() => api.web3Manager.account, []);
   const [accumulated, accumulatedMeta] = useSubscribable(
-    () => api.tokens.getAccumulatedPoolDistributions$(),
-    [],
+    () => (account ? api.tokens.getAccumulatedUserDistributions$(account) : of(new BN(0))),
+    [api, account],
     new BN(0),
   );
   const [accumulatedInDaiInfo, accumulatedInDaiMeta] = useSubscribable(
     () => api.fundsModule.getPtkToDaiExitInfo$(accumulated.toString()),
-    [accumulated.toString()],
+    [api, accumulated.toString()],
   );
 
   const accumulatedInDai = accumulatedInDaiInfo?.total;
 
   const [nextDistributionTimestamp, nextDistributionTimestampMeta] = useSubscribable(
     () => api.tokens.getNextDistributionTimestamp$(),
-    [],
+    [api],
   );
 
   const countdownRenderer = useCallback(
