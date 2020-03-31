@@ -110,12 +110,39 @@ export class TokensApi {
     );
   }
 
+  @memoize(R.identity)
+  @autobind
+  public getAccumulatedUserDistributions$(account: string): Observable<BN> {
+    return combineLatest([
+      this.getAccumulatedPoolDistributions$(),
+      this.getDistributionTotalSupply$(),
+      this.getDistributionBalanceOf$(account),
+    ]).pipe(map(([pool, totalSupply, balance]) => pool.mul(balance).div(totalSupply)));
+  }
+
   @memoize()
   @autobind
   public getAccumulatedPoolDistributions$(): Observable<BN> {
     return this.readonlyContracts.ptk.methods.distributionAccumulator(undefined, {
       DistributionAccumulatorIncreased: {},
       DistributionCreated: {},
+    });
+  }
+
+  @memoize(R.identity)
+  @autobind
+  public getDistributionBalanceOf$(account: string): Observable<BN> {
+    return this.readonlyContracts.ptk.methods.distributionBalanceOf(
+      { account },
+      { Transfer: [{ filter: { from: account } }, { filter: { to: account } }] },
+    );
+  }
+
+  @memoize()
+  @autobind
+  public getDistributionTotalSupply$(): Observable<BN> {
+    return this.readonlyContracts.ptk.methods.distributionTotalSupply(undefined, {
+      Transfer: {},
     });
   }
 

@@ -1941,89 +1941,89 @@
     typedarray-to-buffer "^3.1.5"
     yaeti "^0.0.6"
 
-"@web3-wallets-kit/abstract-connector@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/abstract-connector/-/abstract-connector-0.0.4.tgz#613c24e6b98b17d355537fd8fa16dc82619369c4"
-  integrity sha512-e1cqp7TiIw/MxeAZcK9Q05TSk388kx78d0zTWatJkcHSTN1GPpzTPyzSaoy6wgz7vLhVjRYajZ18pPF/DlmZSQ==
+"@web3-wallets-kit/abstract-connector@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/abstract-connector/-/abstract-connector-0.1.0.tgz#9bad79b66c6d8c846d736f7e7049d4aad98f261a"
+  integrity sha512-8qIhJeqmFNSwnSitA45437RwuecmqotA99UFLKeqpH39Zvic53dwaNSr7g7rxRCN8MHCRcwFzZI5hQhRXIW3Kw==
   dependencies:
-    "@web3-wallets-kit/types" "^0.1.1"
-    "@web3-wallets-kit/utils" "^0.1.5"
+    "@web3-wallets-kit/types" "^0.2.0"
+    "@web3-wallets-kit/utils" "^0.2.0"
 
-"@web3-wallets-kit/bitski-connector@0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/bitski-connector/-/bitski-connector-0.0.9.tgz#cde27b0e941735261edf49585e0ef50d1b3e972f"
-  integrity sha512-An5Z76qFTTCCFf58UL7jJVXxSlxXYQa7JHzdnFCVBC8cDAG0wXYx2mIiR1qlNIFHHv5tWy/vFjxNy/eOEEWSxw==
+"@web3-wallets-kit/bitski-connector@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/bitski-connector/-/bitski-connector-0.0.10.tgz#74fdb826433ef2a2986343e25485883231a00c02"
+  integrity sha512-BMOt/7+gqRVXm0scR6/TPxApGRPplVyjfcFmSrRDqtik9QWFUhdtZvT3m2eXlVVCi7v9ENE77lMoalLnQNEhBA==
   dependencies:
-    "@web3-wallets-kit/abstract-connector" "^0.0.4"
-    "@web3-wallets-kit/types" "^0.1.1"
+    "@web3-wallets-kit/abstract-connector" "^0.1.0"
+    "@web3-wallets-kit/types" "^0.2.0"
     bitski "^0.10.6"
 
-"@web3-wallets-kit/connect-wallet-connector@0.0.10":
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/connect-wallet-connector/-/connect-wallet-connector-0.0.10.tgz#74553c2b3c8c04be798ebe39522911ba3ec02758"
-  integrity sha512-fUijsB/M+YXbK0K0fL96TyQY0zzy/WZHXolyWQoNN0ZEe7XatMtSYvVtw1KclyWdXwAUDbIOYg6PEZK9NAX5Mw==
+"@web3-wallets-kit/connect-wallet-connector@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/connect-wallet-connector/-/connect-wallet-connector-0.0.11.tgz#0af5b08c8b3b79523342070a5e1e5fc1fa8e18b2"
+  integrity sha512-lKypsYE/G3QuT7UBlTdhKV6Tjdv0DhiJ4WwshfMqYpj0TIf8hrRQyqAd5sRPV2NHjgZCzoOIG876OnMQtwDilg==
   dependencies:
     "@walletconnect/web3-provider" "^1.0.0-beta.42"
-    "@web3-wallets-kit/abstract-connector" "^0.0.4"
-    "@web3-wallets-kit/types" "^0.1.1"
+    "@web3-wallets-kit/abstract-connector" "^0.1.0"
+    "@web3-wallets-kit/types" "^0.2.0"
 
-"@web3-wallets-kit/core@^0.0.14":
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/core/-/core-0.0.14.tgz#62946e43c5ab4711f8f9ad3a6efb461f3d54782d"
-  integrity sha512-3m7Yp6ho/TyTs5IV86UCOisOhD3Hvj6FK8r9dSTSXEO7dnaLNuceMIuH7XfcvhsEFLzWMAFWjzqHLtqOzNg5vQ==
+"@web3-wallets-kit/core@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/core/-/core-0.1.0.tgz#51cb07b90d7f9ade7b97e39fc74cf5dac4408170"
+  integrity sha512-DgUGU1jmyVyifPsnMhaXRIU8NuXyuq59rHOQJGX3agZIJNUQQ96WrDcKCuo7dHtp4OEhOQ5EjnwY9Vm2GDsK5Q==
   dependencies:
-    "@web3-wallets-kit/types" "^0.1.1"
+    "@web3-wallets-kit/types" "^0.2.0"
     rxjs "^6.2.2"
     ts-toolbelt "^6.0.0"
     web3-providers-http "^1.2.4"
     web3-providers-ws "^1.2.4"
 
-"@web3-wallets-kit/fortmatic-connector@0.0.10":
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/fortmatic-connector/-/fortmatic-connector-0.0.10.tgz#3fd5f7d48266be07c4e5d5fb30ceaec905e0df88"
-  integrity sha512-+pJuiP2DvLKNRkDIERRR8C9TQ5Ed7xkqluvrVUe5XFm2dmCB+sdAz4a0BUwEQdT8NfWF8Nkj3siJAngCSh5e7Q==
+"@web3-wallets-kit/fortmatic-connector@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/fortmatic-connector/-/fortmatic-connector-0.0.11.tgz#15c31cfa545f805e2199b928b0e50ff4c7464c2a"
+  integrity sha512-jayjN5ZxAduFLMDtxc8pPCCd1lD3XeFLTWgR0MykbJdwINEgy82INP8n9Vew8KyvhGtT7W3ckmlzXPjhmBMgvQ==
   dependencies:
-    "@web3-wallets-kit/abstract-connector" "^0.0.4"
-    "@web3-wallets-kit/types" "^0.1.1"
+    "@web3-wallets-kit/abstract-connector" "^0.1.0"
+    "@web3-wallets-kit/types" "^0.2.0"
     fortmatic "^1.0.1"
 
-"@web3-wallets-kit/inpage-connector@0.0.10":
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/inpage-connector/-/inpage-connector-0.0.10.tgz#19a428b9daf092b32859e76faca71a8644b04db3"
-  integrity sha512-NwNHPVWTDpPacu1kcCQ7dZVtGz6xXw8E9uO3glq6fTOPLg2WH6rqFoq06XaLz0fL30g7na18SpsN6St8prSSVA==
+"@web3-wallets-kit/inpage-connector@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/inpage-connector/-/inpage-connector-0.0.11.tgz#3d29b2846b7e6b8b1db18482b6a80d69122a05bf"
+  integrity sha512-ek3qbrNPj3BTlmSeVM+cxdfORjO6cTfHCwly8UC+23DlNn4CuBD14fpNZiHtxPEFs0Wxn6wVQ00D9Mpwz8+hAA==
   dependencies:
-    "@web3-wallets-kit/abstract-connector" "^0.0.4"
-    "@web3-wallets-kit/types" "^0.1.1"
+    "@web3-wallets-kit/abstract-connector" "^0.1.0"
+    "@web3-wallets-kit/types" "^0.2.0"
 
-"@web3-wallets-kit/portis-connector@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/portis-connector/-/portis-connector-0.1.2.tgz#1258c4c5b6eeee3cda4ec8c06c1fe0cf8e4ed0b3"
-  integrity sha512-xgvblL5POYkJ55U6LTOZ6s65+7nVsFipNJq97bcqbjQWZMqRJ/LkWhA6QMnnrUvixcCETIBZAnOopM/tBxr2Ng==
+"@web3-wallets-kit/portis-connector@^0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/portis-connector/-/portis-connector-0.1.3.tgz#80d9d39d1f92d1e80765ccbab53db019cbe4ba1e"
+  integrity sha512-b7bFij/IayhuhZz4LJ15GJ7Fukrj91lMSiHT3wvr7Rc3H97bfP1+Lzptfz8K0N4AScQQZqE4rBzH68/FbWSr3w==
   dependencies:
     "@portis/web3" "^2.0.0-beta.54"
-    "@web3-wallets-kit/abstract-connector" "^0.0.4"
-    "@web3-wallets-kit/types" "^0.1.1"
+    "@web3-wallets-kit/abstract-connector" "^0.1.0"
+    "@web3-wallets-kit/types" "^0.2.0"
 
-"@web3-wallets-kit/squarelink-connector@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/squarelink-connector/-/squarelink-connector-0.1.1.tgz#8ecd0dc15a06ad2c4aca520fdc683ef6fe54e030"
-  integrity sha512-9HaFJwDippTAqNqVl+W0nqf18bggV2obm61x69VO41TRUQ48ZpKDli8vO8/97hYu1cFLbh0Vlfsoi6HPtRNuug==
+"@web3-wallets-kit/squarelink-connector@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/squarelink-connector/-/squarelink-connector-0.1.2.tgz#3114338d7e850e87671455337062c6cf04f6481d"
+  integrity sha512-BRj+KV/So9+CbR1o/9gEt4U0vRWkhnaPoIv49FgfT/7Q5stImHAtsjWPL+SRCHzSFMtQ8/IvLEXPD3u3Bv8S7w==
   dependencies:
-    "@web3-wallets-kit/abstract-connector" "^0.0.4"
-    "@web3-wallets-kit/types" "^0.1.1"
+    "@web3-wallets-kit/abstract-connector" "^0.1.0"
+    "@web3-wallets-kit/types" "^0.2.0"
     squarelink "^1.1.4"
 
-"@web3-wallets-kit/types@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/types/-/types-0.1.1.tgz#5d342556a0deb2e5f6c13c072fb4d714316f8966"
-  integrity sha512-+44GVyPbjSF2I34votKeU5PxymrUWNgSJqFTWdHd0d4KjGpkx3G2VkwCgc5wkIGorWi+UE3lqm59+OIlcdp7ew==
+"@web3-wallets-kit/types@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/types/-/types-0.2.0.tgz#e69450595b9faedd31d7c76ff623f20027eeb00c"
+  integrity sha512-clyxkePdWt3sTyAm/I2zL9E3WX+CYCzcSKS2x7/ql7E+XlSr9FojT5S1v8k83tX7MtkXPRULw8/xlEIp0VKqsA==
 
-"@web3-wallets-kit/utils@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/utils/-/utils-0.1.5.tgz#dfb045c1e6c7fdfdcffe2a666f165ed9ec54f9d4"
-  integrity sha512-Fwdq61ow3voxzFJCZT2ImnV7ABXiXAJ2zUh4X1soAC/mp30BmBqOobW0QelCgykzK3jBK7TO3o0oxDtNznr5CA==
+"@web3-wallets-kit/utils@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@web3-wallets-kit/utils/-/utils-0.2.0.tgz#6725e92d60513764fcdb3eeb835839c439599296"
+  integrity sha512-t8wZpJu+rYu2RUbdeFCKNbICxjgYhFiL3oeZGd1QAY5PAoQi/lbweFcFHoRt1Tcx9uzyCjjEENQ2RrrX2yj+9Q==
   dependencies:
-    "@web3-wallets-kit/types" "^0.1.1"
+    "@web3-wallets-kit/types" "^0.2.0"
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
