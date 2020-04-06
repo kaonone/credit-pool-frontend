@@ -87,7 +87,6 @@ function PoolBalanceChart() {
   );
 
   const lastPool = R.last(pools);
-  const membersLength = (lastPool && new BN(lastPool.usersLength)) || new BN(0);
   const currentLEnterPrice =
     (lastPool && convertPtkPriceToDaiPrice(lastPool.pEnterPrice, decimals, 'weiBN')) || '0';
   const currentLExitPrice =
@@ -110,7 +109,6 @@ function PoolBalanceChart() {
         chartLines={['lExitPrice', 'lEnterPrice']}
         chartLineColors={{ lEnterPrice: enterPriceColor, lExitPrice: exitPriceColor }}
         title={t(tKeys.poolBalanceTitle.getKey())}
-        membersLength={membersLength.toNumber()}
         renderCurrentBalance={renderCurrentBalance}
       />
     </Loading>

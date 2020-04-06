@@ -10,7 +10,6 @@ import { useStyles } from './BalanceChart.style';
 
 interface IProps<P extends IPoint> {
   title: string;
-  membersLength?: number;
   chartPoints: P[];
   chartLines: Array<keyof P>;
   chartLineColors?: Partial<Record<keyof P, string>>;
@@ -24,14 +23,7 @@ export interface IPeriodInfo<P extends IPoint> {
 }
 
 function BalanceChart<P extends IPoint>(props: IProps<P>) {
-  const {
-    title,
-    membersLength,
-    chartPoints,
-    chartLines,
-    chartLineColors,
-    renderCurrentBalance,
-  } = props;
+  const { title, chartPoints, chartLines, chartLineColors, renderCurrentBalance } = props;
   const classes = useStyles();
   const [periodInfo, setPeriodInfo] = React.useState<IPeriodInfo<P> | null>(null);
 
@@ -49,23 +41,13 @@ function BalanceChart<P extends IPoint>(props: IProps<P>) {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Grid container spacing={3} alignItems="center">
-          <Grid item xs={6}>
+        <Grid container spacing={5} alignItems="center">
+          <Grid item>
             <Typography className={classes.title} variant="subtitle2">
               {title}
             </Typography>
           </Grid>
-          {(membersLength && (
-            <Grid item xs={6}>
-              <Grid container wrap="nowrap" direction="row-reverse">
-                <div className={classes.membersCount}>
-                  <Typography variant="subtitle2">{membersLength}</Typography>
-                </div>
-              </Grid>
-            </Grid>
-          )) ||
-            null}
-          <Grid item xs={12}>
+          <Grid item>
             <Typography className={classes.balanceValue} variant="h4">
               {periodInfo && renderCurrentBalance(periodInfo)}
             </Typography>

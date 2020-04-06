@@ -1,69 +1,59 @@
 import * as React from 'react';
-import { Route, RouteComponentProps } from 'react-router';
+import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { routes } from 'app/routes';
 import { Tabs, Tab } from 'components';
+import { useApi } from 'services/api';
+import { useSubscribable } from 'utils/react';
 
 import { useStyles } from './PageNavigation.style';
 
 function PageNavigation() {
   const classes = useStyles();
+  const match = useRouteMatch<{ page: string }>('/:page');
+
+  const api = useApi();
+  const [account] = useSubscribable(() => api.web3Manager.account, []);
 
   return (
-    <Route path="/:page">
-      {({ match }: RouteComponentProps<{ page: string }>) => (
-        <Tabs
-          value={match && match.params.page}
-          indicatorColor="primary"
-          textColor="primary"
-          classes={{ flexContainer: classes.tabsFlexContainer }}
-        >
-          <Tab
-            className={classes.tab}
-            label="Pool Overview"
-            component={Link}
-            value={routes.overview.getElementKey()}
-            to={routes.overview.getRedirectPath()}
-          />
-          <Tab
-            className={classes.tab}
-            label="Proposals"
-            component={Link}
-            value={routes.proposals.getElementKey()}
-            to={routes.proposals.getRedirectPath()}
-          />
-          <Tab
-            className={classes.tab}
-            label="My loans"
-            component={Link}
-            value={routes['my-loans'].getElementKey()}
-            to={routes['my-loans'].getRedirectPath()}
-          />
-          <Tab
-            className={classes.tab}
-            label="My guarantees"
-            component={Link}
-            value={routes['my-guarantees'].getElementKey()}
-            to={routes['my-guarantees'].getRedirectPath()}
-          />
-          <Tab
-            className={classes.tab}
-            label="Liquidations"
-            component={Link}
-            value={routes.liquidations.getElementKey()}
-            to={routes.liquidations.getRedirectPath()}
-          />
-          <Tab
-            className={classes.tab}
-            label="Balance history"
-            component={Link}
-            value={routes.balance.getElementKey()}
-            to={routes.balance.getRedirectPath()}
-          />
-        </Tabs>
+    <Tabs
+      value={match && match.params.page}
+      indicatorColor="primary"
+      textColor="primary"
+      classes={{ flexContainer: classes.tabsFlexContainer }}
+    >
+      {account && (
+        <Tab
+          className={classes.tab}
+          label="Account"
+          component={Link}
+          value={routes.account.getElementKey()}
+          to={routes.account.getRedirectPath()}
+        />
       )}
-    </Route>
+      <Tab
+        className={classes.tab}
+        label="Pool"
+        component={Link}
+        value={routes.pool.getElementKey()}
+        to={routes.pool.getRedirectPath()}
+      />
+      <Tab
+        className={classes.tab}
+        label="Stats"
+        component={Link}
+        value={routes.stats.getElementKey()}
+        to={routes.stats.getRedirectPath()}
+      />
+      <Tab
+        className={classes.tab}
+        label="Distributions"
+        component={Link}
+        value={routes.distributions.getElementKey()}
+        to={routes.distributions.getRedirectPath()}
+      />
+    </Tabs>
   );
 }
 
