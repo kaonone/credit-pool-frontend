@@ -90,7 +90,7 @@ const en = {
       },
     },
     cashExchange: {
-      pTokenBuyingButton: {
+      pTokenBuying: {
         buttonTitle: 'Deposit',
         formTitle: 'Deposit to Pool',
         placeholder: 'Enter sum',
