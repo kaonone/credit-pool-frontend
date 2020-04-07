@@ -17,9 +17,15 @@ const en = {
     },
     components: {
       header: {
+        apr: 'Pool APR',
+        availableBalance: 'Supply',
+        depositPlusWithdraw24Volume: '24 volume',
+        distributed: 'Total distributed',
+        issued: 'Loans',
+        members: 'Members',
+        shares: 'Shares',
         total: 'Total',
-        availableBalance: 'Available balance',
-        issued: 'Issued loans',
+        yield: 'Yield',
       },
     },
   },

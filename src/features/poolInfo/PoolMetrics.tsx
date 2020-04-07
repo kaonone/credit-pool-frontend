@@ -1,70 +1,46 @@
-import BN from 'bn.js';
 import React from 'react';
-import moment from 'moment';
 
-import { Typography, MetricsList, Loading, CashMetric } from 'components';
-import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { usePoolMetricsSubscription, usePoolMetricByDateSubscription } from 'generated/gql/pool';
+import { MetricsList } from 'components';
 
-const tKeys = tKeysAll.app.components.header;
+import {
+  Apr,
+  AvailableBalance,
+  Loans,
+  Members,
+  TotalBalance,
+  DepositPlusWithdraw24Volume,
+  TotalDistributed,
+  TotalPtkSupply,
+  Yield,
+} from './metrics';
 
-type Props = Pick<React.ComponentProps<typeof MetricsList>, 'orientation' | 'withDividers'>;
+type Metric =
+  | 'availableBalance'
+  | 'depositPlusWithdraw24Volume'
+  | 'investmentApr'
+  | 'investmentYield'
+  | 'loans'
+  | 'members'
+  | 'totalBalance'
+  | 'totalDistributed'
+  | 'totalPtkSupply';
 
-export function PoolMetrics(props: Props) {
-  const { t } = useTranslate();
+const metrics: Record<Metric, JSX.Element> = {
+  availableBalance: <AvailableBalance key="AvailableBalance" />,
+  depositPlusWithdraw24Volume: <DepositPlusWithdraw24Volume key="DepositPlusWithdraw24Volume" />,
+  investmentApr: <Apr key="Apr" />,
+  investmentYield: <Yield key="Yield" />,
+  loans: <Loans key="Loans" />,
+  members: <Members key="Members" />,
+  totalBalance: <TotalBalance key="TotalBalance" />,
+  totalDistributed: <TotalDistributed key="TotalDistributed" />,
+  totalPtkSupply: <TotalPtkSupply key="TotalPtkSupply" />,
+};
 
-  const poolMetricsGqlResult = usePoolMetricsSubscription();
+type Props = Pick<React.ComponentProps<typeof MetricsList>, 'orientation' | 'withDividers'> & {
+  includes: Metric[];
+};
 
-  const lastDay = moment()
-    .subtract(1, 'day')
-    .unix(); // Date in seconds
-
-  const poolMetricsDayAgoGqlResult = usePoolMetricByDateSubscription({
-    variables: {
-      date: `0x${lastDay.toString(16)}`, // Date in seconds
-    },
-  });
-
-  const { lBalance, lDebt } = poolMetricsGqlResult.data?.pools[0] || {
-    lBalance: '0',
-    lDebt: '0',
-  };
-
-  const lBalanceDayAgo =
-    (poolMetricsDayAgoGqlResult.data?.pools[0] &&
-      poolMetricsDayAgoGqlResult.data.pools[0].lBalance) ||
-    lBalance;
-
-  const lDebtDayAgo =
-    (poolMetricsDayAgoGqlResult.data?.pools[0] && poolMetricsDayAgoGqlResult.data.pools[0].lDebt) ||
-    lDebt;
-
-  return (
-    <Loading gqlResults={[poolMetricsGqlResult, poolMetricsDayAgoGqlResult]}>
-      {poolMetricsGqlResult.data?.pools.length ? (
-        <MetricsList {...props}>
-          <CashMetric
-            title={t(tKeys.total.getKey())}
-            value={new BN(lBalance).add(new BN(lDebt)).toString()}
-            previousValue={new BN(lBalanceDayAgo).add(new BN(lDebtDayAgo)).toString()}
-            token="dai"
-          />
-          <CashMetric
-            title={t(tKeys.availableBalance.getKey())}
-            value={lBalance}
-            previousValue={lBalanceDayAgo}
-            token="dai"
-          />
-          <CashMetric
-            title={t(tKeys.issued.getKey())}
-            value={lDebt}
-            previousValue={lDebtDayAgo}
-            token="dai"
-          />
-        </MetricsList>
-      ) : (
-        <Typography color="error">Pool metrics is not found</Typography>
-      )}
-    </Loading>
-  );
+export function PoolMetrics({ includes, ...props }: Props) {
+  return <MetricsList {...props}>{includes.map(metric => metrics[metric])}</MetricsList>;
 }
