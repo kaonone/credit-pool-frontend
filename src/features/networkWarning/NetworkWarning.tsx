@@ -13,7 +13,7 @@ export function NetworkWarning() {
   const { t } = useTranslate();
 
   const [chainId] = useSubscribable(() => api.web3Manager.chainId, [api]);
-  const [isOpen, setIsOpen] = React.useState();
+  const [isOpen, setIsOpen] = React.useState(false);
 
   useOnChangeState(
     chainId,

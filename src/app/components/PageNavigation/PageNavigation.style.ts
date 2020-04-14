@@ -8,6 +8,10 @@ export const useStyles = makeStyles(() => ({
     color: colors.topaz,
   },
 
+  additionalTab: {
+    marginLeft: 'auto',
+  },
+
   tabsFlexContainer: {
     borderBottom: `2px solid ${colors.athensGray}`,
   },

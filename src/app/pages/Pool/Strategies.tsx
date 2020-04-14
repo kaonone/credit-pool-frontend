@@ -1,6 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { Grid, Button } from 'components';
+import { routes } from 'app/routes';
+import { GetLoanButton, PTokenBuyingButton } from 'features/cashExchange';
 
 import { StrategyCard } from './StrategyCard';
 
@@ -13,11 +16,7 @@ export function Strategies() {
           primaryMetric="$560,234"
           secondaryMetric="~15%"
           description="Some text"
-          actionButton={
-            <Button fullWidth color="primary" variant="contained">
-              Buy
-            </Button>
-          }
+          actionButton={<PTokenBuyingButton fullWidth color="primary" variant="contained" />}
         />
       </Grid>
       <Grid item xs={4}>
@@ -27,7 +26,13 @@ export function Strategies() {
           secondaryMetric="~60% APR"
           description="High interest, high risk"
           actionButton={
-            <Button fullWidth color="primary" variant="contained">
+            <Button
+              component={Link}
+              fullWidth
+              color="primary"
+              variant="contained"
+              to={routes.proposals.getRedirectPath()}
+            >
               Lend
             </Button>
           }
@@ -39,11 +44,7 @@ export function Strategies() {
           primaryMetric="$1,120,468"
           secondaryMetric="~20%"
           description="More 30% approved"
-          actionButton={
-            <Button fullWidth color="primary" variant="contained">
-              Borrow
-            </Button>
-          }
+          actionButton={<GetLoanButton />}
         />
       </Grid>
     </Grid>
