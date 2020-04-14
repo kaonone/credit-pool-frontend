@@ -1,4 +1,4 @@
-import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
+import { Observable, combineLatest, BehaviorSubject, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
@@ -124,33 +124,35 @@ export class FundsModuleApi {
   @memoize(R.identity)
   @autobind
   public convertDaiToPtkEnter$(value: string): Observable<BN> {
-    return this.readonlyContract.methods.calculatePoolEnter(
-      { lAmount: new BN(value) },
-      { Status: {} },
-    );
+    const lAmount = new BN(value);
+    return lAmount.isZero()
+      ? of(lAmount)
+      : this.readonlyContract.methods.calculatePoolEnter({ lAmount }, { Status: {} });
   }
 
   @memoize(R.identity)
   @autobind
   public convertDaiToPtkExit$(value: string): Observable<BN> {
-    return this.readonlyContract.methods.calculatePoolExit(
-      { lAmount: new BN(value) },
-      { Status: {} },
-    );
+    const lAmount = new BN(value);
+    return lAmount.isZero()
+      ? of(lAmount)
+      : this.readonlyContract.methods.calculatePoolExit({ lAmount }, { Status: {} });
   }
 
   @memoize(R.identity)
   @autobind
   public getPtkToDaiExitInfo$(value: string): Observable<{ total: BN; user: BN; fee: BN }> {
-    return this.readonlyContract.methods
-      .calculatePoolExitInverse({ pAmount: new BN(value) }, { Status: {} })
-      .pipe(
-        map(([total, user, fee]) => ({
-          total,
-          user,
-          fee,
-        })),
-      );
+    const pAmount = new BN(value);
+
+    return pAmount.isZero()
+      ? of({ total: pAmount, user: pAmount, fee: pAmount })
+      : this.readonlyContract.methods.calculatePoolExitInverse({ pAmount }, { Status: {} }).pipe(
+          map(([total, user, fee]) => ({
+            total,
+            user,
+            fee,
+          })),
+        );
   }
 
   /**

@@ -1,4 +1,4 @@
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import BN from 'bn.js';
 import { autobind } from 'core-decorators';
@@ -48,14 +48,17 @@ export class CurveModuleApi {
     liquidAssets: string,
     pAmount: string,
   ): Observable<{ total: BN; user: BN; fee: BN }> {
-    return this.readonlyContract.methods
-      .calculateExitInverseWithFee({ liquidAssets: new BN(liquidAssets), pAmount: new BN(pAmount) })
-      .pipe(
-        map(([total, user, fee]) => ({
-          total,
-          user,
-          fee,
-        })),
-      );
+    const pAmountBN = new BN(pAmount);
+    return pAmountBN.isZero()
+      ? of({ total: pAmountBN, user: pAmountBN, fee: pAmountBN })
+      : this.readonlyContract.methods
+          .calculateExitInverseWithFee({ liquidAssets: new BN(liquidAssets), pAmount: pAmountBN })
+          .pipe(
+            map(([total, user, fee]) => ({
+              total,
+              user,
+              fee,
+            })),
+          );
   }
 }

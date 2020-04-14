@@ -17,15 +17,15 @@ const en = {
     },
     components: {
       header: {
-        apr: 'Pool APR',
+        apr: 'Pool APR (Coming soon)',
         availableBalance: 'Supply',
         depositPlusWithdraw24Volume: '24 volume',
-        distributed: 'Total distributed',
+        distributed: 'Total distributed (Coming soon)',
         issued: 'Loans',
         members: 'Members',
         shares: 'Shares',
         total: 'Total',
-        yield: 'Yield',
+        yield: 'Yield (Coming soon)',
       },
     },
   },

@@ -11,6 +11,7 @@ import { routes } from './routes';
 import { BaseLayout } from './components/BaseLayout/BaseLayout';
 import { ComingSoonPage } from './pages/ComingSoon/ComingSoon';
 import { PoolPage } from './pages/Pool/PoolPage';
+import { AccountPage } from './pages/Account/AccountPage';
 
 const tKeys = tKeysAll.app;
 
@@ -23,7 +24,7 @@ export function App() {
         {process.env.NODE_ENV !== 'production' && (
           <Route exact path={routes.demo.getRoutePath()} component={DemoPage} />
         )}
-        <Route exact path={routes.account.getRoutePath()} component={ComingSoonPage} />
+        <Route exact path={routes.account.getRoutePath()} component={AccountPage} />
         <Route exact path={routes.pool.getRoutePath()} component={PoolPage} />
         <Route exact path={routes.stats.getRoutePath()} component={StatsPage} />
         <Route exact path={routes.distributions.getRoutePath()} component={ComingSoonPage} />

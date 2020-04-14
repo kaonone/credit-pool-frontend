@@ -5,7 +5,6 @@ import moment from 'moment';
 import { Loading, CashMetric, Metric } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { usePoolMetricsSubscription, usePoolMetricByDateSubscription } from 'generated/gql/pool';
-import { decimalsToWei } from 'utils/bn';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 
@@ -91,7 +90,7 @@ export function Apr() {
 
   return (
     <Loading gqlResults={[]}>
-      <Metric title={t(tKeys.apr.getKey())} value="23 %" />
+      <Metric title={t(tKeys.apr.getKey())} value="—" />
     </Loading>
   );
 }
@@ -102,13 +101,14 @@ export function Yield() {
 
   return (
     <Loading gqlResults={[]}>
-      <CashMetric
+      <Metric title={t(tKeys.yield.getKey())} value="—" />
+      {/* <CashMetric
         title={t(tKeys.yield.getKey())}
         value={decimalsToWei(18)
           .muln(1234)
           .toString()}
         token="dai"
-      />
+      /> */}
     </Loading>
   );
 }
@@ -119,13 +119,14 @@ export function TotalDistributed() {
 
   return (
     <Loading gqlResults={[]}>
-      <CashMetric
+      <Metric title={t(tKeys.distributed.getKey())} value="—" />
+      {/* <CashMetric
         title={t(tKeys.distributed.getKey())}
         value={decimalsToWei(18)
           .muln(1234)
           .toString()}
         token="dai"
-      />
+      /> */}
     </Loading>
   );
 }

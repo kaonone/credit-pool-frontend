@@ -21,8 +21,10 @@ export function formatBalance({
 }: IFormatBalanceOptions): string {
   let balanceString = bnToBn(amountInBaseUnits).toString();
 
+  const units = ` ${tokenSymbol}`;
+
   if (balanceString.length === 0 || balanceString === '0') {
-    return '0';
+    return `0${units.trimEnd()}`;
   }
 
   const isNegative = balanceString[0].startsWith('-');
@@ -40,8 +42,6 @@ export function formatBalance({
     0,
     decimalsZerosLength,
   );
-
-  const units = ` ${tokenSymbol}`;
 
   const long = `${isNegative ? '-' : ''}${formatDecimal(prefix || '0')}${
     baseDecimals ? `.${postfix}` : ''
