@@ -37,6 +37,13 @@ export const theme: Theme = createMuiTheme({
     },
   },
   overrides: {
+    MuiDrawer: {
+      paper: {
+        display: 'block',
+        width: defaultTheme.spacing(52),
+        padding: defaultTheme.spacing(4, 5),
+      },
+    },
     MuiSnackbarContent: {
       root: {
         backgroundColor: '#fff',
@@ -126,6 +133,69 @@ export const theme: Theme = createMuiTheme({
         '&$expanded': {
           margin: defaultTheme.spacing(1.5, 0),
         },
+      },
+    },
+  },
+});
+
+export const darkTheme: Theme = createMuiTheme({
+  palette: {
+    primary: theme.palette.secondary,
+    secondary: theme.palette.primary,
+  },
+  shadows: defaultTheme.shadows.map(item =>
+    item.replace(/0,0,0/g, '255,255,255'),
+  ) as typeof defaultTheme.shadows,
+  overrides: {
+    MuiDrawer: {
+      paper: {
+        ...theme.overrides?.MuiDrawer?.paper,
+        backgroundColor: colors.blackCurrant,
+        color: colors.silver,
+      },
+    },
+
+    MuiButton: {
+      endIcon: {
+        '&:empty': {
+          display: 'none',
+        },
+      },
+
+      startIcon: {
+        '&:empty': {
+          display: 'none',
+        },
+      },
+    },
+
+    MuiFormLabel: {
+      root: {
+        color: 'rgba(255, 255, 255, 0.54)',
+      },
+    },
+
+    MuiInputBase: {
+      root: {
+        color: 'rgba(255, 255, 255, 0.87)',
+      },
+    },
+
+    MuiOutlinedInput: {
+      root: {
+        '&:hover $notchedOutline': {
+          borderColor: 'rgba(255, 255, 255, 0.87)',
+        },
+      },
+
+      notchedOutline: {
+        borderColor: 'rgba(255, 255, 255, 0.23)',
+      },
+    },
+
+    MuiSelect: {
+      icon: {
+        color: 'rgba(255, 255, 255, 0.54)',
       },
     },
   },
