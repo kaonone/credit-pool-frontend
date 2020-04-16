@@ -5,7 +5,7 @@ import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 import { PoolMetrics } from 'features/poolInfo';
 
-import { Strategies } from './Strategies';
+import { Strategies } from './Strategies/Strategies';
 
 export function PoolPage() {
   const api = useApi();

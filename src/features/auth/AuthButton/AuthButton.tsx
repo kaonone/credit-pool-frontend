@@ -8,7 +8,7 @@ import { Button, Loading } from 'components';
 
 import { AuthModal } from './components/AuthModal';
 
-type IProps = Pick<GetProps<typeof Button>, 'color'>;
+type IProps = Pick<GetProps<typeof Button>, 'color'> & {};
 
 export function AuthButton(props: IProps) {
   const { color } = props;
