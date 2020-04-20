@@ -6,5 +6,8 @@ subscription PoolMetrics @pool {
     lProposals
     depositSum
     withdrawSum
+    proposalsCount
+    debtsCount
+    maxProposalInterest
   }
 }

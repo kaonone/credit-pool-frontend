@@ -20,10 +20,7 @@ export function BorrowingStrategy() {
     new BN(0),
   );
 
-  const [loanConfig, loanConfigMeta] = useSubscribable(() => api.loanModule.getConfig$(), [
-    api,
-    account,
-  ]);
+  const [loanConfig, loanConfigMeta] = useSubscribable(() => api.loanModule.getConfig$(), [api]);
 
   const formattedMinInterestApr = loanConfig
     ? formatBalance({
