@@ -188,6 +188,7 @@ const en = {
         notFound: 'Distributions not found',
         date: 'Date',
         distribution: 'Distribution',
+        claimed: 'Claimed',
         members: 'Members',
       },
       accumulated: 'Accumulated',

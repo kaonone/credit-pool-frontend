@@ -48,6 +48,12 @@ export function DistributionEvents() {
                   </Table.Cell>
                 </Table.Column>
                 <Table.Column>
+                  <Table.Head>{t(tKeys.claimed.getKey())}</Table.Head>
+                  <Table.Cell>
+                    {({ data }) => <FormattedBalance sum={data.claimed} token="ptk" />}
+                  </Table.Cell>
+                </Table.Column>
+                <Table.Column>
                   <Table.Head>{t(tKeys.members.getKey())}</Table.Head>
                   <Table.Cell>{({ data }) => data.poolState.usersLength}</Table.Cell>
                 </Table.Column>

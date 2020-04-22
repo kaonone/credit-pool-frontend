@@ -3,6 +3,7 @@ query DistributionEvents($first: Int!, $skip: Int!) {
     id
     date
     amount
+    claimed
     totalSupply
     poolState {
       usersLength
