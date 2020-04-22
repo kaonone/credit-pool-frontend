@@ -20,7 +20,7 @@ interface IProps extends ButtonProps {
   modalType?: 'drawer' | 'dialog';
   dialogMaxWidth?: DialogProps['maxWidth'];
   content: React.ReactNode;
-  children: (props: IChildrenProps) => React.ReactNode;
+  children: React.ReactNode | ((props: IChildrenProps) => React.ReactNode);
 }
 
 function ModalButton(props: IProps) {

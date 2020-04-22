@@ -184,12 +184,19 @@ const en = {
       credit: 'Current loans',
     },
     distributions: {
+      claimsList: {
+        notFound: 'Claims not found',
+        date: 'Date',
+        address: 'Address',
+        claimed: 'Claimed',
+      },
       eventsList: {
         notFound: 'Distributions not found',
         date: 'Date',
         distribution: 'Distribution',
         claimed: 'Claimed',
         members: 'Members',
+        showClaimsButton: 'Show claims',
       },
       accumulated: 'Accumulated',
       untilTheNextDistribution: 'Time to Next Distribution',

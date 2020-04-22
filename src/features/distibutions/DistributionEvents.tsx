@@ -10,10 +10,12 @@ import {
   Table as GeneralTable,
   MakeTableType,
   FormattedBalance,
-  Button,
+  ModalButton,
 } from 'components';
 import { useDistributionEventsQuery } from 'generated/gql/pool';
 import { useSubgraphPagination } from 'utils/react';
+
+import { DistributionClaimsByEvent } from './DistributionClaimsByEvent';
 
 export function DistributionEvents() {
   const { t, tKeys: tKeysAll } = useTranslate();
@@ -60,9 +62,14 @@ export function DistributionEvents() {
                 <Table.Column>
                   <Table.Cell align="center">
                     {({ data }) => (
-                      <Button variant="contained" color="primary">
-                        Show claims for {data.id} (CS)
-                      </Button>
+                      <ModalButton
+                        variant="contained"
+                        color="primary"
+                        modalType="dialog"
+                        content={t(tKeys.showClaimsButton.getKey())}
+                      >
+                        <DistributionClaimsByEvent eventId={data.id} />
+                      </ModalButton>
                     )}
                   </Table.Cell>
                 </Table.Column>
