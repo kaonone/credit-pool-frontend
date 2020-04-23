@@ -23,6 +23,7 @@ export function NetworkWarning() {
 
   return (
     <ConfirmationDialog
+      modalType="dialog"
       isOpen={isOpen}
       message={t(tKeys.warning.getKey(), {
         name: t(tKeys.networkName[NETWORK_ID].getKey()),
