@@ -139,33 +139,25 @@ export const theme: Theme = createMuiTheme({
 });
 
 export const darkTheme: Theme = createMuiTheme({
+  ...defaultTheme,
+
   palette: {
     primary: theme.palette.secondary,
     secondary: theme.palette.primary,
   },
+
   shadows: defaultTheme.shadows.map(item =>
     item.replace(/0,0,0/g, '255,255,255'),
   ) as typeof defaultTheme.shadows,
+
   overrides: {
+    ...defaultTheme.overrides,
+
     MuiDrawer: {
       paper: {
         ...theme.overrides?.MuiDrawer?.paper,
         backgroundColor: colors.blackCurrant,
         color: colors.silver,
-      },
-    },
-
-    MuiButton: {
-      endIcon: {
-        '&:empty': {
-          display: 'none',
-        },
-      },
-
-      startIcon: {
-        '&:empty': {
-          display: 'none',
-        },
       },
     },
 
