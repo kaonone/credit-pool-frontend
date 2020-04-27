@@ -16,6 +16,7 @@ import {
   robotoBlack,
   robotoBlackItalic,
 } from './fonts';
+import { generateGridSpacingOverrides } from './generateGridSpacingOverrides';
 
 export { Theme };
 
@@ -134,6 +135,10 @@ export const theme: Theme = createMuiTheme({
           margin: defaultTheme.spacing(1.5, 0),
         },
       },
+    },
+
+    MuiGrid: {
+      ...generateGridSpacingOverrides(defaultTheme.spacing),
     },
   },
 });
