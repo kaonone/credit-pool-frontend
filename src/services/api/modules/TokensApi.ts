@@ -5,7 +5,7 @@ import * as R from 'ramda';
 import { autobind } from 'core-decorators';
 
 import { memoize } from 'utils/decorators';
-import { createErc20, createDistributionToken } from 'generated/contracts';
+import { createErc20, createPToken } from 'generated/contracts';
 import { Token, ITokenInfo } from 'model/types';
 import { ETH_NETWORK_CONFIG } from 'env';
 
@@ -29,7 +29,7 @@ export class TokensApi {
   constructor(private web3Manager: Web3ManagerModule, private transactionsApi: TransactionsApi) {
     this.readonlyContracts = {
       dai: createErc20(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.dai),
-      ptk: createDistributionToken(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.ptk),
+      ptk: createPToken(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.ptk),
     };
 
     this.web3Manager.txWeb3
@@ -38,7 +38,7 @@ export class TokensApi {
           txWeb3 =>
             txWeb3 && {
               dai: createErc20(txWeb3, ETH_NETWORK_CONFIG.contracts.dai),
-              ptk: createDistributionToken(txWeb3, ETH_NETWORK_CONFIG.contracts.ptk),
+              ptk: createPToken(txWeb3, ETH_NETWORK_CONFIG.contracts.ptk),
             },
         ),
       )
@@ -117,7 +117,11 @@ export class TokensApi {
       this.getAccumulatedPoolDistributions$(),
       this.getDistributionTotalSupply$(),
       this.getDistributionBalanceOf$(account),
-    ]).pipe(map(([pool, totalSupply, balance]) => pool.mul(balance).div(totalSupply)));
+    ]).pipe(
+      map(([pool, totalSupply, balance]) =>
+        totalSupply.isZero() ? totalSupply : pool.mul(balance).div(totalSupply),
+      ),
+    );
   }
 
   @memoize()

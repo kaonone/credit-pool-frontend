@@ -125,7 +125,7 @@ export class FundsModuleApi {
   @autobind
   public convertDaiToPtkEnter$(value: string): Observable<BN> {
     return this.readonlyContract.methods.calculatePoolEnter(
-      { lAmount: new BN(value) },
+      { lAmount: new BN(value), liquidityCorrection: new BN(0) },
       { Status: {} },
     );
   }

@@ -1,25 +1,94 @@
 [{
     "anonymous": false,
     "inputs": [{
-        "indexed": true,
+      "indexed": true,
+      "internalType": "address",
+      "name": "account",
+      "type": "address"
+    }],
+    "name": "DefiOperatorAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": true,
+      "internalType": "address",
+      "name": "account",
+      "type": "address"
+    }],
+    "name": "DefiOperatorRemoved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "amount",
+      "type": "uint256"
+    }],
+    "name": "Deposit",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "currentBalance",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "totalShares",
+        "type": "uint256"
+      }
+    ],
+    "name": "InvestmentDistributionCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
         "internalType": "address",
-        "name": "borrower",
+        "name": "account",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "debt",
+        "name": "shares",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "pBurned",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fromDistribution",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "toDistribution",
         "type": "uint256"
       }
     ],
-    "name": "DebtDefaultExecuted",
+    "name": "InvestmentDistributionsClaimed",
     "type": "event"
   },
   {
@@ -43,6 +112,24 @@
   {
     "anonymous": false,
     "inputs": [{
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "PTKBalanceUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
       "indexed": false,
       "internalType": "address",
       "name": "newPool",
@@ -54,130 +141,36 @@
   {
     "anonymous": false,
     "inputs": [{
-        "indexed": true,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "debt",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "lDebtLeft",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "lFullPaymentAmount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "lInterestPaid",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "pInterestPaid",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "newlastPayment",
-        "type": "uint256"
-      }
-    ],
-    "name": "Repay",
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "amount",
+      "type": "uint256"
+    }],
+    "name": "Withdraw",
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [{
-        "indexed": true,
+        "indexed": false,
         "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "borrower",
+        "name": "account",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "proposal",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "debt",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "pAmount",
+        "name": "amount",
         "type": "uint256"
       }
     ],
-    "name": "UnlockedPledgeWithdraw",
+    "name": "WithdrawInterest",
     "type": "event"
   },
   {
     "constant": true,
     "inputs": [],
-    "name": "ANNUAL_SECONDS",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "DEBT_LOAD_MULTIPLIER",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "DEBT_REPAY_DEADLINE_PERIOD",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "INTEREST_MULTIPLIER",
+    "name": "DISTRIBUTION_AGGREGATION_PERIOD",
     "outputs": [{
       "internalType": "uint256",
       "name": "",
@@ -331,18 +324,42 @@
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [{
+      "internalType": "address",
+      "name": "account",
+      "type": "address"
+    }],
+    "name": "addDefiOperator",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [{
       "internalType": "address",
       "name": "",
       "type": "address"
     }],
-    "name": "activeDebts",
+    "name": "balances",
     "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
+        "internalType": "uint256",
+        "name": "ptkBalance",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "availableBalance",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "nextDistribution",
+        "type": "uint256"
+      }
+    ],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -350,41 +367,25 @@
   {
     "constant": true,
     "inputs": [{
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "debts",
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "name": "distributions",
     "outputs": [{
         "internalType": "uint256",
-        "name": "proposal",
+        "name": "amount",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "lAmount",
+        "name": "balance",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "lastPayment",
+        "name": "totalPTK",
         "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "pInterest",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "defaultExecuted",
-        "type": "bool"
       }
     ],
     "payable": false,
@@ -410,12 +411,42 @@
   },
   {
     "constant": true,
+    "inputs": [{
+      "internalType": "address",
+      "name": "account",
+      "type": "address"
+    }],
+    "name": "isDefiOperator",
+    "outputs": [{
+      "internalType": "bool",
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
     "inputs": [],
     "name": "isOwner",
     "outputs": [{
       "internalType": "bool",
       "name": "",
       "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "nextDistributionTimestamp",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
     }],
     "payable": false,
     "stateMutability": "view",
@@ -445,6 +476,15 @@
     }],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "renounceDefiOperator",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -508,21 +548,72 @@
     "constant": false,
     "inputs": [{
         "internalType": "address",
-        "name": "borrower",
+        "name": "sender",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "proposal",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lAmount",
+        "name": "amount",
         "type": "uint256"
       }
     ],
-    "name": "createDebt",
+    "name": "deposit",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "internalType": "address",
+        "name": "beneficiary",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "withdrawInterest",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "ptkBalance",
+        "type": "uint256"
+      }
+    ],
+    "name": "updatePTKBalance",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "poolBalance",
     "outputs": [{
       "internalType": "uint256",
       "name": "",
@@ -535,54 +626,11 @@
   {
     "constant": false,
     "inputs": [{
-        "internalType": "uint256",
-        "name": "debt",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "repay",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "internalType": "uint256",
-        "name": "debt",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "pAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lAmountMin",
-        "type": "uint256"
-      }
-    ],
-    "name": "repayPTK",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
       "internalType": "address",
-      "name": "borrower",
+      "name": "account",
       "type": "address"
     }],
-    "name": "repayAllInterest",
+    "name": "claimDistributions",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -592,59 +640,16 @@
     "constant": false,
     "inputs": [{
         "internalType": "address",
-        "name": "borrower",
+        "name": "account",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "debt",
+        "name": "toDistribution",
         "type": "uint256"
       }
     ],
-    "name": "executeDebtDefault",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "debt",
-        "type": "uint256"
-      }
-    ],
-    "name": "withdrawUnlockedPledge",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "debt",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "newDate",
-        "type": "uint256"
-      }
-    ],
-    "name": "__changeDebtLastPaymentDate",
+    "name": "claimDistributions",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -653,135 +658,16 @@
   {
     "constant": true,
     "inputs": [{
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "debt",
-        "type": "uint256"
-      }
-    ],
-    "name": "isDebtDefaultTimeReached",
+      "internalType": "address",
+      "name": "account",
+      "type": "address"
+    }],
+    "name": "availableInterest",
     "outputs": [{
-      "internalType": "bool",
+      "internalType": "uint256",
       "name": "",
-      "type": "bool"
+      "type": "uint256"
     }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "debt",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "supporter",
-        "type": "address"
-      }
-    ],
-    "name": "calculatePledgeInfo",
-    "outputs": [{
-        "internalType": "uint256",
-        "name": "pLocked",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "pUnlocked",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "pInterest",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "pWithdrawn",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "debt",
-        "type": "uint256"
-      }
-    ],
-    "name": "getDebtRequiredPayments",
-    "outputs": [{
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "internalType": "address",
-      "name": "borrower",
-      "type": "address"
-    }],
-    "name": "hasActiveDebts",
-    "outputs": [{
-      "internalType": "bool",
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "internalType": "address",
-      "name": "borrower",
-      "type": "address"
-    }],
-    "name": "getUnpaidInterest",
-    "outputs": [{
-        "internalType": "uint256",
-        "name": "totalLInterest",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "totalLInterestPerSecond",
-        "type": "uint256"
-      }
-    ],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -789,7 +675,7 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "totalLDebts",
+    "name": "distributionsLength",
     "outputs": [{
       "internalType": "uint256",
       "name": "",
@@ -797,39 +683,6 @@
     }],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-        "internalType": "uint256",
-        "name": "debtLAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "interest",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "prevPayment",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "currentPayment",
-        "type": "uint256"
-      }
-    ],
-    "name": "calculateInterestPayment",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "pure",
     "type": "function"
   }
 ]

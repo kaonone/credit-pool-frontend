@@ -81,7 +81,7 @@ const config: webpack.Configuration = {
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
-      'process.env.IS_STAGING': JSON.stringify(process.env.IS_STAGING),
+      'process.env.MODE': JSON.stringify(process.env.MODE),
     }),
     new FileManagerWebpackPlugin({
       onEnd: {

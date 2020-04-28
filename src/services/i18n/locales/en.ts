@@ -48,6 +48,11 @@ const en = {
         success: 'Transferring %{amount} to the pool. Successful',
         error: 'Transferring %{amount} to the pool. Failed',
       },
+      'defi.withdrawInterest': {
+        pending: 'Withdrawing yield. Pending',
+        success: 'Withdrawing yield. Successful',
+        error: 'Withdrawing yield. Failed',
+      },
       'loan.addPledge': {
         pending: 'Adding pledge for the loan. Pending',
         success: 'Adding pledge for the loan. Successful',
@@ -100,6 +105,12 @@ const en = {
         buttonTitle: 'Withdraw',
         formTitle: 'Withdraw from Pool',
         placeholder: 'Enter sum',
+        fields: {
+          withdrawMethod: {
+            availableBalance: 'from available pool balance',
+            yield: 'from investment yield',
+          },
+        },
         confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
         interestConfirmation:
           ' Additional ~%{interestAmount} will be deducted from your available balance as a payment for the the accumulated interest on your outstanding loans. Full amount to be written off from your available balance will be ~%{fullAmount}.',
@@ -173,7 +184,8 @@ const en = {
     personalInformation: {
       deposit: 'Deposit',
       availableBalance: 'Available balance',
-      currentProfit: 'Yield',
+      currentProfit: 'Profit',
+      yield: 'Yield',
       locked: 'Locked',
       credit: 'Current loans',
     },

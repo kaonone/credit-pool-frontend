@@ -4,18 +4,22 @@
   "description": "Frontend starter kit for Ethereum DApps",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run codegen:staging && better-npm-run dev",
-    "dev-stable": "npm run codegen && better-npm-run dev-stable",
-    "build": "better-npm-run node webpack --config webpack/prod.ts",
-    "build:staging": "cross-env IS_STAGING=true npm run build",
+    "dev": "npm run dev:sandbox",
+    "dev:beta": "npm run codegen:beta && better-npm-run dev",
+    "dev:beta-defi": "npm run codegen:beta-defi && cross-env MODE=beta-defi better-npm-run dev",
+    "dev:sandbox": "npm run codegen:sandbox && cross-env MODE=sandbox better-npm-run dev",
+    "build:beta": "better-npm-run build",
+    "build:beta-defi": "cross-env MODE=beta-defi better-npm-run build",
+    "build:sandbox": "cross-env MODE=sandbox better-npm-run build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx && tsc --noEmit --pretty",
     "lint:autofix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "test": "jest && npm run lint",
     "test:watch": "jest --watch",
     "test:debug": "node --inspect-brk ./node_modules/.bin/jest --runInBand --watch",
     "test:coverage": "jest --coverage --watch",
-    "codegen": "graphql-codegen --config codegen.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
-    "codegen:staging": "graphql-codegen --config codegen-staging.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi-staging/*.json"
+    "codegen:beta": "graphql-codegen --config codegen-beta.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
+    "codegen:beta-defi": "graphql-codegen --config codegen-beta-defi.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
+    "codegen:sandbox": "graphql-codegen --config codegen-sandbox.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi-staging/*.json"
   },
   "betterScripts": {
     "node": {
@@ -25,13 +29,10 @@
         "TS_NODE_FILES": true
       }
     },
-    "dev": {
-      "command": "better-npm-run node webpack-dev-server --open --config webpack/dev.ts",
-      "env": {
-        "IS_STAGING": true
-      }
+    "build": {
+      "command": "better-npm-run node webpack --config webpack/prod.ts"
     },
-    "dev-stable": {
+    "dev": {
       "command": "better-npm-run node webpack-dev-server --open --config webpack/dev.ts"
     }
   },
@@ -65,6 +66,7 @@
     "core-decorators": "^0.20.0",
     "d3-scale": "^3.2.1",
     "final-form": "^4.18.5",
+    "final-form-calculate": "^1.3.1",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
     "graphql-tools": "^4.0.6",

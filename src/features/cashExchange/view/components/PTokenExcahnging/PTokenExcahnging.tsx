@@ -13,9 +13,14 @@ import {
   PTokenExchangingForm,
   ISubmittedFormData,
   IFormData,
+  IProps as PTokenExchangingFormProps,
+  fieldNames,
 } from '../PTokenExchangingForm/PTokenExchangingForm';
 
-interface IProps<ExtraFormData> {
+export type IProps<ExtraFormData> = Pick<
+  PTokenExchangingFormProps<ExtraFormData>,
+  'disabledSourceInput' | 'isNeedToDisableSourceValidation' | 'formCalculations'
+> & {
   title: string;
   sourcePlaceholder: string;
   confirmMessageTKey:
@@ -35,7 +40,7 @@ interface IProps<ExtraFormData> {
   validateForm?(
     values: ExtraFormData & IFormData,
   ): { [key in keyof (ExtraFormData & IFormData)]?: ITranslateKey };
-}
+};
 
 const tKeysApp = tKeysAll.app;
 
@@ -44,6 +49,8 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
 ) {
   const {
     title,
+    disabledSourceInput,
+    isNeedToDisableSourceValidation,
     sourcePlaceholder,
     getMaxSourceValue,
     getMinSourceValue,
@@ -53,6 +60,7 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
     additionalFields,
     initialValues,
     validateForm,
+    formCalculations,
   } = props;
 
   const { t } = useTranslate();
@@ -95,6 +103,8 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
             <PTokenExchangingForm<ExtraFormData>
               account={account}
               title={title}
+              disabledSourceInput={disabledSourceInput}
+              isNeedToDisableSourceValidation={isNeedToDisableSourceValidation}
               sourcePlaceholder={sourcePlaceholder}
               getMaxSourceValue={getMaxSourceValue}
               getMinSourceValue={getMinSourceValue}
@@ -103,6 +113,7 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
               additionalFields={additionalFields}
               additionalInitialValues={initialValues}
               validateForm={validateForm}
+              formCalculations={formCalculations}
             />
             <PTokenExchangingConfirmation
               isOpen={!!values}
@@ -120,4 +131,4 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
   );
 }
 
-export { PTokenExchanging, ISubmittedFormData };
+export { PTokenExchanging, ISubmittedFormData, fieldNames };
