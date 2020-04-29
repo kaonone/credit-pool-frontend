@@ -113,7 +113,10 @@ export class LoanModuleApi {
     debtLoadMultiplier: BN;
   }> {
     return combineLatest([
-      this.readonlyContracts.limits.methods.allLimits(undefined, { LimitChanged: {} }),
+      this.readonlyContracts.limits.methods.allLimits(
+        undefined,
+        this.readonlyContracts.limits.events.LimitChanged(),
+      ),
       this.readonlyContracts.loan.methods.DEBT_REPAY_DEADLINE_PERIOD(),
       this.readonlyContracts.proposals.methods.COLLATERAL_TO_DEBT_RATIO(),
       this.readonlyContracts.proposals.methods.COLLATERAL_TO_DEBT_RATIO_MULTIPLIER(),
@@ -161,11 +164,11 @@ export class LoanModuleApi {
   @memoize()
   @autobind
   public getTotalLProposals$(): Observable<BN> {
-    return this.readonlyContracts.proposals.methods.totalLProposals(undefined, {
-      PledgeAdded: {},
-      PledgeWithdrawn: {},
-      DebtProposalExecuted: {},
-    });
+    return this.readonlyContracts.proposals.methods.totalLProposals(undefined, [
+      this.readonlyContracts.proposals.events.PledgeAdded(),
+      this.readonlyContracts.proposals.events.PledgeWithdrawn(),
+      this.readonlyContracts.proposals.events.DebtProposalExecuted(),
+    ]);
   }
 
   @memoize(R.identity)
@@ -180,10 +183,10 @@ export class LoanModuleApi {
           {
             borrower,
           },
-          {
-            Repay: { filter: { sender: borrower } },
-            DebtDefaultExecuted: { filter: { borrower } },
-          },
+          [
+            this.readonlyContracts.loan.events.Repay({ filter: { sender: borrower } }),
+            this.readonlyContracts.loan.events.DebtDefaultExecuted({ filter: { borrower } }),
+          ],
         ),
       ),
       map(([unpaidInterest, interestPerSecond]) =>
@@ -195,11 +198,11 @@ export class LoanModuleApi {
   @memoize()
   @autobind
   public getTotalLDebts$(): Observable<BN> {
-    return this.readonlyContracts.loan.methods.totalLDebts(undefined, {
-      // DebtProposalExecuted: {}, // TODO reload on proposalsModule.DebtProposalExecuted
-      Repay: {},
-      DebtDefaultExecuted: {},
-    });
+    return this.readonlyContracts.loan.methods.totalLDebts(undefined, [
+      this.readonlyContracts.proposals.events.DebtProposalExecuted(),
+      this.readonlyContracts.loan.events.Repay(),
+      this.readonlyContracts.loan.events.DebtDefaultExecuted(),
+    ]);
   }
 
   @memoize()
@@ -500,10 +503,10 @@ export class LoanModuleApi {
             borrower,
             debt: bnToBn(debtId),
           },
-          {
-            Repay: { filter: { sender: borrower } },
-            DebtDefaultExecuted: { filter: { borrower } },
-          },
+          [
+            this.readonlyContracts.loan.events.Repay({ filter: { sender: borrower } }),
+            this.readonlyContracts.loan.events.DebtDefaultExecuted({ filter: { borrower } }),
+          ],
         ),
       ),
       map(([loanSize, currentInterest]) => {
@@ -530,10 +533,10 @@ export class LoanModuleApi {
           borrower,
           proposal: bnToBn(proposalId),
         },
-        {
-          PledgeAdded: {},
-          PledgeWithdrawn: {},
-        },
+        [
+          this.readonlyContracts.proposals.events.PledgeAdded(),
+          this.readonlyContracts.proposals.events.PledgeWithdrawn(),
+        ],
         1000,
       )
       .pipe(
@@ -604,11 +607,13 @@ export class LoanModuleApi {
           debt: bnToBn(debtId),
           supporter,
         },
-        {
-          Repay: { filter: { sender: borrower } },
-          DebtDefaultExecuted: { filter: { borrower } },
-          UnlockedPledgeWithdraw: { filter: { sender: supporter } },
-        },
+        [
+          this.readonlyContracts.loan.events.Repay({ filter: { sender: borrower } }),
+          this.readonlyContracts.loan.events.DebtDefaultExecuted({ filter: { borrower } }),
+          this.readonlyContracts.loan.events.UnlockedPledgeWithdraw({
+            filter: { sender: supporter },
+          }),
+        ],
       )
       .pipe(
         map(([pLocked, pUnlocked, pInterest, pWithdrawn]) => ({

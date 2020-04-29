@@ -43,9 +43,7 @@ export class DefiModuleApi {
   public getAvailableInterest$(account: string): Observable<BN> {
     return this.readonlyContract.methods.availableInterest(
       { account },
-      {
-        InvestmentDistributionCreated: {},
-      },
+      this.readonlyContract.events.InvestmentDistributionCreated(),
     );
   }
 

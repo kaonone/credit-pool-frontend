@@ -74,10 +74,10 @@ export class TokensApi {
   @memoize((...args: string[]) => args.join())
   @autobind
   public getBalance$(token: Token, address: string): Observable<BN> {
-    return this.readonlyContracts[token].methods.balanceOf(
-      { account: address },
-      { Transfer: [{ filter: { from: address } }, { filter: { to: address } }] },
-    );
+    return this.readonlyContracts[token].methods.balanceOf({ account: address }, [
+      this.readonlyContracts[token].events.Transfer({ filter: { from: address } }),
+      this.readonlyContracts[token].events.Transfer({ filter: { to: address } }),
+    ]);
   }
 
   @autobind
@@ -101,13 +101,10 @@ export class TokensApi {
   @memoize(R.identity)
   @autobind
   public getUnclaimedDistributions$(account: string): Observable<BN> {
-    return this.readonlyContracts.ptk.methods.calculateUnclaimedDistributions(
-      { account },
-      {
-        DistributionCreated: {},
-        DistributionsClaimed: { filter: { account } },
-      },
-    );
+    return this.readonlyContracts.ptk.methods.calculateUnclaimedDistributions({ account }, [
+      this.readonlyContracts.ptk.events.DistributionCreated(),
+      this.readonlyContracts.ptk.events.DistributionsClaimed({ filter: { account } }),
+    ]);
   }
 
   @memoize(R.identity)
@@ -127,36 +124,35 @@ export class TokensApi {
   @memoize()
   @autobind
   public getAccumulatedPoolDistributions$(): Observable<BN> {
-    return this.readonlyContracts.ptk.methods.distributionAccumulator(undefined, {
-      DistributionAccumulatorIncreased: {},
-      DistributionCreated: {},
-    });
+    return this.readonlyContracts.ptk.methods.distributionAccumulator(undefined, [
+      this.readonlyContracts.ptk.events.DistributionAccumulatorIncreased(),
+      this.readonlyContracts.ptk.events.DistributionCreated(),
+    ]);
   }
 
   @memoize(R.identity)
   @autobind
   public getDistributionBalanceOf$(account: string): Observable<BN> {
-    return this.readonlyContracts.ptk.methods.distributionBalanceOf(
-      { account },
-      { Transfer: [{ filter: { from: account } }, { filter: { to: account } }] },
-    );
+    return this.readonlyContracts.ptk.methods.distributionBalanceOf({ account }, [
+      this.readonlyContracts.ptk.events.Transfer({ filter: { from: account } }),
+      this.readonlyContracts.ptk.events.Transfer({ filter: { to: account } }),
+    ]);
   }
 
   @memoize()
   @autobind
   public getDistributionTotalSupply$(): Observable<BN> {
-    return this.readonlyContracts.ptk.methods.distributionTotalSupply(undefined, {
-      Transfer: {},
-    });
+    return this.readonlyContracts.ptk.methods.distributionTotalSupply(
+      undefined,
+      this.readonlyContracts.ptk.events.Transfer(),
+    );
   }
 
   @memoize()
   @autobind
   public getNextDistributionTimestamp$(): Observable<number> {
     return this.readonlyContracts.ptk.methods
-      .nextDistributionTimestamp(undefined, {
-        DistributionCreated: {},
-      })
+      .nextDistributionTimestamp(undefined, this.readonlyContracts.ptk.events.DistributionCreated())
       .pipe(map(item => item.toNumber()));
   }
 }

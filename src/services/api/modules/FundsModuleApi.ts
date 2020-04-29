@@ -126,7 +126,7 @@ export class FundsModuleApi {
   public convertDaiToPtkEnter$(value: string): Observable<BN> {
     return this.readonlyContract.methods.calculatePoolEnter(
       { lAmount: new BN(value), liquidityCorrection: new BN(0) },
-      { Status: {} },
+      this.readonlyContract.events.Status(),
     );
   }
 
@@ -135,7 +135,7 @@ export class FundsModuleApi {
   public convertDaiToPtkExit$(value: string): Observable<BN> {
     return this.readonlyContract.methods.calculatePoolExit(
       { lAmount: new BN(value) },
-      { Status: {} },
+      this.readonlyContract.events.Status(),
     );
   }
 
@@ -143,7 +143,7 @@ export class FundsModuleApi {
   @autobind
   public getPtkToDaiExitInfo$(value: string): Observable<{ total: BN; user: BN; fee: BN }> {
     return this.readonlyContract.methods
-      .calculatePoolExitInverse({ pAmount: new BN(value) }, { Status: {} })
+      .calculatePoolExitInverse({ pAmount: new BN(value) }, this.readonlyContract.events.Status())
       .pipe(
         map(([total, user, fee]) => ({
           total,
@@ -221,7 +221,7 @@ export class FundsModuleApi {
     }
 
     return combineLatest([
-      this.readonlyContract.methods.lBalance(undefined, { Status: {} }),
+      this.readonlyContract.methods.lBalance(undefined, this.readonlyContract.events.Status()),
       this.getTotalLProposals$(),
     ]).pipe(map(([liquidity, totalLProposals]) => liquidity.sub(totalLProposals)));
   }
@@ -229,6 +229,6 @@ export class FundsModuleApi {
   @memoize()
   @autobind
   public getFundsLBalance$(): Observable<BN> {
-    return this.readonlyContract.methods.lBalance(undefined, { Status: {} });
+    return this.readonlyContract.methods.lBalance(undefined, this.readonlyContract.events.Status());
   }
 }
