@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react';
 import BN from 'bn.js';
-import { Form } from 'react-final-form';
+import { Form, FormSpy } from 'react-final-form';
 import { FORM_ERROR } from 'final-form';
 import * as R from 'ramda';
 import Grid from '@material-ui/core/Grid';
@@ -43,8 +43,7 @@ export interface ISubmittedFormData {
 export interface IProps<ExtraFormData extends Record<string, any> = {}> {
   account: string;
   title: string;
-  disabledSourceInput?: boolean;
-  isNeedToDisableSourceValidation?(values: ExtraFormData & IFormData): boolean;
+  isReadOnlySource?(values: ExtraFormData & IFormData): boolean;
   sourcePlaceholder: string;
   additionalFields?: React.ReactNode[];
   additionalInitialValues?: ExtraFormData;
@@ -66,8 +65,7 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
     title,
     onSubmit,
     onCancel,
-    disabledSourceInput,
-    isNeedToDisableSourceValidation,
+    isReadOnlySource,
     sourcePlaceholder,
     getMaxSourceValue,
     getMinSourceValue,
@@ -128,12 +126,11 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
     );
 
     return (value: string, allValues: Object) => {
-      return isNeedToDisableSourceValidation &&
-        isNeedToDisableSourceValidation(allValues as ExtraFormData & IFormData)
+      return isReadOnlySource && isReadOnlySource(allValues as ExtraFormData & IFormData)
         ? undefined
         : validate(value);
     };
-  }, [maxValue, formatMax, minValue, formatMin, isNeedToDisableSourceValidation]);
+  }, [maxValue, formatMax, minValue, formatMin, isReadOnlySource]);
 
   const initialValues = useMemo<IFormData & ExtraFormData>(
     () => ({
@@ -176,15 +173,19 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
                 </Typography>
 
                 {sourceTokenInfo && (
-                  <DecimalsField
-                    disabled={disabledSourceInput}
-                    maxValue={maxValue}
-                    validate={validateAmount}
-                    baseDecimals={sourceTokenInfo.decimals}
-                    baseUnitName={sourceTokenInfo.symbol}
-                    name={fieldNames.sourceAmount}
-                    placeholder={sourcePlaceholder}
-                  />
+                  <FormSpy subscription={{ values: true }}>
+                    {({ values }: { values: ExtraFormData & IFormData }) => (
+                      <DecimalsField
+                        disabled={isReadOnlySource && isReadOnlySource(values)}
+                        maxValue={maxValue}
+                        validate={validateAmount}
+                        baseDecimals={sourceTokenInfo.decimals}
+                        baseUnitName={sourceTokenInfo.symbol}
+                        name={fieldNames.sourceAmount}
+                        placeholder={sourcePlaceholder}
+                      />
+                    )}
+                  </FormSpy>
                 )}
                 <SpyField
                   name={fieldNames.triggerRevalidateSourceAmount}

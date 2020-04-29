@@ -19,7 +19,15 @@ interface IOwnProps {
 type IProps = IOwnProps & Omit<GetProps<typeof TextInput>, 'ref'>;
 
 function DecimalsInput(props: IProps) {
-  const { onChange, baseDecimals, value, maxValue, baseUnitName, ...restInputProps } = props;
+  const {
+    onChange,
+    baseDecimals,
+    value,
+    maxValue,
+    baseUnitName,
+    disabled,
+    ...restInputProps
+  } = props;
 
   const [suffix, setSuffix] = React.useState('');
 
@@ -63,13 +71,14 @@ function DecimalsInput(props: IProps) {
         <Grid item xs={10}>
           <TextInput
             {...restInputProps}
+            disabled={disabled}
             value={amount}
             variant="outlined"
             fullWidth
             onChange={handleInputChange}
             InputProps={{
               endAdornment: maxValue && (
-                <Button color="primary" onClick={handleMaxButtonClick}>
+                <Button disabled={disabled} color="primary" onClick={handleMaxButtonClick}>
                   MAX
                 </Button>
               ),

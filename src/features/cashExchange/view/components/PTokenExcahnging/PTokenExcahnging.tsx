@@ -19,7 +19,7 @@ import {
 
 export type IProps<ExtraFormData> = Pick<
   PTokenExchangingFormProps<ExtraFormData>,
-  'disabledSourceInput' | 'isNeedToDisableSourceValidation' | 'formCalculations'
+  'isReadOnlySource' | 'formCalculations'
 > & {
   title: string;
   sourcePlaceholder: string;
@@ -49,8 +49,7 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
 ) {
   const {
     title,
-    disabledSourceInput,
-    isNeedToDisableSourceValidation,
+    isReadOnlySource,
     sourcePlaceholder,
     getMaxSourceValue,
     getMinSourceValue,
@@ -103,8 +102,7 @@ function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
             <PTokenExchangingForm<ExtraFormData>
               account={account}
               title={title}
-              disabledSourceInput={disabledSourceInput}
-              isNeedToDisableSourceValidation={isNeedToDisableSourceValidation}
+              isReadOnlySource={isReadOnlySource}
               sourcePlaceholder={sourcePlaceholder}
               getMaxSourceValue={getMaxSourceValue}
               getMinSourceValue={getMinSourceValue}

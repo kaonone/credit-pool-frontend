@@ -113,7 +113,7 @@ function PTokenSellingButton(props: IProps) {
     [],
   );
 
-  const isNeedToDisableSourceValidation = useCallback(
+  const isReadOnlySource = useCallback(
     ({ withdrawMethod }: IExtraFormData) => withdrawMethod === 'yield',
     [],
   );
@@ -159,6 +159,19 @@ function PTokenSellingButton(props: IProps) {
     [defiYield?.toString()],
   );
 
+  const onExchangeRequest = React.useCallback<
+    PTokenExchangingProps<IExtraFormData>['onExchangeRequest']
+  >(
+    async (userAccount, values) => {
+      const hadleByMethod: Record<WithdrawMethod, () => Promise<void>> = {
+        availableBalance: () => api.liquidityModule.sellPtk(userAccount, values),
+        yield: () => api.defiModule.withdrawInterest(userAccount),
+      };
+      return hadleByMethod[values.withdrawMethod]();
+    },
+    [api],
+  );
+
   return (
     <ModalButton
       startIcon={<SellCashIcon />}
@@ -167,15 +180,14 @@ function PTokenSellingButton(props: IProps) {
       {...props}
     >
       {({ closeModal }) => (
-        <PTokenExchanging
+        <PTokenExchanging<IExtraFormData>
           title={t(tKeys.formTitle.getKey())}
-          disabledSourceInput={!defiYield}
-          isNeedToDisableSourceValidation={isNeedToDisableSourceValidation}
+          isReadOnlySource={isReadOnlySource}
           sourcePlaceholder={t(tKeys.placeholder.getKey())}
           getMaxSourceValue={getMaxSourceValue}
           getMinSourceValue={getMinSourceValue}
           confirmMessageTKey={getConfirmMessage}
-          onExchangeRequest={api.liquidityModule.sellPtk}
+          onExchangeRequest={onExchangeRequest}
           onCancel={closeModal}
           additionalFields={additionalFields}
           initialValues={initialValues}
