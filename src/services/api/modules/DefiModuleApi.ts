@@ -41,10 +41,10 @@ export class DefiModuleApi {
   @memoize(R.identity)
   @autobind
   public getAvailableInterest$(account: string): Observable<BN> {
-    return this.readonlyContract.methods.availableInterest(
-      { account },
+    return this.readonlyContract.methods.availableInterest({ account }, [
       this.readonlyContract.events.InvestmentDistributionCreated(),
-    );
+      this.readonlyContract.events.WithdrawInterest({ filter: { account } }),
+    ]);
   }
 
   @autobind
