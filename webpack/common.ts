@@ -7,9 +7,11 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 
+import { getEnv } from '../src/core/getEnv';
+
 const forGhPages = true;
 const pageTitle = 'Credit Pool';
-const isStaging = process.env.IS_STAGING === 'true';
+const { mode } = getEnv();
 
 function sortChunks(a: webpack.compilation.Chunk, b: webpack.compilation.Chunk): number {
   const order = ['app', 'vendors', 'runtime'];
@@ -81,7 +83,7 @@ const config: webpack.Configuration = {
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
-      'process.env.IS_STAGING': JSON.stringify(process.env.IS_STAGING),
+      'process.env.MODE': JSON.stringify(process.env.MODE),
     }),
     new FileManagerWebpackPlugin({
       onEnd: {
@@ -107,7 +109,13 @@ const config: webpack.Configuration = {
             onEnd: {
               copy: [
                 {
-                  source: `assets/${isStaging ? 'ghPageRootStaging' : 'ghPageRoot'}/**`,
+                  source: `assets/${
+                    {
+                      sandbox: 'ghPageRootSandbox',
+                      'beta-defi': 'ghPageRootBetaDefi',
+                      beta: 'ghPageRoot',
+                    }[mode]
+                  }/**`,
                   destination: `build`,
                 },
               ],

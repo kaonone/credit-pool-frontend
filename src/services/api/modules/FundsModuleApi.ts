@@ -125,18 +125,26 @@ export class FundsModuleApi {
   @autobind
   public convertDaiToPtkEnter$(value: string): Observable<BN> {
     const lAmount = new BN(value);
+
     return lAmount.isZero()
       ? of(lAmount)
-      : this.readonlyContract.methods.calculatePoolEnter({ lAmount }, { Status: {} });
+      : this.readonlyContract.methods.calculatePoolEnter(
+          { lAmount, liquidityCorrection: new BN(0) },
+          this.readonlyContract.events.Status(),
+        );
   }
 
   @memoize(R.identity)
   @autobind
   public convertDaiToPtkExit$(value: string): Observable<BN> {
     const lAmount = new BN(value);
+
     return lAmount.isZero()
       ? of(lAmount)
-      : this.readonlyContract.methods.calculatePoolExit({ lAmount }, { Status: {} });
+      : this.readonlyContract.methods.calculatePoolExit(
+          { lAmount },
+          this.readonlyContract.events.Status(),
+        );
   }
 
   @memoize(R.identity)
@@ -146,13 +154,15 @@ export class FundsModuleApi {
 
     return pAmount.isZero()
       ? of({ total: pAmount, user: pAmount, fee: pAmount })
-      : this.readonlyContract.methods.calculatePoolExitInverse({ pAmount }, { Status: {} }).pipe(
-          map(([total, user, fee]) => ({
-            total,
-            user,
-            fee,
-          })),
-        );
+      : this.readonlyContract.methods
+          .calculatePoolExitInverse({ pAmount }, this.readonlyContract.events.Status())
+          .pipe(
+            map(([total, user, fee]) => ({
+              total,
+              user,
+              fee,
+            })),
+          );
   }
 
   /**
@@ -223,7 +233,7 @@ export class FundsModuleApi {
     }
 
     return combineLatest([
-      this.readonlyContract.methods.lBalance(undefined, { Status: {} }),
+      this.readonlyContract.methods.lBalance(undefined, this.readonlyContract.events.Status()),
       this.getTotalLProposals$(),
     ]).pipe(map(([liquidity, totalLProposals]) => liquidity.sub(totalLProposals)));
   }
@@ -231,6 +241,6 @@ export class FundsModuleApi {
   @memoize()
   @autobind
   public getFundsLBalance$(): Observable<BN> {
-    return this.readonlyContract.methods.lBalance(undefined, { Status: {} });
+    return this.readonlyContract.methods.lBalance(undefined, this.readonlyContract.events.Status());
   }
 }

@@ -8,3 +8,7 @@ export interface ITokenInfo {
 export const repaymentMethods = ['fromOwnBalance', 'fromAvailablePoolBalance'] as const;
 
 export type RepaymentMethod = typeof repaymentMethods[number];
+
+export const withdrawMethods = ['availableBalance', 'defiYield'] as const;
+
+export type WithdrawMethod = typeof withdrawMethods[number];

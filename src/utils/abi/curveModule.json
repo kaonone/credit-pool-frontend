@@ -30,7 +30,46 @@
   {
     "constant": true,
     "inputs": [],
+    "name": "MODULE_ACCESS",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "MODULE_CDAI",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
     "name": "MODULE_CURVE",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "MODULE_DEFI",
     "outputs": [{
       "internalType": "string",
       "name": "",
@@ -70,6 +109,32 @@
     "constant": true,
     "inputs": [],
     "name": "MODULE_LOAN",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "MODULE_LOAN_LIMTS",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "MODULE_LOAN_PROPOSALS",
     "outputs": [{
       "internalType": "string",
       "name": "",
@@ -459,6 +524,46 @@
         "type": "uint256"
       }
     ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "liquidAssets",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "calculateExitWithFee",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "lAmount",
+      "type": "uint256"
+    }],
+    "name": "calculateExitFee",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"

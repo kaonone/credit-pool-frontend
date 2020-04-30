@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react';
 import BN from 'bn.js';
-import { Form } from 'react-final-form';
+import { Form, FormSpy } from 'react-final-form';
 import { FORM_ERROR } from 'final-form';
 import * as R from 'ramda';
 import Grid from '@material-ui/core/Grid';
@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Observable } from 'rxjs';
+import createDecorator, { Calculation } from 'final-form-calculate';
 
 import { useTranslate, tKeys as tKeysAll, ITranslateKey } from 'services/i18n';
 import { useApi } from 'services/api';
@@ -22,16 +23,15 @@ import {
   isRequired,
   moreThen,
   moreThenOrEqual,
-  Validator,
 } from 'utils/validators';
 import { useSubscribable, useFormattedBalance } from 'utils/react';
 
 export interface IFormData {
   sourceAmount: string;
-  triggerRevalidateSourceAmount: Validator;
+  triggerRevalidateSourceAmount: (...args: any[]) => any;
 }
 
-const fieldNames: { [K in keyof IFormData]: K } = {
+export const fieldNames: { [K in keyof IFormData]: K } = {
   sourceAmount: 'sourceAmount',
   triggerRevalidateSourceAmount: 'triggerRevalidateSourceAmount',
 };
@@ -40,9 +40,10 @@ export interface ISubmittedFormData {
   sourceAmount: BN;
 }
 
-interface IProps<ExtraFormData extends Record<string, any> = {}> {
+export interface IProps<ExtraFormData extends Record<string, any> = {}> {
   account: string;
   title: string;
+  isReadOnlySource?(values: ExtraFormData & IFormData): boolean;
   sourcePlaceholder: string;
   additionalFields?: React.ReactNode[];
   additionalInitialValues?: ExtraFormData;
@@ -52,7 +53,8 @@ interface IProps<ExtraFormData extends Record<string, any> = {}> {
   onCancel: () => void;
   validateForm?(
     values: ExtraFormData & IFormData,
-  ): { [key in keyof (ExtraFormData & IFormData)]?: ITranslateKey };
+  ): { [key in keyof (ExtraFormData & IFormData)]?: ITranslateKey | null };
+  formCalculations?: Calculation[];
 }
 
 function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
@@ -63,18 +65,24 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
     title,
     onSubmit,
     onCancel,
+    isReadOnlySource,
     sourcePlaceholder,
     getMaxSourceValue,
     getMinSourceValue,
     additionalFields,
     additionalInitialValues = {} as ExtraFormData,
     validateForm,
+    formCalculations,
   } = props;
 
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.cashExchange.exchangingForm;
 
   const api = useApi();
+
+  const decorators = useMemo(() => {
+    return formCalculations ? [createDecorator(...formCalculations)] : undefined;
+  }, [formCalculations]);
 
   const [maxValue] = useSubscribable(() => getMaxSourceValue(account), [
     getMaxSourceValue,
@@ -106,7 +114,7 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
   const formatMin = useCallback(() => formattedMin, [formattedMin]);
 
   const validateAmount = useMemo(() => {
-    return composeValidators(
+    const validate = composeValidators(
       isRequired,
       validateInteger,
       validatePositiveNumber,
@@ -116,7 +124,13 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
       ...(minValue ? [R.curry(moreThenOrEqual)(minValue, R.__, formatMin)] : []),
       /* eslint-enable no-underscore-dangle */
     );
-  }, [maxValue, formatMax, minValue, formatMin]);
+
+    return (value: string, allValues: Object) => {
+      return isReadOnlySource && isReadOnlySource(allValues as ExtraFormData & IFormData)
+        ? undefined
+        : validate(value);
+    };
+  }, [maxValue, formatMax, minValue, formatMin, isReadOnlySource]);
 
   const initialValues = useMemo<IFormData & ExtraFormData>(
     () => ({
@@ -144,6 +158,7 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
   return (
     <Loading meta={sourceTokenInfoMeta}>
       <Form
+        decorators={decorators}
         validate={validateForm}
         onSubmit={handleFormSubmit}
         initialValues={initialValues}
@@ -158,14 +173,19 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
                 </Typography>
 
                 {sourceTokenInfo && (
-                  <DecimalsField
-                    maxValue={maxValue}
-                    validate={validateAmount}
-                    baseDecimals={sourceTokenInfo.decimals}
-                    baseUnitName={sourceTokenInfo.symbol}
-                    name={fieldNames.sourceAmount}
-                    placeholder={sourcePlaceholder}
-                  />
+                  <FormSpy subscription={{ values: true }}>
+                    {({ values }: { values: ExtraFormData & IFormData }) => (
+                      <DecimalsField
+                        disabled={isReadOnlySource && isReadOnlySource(values)}
+                        maxValue={maxValue}
+                        validate={validateAmount}
+                        baseDecimals={sourceTokenInfo.decimals}
+                        baseUnitName={sourceTokenInfo.symbol}
+                        name={fieldNames.sourceAmount}
+                        placeholder={sourcePlaceholder}
+                      />
+                    )}
+                  </FormSpy>
                 )}
                 <SpyField
                   name={fieldNames.triggerRevalidateSourceAmount}

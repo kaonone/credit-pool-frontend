@@ -1,9 +1,11 @@
 import * as packageJson from '../../package.json';
 
+export type Mode = 'sandbox' | 'beta-defi' | 'beta';
+
 export function getEnv() {
   const isProduction = process.env.NODE_ENV === 'production';
   const isDevelopment = process.env.NODE_ENV === 'development';
-  const isStaging = process.env.IS_STAGING === 'true';
+  const mode: Mode = (process.env.MODE as Mode | undefined) || 'beta';
   const forGhPages = true;
   const appVersion = packageJson.version;
   const withHot = !!module.hot && isDevelopment;
@@ -12,7 +14,7 @@ export function getEnv() {
   return {
     isProduction,
     isDevelopment,
-    isStaging,
+    mode,
     forGhPages,
     withHot,
     appVersion,

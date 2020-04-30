@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Button from '@material-ui/core/Button';
 import { switchMap, map } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
@@ -6,18 +6,30 @@ import BN from 'bn.js';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { SellCashIcon } from 'components/icons';
-import { ModalButton } from 'components/ModalButton/ModalButton';
 import { useSubscribable } from 'utils/react';
 import { zeroAddress } from 'utils/mock';
 import { formatBalance } from 'utils/format';
+import { WithdrawMethod, withdrawMethods } from 'model/types';
+import { FormControlLabel, Radio, ModalButton } from 'components';
+import { RadioGroupInputField } from 'components/form';
+import { SellCashIcon } from 'components/icons';
 
 import {
   PTokenExchanging,
   ISubmittedFormData,
+  IProps as PTokenExchangingProps,
+  fieldNames as baseFieldNames,
 } from '../../components/PTokenExcahnging/PTokenExcahnging';
 
 type IProps = React.ComponentPropsWithoutRef<typeof Button>;
+
+interface IExtraFormData {
+  withdrawMethod: WithdrawMethod;
+}
+
+const fieldNames: { [K in keyof IExtraFormData]: K } = {
+  withdrawMethod: 'withdrawMethod',
+};
 
 const tKeys = tKeysAll.features.cashExchange.pTokenSellingButton;
 
@@ -94,6 +106,74 @@ function PTokenSellingButton(props: IProps) {
     [daiTokenInfo, account],
   );
 
+  const initialValues = useMemo<IExtraFormData>(
+    () => ({
+      withdrawMethod: 'availableBalance',
+    }),
+    [],
+  );
+
+  const isReadOnlySource = useCallback(
+    ({ withdrawMethod }: IExtraFormData) => withdrawMethod === 'defiYield',
+    [],
+  );
+
+  const [defiYield] = useSubscribable(
+    () => api.defiModule.getAvailableInterest$(account || zeroAddress),
+    [api, account],
+  );
+
+  const formCalculations: PTokenExchangingProps<IExtraFormData>['formCalculations'] = useMemo(
+    () => [
+      {
+        field: fieldNames.withdrawMethod,
+        updates: {
+          [baseFieldNames.sourceAmount]: (
+            withdrawMethodValue: WithdrawMethod,
+            allValues: Object | undefined,
+          ) => {
+            const defaultValue =
+              allValues && (allValues as Record<string, string>)[baseFieldNames.sourceAmount];
+            return withdrawMethodValue === 'defiYield'
+              ? defiYield?.toString() || '0'
+              : defaultValue;
+          },
+        },
+      },
+    ],
+    [defiYield?.toString()],
+  );
+
+  const additionalFields = useMemo(
+    () => [
+      <RadioGroupInputField name={fieldNames.withdrawMethod}>
+        {withdrawMethods.map(value => (
+          <FormControlLabel
+            disabled={value === 'defiYield' && !defiYield}
+            key={value}
+            value={value}
+            control={<Radio color="primary" />}
+            label={t(tKeys.fields.withdrawMethod[value].getKey())}
+          />
+        ))}
+      </RadioGroupInputField>,
+    ],
+    [defiYield?.toString()],
+  );
+
+  const onExchangeRequest = React.useCallback<
+    PTokenExchangingProps<IExtraFormData>['onExchangeRequest']
+  >(
+    async (userAccount, values) => {
+      const hadleByMethod: Record<WithdrawMethod, () => Promise<void>> = {
+        availableBalance: () => api.liquidityModule.sellPtk(userAccount, values),
+        defiYield: () => api.defiModule.withdrawInterest(userAccount),
+      };
+      return hadleByMethod[values.withdrawMethod]();
+    },
+    [api],
+  );
+
   return (
     <ModalButton
       startIcon={<SellCashIcon />}
@@ -102,14 +182,18 @@ function PTokenSellingButton(props: IProps) {
       {...props}
     >
       {({ closeModal }) => (
-        <PTokenExchanging
+        <PTokenExchanging<IExtraFormData>
           title={t(tKeys.formTitle.getKey())}
+          isReadOnlySource={isReadOnlySource}
           sourcePlaceholder={t(tKeys.placeholder.getKey())}
           getMaxSourceValue={getMaxSourceValue}
           getMinSourceValue={getMinSourceValue}
           confirmMessageTKey={getConfirmMessage}
-          onExchangeRequest={api.liquidityModule.sellPtk}
+          onExchangeRequest={onExchangeRequest}
           onCancel={closeModal}
+          additionalFields={additionalFields}
+          initialValues={initialValues}
+          formCalculations={formCalculations}
         />
       )}
     </ModalButton>
