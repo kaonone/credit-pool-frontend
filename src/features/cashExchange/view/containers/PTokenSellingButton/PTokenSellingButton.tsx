@@ -114,7 +114,7 @@ function PTokenSellingButton(props: IProps) {
   );
 
   const isReadOnlySource = useCallback(
-    ({ withdrawMethod }: IExtraFormData) => withdrawMethod === 'yield',
+    ({ withdrawMethod }: IExtraFormData) => withdrawMethod === 'defiYield',
     [],
   );
 
@@ -134,7 +134,9 @@ function PTokenSellingButton(props: IProps) {
           ) => {
             const defaultValue =
               allValues && (allValues as Record<string, string>)[baseFieldNames.sourceAmount];
-            return withdrawMethodValue === 'yield' ? defiYield?.toString() || '0' : defaultValue;
+            return withdrawMethodValue === 'defiYield'
+              ? defiYield?.toString() || '0'
+              : defaultValue;
           },
         },
       },
@@ -147,7 +149,7 @@ function PTokenSellingButton(props: IProps) {
       <RadioGroupInputField name={fieldNames.withdrawMethod}>
         {withdrawMethods.map(value => (
           <FormControlLabel
-            disabled={value === 'yield' && !defiYield}
+            disabled={value === 'defiYield' && !defiYield}
             key={value}
             value={value}
             control={<Radio color="primary" />}
@@ -165,7 +167,7 @@ function PTokenSellingButton(props: IProps) {
     async (userAccount, values) => {
       const hadleByMethod: Record<WithdrawMethod, () => Promise<void>> = {
         availableBalance: () => api.liquidityModule.sellPtk(userAccount, values),
-        yield: () => api.defiModule.withdrawInterest(userAccount),
+        defiYield: () => api.defiModule.withdrawInterest(userAccount),
       };
       return hadleByMethod[values.withdrawMethod]();
     },

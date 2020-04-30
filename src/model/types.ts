@@ -9,6 +9,6 @@ export const repaymentMethods = ['fromOwnBalance', 'fromAvailablePoolBalance'] a
 
 export type RepaymentMethod = typeof repaymentMethods[number];
 
-export const withdrawMethods = ['availableBalance', 'yield'] as const;
+export const withdrawMethods = ['availableBalance', 'defiYield'] as const;
 
 export type WithdrawMethod = typeof withdrawMethods[number];

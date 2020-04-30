@@ -96,7 +96,7 @@ function PersonalMetrics(props: Props) {
           value={currentProfit.toString()}
           token="dai"
         />
-        <CashMetric title={t(tKeys.yield.getKey())} value={defiYield.toString()} token="dai" />
+        <CashMetric title={t(tKeys.defiYield.getKey())} value={defiYield.toString()} token="dai" />
         <CashMetric title={t(tKeys.credit.getKey())} value={lCredit.toString()} token="dai" />
       </MetricsList>
     </Loading>

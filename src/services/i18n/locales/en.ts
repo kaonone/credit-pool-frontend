@@ -108,7 +108,7 @@ const en = {
         fields: {
           withdrawMethod: {
             availableBalance: 'from available pool balance',
-            yield: 'from investment yield',
+            defiYield: 'from investment yield',
           },
         },
         confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
@@ -185,7 +185,7 @@ const en = {
       deposit: 'Deposit',
       availableBalance: 'Available balance',
       currentProfit: 'Profit',
-      yield: 'Yield',
+      defiYield: 'Yield',
       locked: 'Locked',
       credit: 'Current loans',
     },
