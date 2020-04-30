@@ -29,7 +29,7 @@ deploy:
     skip-cleanup: true
     github-token: $GITHUB_TOKEN
     local-dir: "./build"
-    repo: akropolisio/credit-pool-frontend-v2
+    repo: akropolisio/credit-pool-frontend-sandbox
     on:
       branch: sandbox
 

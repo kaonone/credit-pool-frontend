@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { GetProps } from '_helpers';
 import Dialog, { DialogProps } from '@material-ui/core/Dialog';
+import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 import DialogContent from '@material-ui/core/DialogContent';
 
-import { makeStyles } from 'utils/styles';
+import { makeStyles, WithDarkTheme } from 'utils/styles';
 
 interface IChildrenProps {
   closeModal(): void;
@@ -16,14 +17,15 @@ type ButtonProps = Pick<
 >;
 
 interface IProps extends ButtonProps {
+  modalType?: 'drawer' | 'dialog';
   dialogMaxWidth?: DialogProps['maxWidth'];
   content: React.ReactNode;
-  children: (props: IChildrenProps) => React.ReactNode;
+  children: React.ReactNode | ((props: IChildrenProps) => React.ReactNode);
 }
 
 function ModalButton(props: IProps) {
   const classes = useStyles();
-  const { children, content, dialogMaxWidth, ...rest } = props;
+  const { children, content, dialogMaxWidth, modalType = 'drawer', ...rest } = props;
   const [isOpened, setIsOpened] = React.useState(false);
 
   const openModal = React.useCallback(() => setIsOpened(true), []);
@@ -34,11 +36,20 @@ function ModalButton(props: IProps) {
       <Button {...rest} onClick={openModal}>
         {content}
       </Button>
-      <Dialog fullWidth maxWidth={dialogMaxWidth || 'sm'} open={isOpened} onClose={closeModal}>
-        <DialogContent className={classes.dialogContent}>
-          {typeof children === 'function' ? children({ closeModal }) : children}
-        </DialogContent>
-      </Dialog>
+      {modalType === 'dialog' && (
+        <Dialog fullWidth maxWidth={dialogMaxWidth || 'sm'} open={isOpened} onClose={closeModal}>
+          <DialogContent className={classes.dialogContent}>
+            {typeof children === 'function' ? children({ closeModal }) : children}
+          </DialogContent>
+        </Dialog>
+      )}
+      {modalType === 'drawer' && (
+        <WithDarkTheme>
+          <Drawer open={isOpened} anchor="right" onClose={closeModal}>
+            {typeof children === 'function' ? children({ closeModal }) : children}
+          </Drawer>
+        </WithDarkTheme>
+      )}
     </>
   );
 }

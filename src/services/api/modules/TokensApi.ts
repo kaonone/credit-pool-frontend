@@ -80,6 +80,14 @@ export class TokensApi {
     );
   }
 
+  @memoize(R.identity)
+  @autobind
+  public getTotalSupply$(token: Token): Observable<BN> {
+    return this.readonlyContracts[token].methods.totalSupply(undefined, {
+      Transfer: {},
+    });
+  }
+
   @autobind
   public async withdrawUnclaimedDistributions(fromAddress: string): Promise<void> {
     const txContracts = getCurrentValueOrThrow(this.txContracts);

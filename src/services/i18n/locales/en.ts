@@ -17,9 +17,15 @@ const en = {
     },
     components: {
       header: {
+        apr: 'Pool APR (Coming soon)',
+        availableBalance: 'Supply',
+        depositPlusWithdraw24Volume: '24 volume',
+        distributed: 'Total distributed (Coming soon)',
+        issued: 'Loans',
+        members: 'Members',
+        shares: 'Shares',
         total: 'Total',
-        availableBalance: 'Available balance',
-        issued: 'Issued loans',
+        yield: 'Yield (Coming soon)',
       },
     },
   },
@@ -90,15 +96,15 @@ const en = {
       },
     },
     cashExchange: {
-      pTokenBuyingButton: {
-        buttonTitle: 'Deposit',
-        formTitle: 'Deposit to Pool',
+      pTokenBuying: {
+        buttonTitle: 'Buy',
+        formTitle: 'Buy share',
         placeholder: 'Enter sum',
         confirmMessage: 'Are you sure you want deposit %{sourceAmount}?',
       },
       pTokenSellingButton: {
-        buttonTitle: 'Withdraw',
-        formTitle: 'Withdraw from Pool',
+        buttonTitle: 'Sell',
+        formTitle: 'Sell share',
         placeholder: 'Enter sum',
         confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
         interestConfirmation:
@@ -133,7 +139,7 @@ const en = {
         insufficientBalanceError: 'Insufficient balance. You have only %{value}.',
       },
       getLoanButton: {
-        buttonTitle: 'Get loan',
+        buttonTitle: 'Borrow',
         formTitle: 'Get loan',
         amountPlaceholder: 'Enter sum',
         amountLabel: 'Loan sum',
@@ -178,6 +184,20 @@ const en = {
       credit: 'Current loans',
     },
     distributions: {
+      claimsList: {
+        notFound: 'Claims not found',
+        date: 'Date',
+        address: 'Address',
+        claimed: 'Claimed',
+      },
+      eventsList: {
+        notFound: 'Distributions not found',
+        date: 'Date',
+        distribution: 'Distribution',
+        claimed: 'Claimed',
+        members: 'Members',
+        showClaimsButton: 'Show claims',
+      },
       accumulated: 'Accumulated',
       untilTheNextDistribution: 'Time to Next Distribution',
       awaitingDistribution: 'Awaiting distribution',

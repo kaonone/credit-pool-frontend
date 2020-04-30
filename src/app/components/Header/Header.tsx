@@ -3,8 +3,6 @@ import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 
 import { Back, InfoIcon } from 'components/icons';
 import { Grid, IconButton, Typography, Tooltip, Button } from 'components';
-import { PersonalMetrics } from 'features/personalInformation';
-import { PTokenBuyingButton, PTokenSellingButton } from 'features/cashExchange';
 import { AuthButton } from 'features/auth';
 
 import { useStyles } from './Header.style';
@@ -60,24 +58,6 @@ function HeaderComponent(props: IProps) {
             </Grid>
             <Grid item>
               <AuthButton color="secondary" />
-            </Grid>
-          </Grid>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Grid container alignItems="center" justify="space-between" spacing={2}>
-            <Grid item>
-              <PersonalMetrics withDividers orientation="horizontal" />
-            </Grid>
-            <Grid item>
-              <Grid container spacing={2} alignItems="center">
-                <Grid item>
-                  <PTokenSellingButton size="large" color="secondary" variant="contained" />
-                </Grid>
-                <Grid item>
-                  <PTokenBuyingButton size="large" color="secondary" variant="contained" />
-                </Grid>
-              </Grid>
             </Grid>
           </Grid>
         </Grid>

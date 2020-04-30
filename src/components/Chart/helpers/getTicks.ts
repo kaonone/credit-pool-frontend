@@ -4,7 +4,7 @@ import * as d3Scale from 'd3-scale';
 
 import { Period, IPoint } from '../Chart';
 
-const POINTS_LENGTH = 14;
+const POINTS_LENGTH = 21;
 
 export function getTicks<P extends IPoint>(
   points: P[],

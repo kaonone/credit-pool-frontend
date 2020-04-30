@@ -12,7 +12,7 @@ describe('formatBalance', (): void => {
         baseDecimals: 0,
         tokenSymbol: 'Unit',
       }),
-    ).toEqual('0');
+    ).toEqual('0 Unit');
   });
 
   it('formats 123,456,789,000 (decimals=15)', (): void => {

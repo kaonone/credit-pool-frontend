@@ -75,6 +75,7 @@ export class LoanModuleApi {
     collateralToDebtRatio: BN;
     collateralToDebtRatioMultiplier: BN;
     debtLoadMultiplier: BN;
+    debtInterestMultiplier: BN;
   }> {
     return combineLatest([
       this.readonlyContract.methods.limits(),
@@ -82,6 +83,7 @@ export class LoanModuleApi {
       this.readonlyContract.methods.COLLATERAL_TO_DEBT_RATIO(),
       this.readonlyContract.methods.COLLATERAL_TO_DEBT_RATIO_MULTIPLIER(),
       this.readonlyContract.methods.DEBT_LOAD_MULTIPLIER(),
+      this.readonlyContract.methods.PLEDGE_PERCENT_MULTIPLIER(),
     ]).pipe(
       map(
         ([
@@ -90,6 +92,7 @@ export class LoanModuleApi {
           collateralToDebtRatio,
           collateralToDebtRatioMultiplier,
           debtLoadMultiplier,
+          debtInterestMultiplier,
         ]) => ({
           limits: {
             lDebtAmountMin,
@@ -102,6 +105,7 @@ export class LoanModuleApi {
           collateralToDebtRatio,
           collateralToDebtRatioMultiplier,
           debtLoadMultiplier,
+          debtInterestMultiplier,
         }),
       ),
     );

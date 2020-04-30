@@ -1,8 +1,8 @@
 import { makeStyles, Theme, colors } from 'utils/styles';
 
 export const useStyles = makeStyles((theme: Theme) => {
-  const graphicMarginBottom = theme.spacing(3);
-  const switchButtonsHeight = 40;
+  const graphicMarginBottom = theme.spacing(1);
+  const switchButtonsHeight = 25;
   const graphicHeight = `calc(100% - ${graphicMarginBottom}px - ${switchButtonsHeight}px)`;
 
   return {

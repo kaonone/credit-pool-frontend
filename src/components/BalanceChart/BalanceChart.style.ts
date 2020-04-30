@@ -43,6 +43,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
   graphic: {
     width: '100%',
     marginTop: theme.spacing(2),
-    height: '290px',
+    height: '270px',
   },
 }));
