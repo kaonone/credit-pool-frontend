@@ -1,7 +1,7 @@
 branches:
   only:
     - beta
-    - v2
+    - sandbox
 
 language: node_js
 node_js:
@@ -13,10 +13,10 @@ script: skip
 before_deploy:
   - yarn
   - if [ "$TRAVIS_BRANCH" = "beta" ]; then yarn codegen; fi
-  - if [ "$TRAVIS_BRANCH" = "v2" ]; then yarn codegen:staging; fi
+  - if [ "$TRAVIS_BRANCH" = "sandbox" ]; then yarn codegen:staging; fi
   - yarn test
   - if [ "$TRAVIS_BRANCH" = "beta" ]; then yarn build; fi
-  - if [ "$TRAVIS_BRANCH" = "v2" ]; then yarn build:staging; fi
+  - if [ "$TRAVIS_BRANCH" = "sandbox" ]; then yarn build:staging; fi
 
 deploy:
   - provider: pages
@@ -29,9 +29,9 @@ deploy:
     skip-cleanup: true
     github-token: $GITHUB_TOKEN
     local-dir: "./build"
-    repo: akropolisio/credit-pool-frontend-v2
+    repo: akropolisio/credit-pool-frontend-sandbox
     on:
-      branch: v2
+      branch: sandbox
 
 notifications:
   slack: akropolisio:xUhLQpSGEoBylmWK3DW8Kblm
