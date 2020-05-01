@@ -8,7 +8,7 @@ import { MyStakeCost } from 'features/stake';
 import { StakeButton, UnstakeButton } from 'features/cashExchange';
 import { CashMetric, Metric, ShortAddress, ActivitiesCard, Loading } from 'components';
 import { LendIcon } from 'components/icons';
-import { getPledgeId, calcInterestShare } from 'model';
+import { getPledgeId } from 'model';
 import { useSubscribable } from 'utils/react';
 import { formatBalance } from 'utils/format';
 import { Status, usePledgeSubscription } from 'generated/gql/pool';
@@ -56,16 +56,11 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
     },
   });
   const pledgePLocked = new BN(pledgeGqlResult.data?.pledge?.pLocked || '0');
-  const pledgeLInitialLocked = new BN(pledgeGqlResult.data?.pledge?.lInitialLocked || '0');
   const needToShowUnstake = pledgePLocked.gtn(0);
 
-  const [fullLoanStake, fullLoanStakeMeta] = useSubscribable(
-    () => api.loanModule.calculateFullLoanStake$(lendValue),
-    [lendValue],
-  );
-  const interestShareDecimals = 2;
-  const rawInterestShareDelta =
-    fullLoanStake && calcInterestShare(pledgeLInitialLocked, fullLoanStake, interestShareDecimals);
+  const [fullLoanStake] = useSubscribable(() => api.loanModule.calculateFullLoanStake$(lendValue), [
+    lendValue,
+  ]);
 
   const metricsList = React.useMemo(
     () => [
@@ -111,15 +106,18 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
       lendValue,
       borrower,
       aprValue,
-      stakedValue,
       aprDecimals,
-      rawInterestShareDelta,
       aprDecimalsMeta,
-      fullLoanStakeMeta,
+      account,
+      accountMeta,
+      status,
+      proposalId,
     ],
   );
 
-  const rawProgressInPercents = new BN(stakedValue).muln(10000).div(new BN(lendValue));
+  const rawProgressInPercents = fullLoanStake
+    ? new BN(stakedValue).muln(10000).div(fullLoanStake)
+    : new BN(0);
   const progressInPercents = Math.min(100, rawProgressInPercents.toNumber() / 100);
   const isMyProposal = !!account && account.toLowerCase() === borrower.toLowerCase();
 
