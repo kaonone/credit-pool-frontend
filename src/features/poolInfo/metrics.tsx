@@ -7,6 +7,7 @@ import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { usePoolMetricsSubscription, usePoolMetricByDateSubscription } from 'generated/gql/pool';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
+import { useAvgPoolAPR } from 'model/hooks';
 
 const tKeys = tKeysAll.app.components.header;
 
@@ -84,13 +85,17 @@ export function Loans() {
   );
 }
 
-// TODO use real data
 export function Apr() {
   const { t } = useTranslate();
 
+  const avgPoolGqlResult = useAvgPoolAPR();
+
   return (
-    <Loading gqlResults={[]}>
-      <Metric title={t(tKeys.apr.getKey())} value="—" />
+    <Loading gqlResults={avgPoolGqlResult}>
+      <Metric
+        title={t(tKeys.apr.getKey())}
+        value={`~${avgPoolGqlResult.data?.formattedApr || 'unknown'}%`}
+      />
     </Loading>
   );
 }

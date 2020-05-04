@@ -17,7 +17,7 @@ const en = {
     },
     components: {
       header: {
-        apr: 'Pool APR (Coming soon)',
+        apr: 'Pool APR',
         availableBalance: 'Supply',
         depositPlusWithdraw24Volume: '24 volume',
         distributed: 'Total distributed (Coming soon)',

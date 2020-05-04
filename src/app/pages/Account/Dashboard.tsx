@@ -7,6 +7,8 @@ import { PTokenBuyingButton, PTokenSellingButton } from 'features/cashExchange';
 import { WithdrawDistributionsButton } from 'features/distibutions';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
+import { zeroAddress } from 'utils/mock';
+import { useAvgPoolAPR } from 'model/hooks';
 
 import { AccountMetricCard } from './AccountMetricCard';
 
@@ -17,21 +19,45 @@ export function Dashboard() {
         <Balance />
       </Grid>
       <Grid item xs={4}>
-        <AccountMetricCard
-          title="Yield (Coming soon)"
-          primaryMetric="$0"
-          secondaryMetric="~0% APR"
-          actionButtons={[
-            <Button disabled fullWidth color="primary" variant="contained">
-              Withdraw
-            </Button>,
-          ]}
-        />
+        <DefiYield />
       </Grid>
       <Grid item xs={4}>
         <Distribution />
       </Grid>
     </Grid>
+  );
+}
+
+function DefiYield() {
+  const api = useApi();
+  const [account] = useSubscribable(() => api.web3Manager.account, []);
+
+  const [defiYield, defiYieldMeta] = useSubscribable(
+    () => api.defiModule.getAvailableInterest$(account || zeroAddress),
+    [api, account],
+  );
+
+  const avgPoolGqlResult = useAvgPoolAPR();
+
+  return (
+    <AccountMetricCard
+      title="Yield"
+      primaryMetric={
+        <Loading meta={defiYieldMeta}>
+          {defiYield && <FormattedBalance sum={defiYield.toString()} token="dai" />}
+        </Loading>
+      }
+      secondaryMetric={
+        <Loading gqlResults={avgPoolGqlResult}>
+          ~{avgPoolGqlResult.data?.formattedApr || 'unknown'}% APR
+        </Loading>
+      }
+      actionButtons={[
+        <Button disabled fullWidth color="primary" variant="contained">
+          Withdraw
+        </Button>,
+      ]}
+    />
   );
 }
 
