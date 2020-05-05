@@ -2,8 +2,12 @@ import React from 'react';
 import BN from 'bn.js';
 import { of } from 'rxjs';
 
-import { Grid, Button, Loading, FormattedBalance } from 'components';
-import { PTokenBuyingButton, PTokenSellingButton } from 'features/cashExchange';
+import { Grid, Loading, FormattedBalance } from 'components';
+import {
+  PTokenBuyingButton,
+  PTokenSellingButton,
+  WithdrawDefiYieldButton,
+} from 'features/cashExchange';
 import { WithdrawDistributionsButton } from 'features/distibutions';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
@@ -52,11 +56,7 @@ function DefiYield() {
           ~{avgPoolGqlResult.data?.formattedApr || 'unknown'}% APR
         </Loading>
       }
-      actionButtons={[
-        <Button disabled fullWidth color="primary" variant="contained">
-          Withdraw
-        </Button>,
-      ]}
+      actionButtons={[<WithdrawDefiYieldButton fullWidth color="primary" variant="contained" />]}
     />
   );
 }
