@@ -4,7 +4,7 @@ import BN from 'bn.js';
 import { Debt, Status, usePledgeSubscription } from 'generated/gql/pool';
 import { isEqualHex } from 'utils/hex';
 import { bnToBn } from 'utils/bn';
-import { Grid, Loading, Hint } from 'components';
+import { Grid, Loading } from 'components';
 import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
 import { getLoanDuePaymentDate, getPledgeId } from 'model';
@@ -66,7 +66,6 @@ export function ActionsCell({ debt, account }: IProps) {
     color: 'primary',
     size: 'small',
     fullWidth: true,
-    children: () => <Hint>Coming soon</Hint>,
   } as const;
 
   const actions = [

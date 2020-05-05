@@ -1,6 +1,30 @@
 [{
     "anonymous": false,
     "inputs": [{
+        "indexed": false,
+        "internalType": "enum ILoanLimitsModule.LoanLimitType",
+        "name": "limitType",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "oldValue",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "LimitChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -30,7 +54,72 @@
   {
     "constant": true,
     "inputs": [],
+    "name": "DEBT_LOAD_MULTIPLIER",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "INTEREST_MULTIPLIER",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "MODULE_ACCESS",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "MODULE_CDAI",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
     "name": "MODULE_CURVE",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "MODULE_DEFI",
     "outputs": [{
       "internalType": "string",
       "name": "",
@@ -82,6 +171,32 @@
   {
     "constant": true,
     "inputs": [],
+    "name": "MODULE_LOAN_LIMTS",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "MODULE_LOAN_PROPOSALS",
+    "outputs": [{
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
     "name": "MODULE_LTOKEN",
     "outputs": [{
       "internalType": "string",
@@ -108,124 +223,7 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "PERCENT_DIVIDER",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-        "internalType": "uint256",
-        "name": "liquidAssets",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "debtCommitments",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "calculateEnter",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-        "internalType": "uint256",
-        "name": "liquidAssets",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "calculateExit",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-        "internalType": "uint256",
-        "name": "liquidAssets",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "pAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "calculateExitInverse",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "curveA",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "curveB",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "s",
-      "type": "uint256"
-    }],
-    "name": "curveFunction",
+    "name": "PLEDGE_PERCENT_MULTIPLIER",
     "outputs": [{
       "internalType": "uint256",
       "name": "",
@@ -247,23 +245,6 @@
       "internalType": "address",
       "name": "",
       "type": "address"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "internalType": "uint256",
-      "name": "x",
-      "type": "uint256"
-    }],
-    "name": "inverseCurveFunction",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
     }],
     "payable": false,
     "stateMutability": "view",
@@ -344,28 +325,6 @@
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "withdrawFeePercent",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "initialize",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": false,
     "inputs": [{
       "internalType": "address",
@@ -380,17 +339,7 @@
   },
   {
     "constant": false,
-    "inputs": [{
-        "internalType": "uint256",
-        "name": "_curveA",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_curveB",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [],
     "name": "initialize",
     "outputs": [],
     "payable": false,
@@ -400,30 +349,17 @@
   {
     "constant": false,
     "inputs": [{
-      "internalType": "uint256",
-      "name": "_withdrawFeePercent",
-      "type": "uint256"
-    }],
-    "name": "setWithdrawFee",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "internalType": "uint256",
-        "name": "_curveA",
-        "type": "uint256"
+        "internalType": "enum ILoanLimitsModule.LoanLimitType",
+        "name": "limit",
+        "type": "uint8"
       },
       {
         "internalType": "uint256",
-        "name": "_curveB",
+        "name": "value",
         "type": "uint256"
       }
     ],
-    "name": "setCurveParams",
+    "name": "set",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -432,30 +368,148 @@
   {
     "constant": true,
     "inputs": [{
-        "internalType": "uint256",
-        "name": "liquidAssets",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "pAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "calculateExitInverseWithFee",
+      "internalType": "enum ILoanLimitsModule.LoanLimitType",
+      "name": "limit",
+      "type": "uint8"
+    }],
+    "name": "get",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "lDebtAmountMin",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "debtInterestMin",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "pledgePercentMin",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "lMinPledgeMax",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "debtLoadMax",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "maxOpenProposalsPerUser",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "minCancelProposalTimeout",
+    "outputs": [{
+      "internalType": "uint256",
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "allLimits",
     "outputs": [{
         "internalType": "uint256",
-        "name": "withdraw",
+        "name": "",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "withdrawU",
+        "name": "",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "withdrawP",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],

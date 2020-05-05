@@ -6,19 +6,25 @@ import { BehaviorSubject } from 'rxjs';
 import {
   createErc20,
   createFundsModule,
+  createDeFiModule,
   createLiquidityModule,
   createLoanModule,
   createCurveModule,
-  createDistributionToken,
+  createPToken,
+  createLoanLimitsModule,
+  createLoanProposalsModule,
 } from 'generated/contracts';
 
 export type Contracts = {
   dai: ReturnType<typeof createErc20>;
-  ptk: ReturnType<typeof createDistributionToken>;
+  ptk: ReturnType<typeof createPToken>;
   fundsModule: ReturnType<typeof createFundsModule>;
   liquidityModule: ReturnType<typeof createLiquidityModule>;
   loanModule: ReturnType<typeof createLoanModule>;
+  loanLimitsModule: ReturnType<typeof createLoanLimitsModule>;
+  loanProposalsModule: ReturnType<typeof createLoanProposalsModule>;
   curveModule: ReturnType<typeof createCurveModule>;
+  defiModule: ReturnType<typeof createDeFiModule>;
 };
 
 export type SubmittedTransaction =
@@ -26,6 +32,7 @@ export type SubmittedTransaction =
   | IGenericSubmittedTransaction<'dai.approve', { spender: string; fromAddress: string; value: BN }>
   | IGenericSubmittedTransaction<'liquidity.sellPtk', { address: string; sourceAmount: BN }>
   | IGenericSubmittedTransaction<'liquidity.buyPtk', { address: string; sourceAmount: BN }>
+  | IGenericSubmittedTransaction<'defi.withdrawInterest', { address: string }>
   | IGenericSubmittedTransaction<'loan.addPledge', { address: string; sourceAmount: BN }>
   | IGenericSubmittedTransaction<'loan.unstakePledge', { address: string; sourceAmount: BN }>
   | IGenericSubmittedTransaction<

@@ -43,6 +43,12 @@ function PersonalMetrics(props: Props) {
     { user: new BN(0) },
   );
 
+  const [defiYield, defiYieldMeta] = useSubscribable(
+    () => api.defiModule.getAvailableInterest$(account || zeroAddress),
+    [api, account],
+    new BN(0),
+  );
+
   const [unclaimedDistributions, unclaimedDistributionsMeta] = useSubscribable(
     () => api.tokens.getUnclaimedDistributions$(account || zeroAddress),
     [account],
@@ -71,7 +77,13 @@ function PersonalMetrics(props: Props) {
   return (
     <Loading
       gqlResults={myUserResult}
-      meta={[accountMeta, lAvailableBalanceMeta, unclaimedDistributionsMeta, lIncreasingMeta]}
+      meta={[
+        accountMeta,
+        lAvailableBalanceMeta,
+        unclaimedDistributionsMeta,
+        lIncreasingMeta,
+        defiYieldMeta,
+      ]}
     >
       <MetricsList {...props}>
         <CashMetric
@@ -84,6 +96,7 @@ function PersonalMetrics(props: Props) {
           value={currentProfit.toString()}
           token="dai"
         />
+        <CashMetric title={t(tKeys.defiYield.getKey())} value={defiYield.toString()} token="dai" />
         <CashMetric title={t(tKeys.credit.getKey())} value={lCredit.toString()} token="dai" />
       </MetricsList>
     </Loading>

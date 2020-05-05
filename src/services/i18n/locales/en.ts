@@ -17,7 +17,7 @@ const en = {
     },
     components: {
       header: {
-        apr: 'Pool APR (Coming soon)',
+        apr: 'Pool APR',
         availableBalance: 'Supply',
         depositPlusWithdraw24Volume: '24 volume',
         distributed: 'Total distributed (Coming soon)',
@@ -53,6 +53,11 @@ const en = {
         pending: 'Transferring %{amount} to the pool. Pending',
         success: 'Transferring %{amount} to the pool. Successful',
         error: 'Transferring %{amount} to the pool. Failed',
+      },
+      'defi.withdrawInterest': {
+        pending: 'Withdrawing yield. Pending',
+        success: 'Withdrawing yield. Successful',
+        error: 'Withdrawing yield. Failed',
       },
       'loan.addPledge': {
         pending: 'Adding pledge for the loan. Pending',
@@ -106,6 +111,12 @@ const en = {
         buttonTitle: 'Sell',
         formTitle: 'Sell share',
         placeholder: 'Enter sum',
+        fields: {
+          withdrawMethod: {
+            availableBalance: 'from available pool balance',
+            defiYield: 'from investment yield',
+          },
+        },
         confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
         interestConfirmation:
           ' Additional ~%{interestAmount} will be deducted from your available balance as a payment for the the accumulated interest on your outstanding loans. Full amount to be written off from your available balance will be ~%{fullAmount}.',
@@ -154,6 +165,11 @@ const en = {
         confirmMessage:
           'Are you sure you want to activate a loan? Please note that your loan will be transferred directly to your wallet.',
       },
+      withdrawDefiYieldButton: {
+        buttonTitle: 'Withdraw',
+        confirmMessage:
+          'Are you sure you want to withdraw %{amount} from yield? Please note that your yield will be transferred directly to your wallet.',
+      },
       cancelProposalButton: {
         confirmMessage: 'Are you sure you want to cancel a loan proposal?',
       },
@@ -179,7 +195,8 @@ const en = {
     personalInformation: {
       deposit: 'Deposit',
       availableBalance: 'Available balance',
-      currentProfit: 'Yield',
+      currentProfit: 'Profit',
+      defiYield: 'Yield',
       locked: 'Locked',
       credit: 'Current loans',
     },

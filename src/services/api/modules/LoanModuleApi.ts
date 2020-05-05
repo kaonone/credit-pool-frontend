@@ -7,7 +7,11 @@ import PromiEvent from 'web3/promiEvent';
 
 import { min, bnToBn, max, decimalsToWei } from 'utils/bn';
 import { memoize } from 'utils/decorators';
-import { createLoanModule } from 'generated/contracts';
+import {
+  createLoanModule,
+  createLoanLimitsModule,
+  createLoanProposalsModule,
+} from 'generated/contracts';
 import {
   ETH_NETWORK_CONFIG,
   MIN_COLLATERAL_PERCENT_FOR_BORROWER,
@@ -38,8 +42,17 @@ function first<T>(input: Observable<T>): Promise<T> {
 }
 
 export class LoanModuleApi {
-  private readonlyContract: Contracts['loanModule'];
-  private txContract = new BehaviorSubject<null | Contracts['loanModule']>(null);
+  private readonlyContracts: {
+    loan: Contracts['loanModule'];
+    limits: Contracts['loanLimitsModule'];
+    proposals: Contracts['loanProposalsModule'];
+  };
+
+  private txContracts = {
+    loan: new BehaviorSubject<null | Contracts['loanModule']>(null),
+    limits: new BehaviorSubject<null | Contracts['loanLimitsModule']>(null),
+    proposals: new BehaviorSubject<null | Contracts['loanProposalsModule']>(null),
+  };
 
   constructor(
     private web3Manager: Web3ManagerModule,
@@ -49,16 +62,39 @@ export class LoanModuleApi {
     private swarmApi: SwarmApi,
     private curveModuleApi: CurveModuleApi,
   ) {
-    this.readonlyContract = createLoanModule(
-      this.web3Manager.web3,
-      ETH_NETWORK_CONFIG.contracts.loanModule,
-    );
-
+    this.readonlyContracts = {
+      loan: createLoanModule(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.loanModule),
+      limits: createLoanLimitsModule(
+        this.web3Manager.web3,
+        ETH_NETWORK_CONFIG.contracts.loanLimitsModule,
+      ),
+      proposals: createLoanProposalsModule(
+        this.web3Manager.web3,
+        ETH_NETWORK_CONFIG.contracts.loanProposalsModule,
+      ),
+    };
     this.web3Manager.txWeb3
       .pipe(
         map(txWeb3 => txWeb3 && createLoanModule(txWeb3, ETH_NETWORK_CONFIG.contracts.loanModule)),
       )
-      .subscribe(this.txContract);
+      .subscribe(this.txContracts.loan);
+    this.web3Manager.txWeb3
+      .pipe(
+        map(
+          txWeb3 =>
+            txWeb3 && createLoanLimitsModule(txWeb3, ETH_NETWORK_CONFIG.contracts.loanLimitsModule),
+        ),
+      )
+      .subscribe(this.txContracts.limits);
+    this.web3Manager.txWeb3
+      .pipe(
+        map(
+          txWeb3 =>
+            txWeb3 &&
+            createLoanProposalsModule(txWeb3, ETH_NETWORK_CONFIG.contracts.loanProposalsModule),
+        ),
+      )
+      .subscribe(this.txContracts.proposals);
   }
 
   @memoize()
@@ -78,12 +114,15 @@ export class LoanModuleApi {
     debtInterestMultiplier: BN;
   }> {
     return combineLatest([
-      this.readonlyContract.methods.limits(),
-      this.readonlyContract.methods.DEBT_REPAY_DEADLINE_PERIOD(),
-      this.readonlyContract.methods.COLLATERAL_TO_DEBT_RATIO(),
-      this.readonlyContract.methods.COLLATERAL_TO_DEBT_RATIO_MULTIPLIER(),
-      this.readonlyContract.methods.DEBT_LOAD_MULTIPLIER(),
-      this.readonlyContract.methods.PLEDGE_PERCENT_MULTIPLIER(),
+      this.readonlyContracts.limits.methods.allLimits(
+        undefined,
+        this.readonlyContracts.limits.events.LimitChanged(),
+      ),
+      this.readonlyContracts.loan.methods.DEBT_REPAY_DEADLINE_PERIOD(),
+      this.readonlyContracts.proposals.methods.COLLATERAL_TO_DEBT_RATIO(),
+      this.readonlyContracts.proposals.methods.COLLATERAL_TO_DEBT_RATIO_MULTIPLIER(),
+      this.readonlyContracts.loan.methods.DEBT_LOAD_MULTIPLIER(),
+      this.readonlyContracts.limits.methods.PLEDGE_PERCENT_MULTIPLIER(),
     ]).pipe(
       map(
         ([
@@ -117,7 +156,7 @@ export class LoanModuleApi {
     // on the contract, apr is measured in fractions of a unit, so we need to shift the decimals by 2
     const toPercentMultiplierDivider = 2;
 
-    return this.readonlyContract.methods.INTEREST_MULTIPLIER().pipe(
+    return this.readonlyContracts.loan.methods.INTEREST_MULTIPLIER().pipe(
       map(multiplier => {
         // the multiplier is 10^n
         const decimals = multiplier.toString().length - 1 - toPercentMultiplierDivider;
@@ -129,11 +168,11 @@ export class LoanModuleApi {
   @memoize()
   @autobind
   public getTotalLProposals$(): Observable<BN> {
-    return this.readonlyContract.methods.totalLProposals(undefined, {
-      PledgeAdded: {},
-      PledgeWithdrawn: {},
-      DebtProposalExecuted: {},
-    });
+    return this.readonlyContracts.proposals.methods.totalLProposals(undefined, [
+      this.readonlyContracts.proposals.events.PledgeAdded(),
+      this.readonlyContracts.proposals.events.PledgeWithdrawn(),
+      this.readonlyContracts.proposals.events.DebtProposalExecuted(),
+    ]);
   }
 
   @memoize(R.identity)
@@ -144,14 +183,14 @@ export class LoanModuleApi {
 
     return timer(0, recalcInterestIntervalInMs).pipe(
       switchMap(() =>
-        this.readonlyContract.methods.getUnpaidInterest(
+        this.readonlyContracts.loan.methods.getUnpaidInterest(
           {
             borrower,
           },
-          {
-            Repay: { filter: { sender: borrower } },
-            DebtDefaultExecuted: { filter: { borrower } },
-          },
+          [
+            this.readonlyContracts.loan.events.Repay({ filter: { sender: borrower } }),
+            this.readonlyContracts.loan.events.DebtDefaultExecuted({ filter: { borrower } }),
+          ],
         ),
       ),
       map(([unpaidInterest, interestPerSecond]) =>
@@ -163,11 +202,11 @@ export class LoanModuleApi {
   @memoize()
   @autobind
   public getTotalLDebts$(): Observable<BN> {
-    return this.readonlyContract.methods.totalLDebts(undefined, {
-      DebtProposalExecuted: {},
-      Repay: {},
-      DebtDefaultExecuted: {},
-    });
+    return this.readonlyContracts.loan.methods.totalLDebts(undefined, [
+      this.readonlyContracts.proposals.events.DebtProposalExecuted(),
+      this.readonlyContracts.loan.events.Repay(),
+      this.readonlyContracts.loan.events.DebtDefaultExecuted(),
+    ]);
   }
 
   @memoize()
@@ -190,7 +229,7 @@ export class LoanModuleApi {
     values: { sourceAmount: BN; borrower: string; proposalId: string },
   ): Promise<void> {
     const { sourceAmount, borrower, proposalId } = values;
-    const txLoanModule = getCurrentValueOrThrow(this.txContract);
+    const txLoanModule = getCurrentValueOrThrow(this.txContracts.proposals);
 
     const daiInfo = await first(this.tokensApi.getTokenInfo$('dai'));
 
@@ -231,7 +270,7 @@ export class LoanModuleApi {
     },
   ): Promise<void> {
     const { sourceAmount, borrower, proposalId, pInitialLocked, lInitialLocked } = values;
-    const txLoanModule = getCurrentValueOrThrow(this.txContract);
+    const txLoanModule = getCurrentValueOrThrow(this.txContracts.proposals);
 
     const currentFullStakeCost = await first(
       this.fundsModuleApi.getAvailableBalanceIncreasing$(
@@ -269,7 +308,7 @@ export class LoanModuleApi {
     },
   ): Promise<void> {
     const { borrower, debtId } = values;
-    const txLoanModule = getCurrentValueOrThrow(this.txContract);
+    const txLoanModule = getCurrentValueOrThrow(this.txContracts.loan);
 
     const promiEvent = txLoanModule.methods.withdrawUnlockedPledge(
       {
@@ -293,7 +332,7 @@ export class LoanModuleApi {
     values: { sourceAmount: BN; apr: string; description: string },
   ): Promise<void> {
     const { sourceAmount, apr, description } = values;
-    const txLoanModule = getCurrentValueOrThrow(this.txContract);
+    const txLoanModule = getCurrentValueOrThrow(this.txContracts.proposals);
 
     const hash = await this.swarmApi.upload<string>(description);
 
@@ -336,7 +375,7 @@ export class LoanModuleApi {
       throw new Error('Proposal can not be executed now because of debt loan limit');
     }
 
-    const txLoanModule = getCurrentValueOrThrow(this.txContract);
+    const txLoanModule = getCurrentValueOrThrow(this.txContracts.proposals);
 
     const promiEvent = txLoanModule.methods.executeDebtProposal(
       { proposal: bnToBn(proposalId) },
@@ -353,7 +392,7 @@ export class LoanModuleApi {
 
   @autobind
   public async cancelDebtProposal(fromAddress: string, proposalId: string): Promise<void> {
-    const txLoanModule = getCurrentValueOrThrow(this.txContract);
+    const txLoanModule = getCurrentValueOrThrow(this.txContracts.proposals);
 
     const promiEvent = txLoanModule.methods.cancelDebtProposal(
       { proposal: bnToBn(proposalId) },
@@ -370,7 +409,7 @@ export class LoanModuleApi {
 
   @autobind
   public async liquidateDebt(fromAddress: string, borrower: string, debtId: string): Promise<void> {
-    const txLoanModule = getCurrentValueOrThrow(this.txContract);
+    const txLoanModule = getCurrentValueOrThrow(this.txContracts.loan);
 
     const promiEvent = txLoanModule.methods.executeDebtDefault(
       {
@@ -396,7 +435,7 @@ export class LoanModuleApi {
     lAmount: BN,
     method: RepaymentMethod,
   ): Promise<void> {
-    const txLoanModule = getCurrentValueOrThrow(this.txContract);
+    const txLoanModule = getCurrentValueOrThrow(this.txContracts.loan);
 
     let promiEvent: PromiEvent<any>;
 
@@ -463,15 +502,15 @@ export class LoanModuleApi {
 
     return timer(0, recalcInterestIntervalInMs).pipe(
       switchMap(() =>
-        this.readonlyContract.methods.getDebtRequiredPayments(
+        this.readonlyContracts.loan.methods.getDebtRequiredPayments(
           {
             borrower,
             debt: bnToBn(debtId),
           },
-          {
-            Repay: { filter: { sender: borrower } },
-            DebtDefaultExecuted: { filter: { borrower } },
-          },
+          [
+            this.readonlyContracts.loan.events.Repay({ filter: { sender: borrower } }),
+            this.readonlyContracts.loan.events.DebtDefaultExecuted({ filter: { borrower } }),
+          ],
         ),
       ),
       map(([loanSize, currentInterest]) => {
@@ -492,16 +531,16 @@ export class LoanModuleApi {
     borrower: string,
     proposalId: string,
   ): Observable<{ minLPledge: BN; maxLPledge: BN; minPPledge: BN; maxPPledge: BN }> {
-    return this.readonlyContract.methods
+    return this.readonlyContracts.proposals.methods
       .getPledgeRequirements(
         {
           borrower,
           proposal: bnToBn(proposalId),
         },
-        {
-          PledgeAdded: {},
-          PledgeWithdrawn: {},
-        },
+        [
+          this.readonlyContracts.proposals.events.PledgeAdded(),
+          this.readonlyContracts.proposals.events.PledgeWithdrawn(),
+        ],
         1000,
       )
       .pipe(
@@ -565,18 +604,20 @@ export class LoanModuleApi {
     pInterest: BN;
     pWithdrawn: BN;
   }> {
-    return this.readonlyContract.methods
+    return this.readonlyContracts.loan.methods
       .calculatePledgeInfo(
         {
           borrower,
           debt: bnToBn(debtId),
           supporter,
         },
-        {
-          Repay: { filter: { sender: borrower } },
-          DebtDefaultExecuted: { filter: { borrower } },
-          UnlockedPledgeWithdraw: { filter: { sender: supporter } },
-        },
+        [
+          this.readonlyContracts.loan.events.Repay({ filter: { sender: borrower } }),
+          this.readonlyContracts.loan.events.DebtDefaultExecuted({ filter: { borrower } }),
+          this.readonlyContracts.loan.events.UnlockedPledgeWithdraw({
+            filter: { sender: supporter },
+          }),
+        ],
       )
       .pipe(
         map(([pLocked, pUnlocked, pInterest, pWithdrawn]) => ({
