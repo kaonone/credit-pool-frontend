@@ -3,6 +3,7 @@ import { map } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
 import { autobind } from 'core-decorators';
+import { EventEmitter } from 'web3/types';
 
 import { memoize } from 'utils/decorators';
 import { createErc20, createPToken } from 'generated/contracts';
@@ -25,6 +26,7 @@ function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNulla
 export class TokensApi {
   private readonlyContracts: Pick<Contracts, 'dai' | 'ptk'>;
   private txContracts = new BehaviorSubject<null | Pick<Contracts, 'dai' | 'ptk'>>(null);
+  private events: { forReloadPtkDistributionBalance: EventEmitter[] } | null = null;
 
   constructor(private web3Manager: Web3ManagerModule, private transactionsApi: TransactionsApi) {
     this.readonlyContracts = {
@@ -43,6 +45,10 @@ export class TokensApi {
         ),
       )
       .subscribe(this.txContracts);
+  }
+
+  public setEvents(events: NonNullable<TokensApi['events']>) {
+    this.events = events;
   }
 
   @autobind
@@ -77,6 +83,19 @@ export class TokensApi {
     return this.readonlyContracts[token].methods.balanceOf({ account: address }, [
       this.readonlyContracts[token].events.Transfer({ filter: { from: address } }),
       this.readonlyContracts[token].events.Transfer({ filter: { to: address } }),
+    ]);
+  }
+
+  @memoize(R.identity)
+  @autobind
+  public getPtkDistributionBalance$(address: string): Observable<BN> {
+    if (!this.events) {
+      throw new Error('Events for reload not found');
+    }
+    return this.readonlyContracts.ptk.methods.distributionBalanceOf({ account: address }, [
+      this.readonlyContracts.ptk.events.Transfer({ filter: { from: address } }),
+      this.readonlyContracts.ptk.events.Transfer({ filter: { to: address } }),
+      ...this.events.forReloadPtkDistributionBalance,
     ]);
   }
 

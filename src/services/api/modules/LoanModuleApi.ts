@@ -42,7 +42,7 @@ function first<T>(input: Observable<T>): Promise<T> {
 }
 
 export class LoanModuleApi {
-  private readonlyContracts: {
+  public readonlyContracts: {
     loan: Contracts['loanModule'];
     limits: Contracts['loanLimitsModule'];
     proposals: Contracts['loanProposalsModule'];

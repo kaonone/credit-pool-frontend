@@ -27,8 +27,8 @@ export function ShareBuyingStrategy() {
     new BN(0),
   );
 
-  const [ptkBalance, ptkBalanceMeta] = useSubscribable(
-    () => (account ? api.tokens.getBalance$('ptk', account) : of(new BN(0))),
+  const [ptkDistributionBalance, ptkDistributionBalanceMeta] = useSubscribable(
+    () => (account ? api.tokens.getPtkDistributionBalance$(account) : of(new BN(0))),
     [api, account],
     new BN(0),
   );
@@ -41,7 +41,7 @@ export function ShareBuyingStrategy() {
 
   const percentDecimals = 2;
   const shareIncreasing = calcShareIncreasingPercent(
-    ptkBalance,
+    ptkDistributionBalance,
     ptkIncreasing,
     ptkTotalSupply,
     percentDecimals,
@@ -60,7 +60,7 @@ export function ShareBuyingStrategy() {
         </Loading>
       }
       secondaryMetric={
-        <Loading meta={[ptkIncreasingMeta, ptkBalanceMeta, ptkTotalSupplyMeta]}>
+        <Loading meta={[ptkIncreasingMeta, ptkDistributionBalanceMeta, ptkTotalSupplyMeta]}>
           {ptkIncreasing && (
             <>
               +
@@ -82,14 +82,19 @@ function calcShareIncreasingPercent(
   totalSupply: BN,
   resultDecimals: number = 0,
 ): BN {
-  if (totalSupply.isZero()) {
-    return new BN(0);
-  }
   const multiplier = decimalsToWei(resultDecimals).muln(100);
-  const currentShare = currentBalance.mul(multiplier).div(totalSupply);
-  const nextShare = currentBalance
-    .add(balanceIncreasing)
-    .mul(multiplier)
-    .div(totalSupply.add(balanceIncreasing));
+
+  const currentShare = totalSupply.isZero()
+    ? new BN(0)
+    : currentBalance.mul(multiplier).div(totalSupply);
+
+  const nextTotalSupply = totalSupply.add(balanceIncreasing);
+  const nextShare = nextTotalSupply.isZero()
+    ? new BN(0)
+    : currentBalance
+        .add(balanceIncreasing)
+        .mul(multiplier)
+        .div(nextTotalSupply);
+
   return nextShare.sub(currentShare);
 }
