@@ -1,7 +1,7 @@
 import * as React from 'react';
 import BN from 'bn.js';
 
-import { Debt, Status, usePledgeSubscription } from 'generated/gql/pool';
+import { Status, usePledgeSubscription } from 'generated/gql/pool';
 import { isEqualHex } from 'utils/hex';
 import { bnToBn } from 'utils/bn';
 import { Grid, Loading } from 'components';
@@ -17,8 +17,10 @@ import {
   CancelProposalButton,
 } from 'features/cashExchange';
 
+import { PartialDebt } from './types';
+
 interface IProps {
-  debt: Debt;
+  debt: PartialDebt;
   account: string;
 }
 
@@ -35,9 +37,9 @@ export function ActionsCell({ debt, account }: IProps) {
   const api = useApi();
   const [config, configMeta] = useSubscribable(() => api.loanModule.getConfig$(), []);
 
-  const pledgeHash = React.useMemo(() => getPledgeId(account, borrower, proposalId), [
+  const pledgeHash = React.useMemo(() => getPledgeId(account, borrower.id, proposalId), [
     account,
-    borrower,
+    borrower.id,
     proposalId,
   ]);
   const pledgeGqlResult = usePledgeSubscription({ variables: { pledgeHash } });
@@ -49,7 +51,7 @@ export function ActionsCell({ debt, account }: IProps) {
     config && getLoanDuePaymentDate(lastUpdate, config.debtRepayDeadlinePeriod)?.getTime();
   const isDuePaymentExpired = duePaymentDate && duePaymentDate < Date.now();
 
-  const isMyLoan = isEqualHex(borrower, account);
+  const isMyLoan = isEqualHex(borrower.id, account);
 
   const isAvailableForUnstake = status === Status.Proposed && !isMyLoan && pLocked.gtn(0);
   const isAvailableForProposalCanceling = status === Status.Proposed && isMyLoan;
@@ -71,7 +73,7 @@ export function ActionsCell({ debt, account }: IProps) {
   const actions = [
     isAvailableForActivation ? (
       <ActivateLoanButton
-        borrower={borrower}
+        borrower={borrower.id}
         proposalId={proposalId}
         loanAmount={total}
         {...commonProps}
@@ -80,13 +82,13 @@ export function ActionsCell({ debt, account }: IProps) {
       </ActivateLoanButton>
     ) : null,
     isAvailableForProposalCanceling ? (
-      <CancelProposalButton borrower={borrower} proposalId={proposalId} {...commonProps}>
+      <CancelProposalButton borrower={borrower.id} proposalId={proposalId} {...commonProps}>
         Cancel
       </CancelProposalButton>
     ) : null,
     isAvailableForRepay && lastUpdate && debtId ? (
       <RepayButton
-        account={borrower}
+        account={borrower.id}
         debtId={debtId}
         lastPaymentDate={lastUpdate}
         {...commonProps}
@@ -94,17 +96,22 @@ export function ActionsCell({ debt, account }: IProps) {
     ) : null,
     isAvailableForUnstake ? (
       <UnstakeButton
-        borrower={borrower}
+        borrower={borrower.id}
         proposalId={proposalId}
         loanSize={total}
         {...commonProps}
       />
     ) : null,
     isAvailableForUnlock && debtId ? (
-      <UnlockButton borrower={borrower} proposalId={proposalId} debtId={debtId} {...commonProps} />
+      <UnlockButton
+        borrower={borrower.id}
+        proposalId={proposalId}
+        debtId={debtId}
+        {...commonProps}
+      />
     ) : null,
     isAvailableForLiquidation && debtId ? (
-      <LiquidateLoanButton borrower={borrower} debtId={debtId} {...commonProps}>
+      <LiquidateLoanButton borrower={borrower.id} debtId={debtId} {...commonProps}>
         Liquidate
       </LiquidateLoanButton>
     ) : null,

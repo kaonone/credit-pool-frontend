@@ -49,7 +49,7 @@ export function DistributionClaimsByEvent({ eventId }: Props) {
                 </Table.Column>
                 <Table.Column>
                   <Table.Head>{t(tKeys.address.getKey())}</Table.Head>
-                  <Table.Cell>{({ data }) => <ShortAddress address={data.address} />}</Table.Cell>
+                  <Table.Cell>{({ data }) => <ShortAddress address={data.user.id} />}</Table.Cell>
                 </Table.Column>
                 <Table.Column>
                   <Table.Head>{t(tKeys.claimed.getKey())}</Table.Head>

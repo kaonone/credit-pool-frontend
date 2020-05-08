@@ -1,8 +1,9 @@
 subscription Pledge($pledgeHash: ID!) { # $pledgeHash = keccak256(supporter + borrower + proposalId)
   pledge(id: $pledgeHash) {
     id
-    proposal_id
-    pledger
+    pledger {
+      id
+    }
     lInitialLocked
     pInitialLocked
     pLocked

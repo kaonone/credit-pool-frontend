@@ -14,8 +14,7 @@ function MyGuarantees(props: IProps) {
   const { account } = props;
 
   const { result, paginationView } = useSubgraphPagination(useMyGuaranteesQuery, {
-    pledgers: [account.toLowerCase()],
-    borrower: account.toLowerCase(),
+    supporters: [account.toLowerCase()],
   });
 
   const guarantees = result.data?.debts || [];

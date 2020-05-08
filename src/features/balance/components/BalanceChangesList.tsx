@@ -12,10 +12,12 @@ import {
 import { BalanceChange } from 'generated/gql/pool';
 import { useTranslate } from 'services/i18n';
 
-export const Table = GeneralTable as MakeTableType<BalanceChange>;
+type PartialBalanceChange = Pick<BalanceChange, 'date' | 'type' | 'amount'>;
+
+export const Table = GeneralTable as MakeTableType<PartialBalanceChange>;
 
 interface Props {
-  list: BalanceChange[];
+  list: PartialBalanceChange[];
   paginationView: React.ReactNode;
 }
 

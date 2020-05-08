@@ -12,10 +12,12 @@ import {
 import { Earning } from 'generated/gql/pool';
 import { useTranslate } from 'services/i18n';
 
-export const Table = GeneralTable as MakeTableType<Earning>;
+type PartialEarning = Pick<Earning, 'date' | 'lAmount' | 'type'>;
+
+export const Table = GeneralTable as MakeTableType<PartialEarning>;
 
 interface Props {
-  list: Earning[];
+  list: PartialEarning[];
   paginationView: React.ReactNode;
 }
 

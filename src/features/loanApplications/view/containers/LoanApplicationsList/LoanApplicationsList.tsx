@@ -29,7 +29,7 @@ function LoanApplicationsList() {
     () =>
       debts?.map<Activity>(debt => ({
         lendValue: debt.total,
-        borrower: debt.borrower,
+        borrower: debt.borrower.id,
         aprValue: debt.apr,
         stakedValue: debt.lStaked,
         descriptionHash: debt.description,

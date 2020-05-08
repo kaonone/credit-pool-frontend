@@ -13,20 +13,21 @@ import {
   MakeTableType,
   FormattedBalance,
 } from 'components';
-import { Debt, Status } from 'generated/gql/pool';
+import { Status } from 'generated/gql/pool';
 import { formatBalance } from 'utils/format';
 import { useSubscribable } from 'utils/react';
 import { getLoanDuePaymentDate } from 'model';
 
 import { AddressCell, MyEarnCell, StatusCell } from './LoansTableCells';
 import { ActionsCell } from './ActionsCell';
+import { PartialDebt } from './types';
 
-export const Table = GeneralTable as MakeTableType<Debt>;
+export const Table = GeneralTable as MakeTableType<PartialDebt>;
 
 type HidableColumn = 'address' | 'earn' | 'myStake';
 
 interface Props {
-  list: Debt[];
+  list: PartialDebt[];
   hideColumns?: HidableColumn[];
   paginationView: React.ReactNode;
 }
@@ -67,7 +68,9 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
                 {!hideColumns.includes('address') && (
                   <Table.Column>
                     <Table.Head>{t(tKeys.address.getKey())}</Table.Head>
-                    <Table.Cell>{({ data }) => <AddressCell address={data.borrower} />}</Table.Cell>
+                    <Table.Cell>
+                      {({ data }) => <AddressCell address={data.borrower.id} />}
+                    </Table.Cell>
                   </Table.Column>
                 )}
                 <Table.Column>
@@ -121,7 +124,7 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
                       {({ data }) => (
                         <MyEarnCell
                           supporter={account}
-                          borrower={data.borrower}
+                          borrower={data.borrower.id}
                           proposalId={data.proposal_id}
                         />
                       )}
@@ -149,7 +152,7 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
                           loanBody={new BN(data.total).sub(new BN(data.repayed)).toString()}
                           status={data.status}
                           supporter={account}
-                          borrower={data.borrower}
+                          borrower={data.borrower.id}
                           proposalId={data.proposal_id}
                         />
                       )}

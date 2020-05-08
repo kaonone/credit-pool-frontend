@@ -1,19 +1,15 @@
-query MyGuarantees($first: Int!, $skip: Int!, $pledgers: [String!]!, $borrower: String!) {
-  debts(first: $first, skip: $skip, where: {pledgers_contains: $pledgers, borrower_not: $borrower}) {
-    id
+query MyGuarantees($first: Int!, $skip: Int!, $supporters: [String!]!) {
+  debts(first: $first, skip: $skip, where: {supporters_contains: $supporters}) {
     debt_id
     proposal_id
     apr
-    borrower
     total
     repayed
-    description
-    pledgers
-    pledges
-    stakeProgress
-    lStaked
-    pStaked
-    status
     last_update
+    status
+    stakeProgress
+    borrower {
+      id
+    }
   }
 }

@@ -1,17 +1,13 @@
 query DebtProposals($first: Int!, $skip: Int!) {
   debts(first: $first, skip: $skip, where: {status: PROPOSED, stakeProgress_lt: "0x64"}) {
-    id
-    debt_id
     proposal_id
     apr
-    borrower
     total
-    repayed
-    pledges
     lStaked
-    pStaked
     status
     description
-    last_update
+    borrower {
+      id
+    }
   }
 }

@@ -1,19 +1,15 @@
 query MyLoans($first: Int!, $skip: Int!, $address: String!) {
   debts(first: $first, skip: $skip, where: {borrower: $address}) {
-    id
     debt_id
     proposal_id
     apr
-    borrower
     total
     repayed
-    description
-    pledgers
-    pledges
-    stakeProgress
-    lStaked
-    pStaked
-    status
     last_update
+    status
+    stakeProgress
+    borrower {
+      id
+    }
   }
 }
