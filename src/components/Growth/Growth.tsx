@@ -14,12 +14,7 @@ interface IProps {
 function Growth(props: IProps) {
   const { current, previous, className } = props;
 
-  const growth = previous.isZero()
-    ? new BN(0)
-    : current
-        .sub(previous)
-        .muln(10000)
-        .div(previous);
+  const growth = previous.isZero() ? new BN(0) : current.sub(previous).muln(10000).div(previous);
 
   const formattedGrowth = formatBalance({
     amountInBaseUnits: growth.abs(),

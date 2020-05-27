@@ -49,13 +49,7 @@ function UserBalanceChart() {
   );
   const decimals = daiTokenInfo?.decimals;
 
-  const yearAgoDate = React.useMemo(
-    () =>
-      moment()
-        .subtract(1, 'years')
-        .unix(),
-    [],
-  ); // Date in seconds
+  const yearAgoDate = React.useMemo(() => moment().subtract(1, 'years').unix(), []); // Date in seconds
 
   const balancesResult = useMyUserBalancesSubscription({
     variables: {
@@ -69,12 +63,7 @@ function UserBalanceChart() {
   const mockedPoints = React.useMemo<IUserBalancePoint[]>(
     () => [
       {
-        date:
-          Date.now() -
-          moment()
-            .subtract(1, 'days')
-            .unix() *
-            1000, // Date in milliseconds
+        date: Date.now() - moment().subtract(1, 'days').unix() * 1000, // Date in milliseconds
         value: 0,
       },
       { date: Date.now(), value: 0 }, // Date in milliseconds
@@ -89,17 +78,10 @@ function UserBalanceChart() {
             .map(balance => ({
               date: parseInt(balance.date, 10) * 1000, // Date in milliseconds
               value:
-                new BN(balance.lBalance)
-                  .muln(100)
-                  .div(decimalsToWei(decimals))
-                  .toNumber() / 100,
+                new BN(balance.lBalance).muln(100).div(decimalsToWei(decimals)).toNumber() / 100,
             }))
             .concat({
-              value:
-                (currentBalance
-                  ?.muln(100)
-                  .div(decimalsToWei(decimals))
-                  .toNumber() || 0) / 100,
+              value: (currentBalance?.muln(100).div(decimalsToWei(decimals)).toNumber() || 0) / 100,
               date: Date.now(),
             })
         : mockedPoints,

@@ -59,10 +59,7 @@ function PersonalMetrics(props: Props) {
     () =>
       api.fundsModule.getAvailableBalanceIncreasing$(
         account || zeroAddress,
-        pLockedSum
-          .add(pInterestSum)
-          .add(unclaimedDistributions)
-          .toString(),
+        pLockedSum.add(pInterestSum).add(unclaimedDistributions).toString(),
         unlockLiquiditySum.toString(),
       ),
     [account],
