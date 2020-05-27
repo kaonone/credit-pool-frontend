@@ -4,3 +4,4 @@ export { NumberInput } from './NumberInput';
 export { DecimalsInput } from './DecimalsInput';
 export { CheckboxInput } from './CheckboxInput';
 export { RadioGroupInput } from './RadioGroupInput';
+export { TokenAmountInput, TokenAmountInputProps } from './TokenAmountInput';
