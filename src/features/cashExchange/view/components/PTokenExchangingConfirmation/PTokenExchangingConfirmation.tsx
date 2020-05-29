@@ -1,19 +1,21 @@
 import React from 'react';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { ConfirmationDialog } from 'components';
-import { useFormattedBalance, useSubscribable } from 'utils/react';
+import { useSubscribable } from 'utils/react';
 
-interface IProps<T> {
+import { ISubmittedFormData } from '../PTokenExchangingForm/PTokenExchangingForm';
+
+interface IProps<T extends ISubmittedFormData> {
   isOpen: boolean;
   values: T | null;
-  messageTKey: string | ((values: T | null) => Observable<string>);
+  messageTKey: string | ((values: T) => Observable<string>);
   onConfirm: () => Promise<void>;
   onCancel: () => void;
 }
 
-function PTokenExchangingConfirmation<ExtraFormData extends Record<string, any> = {}>(
+function PTokenExchangingConfirmation<ExtraFormData extends ISubmittedFormData>(
   props: IProps<ExtraFormData>,
 ) {
   const { messageTKey, onCancel, onConfirm, values, isOpen } = props;
@@ -21,15 +23,10 @@ function PTokenExchangingConfirmation<ExtraFormData extends Record<string, any> 
   const { t } = useTranslate();
   const tKeys = tKeysAll.features.cashExchange.exchangingConfirmation;
 
-  const [{ formattedBalance: formattedSourceAmount }] = useFormattedBalance(
-    'dai',
-    values?.sourceAmount || '0',
-  );
-
   const message =
     typeof messageTKey === 'string'
-      ? t(messageTKey, { sourceAmount: formattedSourceAmount })
-      : useSubscribable(() => messageTKey(values), [values], '⏳');
+      ? t(messageTKey, { sourceAmount: values?.sourceAmount.toFormattedString() || '⏳' })
+      : useSubscribable(() => (values ? messageTKey(values) : of('⏳')), [values], '⏳');
 
   return (
     <ConfirmationDialog

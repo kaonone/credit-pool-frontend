@@ -3,12 +3,12 @@ import BN from 'bn.js';
 import { tKeys, ITranslateKey } from 'services/i18n';
 
 export function lessThenOrEqual(
-  value: number | BN,
-  currentValue: string | number,
-  formatValue?: (value: number | BN) => string,
+  value: BN,
+  currentValue: BN,
+  formatValue?: (value: BN) => string,
   errorKey?: string,
 ): ITranslateKey | undefined {
-  const isValid = BN.isBN(value) ? value.gte(new BN(currentValue)) : Number(currentValue) <= value;
+  const isValid = value.gte(new BN(currentValue));
 
   return isValid
     ? undefined

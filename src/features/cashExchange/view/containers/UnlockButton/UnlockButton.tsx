@@ -9,7 +9,6 @@ import { useSubscribable } from 'utils/react';
 import { usePledgeSubscription } from 'generated/gql/pool';
 import { getPledgeId } from 'model';
 import { zeroAddress } from 'utils/mock';
-import { formatBalance } from 'utils/format';
 
 type IProps = React.ComponentPropsWithoutRef<typeof Button> & {
   proposalId: string;
@@ -30,10 +29,6 @@ export function UnlockButton(props: IProps) {
   const open = React.useCallback(() => setIsOpen(true), []);
   const close = React.useCallback(() => setIsOpen(false), []);
 
-  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
-    () => api.tokens.getTokenInfo$('dai'),
-    [],
-  );
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
   const pledgeGqlResult = usePledgeSubscription({
     variables: {
@@ -69,22 +64,9 @@ export function UnlockButton(props: IProps) {
     pledgeForUnlock:
       (availableForUnlockCost &&
         interestCost &&
-        daiTokenInfo &&
-        formatBalance({
-          amountInBaseUnits: availableForUnlockCost.sub(interestCost),
-          baseDecimals: daiTokenInfo.decimals,
-          tokenSymbol: daiTokenInfo.symbol,
-        })) ||
+        availableForUnlockCost.sub(interestCost).toFormattedString()) ||
       '⏳',
-    earnForUnlock:
-      (interestCost &&
-        daiTokenInfo &&
-        formatBalance({
-          amountInBaseUnits: interestCost,
-          baseDecimals: daiTokenInfo.decimals,
-          tokenSymbol: daiTokenInfo.symbol,
-        })) ||
-      '⏳',
+    earnForUnlock: (interestCost && interestCost.toFormattedString()) || '⏳',
   });
 
   const handleActivate = useCallback(async (): Promise<void> => {
@@ -95,13 +77,7 @@ export function UnlockButton(props: IProps) {
   return (
     <>
       <Loading
-        meta={[
-          daiTokenInfoMeta,
-          accountMeta,
-          pAvailableForUnlockMeta,
-          interestCostMeta,
-          availableForUnlockCostMeta,
-        ]}
+        meta={[accountMeta, pAvailableForUnlockMeta, interestCostMeta, availableForUnlockCostMeta]}
         gqlResults={pledgeGqlResult}
       >
         <Button {...restProps} onClick={open}>

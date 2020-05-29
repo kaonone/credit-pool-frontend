@@ -46,7 +46,6 @@ function PersonalMetrics(props: Props) {
   const [defiYield, defiYieldMeta] = useSubscribable(
     () => api.defiModule.getAvailableInterest$(account || zeroAddress),
     [api, account],
-    new BN(0),
   );
 
   const [unclaimedDistributions, unclaimedDistributionsMeta] = useSubscribable(
@@ -63,12 +62,11 @@ function PersonalMetrics(props: Props) {
         unlockLiquiditySum.toString(),
       ),
     [account],
-    new BN(0),
   );
 
   const currentProfit = max(
     new BN(0),
-    lAvailableBalance.add(lIncreasing).sub(prevLAvailableBalance),
+    lAvailableBalance.add(lIncreasing?.value || new BN(0)).sub(prevLAvailableBalance),
   );
 
   return (
@@ -93,7 +91,13 @@ function PersonalMetrics(props: Props) {
           value={currentProfit.toString()}
           token="dai"
         />
-        <CashMetric title={t(tKeys.defiYield.getKey())} value={defiYield.toString()} token="dai" />
+        {defiYield && (
+          <CashMetric
+            title={t(tKeys.defiYield.getKey())}
+            value={defiYield.toString()}
+            token="dai"
+          />
+        )}
         <CashMetric title={t(tKeys.credit.getKey())} value={lCredit.toString()} token="dai" />
       </MetricsList>
     </Loading>

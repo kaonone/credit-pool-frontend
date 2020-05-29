@@ -2,7 +2,7 @@ import React from 'react';
 import BN from 'bn.js';
 
 import { useApi } from 'services/api';
-import { Loading, FormattedBalance, Highlighted } from 'components';
+import { Loading, Highlighted, FormattedAmount } from 'components';
 import { calcInterestShare, getPledgeId } from 'model';
 import { useSubscribable } from 'utils/react';
 import { formatBalance } from 'utils/format';
@@ -42,7 +42,6 @@ export function MyStakeCost({
   const [myStakeCost, myStakeCostMeta] = useSubscribable(
     () => api.fundsModule.getAvailableBalanceIncreasing$(supporter, pLocked, additionalLiquidity),
     [supporter, pLocked, additionalLiquidity],
-    new BN(0),
   );
 
   const [fullLoanStake, fullLoanStakeMeta] = useSubscribable(
@@ -59,7 +58,7 @@ export function MyStakeCost({
     <Loading gqlResults={pledgeGqlResult} meta={[myStakeCostMeta, fullLoanStakeMeta]}>
       {new BN(pLocked).gtn(0) ? (
         <>
-          <FormattedBalance sum={myStakeCost.toString()} token="dai" />{' '}
+          {myStakeCost && <FormattedAmount sum={myStakeCost} />}{' '}
           {interestShare && (
             <Highlighted color={interestShareColor}>
               {formatBalance({

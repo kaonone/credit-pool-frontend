@@ -8,7 +8,7 @@ import { EventEmitter } from 'web3/types';
 import { memoize } from 'utils/decorators';
 import { createErc20, createPToken } from 'generated/contracts';
 import { Token as TokenType, ITokenInfo } from 'model/types';
-import { Token } from 'model/Token';
+import { Token, TokenAmount } from 'model/entities';
 import { ETH_NETWORK_CONFIG } from 'env';
 
 import { Contracts, Web3ManagerModule } from '../types';
@@ -53,15 +53,22 @@ export class TokensApi {
   }
 
   @autobind
-  public async approveDai(fromAddress: string, spender: string, value: BN): Promise<void> {
+  public async approveDai(
+    fromAddress: string,
+    spender: string,
+    amount: TokenAmount,
+  ): Promise<void> {
     const txDai = getCurrentValueOrThrow(this.txContracts).dai;
 
-    const promiEvent = txDai.methods.approve({ spender, amount: value }, { from: fromAddress });
+    const promiEvent = txDai.methods.approve(
+      { spender, amount: amount.value },
+      { from: fromAddress },
+    );
 
     this.transactionsApi.pushToSubmittedTransactions$('dai.approve', promiEvent, {
       spender,
       fromAddress,
-      value,
+      value: amount,
     });
 
     await promiEvent;
@@ -93,6 +100,13 @@ export class TokensApi {
   public getToken$(address: string): Observable<Token> {
     return this.getERC20TokenInfo$(address).pipe(
       map(({ decimals, symbol }) => new Token(address, symbol, decimals)),
+    );
+  }
+
+  @autobind
+  public toTokenAmount(tokenAddress: string, amount$: Observable<BN>): Observable<TokenAmount> {
+    return combineLatest([this.getToken$(tokenAddress), amount$]).pipe(
+      map(([token, amount]) => new TokenAmount(amount, token)),
     );
   }
 

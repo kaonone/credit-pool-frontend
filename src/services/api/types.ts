@@ -14,6 +14,7 @@ import {
   createLoanLimitsModule,
   createLoanProposalsModule,
 } from 'generated/contracts';
+import { TokenAmount } from 'model/entities';
 
 export type Contracts = {
   dai: ReturnType<typeof createErc20>;
@@ -29,19 +30,28 @@ export type Contracts = {
 
 export type SubmittedTransaction =
   | IGenericSubmittedTransaction<'ptk.claimDistributions', { fromAddress: string }>
-  | IGenericSubmittedTransaction<'dai.approve', { spender: string; fromAddress: string; value: BN }>
-  | IGenericSubmittedTransaction<'liquidity.sellPtk', { address: string; sourceAmount: BN }>
-  | IGenericSubmittedTransaction<'liquidity.buyPtk', { address: string; sourceAmount: BN }>
+  | IGenericSubmittedTransaction<
+      'dai.approve',
+      { spender: string; fromAddress: string; value: TokenAmount }
+    >
+  | IGenericSubmittedTransaction<
+      'liquidity.sellPtk',
+      { address: string; sourceAmount: TokenAmount }
+    >
+  | IGenericSubmittedTransaction<'liquidity.buyPtk', { address: string; sourceAmount: TokenAmount }>
   | IGenericSubmittedTransaction<'defi.withdrawInterest', { address: string }>
-  | IGenericSubmittedTransaction<'loan.addPledge', { address: string; sourceAmount: BN }>
-  | IGenericSubmittedTransaction<'loan.unstakePledge', { address: string; sourceAmount: BN }>
+  | IGenericSubmittedTransaction<'loan.addPledge', { address: string; sourceAmount: TokenAmount }>
+  | IGenericSubmittedTransaction<
+      'loan.unstakePledge',
+      { address: string; sourceAmount: TokenAmount }
+    >
   | IGenericSubmittedTransaction<
       'loan.withdrawUnlockedPledge',
       { address: string; borrower: string; debtId: string }
     >
   | IGenericSubmittedTransaction<
       'loan.createProposal',
-      { address: string; sourceAmount: BN; apr: string; description: string }
+      { address: string; sourceAmount: TokenAmount; apr: string; description: string }
     >
   | IGenericSubmittedTransaction<'loan.executeProposal', { address: string; proposalId: string }>
   | IGenericSubmittedTransaction<'loan.cancelProposal', { address: string; proposalId: string }>

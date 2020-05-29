@@ -24,7 +24,7 @@ export function getFieldWithComponent<P extends BaseWrappedFieldProps>(
   type?: string,
 ) {
   type OwnProps = Omit<P, keyof BaseWrappedFieldProps>;
-  type FieldProps = Pick<RFFieldProps<any, HTMLElement>, RFFieldPropKey>;
+  type FieldProps = Pick<RFFieldProps<P['input']['value'], HTMLElement>, RFFieldPropKey>;
   type ResultProps = MergeRight<OwnProps, FieldProps>;
 
   const result: React.StatelessComponent<ResultProps> = (props: ResultProps) => (

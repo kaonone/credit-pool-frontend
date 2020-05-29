@@ -7,7 +7,10 @@ import { useApi } from 'services/api';
 import { SellCashIcon } from 'components/icons';
 import { ModalButton } from 'components/ModalButton/ModalButton';
 
-import { PTokenExchanging } from '../../components/PTokenExcahnging/PTokenExcahnging';
+import {
+  PTokenExchanging,
+  PTokenExchangingProps,
+} from '../../components/PTokenExcahnging/PTokenExcahnging';
 
 type IProps = React.ComponentPropsWithoutRef<typeof Button>;
 
@@ -17,11 +20,11 @@ function PTokenSellingButton(props: IProps) {
   const { t } = useTranslate();
   const api = useApi();
 
-  const getMaxSourceValue = useCallback(
-    (account: string) => api.fundsModule.getMaxWithdrawAmountInDai$(account),
+  const getMaxSourceValue: PTokenExchangingProps['getMaxSourceValue'] = useCallback(
+    ({ account }) => api.fundsModule.getMaxWithdrawAmountInDai$(account),
     [],
   );
-  const getMinSourceValue = useCallback(
+  const getMinSourceValue: PTokenExchangingProps['getMinSourceValue'] = useCallback(
     () =>
       api.liquidityModule
         .getConfig$()

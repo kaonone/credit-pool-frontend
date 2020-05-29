@@ -4,8 +4,7 @@ import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import { fromBaseUnit, toBaseUnit } from 'utils/bn';
-import { Token } from 'model/Token';
-import { TokenAmount } from 'model/TokenAmount';
+import { TokenAmount, Token } from 'model/entities';
 import { makeStyles } from 'utils/styles';
 
 import { TextInput } from './TextInput';

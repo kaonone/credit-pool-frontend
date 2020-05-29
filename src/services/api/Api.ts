@@ -17,7 +17,7 @@ export class Api {
 
   public curveModule = new CurveModuleApi(this.web3Manager);
   public fundsModule = new FundsModuleApi(this.web3Manager, this.curveModule, this.tokens);
-  public defiModule = new DefiModuleApi(this.web3Manager, this.transactions);
+  public defiModule = new DefiModuleApi(this.web3Manager, this.transactions, this.tokens);
   public loanModule = new LoanModuleApi(
     this.web3Manager,
     this.tokens,

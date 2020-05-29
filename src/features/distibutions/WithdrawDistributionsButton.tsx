@@ -4,10 +4,9 @@ import BN from 'bn.js';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { ConfirmationDialog, Loading, FormattedBalance } from 'components';
+import { ConfirmationDialog, Loading, FormattedAmount } from 'components';
 import { useSubscribable } from 'utils/react';
 import { zeroAddress } from 'utils/mock';
-import { formatBalance } from 'utils/format';
 
 type IProps = React.ComponentPropsWithoutRef<typeof Button>;
 
@@ -24,10 +23,7 @@ export function WithdrawDistributionsButton(props: IProps) {
   const close = React.useCallback(() => setIsOpen(false), []);
 
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
-  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
-    () => api.tokens.getTokenInfo$('dai'),
-    [],
-  );
+
   const [unclaimedDistributions, unclaimedDistributionsMeta] = useSubscribable(
     () => api.tokens.getUnclaimedDistributions$(account || zeroAddress),
     [account],
@@ -46,14 +42,7 @@ export function WithdrawDistributionsButton(props: IProps) {
 
   const confirmMessage = t(tKeys.withdrawConfirmationMessage.getKey(), {
     distributions:
-      (unclaimedDistributionsInDai &&
-        daiTokenInfo &&
-        formatBalance({
-          amountInBaseUnits: unclaimedDistributionsInDai,
-          baseDecimals: daiTokenInfo.decimals,
-          tokenSymbol: daiTokenInfo.symbol,
-        })) ||
-      '⏳',
+      (unclaimedDistributionsInDai && unclaimedDistributionsInDai.toFormattedString()) || '⏳',
   });
 
   const handleActivate = useCallback(async (): Promise<void> => {
@@ -63,14 +52,7 @@ export function WithdrawDistributionsButton(props: IProps) {
 
   return (
     <>
-      <Loading
-        meta={[
-          daiTokenInfoMeta,
-          accountMeta,
-          unclaimedDistributionsMeta,
-          unclaimedDistributionsInDaiMeta,
-        ]}
-      >
+      <Loading meta={[accountMeta, unclaimedDistributionsMeta, unclaimedDistributionsInDaiMeta]}>
         <Button
           {...props}
           onClick={open}
@@ -78,7 +60,7 @@ export function WithdrawDistributionsButton(props: IProps) {
         >
           {t(tKeys.withdrawButton.getKey())}&nbsp;
           {unclaimedDistributionsInDai && !unclaimedDistributionsInDai.isZero() && (
-            <FormattedBalance sum={unclaimedDistributionsInDai.toString()} token="dai" />
+            <FormattedAmount sum={unclaimedDistributionsInDai} />
           )}
         </Button>
       </Loading>

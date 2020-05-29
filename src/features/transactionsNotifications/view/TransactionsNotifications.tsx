@@ -2,10 +2,8 @@ import React from 'react';
 import { useSnackbar } from 'notistack';
 
 import { useSubscribable } from 'utils/react';
-import { formatBalance } from 'utils/format';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi, SubmittedTransaction } from 'services/api';
-import { ITokenInfo } from 'model/types';
 
 const tKeys = tKeysAll.features.notifications;
 
@@ -58,44 +56,20 @@ interface NotificationProps {
 
 function NotificationText({ transaction, type: notType }: NotificationProps) {
   const { t } = useTranslate();
-  const api = useApi();
 
-  const [daiTokenInfo] = useSubscribable(() => api.tokens.getTokenInfo$('dai'), [], null);
-
-  return (
-    <>
-      {t(tKeys[transaction.type][notType].getKey(), getTranslateParams(transaction, daiTokenInfo))}
-    </>
-  );
+  return <>{t(tKeys[transaction.type][notType].getKey(), getTranslateParams(transaction))}</>;
 }
 
-function getTranslateParams(
-  transaction: SubmittedTransaction,
-  daiTokenInfo: ITokenInfo | null,
-): Record<string, string> {
+function getTranslateParams(transaction: SubmittedTransaction): Record<string, string> {
   switch (transaction.type) {
     case 'dai.approve':
       return {
-        amount: daiTokenInfo
-          ? formatBalance({
-              amountInBaseUnits: transaction.payload.value,
-              baseDecimals: daiTokenInfo.decimals,
-              tokenSymbol: daiTokenInfo.symbol,
-              precision: 2,
-            })
-          : '⏳',
+        amount: transaction.payload.value.toFormattedString(),
       };
     case 'liquidity.buyPtk':
     case 'liquidity.sellPtk':
       return {
-        amount: daiTokenInfo
-          ? formatBalance({
-              amountInBaseUnits: transaction.payload.sourceAmount,
-              baseDecimals: daiTokenInfo.decimals,
-              tokenSymbol: daiTokenInfo.symbol,
-              precision: 2,
-            })
-          : '⏳',
+        amount: transaction.payload.sourceAmount.toFormattedString(),
       };
     default:
       return {};

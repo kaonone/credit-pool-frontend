@@ -2,9 +2,8 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
-import BN from 'bn.js';
 
-import { ShortAddress, Loading, FormattedBalance } from 'components';
+import { ShortAddress, Loading, FormattedAmount } from 'components';
 import { getPledgeId } from 'model/getPledgeId';
 import { usePledgeSubscription, Status } from 'generated/gql/pool';
 import { useSubscribable } from 'utils/react';
@@ -47,12 +46,11 @@ export function MyEarnCell({ supporter, borrower, proposalId }: MyEarnCellProps)
   const [interestCost, interestCostMeta] = useSubscribable(
     () => api.fundsModule.getAvailableBalanceIncreasing$(supporter, pInterest, '0'),
     [supporter, pInterest],
-    new BN(0),
   );
 
   return (
     <Loading gqlResults={pledgeGqlResult} meta={interestCostMeta}>
-      {interestCost.gtn(0) ? <FormattedBalance sum={interestCost} token="dai" /> : '—'}
+      {interestCost?.gtn(0) ? <FormattedAmount sum={interestCost} /> : '—'}
     </Loading>
   );
 }
