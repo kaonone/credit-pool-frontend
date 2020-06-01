@@ -49,6 +49,7 @@ module.exports = {
         ],
       },
     ],
+    'import/named': 'off',
     'import/prefer-default-export': 'off',
     'import/no-default-export': 'error',
     'import/no-cycle': 'off',
