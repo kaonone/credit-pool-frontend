@@ -37,6 +37,7 @@ export * from './Metric/Metric';
 export * from './CashMetric/CashMetric';
 export * from './ExpansionPanel/ExpansionPanel';
 export * from './FormattedBalance/FormattedBalance';
+export * from './FormattedAmount/FormattedAmount';
 export * from './Growth/Growth';
 export * from './ConfirmationDialog/ConfirmationDialog';
 export * from './Highlighted/Highlighted';

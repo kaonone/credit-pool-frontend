@@ -5,11 +5,11 @@ import { tKeys, ITranslateKey } from 'services/i18n';
 type FormatValue = (value: number | BN) => string;
 
 export function moreThen(
-  value: number | BN,
-  currentValue: string | number,
+  value: BN,
+  currentValue: BN,
   formatValue?: FormatValue | undefined,
 ): ITranslateKey | undefined {
-  const isValid = BN.isBN(value) ? value.lt(new BN(currentValue)) : Number(currentValue) > value;
+  const isValid = value.lt(new BN(currentValue));
 
   return isValid
     ? undefined

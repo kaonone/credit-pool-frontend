@@ -6,7 +6,6 @@ import { useApi } from 'services/api';
 import { ConfirmationDialog, Loading } from 'components';
 import { useSubscribable } from 'utils/react';
 import { zeroAddress } from 'utils/mock';
-import { formatBalance } from 'utils/format';
 
 type IProps = React.ComponentPropsWithoutRef<typeof Button>;
 
@@ -17,10 +16,6 @@ function WithdrawDefiYieldButton(props: IProps) {
   const { t } = useTranslate();
   const api = useApi();
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
-  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
-    () => api.tokens.getTokenInfo$('dai'),
-    [],
-  );
 
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -33,15 +28,7 @@ function WithdrawDefiYieldButton(props: IProps) {
   );
 
   const confirmMessage = t(tKeys.confirmMessage.getKey(), {
-    amount:
-      (defiYield &&
-        daiTokenInfo &&
-        formatBalance({
-          amountInBaseUnits: defiYield,
-          baseDecimals: daiTokenInfo.decimals,
-          tokenSymbol: daiTokenInfo.symbol,
-        })) ||
-      '⏳',
+    amount: (defiYield && defiYield.toFormattedString()) || '⏳',
   });
 
   const handleActivate = useCallback(async (): Promise<void> => {
@@ -54,7 +41,7 @@ function WithdrawDefiYieldButton(props: IProps) {
 
   return (
     <>
-      <Loading meta={[daiTokenInfoMeta, accountMeta, defiYieldMeta]}>
+      <Loading meta={[accountMeta, defiYieldMeta]}>
         <Button {...props} onClick={open} disabled={defiYield?.isZero()}>
           {t(tKeys.buttonTitle.getKey())}
         </Button>

@@ -91,10 +91,7 @@ function calcShareIncreasingPercent(
   const nextTotalSupply = totalSupply.add(balanceIncreasing);
   const nextShare = nextTotalSupply.isZero()
     ? new BN(0)
-    : currentBalance
-        .add(balanceIncreasing)
-        .mul(multiplier)
-        .div(nextTotalSupply);
+    : currentBalance.add(balanceIncreasing).mul(multiplier).div(nextTotalSupply);
 
   return nextShare.sub(currentShare);
 }

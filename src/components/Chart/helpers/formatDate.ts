@@ -3,10 +3,7 @@ import moment from 'moment';
 import { Period } from '../Chart';
 
 export function makeFormatDateByPeriod(period: Period, firstDate: number) {
-  const monthAgo = moment(Date.now())
-    .subtract(1, 'months')
-    .endOf('day')
-    .valueOf();
+  const monthAgo = moment(Date.now()).subtract(1, 'months').endOf('day').valueOf();
   return (date: number) => {
     const mDate = moment(date);
     const formatByPeriod: Record<Period, string> = {

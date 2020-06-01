@@ -1,6 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
 import Button from '@material-ui/core/Button';
-import * as R from 'ramda';
 import BN from 'bn.js';
 import { map } from 'rxjs/operators';
 
@@ -25,9 +24,12 @@ import { roundWei } from 'utils/bn';
 import {
   PTokenExchanging,
   ISubmittedFormData,
+  PTokenExchangingProps as GenericPTokenExchangingProps,
 } from '../../components/PTokenExcahnging/PTokenExcahnging';
 
-type IProps = React.ComponentPropsWithoutRef<typeof Button>;
+type PTokenExchangingProps = GenericPTokenExchangingProps<IExtraFormData>;
+
+type Props = React.ComponentPropsWithoutRef<typeof Button>;
 
 const tKeys = tKeysAll.features.cashExchange.getLoanButton;
 
@@ -45,23 +47,20 @@ const fieldNames: { [K in keyof IExtraFormData]: K } = {
 
 const zero = new BN(0);
 
-function GetLoanButton(props: IProps) {
+function GetLoanButton(props: Props) {
   const { t } = useTranslate();
   const api = useApi();
 
-  const [daiTokenInfo] = useSubscribable(() => api.tokens.getTokenInfo$('dai'), []);
-  const decimals = daiTokenInfo?.decimals || 0;
-
-  const getMaxSourceValue = useCallback(
-    (account: string) =>
+  const getMaxSourceValue: PTokenExchangingProps['getMaxSourceValue'] = useCallback(
+    ({ account, token }) =>
       api.loanModule
         .getMaxAvailableLoanSizeInDai$(account)
-        .pipe(map(loanSize => roundWei(loanSize, decimals, 'floor', 2))),
-    [decimals],
+        .pipe(map(loanSize => roundWei(loanSize, token.decimals, 'floor', 2))),
+    [],
   );
-  const getMinSourceValue = useCallback(
+  const getMinSourceValue: PTokenExchangingProps['getMinSourceValue'] = useCallback(
     () => api.loanModule.getConfig$().pipe(map(({ limits: { lDebtAmountMin } }) => lDebtAmountMin)),
-    [decimals],
+    [],
   );
 
   const [percentDecimals, percentDecimalsMeta] = useSubscribable(
@@ -81,12 +80,13 @@ function GetLoanButton(props: IProps) {
     return composeValidators(
       isRequired,
       validateInteger,
-      /* eslint-disable no-underscore-dangle */
-      R.curry(moreThen)(new BN(0), R.__, undefined as any),
+      (value: string) => moreThen(new BN(0), new BN(value)),
       ...(!minApr.isZero()
-        ? [R.curry(moreThenOrEqual)(minApr, R.__, () => `${formattedMinPercent}%`)]
+        ? [
+            (value: string) =>
+              moreThenOrEqual(minApr, new BN(value), () => `${formattedMinPercent}%`),
+          ]
         : []),
-      /* eslint-enable no-underscore-dangle */
     );
   }, [minApr, formattedMinPercent]);
 
@@ -104,34 +104,17 @@ function GetLoanButton(props: IProps) {
   );
 
   const getConfirmMessage = useCallback(
-    (values: (ISubmittedFormData & IExtraFormData) | null) => {
-      const rawSourceAmount = values?.sourceAmount?.toString() || '0';
-
-      return api.loanModule.getMinLoanCollateralByDaiInDai$(rawSourceAmount).pipe(
-        map(rawCollateral => {
-          const collateral =
-            (daiTokenInfo &&
-              formatBalance({
-                amountInBaseUnits: rawCollateral,
-                baseDecimals: daiTokenInfo.decimals,
-                tokenSymbol: daiTokenInfo.symbol,
-              })) ||
-            '⏳';
-
-          const sourceAmount =
-            (daiTokenInfo &&
-              formatBalance({
-                amountInBaseUnits: rawSourceAmount,
-                baseDecimals: daiTokenInfo.decimals,
-                tokenSymbol: daiTokenInfo.symbol,
-              })) ||
-            '⏳';
-
-          return t(tKeys.confirmMessage.getKey(), { collateral, sourceAmount });
+    ({ sourceAmount }: ISubmittedFormData & IExtraFormData) => {
+      return api.loanModule.getMinLoanCollateralByDaiInDai$(sourceAmount.toString()).pipe(
+        map(collateral => {
+          return t(tKeys.confirmMessage.getKey(), {
+            collateral: sourceAmount.withValue(collateral).toFormattedString(),
+            sourceAmount: sourceAmount.toFormattedString(),
+          });
         }),
       );
     },
-    [daiTokenInfo],
+    [api],
   );
 
   const additionalFields = useMemo(

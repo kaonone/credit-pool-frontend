@@ -11,6 +11,9 @@ module.exports = {
     browser: true,
     node: true,
   },
+  parserOptions: {
+    project: './tsconfig.json',
+  },
   settings: {
     'import/resolver': {
       node: {
@@ -55,6 +58,13 @@ module.exports = {
       {
         groups: [['builtin', 'external'], 'internal', ['parent', 'sibling'], 'index'],
         'newlines-between': 'always',
+      },
+    ],
+    '@typescript-eslint/camelcase': 'off', // TODO try to remove after eslint-config-airbnb-typescript updating
+    '@typescript-eslint/no-unused-expressions': [
+      'error',
+      {
+        allowShortCircuit: true,
       },
     ],
     '@typescript-eslint/no-use-before-define': 'off',

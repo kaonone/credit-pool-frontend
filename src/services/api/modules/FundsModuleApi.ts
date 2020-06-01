@@ -9,6 +9,7 @@ import { createFundsModule } from 'generated/contracts';
 import { ETH_NETWORK_CONFIG } from 'env';
 import { decimalsToWei, max } from 'utils/bn';
 import { calcTotalWithdrawAmountByUserWithdrawAmount } from 'model';
+import { TokenAmount } from 'model/entities';
 
 import { TokensApi } from './TokensApi';
 import { CurveModuleApi } from './CurveModuleApi';
@@ -205,22 +206,22 @@ export class FundsModuleApi {
     address: string,
     additionalPtkBalance: string,
     additionalLiquidity: string,
-  ): Observable<BN> {
-    return combineLatest([
-      this.tokensApi.getBalance$('ptk', address),
-      this.getCurrentLiquidity$(),
-    ]).pipe(
-      switchMap(([ptkBalance, currentLiquidity]) =>
-        combineLatest([
-          this.curveModuleApi.calculateExitInverse$(
-            currentLiquidity.toString(),
-            ptkBalance.toString(),
-          ),
-          this.curveModuleApi.calculateExitInverse$(
-            currentLiquidity.add(new BN(additionalLiquidity)).toString(),
-            ptkBalance.add(new BN(additionalPtkBalance)).toString(),
-          ),
-        ]).pipe(map(([currentInfo, increasedInfo]) => increasedInfo.user.sub(currentInfo.user))),
+  ): Observable<TokenAmount> {
+    return this.tokensApi.toTokenAmount(
+      ETH_NETWORK_CONFIG.contracts.dai,
+      combineLatest([this.tokensApi.getBalance$('ptk', address), this.getCurrentLiquidity$()]).pipe(
+        switchMap(([ptkBalance, currentLiquidity]) =>
+          combineLatest([
+            this.curveModuleApi.calculateExitInverse$(
+              currentLiquidity.toString(),
+              ptkBalance.toString(),
+            ),
+            this.curveModuleApi.calculateExitInverse$(
+              currentLiquidity.add(new BN(additionalLiquidity)).toString(),
+              ptkBalance.add(new BN(additionalPtkBalance)).toString(),
+            ),
+          ]).pipe(map(([currentInfo, increasedInfo]) => increasedInfo.user.sub(currentInfo.user))),
+        ),
       ),
     );
   }

@@ -45,7 +45,7 @@ function DecimalsInput(props: IProps) {
       );
 
       if (inputValidationRegExp.test(event.target.value)) {
-        const suffixMatch = event.target.value.match(/^.+?((\.|\.0*)|(\.[1-9]*(0*)))$/);
+        const suffixMatch = event.target.value.match(/^.+?((\.|\.0+)|(\.[0-9]*?(0*)))$/);
 
         if (suffixMatch) {
           const [, , dotWithZeros, , zerosAfterDot] = suffixMatch;

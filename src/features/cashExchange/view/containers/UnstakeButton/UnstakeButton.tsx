@@ -13,10 +13,12 @@ import { usePledgeSubscription } from 'generated/gql/pool';
 import { getPledgeId, calcInterestShare } from 'model';
 import { Loading } from 'components';
 import { zeroAddress } from 'utils/mock';
+import { TokenAmount } from 'model/entities';
 
 import {
   PTokenExchanging,
   ISubmittedFormData,
+  PTokenExchangingProps,
 } from '../../components/PTokenExcahnging/PTokenExcahnging';
 
 type IProps = React.ComponentPropsWithoutRef<typeof Button> & {
@@ -33,10 +35,6 @@ function UnstakeButton(props: IProps) {
   const api = useApi();
 
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
-  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
-    () => api.tokens.getTokenInfo$('dai'),
-    [],
-  );
 
   const [fullLoanStake, fullLoanStakeMeta] = useSubscribable(
     () => api.loanModule.calculateFullLoanStake$(loanSize),
@@ -53,17 +51,17 @@ function UnstakeButton(props: IProps) {
   const lInitialLocked = pledgeGqlResult.data?.pledge?.lInitialLocked || '0';
 
   const getConfirmMessage = useCallback(
-    (values: ISubmittedFormData | null) => {
+    ({ sourceAmount }: ISubmittedFormData) => {
       return api.fundsModule
         .getAvailableBalanceIncreasing$(account || zeroAddress, pInitialLocked, lInitialLocked)
         .pipe(
           map(currentFullStakeCost => {
-            const rawSourceAmount = new BN(values?.sourceAmount?.toString() || '0');
+            const rawSourceAmount = sourceAmount.value;
             const interestShareDecimals = 2;
 
             const lAmountForUnstakeByInitial = new BN(lInitialLocked)
               .mul(rawSourceAmount)
-              .div(currentFullStakeCost);
+              .div(currentFullStakeCost.value);
 
             const rawInterestShareDelta = calcInterestShare(
               lAmountForUnstakeByInitial,
@@ -71,43 +69,35 @@ function UnstakeButton(props: IProps) {
               interestShareDecimals,
             );
 
-            const interestShareDelta =
-              (daiTokenInfo &&
-                `${formatBalance({
-                  amountInBaseUnits: rawInterestShareDelta,
-                  baseDecimals: interestShareDecimals,
-                })}%`) ||
-              '⏳';
+            const interestShareDelta = `${formatBalance({
+              amountInBaseUnits: rawInterestShareDelta,
+              baseDecimals: interestShareDecimals,
+            })}%`;
 
-            const sourceAmount =
-              (daiTokenInfo &&
-                formatBalance({
-                  amountInBaseUnits: rawSourceAmount,
-                  baseDecimals: daiTokenInfo.decimals,
-                  tokenSymbol: daiTokenInfo.symbol,
-                })) ||
-              '⏳';
-
-            return t(tKeys.confirmMessage.getKey(), { sourceAmount, interestShareDelta });
+            return t(tKeys.confirmMessage.getKey(), {
+              sourceAmount: sourceAmount.toFormattedString(),
+              interestShareDelta,
+            });
           }),
         );
     },
-    [account, daiTokenInfo, fullLoanStake.toString(), pInitialLocked, lInitialLocked],
+    [account, fullLoanStake.toString(), pInitialLocked, lInitialLocked],
   );
 
-  const getMaxSourceValue = useCallback(
+  const getMaxSourceValue: PTokenExchangingProps['getMaxSourceValue'] = useCallback(
     () =>
-      api.fundsModule.getAvailableBalanceIncreasing$(
-        account || zeroAddress,
-        pInitialLocked,
-        lInitialLocked,
-      ),
-    [account, pInitialLocked, lInitialLocked],
+      api.fundsModule
+        .getAvailableBalanceIncreasing$(account || zeroAddress, pInitialLocked, lInitialLocked)
+        .pipe(map(item => item.value)),
+    [api, account, pInitialLocked, lInitialLocked],
   );
-  const getMinSourceValue = useCallback(() => of(new BN(0)), []);
+  const getMinSourceValue: PTokenExchangingProps['getMinSourceValue'] = useCallback(
+    () => of(new BN(0)),
+    [],
+  );
 
   const onUnstakeRequest = useCallback(
-    (address: string, values: { sourceAmount: BN }): Promise<void> => {
+    (address: string, values: { sourceAmount: TokenAmount }): Promise<void> => {
       return api.loanModule.unstakePtk(address, {
         borrower,
         proposalId,
@@ -120,7 +110,7 @@ function UnstakeButton(props: IProps) {
   );
 
   return (
-    <Loading meta={[accountMeta, daiTokenInfoMeta, fullLoanStakeMeta]} progressVariant="linear">
+    <Loading meta={[accountMeta, fullLoanStakeMeta]} progressVariant="linear">
       <ModalButton content={t(tKeys.buttonTitle.getKey())} fullWidth {...restProps}>
         {({ closeModal }) => (
           <PTokenExchanging

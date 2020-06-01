@@ -12,10 +12,12 @@ import { useSubscribable } from 'utils/react';
 import { Loading } from 'components';
 import { formatBalance } from 'utils/format';
 import { calcInterestShare } from 'model';
+import { TokenAmount } from 'model/entities';
 
 import {
   PTokenExchanging,
   ISubmittedFormData,
+  PTokenExchangingProps,
 } from '../../components/PTokenExcahnging/PTokenExcahnging';
 
 type IProps = React.ComponentPropsWithoutRef<typeof Button> & {
@@ -31,12 +33,6 @@ function StakeButton(props: IProps) {
   const { t } = useTranslate();
   const api = useApi();
 
-  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
-    () => api.tokens.getTokenInfo$('dai'),
-    [],
-  );
-  const decimals = daiTokenInfo?.decimals || 0;
-
   const [fullLoanStake, fullLoanStakeMeta] = useSubscribable(
     () => api.loanModule.calculateFullLoanStake$(loanSize),
     [loanSize],
@@ -44,8 +40,8 @@ function StakeButton(props: IProps) {
   );
 
   const getConfirmMessage = useCallback(
-    (values: ISubmittedFormData | null) => {
-      const rawSourceAmount = new BN(values?.sourceAmount?.toString() || '0');
+    ({ sourceAmount }: ISubmittedFormData) => {
+      const rawSourceAmount = sourceAmount.value;
 
       const interestShareDecimals = 2;
       const rawInterestShareDelta = calcInterestShare(
@@ -54,44 +50,37 @@ function StakeButton(props: IProps) {
         interestShareDecimals,
       );
 
-      const interestShareDelta =
-        (daiTokenInfo &&
-          `${formatBalance({
-            amountInBaseUnits: rawInterestShareDelta,
-            baseDecimals: interestShareDecimals,
-          })}%`) ||
-        '⏳';
+      const interestShareDelta = `${formatBalance({
+        amountInBaseUnits: rawInterestShareDelta,
+        baseDecimals: interestShareDecimals,
+      })}%`;
 
-      const sourceAmount =
-        (daiTokenInfo &&
-          formatBalance({
-            amountInBaseUnits: rawSourceAmount,
-            baseDecimals: daiTokenInfo.decimals,
-            tokenSymbol: daiTokenInfo.symbol,
-          })) ||
-        '⏳';
-
-      return of(t(tKeys.confirmMessage.getKey(), { interestShareDelta, sourceAmount }));
+      return of(
+        t(tKeys.confirmMessage.getKey(), {
+          interestShareDelta,
+          sourceAmount: sourceAmount.toFormattedString(),
+        }),
+      );
     },
-    [t, daiTokenInfo, fullLoanStake],
+    [t, fullLoanStake],
   );
 
-  const getMaxSourceValue = useCallback(
-    (account: string) =>
+  const getMaxSourceValue: PTokenExchangingProps['getMaxSourceValue'] = useCallback(
+    ({ account, token }) =>
       combineLatest([
         api.fundsModule.getPtkBalanceInDaiWithoutFee$(account),
         api.loanModule.getPledgeRequirements$(borrower, proposalId),
       ]).pipe(
         map(([balance, { maxLPledge }]) => {
-          const roundedBalance = roundWei(balance, decimals, 'floor', 2);
-          const roundedMaxStakeSize = roundWei(maxLPledge, decimals, 'ceil', 2);
+          const roundedBalance = roundWei(balance, token.decimals, 'floor', 2);
+          const roundedMaxStakeSize = roundWei(maxLPledge, token.decimals, 'ceil', 2);
 
           return min(roundedBalance, roundedMaxStakeSize);
         }),
       ),
-    [borrower, proposalId, decimals],
+    [borrower, proposalId],
   );
-  const getMinSourceValue = useCallback(
+  const getMinSourceValue: PTokenExchangingProps['getMinSourceValue'] = useCallback(
     () =>
       api.loanModule
         .getPledgeRequirements$(borrower, proposalId)
@@ -100,7 +89,7 @@ function StakeButton(props: IProps) {
   );
 
   const onStakeRequest = useCallback(
-    (address: string, values: { sourceAmount: BN }): Promise<void> => {
+    (address: string, values: { sourceAmount: TokenAmount }): Promise<void> => {
       return api.loanModule.stakePtk(address, {
         borrower,
         proposalId,
@@ -111,7 +100,7 @@ function StakeButton(props: IProps) {
   );
 
   return (
-    <Loading meta={[daiTokenInfoMeta, fullLoanStakeMeta]} progressVariant="linear">
+    <Loading meta={fullLoanStakeMeta} progressVariant="linear">
       <ModalButton content={t(tKeys.buttonTitle.getKey())} fullWidth {...restProps}>
         {({ closeModal }) => (
           <PTokenExchanging

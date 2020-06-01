@@ -8,17 +8,20 @@ import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { ModalButton, FormControlLabel, Radio, Loading } from 'components';
 import { RadioGroupInputField, SpyField } from 'components/form';
-import { useSubscribable, useFormattedBalance } from 'utils/react';
-import { formatBalance } from 'utils/format';
+import { useSubscribable } from 'utils/react';
 import { max, min } from 'utils/bn';
 import { RepaymentMethod, repaymentMethods } from 'model/types';
 import { lessThenOrEqual } from 'utils/validators';
 import { zeroAddress } from 'utils/mock';
+import { TokenAmount } from 'model/entities';
 
 import {
   PTokenExchanging,
   ISubmittedFormData,
+  PTokenExchangingProps as GenericPTokenExchangingProps,
 } from '../../components/PTokenExcahnging/PTokenExcahnging';
+
+type PTokenExchangingProps = GenericPTokenExchangingProps<IExtraFormData>;
 
 type IProps = React.ComponentPropsWithoutRef<typeof Button> & {
   debtId: string;
@@ -43,52 +46,24 @@ function RepayButton(props: IProps) {
   const { t } = useTranslate();
   const api = useApi();
 
-  const [daiTokenInfo] = useSubscribable(() => api.tokens.getTokenInfo$('dai'), []);
-
   const getConfirmMessage = useCallback(
-    (values: ISubmittedFormData | null) => {
-      const rawSourceAmount = new BN(values?.sourceAmount?.toString() || '0');
+    ({ sourceAmount }: ISubmittedFormData) => {
+      const rawSourceAmount = sourceAmount.value;
 
       return api.loanModule.getDebtRequiredPayments$(account, debtId, lastPaymentDate).pipe(
         map(({ currentInterest }) => {
-          const rawBody = max('0', rawSourceAmount.sub(currentInterest));
-          const rawInterest = min(rawSourceAmount, currentInterest);
+          const body = max('0', rawSourceAmount.sub(currentInterest));
+          const interest = min(rawSourceAmount, currentInterest);
 
-          const body =
-            (daiTokenInfo &&
-              formatBalance({
-                amountInBaseUnits: rawBody,
-                baseDecimals: daiTokenInfo.decimals,
-                tokenSymbol: daiTokenInfo.symbol,
-                precision: 4,
-              })) ||
-            '⏳';
-
-          const interest =
-            (daiTokenInfo &&
-              formatBalance({
-                amountInBaseUnits: rawInterest,
-                baseDecimals: daiTokenInfo.decimals,
-                tokenSymbol: daiTokenInfo.symbol,
-                precision: 4,
-              })) ||
-            '⏳';
-
-          const sourceAmount =
-            (daiTokenInfo &&
-              formatBalance({
-                amountInBaseUnits: rawSourceAmount,
-                baseDecimals: daiTokenInfo.decimals,
-                tokenSymbol: daiTokenInfo.symbol,
-                precision: 4,
-              })) ||
-            '⏳';
-
-          return t(tKeys.confirmMessage.getKey(), { body, interest, sourceAmount });
+          return t(tKeys.confirmMessage.getKey(), {
+            body: sourceAmount.withValue(body).toFormattedString(4),
+            interest: sourceAmount.withValue(interest).toFormattedString(4),
+            sourceAmount: sourceAmount.toFormattedString(4),
+          });
         }),
       );
     },
-    [daiTokenInfo, account, debtId, lastPaymentDate],
+    [account, debtId, lastPaymentDate],
   );
 
   const initialValues = useMemo<IExtraFormData>(
@@ -99,14 +74,17 @@ function RepayButton(props: IProps) {
     [],
   );
 
-  const getMaxSourceValue = useCallback(
+  const getMaxSourceValue: PTokenExchangingProps['getMaxSourceValue'] = useCallback(
     () =>
       api.loanModule
         .getDebtRequiredPayments$(account, debtId, lastPaymentDate)
         .pipe(map(({ currentInterest, loanSize }) => currentInterest.add(loanSize))),
     [debtId, account, lastPaymentDate],
   );
-  const getMinSourceValue = useCallback(() => of(new BN(0)), []);
+  const getMinSourceValue: PTokenExchangingProps['getMinSourceValue'] = useCallback(
+    () => of(new BN(0)),
+    [],
+  );
 
   const [availablePoolBalance, availablePoolBalanceMeta] = useSubscribable(
     () => api.fundsModule.getPtkBalanceInDaiWithFee$(account || zeroAddress),
@@ -119,47 +97,34 @@ function RepayButton(props: IProps) {
     new BN(0),
   );
 
-  const [{ formattedBalance: formattedAvailablePoolBalance }] = useFormattedBalance(
-    'dai',
-    availablePoolBalance,
-    daiTokenInfo?.decimals,
-    'short',
-  );
-  const [{ formattedBalance: formattedAvailableDaiBalance }] = useFormattedBalance(
-    'dai',
-    availableDaiBalance,
-    daiTokenInfo?.decimals,
-    'short',
-  );
-
   const validateForm = useCallback(
-    ({ repaymentMethod, sourceAmount }: IExtraFormData & { sourceAmount: string }) => {
+    ({ repaymentMethod, sourceAmount }: IExtraFormData & { sourceAmount: TokenAmount | null }) => {
+      if (!sourceAmount) {
+        return {};
+      }
+
       const sourceAmountError =
         repaymentMethod === 'fromAvailablePoolBalance'
           ? lessThenOrEqual(
               availablePoolBalance,
-              sourceAmount,
-              () => formattedAvailablePoolBalance,
+              sourceAmount.value,
+              () => sourceAmount.withValue(availablePoolBalance).toFormattedString(),
               tKeys.insufficientBalanceError.getKey(),
             )
           : lessThenOrEqual(
               availableDaiBalance,
-              sourceAmount,
-              () => formattedAvailableDaiBalance,
+              sourceAmount.value,
+              () => sourceAmount.withValue(availableDaiBalance).toFormattedString(),
               tKeys.insufficientBalanceError.getKey(),
             );
 
       return { sourceAmount: sourceAmountError };
     },
-    [
-      availablePoolBalance.toString(),
-      availableDaiBalance.toString(),
-      formattedAvailablePoolBalance,
-    ],
+    [availablePoolBalance.toString(), availableDaiBalance.toString()],
   );
 
   const onRepayRequest = useCallback(
-    (address: string, values: { sourceAmount: BN } & IExtraFormData): Promise<void> => {
+    (address: string, values: { sourceAmount: TokenAmount } & IExtraFormData): Promise<void> => {
       return api.loanModule.repay(address, debtId, values.sourceAmount, values.repaymentMethod);
     },
     [debtId],

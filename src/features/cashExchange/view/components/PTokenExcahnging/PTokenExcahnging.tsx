@@ -17,21 +17,19 @@ import {
   fieldNames,
 } from '../PTokenExchangingForm/PTokenExchangingForm';
 
-export type IProps<ExtraFormData> = Pick<
+export type PTokenExchangingProps<ExtraFormData = {}> = Pick<
   PTokenExchangingFormProps<ExtraFormData>,
-  'isReadOnlySource' | 'formCalculations'
+  'isReadOnlySource' | 'formCalculations' | 'getMaxSourceValue' | 'getMinSourceValue'
 > & {
   title: string;
   sourcePlaceholder: string;
   confirmMessageTKey:
     | string
     | ((
-        values: (ISubmittedFormData & Omit<ExtraFormData, keyof ISubmittedFormData>) | null,
+        values: ISubmittedFormData & Omit<ExtraFormData, keyof ISubmittedFormData>,
       ) => Observable<string>);
   additionalFields?: React.ReactNode[];
   initialValues?: ExtraFormData;
-  getMaxSourceValue: (account: string) => Observable<BN>;
-  getMinSourceValue: (account: string) => Observable<BN>;
   onExchangeRequest: (
     account: string,
     values: ISubmittedFormData & Omit<ExtraFormData, keyof ISubmittedFormData>,
@@ -45,7 +43,7 @@ export type IProps<ExtraFormData> = Pick<
 const tKeysApp = tKeysAll.app;
 
 function PTokenExchanging<ExtraFormData extends Record<string, any> = {}>(
-  props: IProps<ExtraFormData>,
+  props: PTokenExchangingProps<ExtraFormData>,
 ) {
   const {
     title,

@@ -8,8 +8,5 @@ export function calcInterestShare(
   outputDecimals: number = 0,
 ): BN {
   const weiDecimals = decimalsToWei(outputDecimals);
-  return new BN(userStake)
-    .muln(100)
-    .mul(weiDecimals)
-    .div(new BN(fullLoanStake));
+  return new BN(userStake).muln(100).mul(weiDecimals).div(new BN(fullLoanStake));
 }

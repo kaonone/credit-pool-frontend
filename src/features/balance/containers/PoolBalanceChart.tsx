@@ -42,13 +42,7 @@ function PoolBalanceChart() {
   );
   const decimals = daiTokenInfo?.decimals || 0;
 
-  const yearAgoDate = React.useMemo(
-    () =>
-      moment()
-        .subtract(1, 'years')
-        .unix(),
-    [],
-  ); // Date in seconds
+  const yearAgoDate = React.useMemo(() => moment().subtract(1, 'years').unix(), []); // Date in seconds
 
   const balancesResult = usePoolBalancesSubscription({
     variables: {
@@ -60,12 +54,7 @@ function PoolBalanceChart() {
   const mockedPoints = React.useMemo<PoolPoint[]>(
     () => [
       {
-        date:
-          Date.now() -
-          moment()
-            .subtract(1, 'days')
-            .unix() *
-            1000, // Date in milliseconds
+        date: Date.now() - moment().subtract(1, 'days').unix() * 1000, // Date in milliseconds
         lEnterPrice: 0,
         lExitPrice: 0,
       },
@@ -123,15 +112,8 @@ function convertPtkPriceToDaiPrice(
   output: 'number' | 'weiBN',
 ): number | BN {
   const byOutput = {
-    number: () =>
-      decimalsToWei(decimals)
-        .muln(100)
-        .div(new BN(price))
-        .toNumber() / 100,
-    weiBN: () =>
-      decimalsToWei(decimals)
-        .mul(decimalsToWei(decimals))
-        .div(new BN(price)),
+    number: () => decimalsToWei(decimals).muln(100).div(new BN(price)).toNumber() / 100,
+    weiBN: () => decimalsToWei(decimals).mul(decimalsToWei(decimals)).div(new BN(price)),
   };
 
   return byOutput[output]();

@@ -20,34 +20,13 @@ export function getTicks<P extends IPoint>(
 
   const firstPointDateByPeriod: Record<Period, () => number> = {
     all: () => firstPoint.date,
-    '24h': () =>
-      moment(currentDate)
-        .subtract(1, 'day')
-        .valueOf(),
-    '3d': () =>
-      moment(currentDate)
-        .subtract(3, 'day')
-        .valueOf(),
-    '1w': () =>
-      moment(currentDate)
-        .subtract(1, 'week')
-        .valueOf(),
-    '2w': () =>
-      moment(currentDate)
-        .subtract(2, 'week')
-        .valueOf(),
-    '1m': () =>
-      moment(currentDate)
-        .subtract(1, 'month')
-        .valueOf(),
-    '3m': () =>
-      moment(currentDate)
-        .subtract(3, 'month')
-        .valueOf(),
-    '6m': () =>
-      moment(currentDate)
-        .subtract(6, 'month')
-        .valueOf(),
+    '24h': () => moment(currentDate).subtract(1, 'day').valueOf(),
+    '3d': () => moment(currentDate).subtract(3, 'day').valueOf(),
+    '1w': () => moment(currentDate).subtract(1, 'week').valueOf(),
+    '2w': () => moment(currentDate).subtract(2, 'week').valueOf(),
+    '1m': () => moment(currentDate).subtract(1, 'month').valueOf(),
+    '3m': () => moment(currentDate).subtract(3, 'month').valueOf(),
+    '6m': () => moment(currentDate).subtract(6, 'month').valueOf(),
   };
 
   const firstPointDate = Math.max(firstPointDateByPeriod[selectedPeriod](), firstPoint.date);

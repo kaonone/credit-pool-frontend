@@ -7,7 +7,8 @@ import { EventEmitter } from 'web3/types';
 
 import { memoize } from 'utils/decorators';
 import { createErc20, createPToken } from 'generated/contracts';
-import { Token, ITokenInfo } from 'model/types';
+import { Token as TokenType, ITokenInfo } from 'model/types';
+import { Token, TokenAmount } from 'model/entities';
 import { ETH_NETWORK_CONFIG } from 'env';
 
 import { Contracts, Web3ManagerModule } from '../types';
@@ -52,15 +53,22 @@ export class TokensApi {
   }
 
   @autobind
-  public async approveDai(fromAddress: string, spender: string, value: BN): Promise<void> {
+  public async approveDai(
+    fromAddress: string,
+    spender: string,
+    amount: TokenAmount,
+  ): Promise<void> {
     const txDai = getCurrentValueOrThrow(this.txContracts).dai;
 
-    const promiEvent = txDai.methods.approve({ spender, amount: value }, { from: fromAddress });
+    const promiEvent = txDai.methods.approve(
+      { spender, amount: amount.value },
+      { from: fromAddress },
+    );
 
     this.transactionsApi.pushToSubmittedTransactions$('dai.approve', promiEvent, {
       spender,
       fromAddress,
-      value,
+      value: amount,
     });
 
     await promiEvent;
@@ -68,7 +76,7 @@ export class TokensApi {
 
   @memoize(R.identity)
   @autobind
-  public getTokenInfo$(token: Token): Observable<ITokenInfo> {
+  public getTokenInfo$(token: TokenType): Observable<ITokenInfo> {
     return combineLatest([
       this.readonlyContracts[token].methods.symbol(),
       this.readonlyContracts[token].methods.decimals(),
@@ -77,9 +85,34 @@ export class TokensApi {
     );
   }
 
+  @memoize(R.identity)
+  @autobind
+  public getERC20TokenInfo$(address: string): Observable<ITokenInfo> {
+    const contract = createErc20(this.web3Manager.web3, address);
+
+    return combineLatest([contract.methods.symbol(), contract.methods.decimals()]).pipe(
+      map(([tokenSymbol, decimals]) => ({ symbol: tokenSymbol, decimals: decimals.toNumber() })),
+    );
+  }
+
+  @memoize(R.identity)
+  @autobind
+  public getToken$(address: string): Observable<Token> {
+    return this.getERC20TokenInfo$(address).pipe(
+      map(({ decimals, symbol }) => new Token(address, symbol, decimals)),
+    );
+  }
+
+  @autobind
+  public toTokenAmount(tokenAddress: string, amount$: Observable<BN>): Observable<TokenAmount> {
+    return combineLatest([this.getToken$(tokenAddress), amount$]).pipe(
+      map(([token, amount]) => new TokenAmount(amount, token)),
+    );
+  }
+
   @memoize((...args: string[]) => args.join())
   @autobind
-  public getBalance$(token: Token, address: string): Observable<BN> {
+  public getBalance$(token: TokenType, address: string): Observable<BN> {
     return this.readonlyContracts[token].methods.balanceOf({ account: address }, [
       this.readonlyContracts[token].events.Transfer({ filter: { from: address } }),
       this.readonlyContracts[token].events.Transfer({ filter: { to: address } }),
@@ -101,7 +134,7 @@ export class TokensApi {
 
   @memoize(R.identity)
   @autobind
-  public getTotalSupply$(token: Token): Observable<BN> {
+  public getTotalSupply$(token: TokenType): Observable<BN> {
     return this.readonlyContracts[token].methods.totalSupply(
       undefined,
       this.readonlyContracts[token].events.Transfer(),

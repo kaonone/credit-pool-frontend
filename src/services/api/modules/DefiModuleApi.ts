@@ -1,15 +1,16 @@
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import BN from 'bn.js';
 import { autobind } from 'core-decorators';
 import * as R from 'ramda';
 
 import { ETH_NETWORK_CONFIG } from 'env';
 import { createDeFiModule } from 'generated/contracts';
 import { memoize } from 'utils/decorators';
+import { TokenAmount } from 'model/entities';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
+import { TokensApi } from './TokensApi';
 
 function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNullable<T> {
   const value = subject.getValue();
@@ -25,7 +26,11 @@ export class DefiModuleApi {
   private readonlyContract: Contracts['defiModule'];
   private txContract = new BehaviorSubject<null | Contracts['defiModule']>(null);
 
-  constructor(private web3Manager: Web3ManagerModule, private transactionsApi: TransactionsApi) {
+  constructor(
+    private web3Manager: Web3ManagerModule,
+    private transactionsApi: TransactionsApi,
+    private tokensApi: TokensApi,
+  ) {
     this.readonlyContract = createDeFiModule(
       web3Manager.web3,
       ETH_NETWORK_CONFIG.contracts.defiModule,
@@ -40,11 +45,14 @@ export class DefiModuleApi {
 
   @memoize(R.identity)
   @autobind
-  public getAvailableInterest$(account: string): Observable<BN> {
-    return this.readonlyContract.methods.availableInterest({ account }, [
-      this.readonlyContract.events.InvestmentDistributionCreated(),
-      this.readonlyContract.events.WithdrawInterest({ filter: { account } }),
-    ]);
+  public getAvailableInterest$(account: string): Observable<TokenAmount> {
+    return this.tokensApi.toTokenAmount(
+      ETH_NETWORK_CONFIG.contracts.dai,
+      this.readonlyContract.methods.availableInterest({ account }, [
+        this.readonlyContract.events.InvestmentDistributionCreated(),
+        this.readonlyContract.events.WithdrawInterest({ filter: { account } }),
+      ]),
+    );
   }
 
   @autobind

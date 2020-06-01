@@ -8,6 +8,7 @@ import { ETH_NETWORK_CONFIG } from 'env';
 import { createLiquidityModule } from 'generated/contracts';
 import { memoize } from 'utils/decorators';
 import { calcTotalWithdrawAmountByUserWithdrawAmount } from 'model';
+import { TokenAmount } from 'model/entities';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TokensApi } from './TokensApi';
@@ -67,13 +68,13 @@ export class LiquidityModuleApi {
   }
 
   @autobind
-  public async sellPtk(fromAddress: string, values: { sourceAmount: BN }): Promise<void> {
+  public async sellPtk(fromAddress: string, values: { sourceAmount: TokenAmount }): Promise<void> {
     const { sourceAmount: lAmountWithoutFee } = values;
     const txLiquidityModule = getCurrentValueOrThrow(this.txContract);
 
     const { percentDivider, withdrawFeePercent } = await first(this.curveModuleApi.getConfig$());
     const lAmountWithFee = calcTotalWithdrawAmountByUserWithdrawAmount({
-      userWithdrawAmountInDai: lAmountWithoutFee,
+      userWithdrawAmountInDai: lAmountWithoutFee.value,
       percentDivider,
       withdrawFeePercent,
     });
@@ -97,7 +98,7 @@ export class LiquidityModuleApi {
   }
 
   @autobind
-  public async buyPtk(fromAddress: string, values: { sourceAmount: BN }): Promise<void> {
+  public async buyPtk(fromAddress: string, values: { sourceAmount: TokenAmount }): Promise<void> {
     const { sourceAmount } = values;
     const txLiquidityModule = getCurrentValueOrThrow(this.txContract);
 
@@ -108,7 +109,7 @@ export class LiquidityModuleApi {
     );
 
     const promiEvent = txLiquidityModule.methods.deposit(
-      { lAmount: sourceAmount, pAmountMin: new BN(0) },
+      { lAmount: sourceAmount.value, pAmountMin: new BN(0) },
       { from: fromAddress },
     );
 

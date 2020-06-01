@@ -19,6 +19,7 @@ import {
 } from 'env';
 import { RepaymentMethod } from 'model/types';
 import { calcTotalWithdrawAmountByUserWithdrawAmount } from 'model';
+import { TokenAmount } from 'model/entities';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
@@ -226,7 +227,7 @@ export class LoanModuleApi {
   @autobind
   public async stakePtk(
     fromAddress: string,
-    values: { sourceAmount: BN; borrower: string; proposalId: string },
+    values: { sourceAmount: TokenAmount; borrower: string; proposalId: string },
   ): Promise<void> {
     const { sourceAmount, borrower, proposalId } = values;
     const txLoanModule = getCurrentValueOrThrow(this.txContracts.proposals);
@@ -262,7 +263,7 @@ export class LoanModuleApi {
   public async unstakePtk(
     fromAddress: string,
     values: {
-      sourceAmount: BN; // in DAI by currentFullStakeCost
+      sourceAmount: TokenAmount; // in DAI by currentFullStakeCost
       borrower: string;
       proposalId: string;
       lInitialLocked: string;
@@ -280,7 +281,7 @@ export class LoanModuleApi {
       ),
     );
 
-    const pAmount = new BN(pInitialLocked).mul(sourceAmount).div(new BN(currentFullStakeCost));
+    const pAmount = new BN(pInitialLocked).mul(sourceAmount.value).div(currentFullStakeCost.value);
 
     const promiEvent = txLoanModule.methods.withdrawPledge(
       {
@@ -329,7 +330,7 @@ export class LoanModuleApi {
   @autobind
   public async createLoanProposal(
     fromAddress: string,
-    values: { sourceAmount: BN; apr: string; description: string },
+    values: { sourceAmount: TokenAmount; apr: string; description: string },
   ): Promise<void> {
     const { sourceAmount, apr, description } = values;
     const txLoanModule = getCurrentValueOrThrow(this.txContracts.proposals);
@@ -347,7 +348,7 @@ export class LoanModuleApi {
     const promiEvent = txLoanModule.methods.createDebtProposal(
       {
         pAmountMax: min(pAmount, pBalance),
-        debtLAmount: sourceAmount,
+        debtLAmount: sourceAmount.value,
         interest: new BN(apr),
         descriptionHash: hash,
       },
@@ -432,7 +433,7 @@ export class LoanModuleApi {
   public async repay(
     fromAddress: string,
     debtId: string,
-    lAmount: BN,
+    lAmount: TokenAmount,
     method: RepaymentMethod,
   ): Promise<void> {
     const txLoanModule = getCurrentValueOrThrow(this.txContracts.loan);
@@ -444,7 +445,7 @@ export class LoanModuleApi {
 
       const totalWithdrawAmount = calcTotalWithdrawAmountByUserWithdrawAmount({
         percentDivider,
-        userWithdrawAmountInDai: lAmount,
+        userWithdrawAmountInDai: lAmount.value,
         withdrawFeePercent,
       });
 
@@ -454,7 +455,7 @@ export class LoanModuleApi {
       const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
 
       promiEvent = txLoanModule.methods.repayPTK(
-        { debt: bnToBn(debtId), lAmountMin: lAmount, pAmount: min(pAmount, pBalance) },
+        { debt: bnToBn(debtId), lAmountMin: lAmount.value, pAmount: min(pAmount, pBalance) },
         { from: fromAddress },
       );
     } else {
@@ -465,7 +466,7 @@ export class LoanModuleApi {
       );
 
       promiEvent = txLoanModule.methods.repay(
-        { debt: bnToBn(debtId), lAmount },
+        { debt: bnToBn(debtId), lAmount: lAmount.value },
         { from: fromAddress },
       );
     }
@@ -473,7 +474,7 @@ export class LoanModuleApi {
     this.transactionsApi.pushToSubmittedTransactions$('loan.repay', promiEvent, {
       address: fromAddress,
       debtId,
-      amount: lAmount,
+      amount: lAmount.value,
     });
 
     await promiEvent;

@@ -5,3 +5,4 @@ export { RadioGroupInputField } from './RadioGroupInputField';
 export { TextInputField } from './TextInputField';
 export { DecimalsField } from './DecimalsField';
 export { SpyField } from './SpyField';
+export { TokenAmountField } from './TokenAmountField';

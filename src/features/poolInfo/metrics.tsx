@@ -190,9 +190,7 @@ function usePoolInfo() {
 }
 
 function usePoolInfoDayAgo() {
-  const lastDay = moment()
-    .subtract(1, 'day')
-    .unix(); // Date in seconds
+  const lastDay = moment().subtract(1, 'day').unix(); // Date in seconds
 
   const poolMetricsDayAgoGqlResult = usePoolMetricByDateSubscription({
     variables: {
