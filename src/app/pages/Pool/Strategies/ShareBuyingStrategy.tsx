@@ -8,6 +8,7 @@ import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 import { decimalsToWei } from 'utils/bn';
 import { formatBalance } from 'utils/format';
+import { ETH_NETWORK_CONFIG } from 'env';
 
 import { StrategyCard } from '../StrategyCard';
 
@@ -16,7 +17,7 @@ export function ShareBuyingStrategy() {
   const [account] = useSubscribable(() => api.web3Manager.account, []);
 
   const [daiBalance, daiBalanceMeta] = useSubscribable(
-    () => (account ? api.tokens.getBalance$('dai', account) : of(new BN(0))),
+    () => (account ? api.tokens.getDaiBalance$(account) : of(new BN(0))),
     [api, account],
     new BN(0),
   );
@@ -34,7 +35,7 @@ export function ShareBuyingStrategy() {
   );
 
   const [ptkTotalSupply, ptkTotalSupplyMeta] = useSubscribable(
-    () => (account ? api.tokens.getTotalSupply$('ptk') : of(new BN(0))),
+    () => (account ? api.tokens.getTotalSupply$(ETH_NETWORK_CONFIG.contracts.ptk) : of(new BN(0))),
     [api, account],
     new BN(0),
   );

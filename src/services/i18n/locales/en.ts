@@ -34,7 +34,7 @@ const en = {
       applicationNetwork: 'This application works with the network "%{networkName}"',
     },
     notifications: {
-      'dai.approve': {
+      'erc20.approve': {
         pending: 'Approving %{amount} transfer. Pending',
         success: 'Approving %{amount} transfer. Successful',
         error: 'Approving %{amount} transfer. Failed',
@@ -100,26 +100,20 @@ const en = {
         error: 'Loan repaying. Failed',
       },
     },
+    sellShare: {
+      buttonTitle: 'Sell',
+      formTitle: 'Sell share',
+      placeholder: 'Enter sum',
+      confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
+      interestConfirmation:
+        ' Additional ~%{interestAmount} will be deducted from your available balance as a payment for the the accumulated interest on your outstanding loans. Full amount to be written off from your available balance will be ~%{fullAmount}.',
+    },
     cashExchange: {
       pTokenBuying: {
         buttonTitle: 'Buy',
         formTitle: 'Buy share',
         placeholder: 'Enter sum',
         confirmMessage: 'Are you sure you want deposit %{sourceAmount}?',
-      },
-      pTokenSellingButton: {
-        buttonTitle: 'Sell',
-        formTitle: 'Sell share',
-        placeholder: 'Enter sum',
-        fields: {
-          withdrawMethod: {
-            availableBalance: 'from available pool balance',
-            defiYield: 'from investment yield',
-          },
-        },
-        confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
-        interestConfirmation:
-          ' Additional ~%{interestAmount} will be deducted from your available balance as a payment for the the accumulated interest on your outstanding loans. Full amount to be written off from your available balance will be ~%{fullAmount}.',
       },
       stakeButton: {
         buttonTitle: 'Stake',
@@ -183,6 +177,7 @@ const en = {
       },
       exchangingForm: {
         cancelButtonText: 'Cancel',
+        submitButtonText: 'Submit',
         givenAmountText: 'You get ~%{formattedAmount}',
         targetAmountError: 'Please wait until amount is calculated',
       },

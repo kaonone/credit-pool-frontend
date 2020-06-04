@@ -19,7 +19,7 @@ export function JoiningToPoolModal() {
   const [account] = useSubscribable(() => api.web3Manager.account, [api]);
 
   const [balance] = useSubscribable(
-    () => (account ? api.tokens.getBalance$('ptk', account) : of(null)),
+    () => (account ? api.tokens.getPtkBalance$(account) : of(null)),
     [api, account],
     null,
   );

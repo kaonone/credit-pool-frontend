@@ -1,18 +1,13 @@
 import React, { useMemo, useCallback } from 'react';
 import BN from 'bn.js';
-import { Form, FormSpy } from 'react-final-form';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { FormSpy } from 'react-final-form';
 import { Observable, empty } from 'rxjs';
 import createDecorator, { Calculation } from 'final-form-calculate';
 
 import { useTranslate, tKeys as tKeysAll, ITranslateKey } from 'services/i18n';
 import { useApi } from 'services/api';
-import { TokenAmountField, SpyField } from 'components/form';
-import { Hint } from 'components/Hint/Hint';
-import { Loading } from 'components/Loading';
+import { TokenAmountField, SpyField, FormTemplate } from 'components/form';
+import { Loading } from 'components';
 import {
   validatePositiveNumber,
   lessThenOrEqual,
@@ -142,74 +137,37 @@ function PTokenExchangingForm<ExtraFormData extends Record<string, any> = {}>(
   );
 
   return (
-    <Form
+    <FormTemplate
       decorators={decorators}
       validate={validateForm}
       onSubmit={handleFormSubmit}
       initialValues={initialValues}
-      subscription={{ submitError: true, submitting: true, dirtySinceLastSubmit: true }}
+      title={title}
+      cancelButton={t(tKeys.cancelButtonText.getKey())}
+      submitButton={t(tKeys.submitButtonText.getKey())}
+      onCancel={onCancel}
     >
-      {({ handleSubmit, submitError, submitting, dirtySinceLastSubmit }) => (
-        <form onSubmit={handleSubmit}>
-          <Grid container justify="center" spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h5" gutterBottom>
-                {title}
-              </Typography>
-
-              <Loading meta={sourceTokenMeta}>
-                {sourceToken && (
-                  <FormSpy subscription={{ values: true }}>
-                    {({ values }: { values: ExtraFormData & IFormData }) => (
-                      <TokenAmountField
-                        disabled={isReadOnlySource && isReadOnlySource(values)}
-                        maxValue={maxValue}
-                        validate={validateAmount}
-                        token={sourceToken}
-                        name={fieldNames.sourceAmount}
-                        placeholder={sourcePlaceholder}
-                      />
-                    )}
-                  </FormSpy>
-                )}
-              </Loading>
-              <SpyField
-                name={fieldNames.triggerRevalidateSourceAmount}
-                fieldValue={validateAmount}
-              />
-            </Grid>
-            {additionalFields?.map((item, index) => (
-              <Grid key={index} item xs={12}>
-                {item}
-              </Grid>
-            ))}
-            {!dirtySinceLastSubmit && !!submitError && (
-              <Grid item xs={12}>
-                <Hint>
-                  <Typography color="error">{submitError}</Typography>
-                </Hint>
-              </Grid>
-            )}
-            <Grid item xs={6}>
-              <Button variant="outlined" color="primary" fullWidth onClick={onCancel}>
-                {t(tKeys.cancelButtonText.getKey())}
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                fullWidth
-                disabled={submitting}
-              >
-                {submitting ? <CircularProgress size={24} /> : 'submit'}
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      )}
-    </Form>
+      <>
+        <Loading meta={sourceTokenMeta}>
+          {sourceToken && (
+            <FormSpy subscription={{ values: true }}>
+              {({ values }: { values: ExtraFormData & IFormData }) => (
+                <TokenAmountField
+                  disabled={isReadOnlySource && isReadOnlySource(values)}
+                  maxValue={maxValue}
+                  validate={validateAmount}
+                  currencies={[sourceToken]}
+                  name={fieldNames.sourceAmount}
+                  placeholder={sourcePlaceholder}
+                />
+              )}
+            </FormSpy>
+          )}
+        </Loading>
+        <SpyField name={fieldNames.triggerRevalidateSourceAmount} fieldValue={validateAmount} />
+      </>
+      {additionalFields}
+    </FormTemplate>
   );
 }
 

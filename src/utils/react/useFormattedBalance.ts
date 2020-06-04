@@ -1,8 +1,10 @@
 import BN from 'bn.js';
 
 import { useApi } from 'services/api';
-import { Token, ITokenInfo } from 'model/types';
+import { TokenType, IToBN } from 'model/types';
 import { formatBalance } from 'utils/format';
+import { Token } from 'model/entities';
+import { ETH_NETWORK_CONFIG } from 'env';
 
 import { useSubscribable, ISubscriptionMeta } from './useSubscribable';
 
@@ -11,44 +13,45 @@ type FormattedBalance = {
   notRoundedBalance: string;
 };
 
+const addressByToken: Record<TokenType, string> = {
+  dai: ETH_NETWORK_CONFIG.contracts.dai,
+  ptk: ETH_NETWORK_CONFIG.contracts.ptk,
+};
+
 export function useFormattedBalance(
-  token: Token,
-  value: string | BN,
+  tokenType: TokenType,
+  value: string | BN | IToBN,
   precision: number = 2,
   variant: 'short' | 'long' = 'long',
 ): [FormattedBalance, ISubscriptionMeta] {
   const api = useApi();
-  const [tokenInfo, tokenInfoMeta] = useSubscribable(() => api.tokens.getTokenInfo$(token), [
-    token,
-  ]);
+  const [token, tokenMeta] = useSubscribable(
+    () => api.tokens.getToken$(addressByToken[tokenType]),
+    [tokenType],
+  );
 
   return [
-    (tokenInfo && {
-      formattedBalance: getFormattedBalance(value.toString(), tokenInfo, precision, variant),
-      notRoundedBalance: getFormattedBalance(
-        value.toString(),
-        tokenInfo,
-        tokenInfo.decimals,
-        variant,
-      ),
+    (token && {
+      formattedBalance: getFormattedBalance(value, token, precision, variant),
+      notRoundedBalance: getFormattedBalance(value, token, token.decimals, variant),
     }) || {
       formattedBalance: '⏳',
       notRoundedBalance: '⏳',
     },
-    tokenInfoMeta,
+    tokenMeta,
   ];
 }
 
 const getFormattedBalance = (
-  value: string | BN,
-  tokenInfo: ITokenInfo,
+  value: string | BN | IToBN,
+  token: Token,
   precision: number,
   variant: 'short' | 'long',
 ) =>
   formatBalance({
     amountInBaseUnits: value,
-    baseDecimals: tokenInfo.decimals,
-    tokenSymbol: tokenInfo.symbol,
+    baseDecimals: token.decimals,
+    tokenSymbol: token.symbol,
     precision: precision || 2,
     variant,
   });

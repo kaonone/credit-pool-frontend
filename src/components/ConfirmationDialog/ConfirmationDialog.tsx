@@ -80,7 +80,7 @@ function ConfirmationDialog(props: IProps) {
           {typeof message === 'string' ? (
             <Typography>{message}</Typography>
           ) : (
-            <Loading component={Hint} meta={message[1]}>
+            <Loading meta={message[1]}>
               <Typography>{message[0]}</Typography>
             </Loading>
           )}

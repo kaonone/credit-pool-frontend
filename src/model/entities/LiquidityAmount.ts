@@ -2,17 +2,17 @@ import BN from 'bn.js';
 
 import { formatBalance } from 'utils/format';
 
-import { Token } from './Token';
 import { Amount } from './Amount';
+import { Currency } from './Currency';
 
-const uniqType = Symbol('TokenAmount');
+const uniqType = Symbol('LiquidityAmount type');
 
-export class TokenAmount extends Amount<Token> {
+export class LiquidityAmount extends Amount<Currency> {
   public _type: typeof uniqType = uniqType;
 
   // eslint-disable-next-line class-methods-use-this
-  public makeAmount(amount: string | BN, token: Token): this {
-    return new TokenAmount(amount, token) as this;
+  public makeAmount(amount: string | BN, currency: Currency): this {
+    return new LiquidityAmount(amount, currency) as this;
   }
 
   public toFormattedString(precision: number = 2): string {
@@ -21,11 +21,7 @@ export class TokenAmount extends Amount<Token> {
       tokenSymbol: this.currency.symbol,
       baseDecimals: this.currency.decimals,
       precision,
-      symbolPosition: 'end-space',
+      symbolPosition: 'start',
     });
-  }
-
-  public withToken(newToken: Token): TokenAmount {
-    return new TokenAmount(this.value, newToken);
   }
 }

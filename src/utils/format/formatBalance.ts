@@ -1,15 +1,19 @@
 import BN from 'bn.js';
 
 import { bnToBn } from 'utils/bn/bnToBn';
+import { IToBN } from 'model/types';
 
 import { formatDecimal } from './formatDecimal';
 
+type SymbolPosition = 'start-space' | 'start' | 'end-space' | 'end';
+
 interface IFormatBalanceOptions {
-  amountInBaseUnits: string | BN;
+  amountInBaseUnits: string | BN | IToBN;
   baseDecimals: number;
   tokenSymbol?: string;
   precision?: number;
   variant?: 'short' | 'long';
+  symbolPosition?: SymbolPosition;
 }
 
 export function formatBalance({
@@ -18,13 +22,12 @@ export function formatBalance({
   tokenSymbol = '',
   precision = 2,
   variant = 'long',
+  symbolPosition = 'end-space',
 }: IFormatBalanceOptions): string {
   let balanceString = bnToBn(amountInBaseUnits).toString();
 
-  const units = ` ${tokenSymbol}`;
-
   if (balanceString.length === 0 || balanceString === '0') {
-    return `0${units.trimEnd()}`;
+    return withUnit('0', { symbolPosition, tokenSymbol });
   }
 
   const isNegative = balanceString[0].startsWith('-');
@@ -48,5 +51,25 @@ export function formatBalance({
   }`;
   const short = long.replace(/^(\d+?\.\d*?)0*$/, '$1').replace(/^(\d+?)\.$/, '$1');
 
-  return `${variant === 'short' ? short : long}${units.trimEnd()}`;
+  return withUnit(variant === 'short' ? short : long, { symbolPosition, tokenSymbol });
+}
+
+const unitsGetterByPosition: Record<SymbolPosition, (tokenSymbol: string) => string> = {
+  'end-space': tokenSymbol => ` ${tokenSymbol}`,
+  end: tokenSymbol => tokenSymbol,
+  'start-space': tokenSymbol => `${tokenSymbol} `,
+  start: tokenSymbol => tokenSymbol,
+};
+
+const startPositions: SymbolPosition[] = ['start', 'start-space'];
+
+function withUnit(
+  value: string,
+  { symbolPosition, tokenSymbol }: { tokenSymbol: string; symbolPosition: SymbolPosition },
+) {
+  const isStartUnit = startPositions.includes(symbolPosition);
+  const unit = unitsGetterByPosition[symbolPosition](tokenSymbol.trim());
+  const raw = isStartUnit ? [unit, value] : [value, unit];
+
+  return raw.join('');
 }

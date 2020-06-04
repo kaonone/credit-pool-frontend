@@ -14,10 +14,10 @@ import {
   createLoanLimitsModule,
   createLoanProposalsModule,
 } from 'generated/contracts';
-import { TokenAmount } from 'model/entities';
+import { TokenAmount, LiquidityAmount } from 'model/entities';
 
 export type Contracts = {
-  dai: ReturnType<typeof createErc20>;
+  erc20: ReturnType<typeof createErc20>;
   ptk: ReturnType<typeof createPToken>;
   fundsModule: ReturnType<typeof createFundsModule>;
   liquidityModule: ReturnType<typeof createLiquidityModule>;
@@ -31,16 +31,19 @@ export type Contracts = {
 export type SubmittedTransaction =
   | IGenericSubmittedTransaction<'ptk.claimDistributions', { fromAddress: string }>
   | IGenericSubmittedTransaction<
-      'dai.approve',
+      'erc20.approve',
       { spender: string; fromAddress: string; value: TokenAmount }
     >
   | IGenericSubmittedTransaction<
       'liquidity.sellPtk',
-      { address: string; sourceAmount: TokenAmount }
+      { address: string; sourceAmount: LiquidityAmount }
     >
   | IGenericSubmittedTransaction<'liquidity.buyPtk', { address: string; sourceAmount: TokenAmount }>
   | IGenericSubmittedTransaction<'defi.withdrawInterest', { address: string }>
-  | IGenericSubmittedTransaction<'loan.addPledge', { address: string; sourceAmount: TokenAmount }>
+  | IGenericSubmittedTransaction<
+      'loan.addPledge',
+      { address: string; sourceAmount: LiquidityAmount }
+    >
   | IGenericSubmittedTransaction<
       'loan.unstakePledge',
       { address: string; sourceAmount: TokenAmount }

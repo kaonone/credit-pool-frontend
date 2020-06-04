@@ -89,6 +89,7 @@ function StakeButton(props: IProps) {
   );
 
   const onStakeRequest = useCallback(
+    // TODO use liquidity token
     (address: string, values: { sourceAmount: TokenAmount }): Promise<void> => {
       return api.loanModule.stakePtk(address, {
         borrower,

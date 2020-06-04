@@ -7,9 +7,10 @@ import { autobind } from 'core-decorators';
 import { memoize } from 'utils/decorators';
 import { createFundsModule } from 'generated/contracts';
 import { ETH_NETWORK_CONFIG } from 'env';
-import { decimalsToWei, max } from 'utils/bn';
-import { calcTotalWithdrawAmountByUserWithdrawAmount } from 'model';
-import { TokenAmount } from 'model/entities';
+import { max } from 'utils/bn';
+import { calcWithdrawAmountBeforeFee } from 'model';
+import { TokenAmount, Token, Currency, LiquidityAmount } from 'model/entities';
+import { IToBN } from 'model/types';
 
 import { TokensApi } from './TokensApi';
 import { CurveModuleApi } from './CurveModuleApi';
@@ -19,7 +20,7 @@ export class FundsModuleApi {
   private readonlyContract: Contracts['fundsModule'];
   private txContract = new BehaviorSubject<null | Contracts['fundsModule']>(null);
   private getTotalLProposals$: (() => Observable<BN>) | null = null;
-  private getUnpaidInterest$: ((address: string) => Observable<BN>) | null = null;
+  private getUnpaidInterest$: ((address: string) => Observable<LiquidityAmount>) | null = null;
 
   constructor(
     private web3Manager: Web3ManagerModule,
@@ -44,25 +45,48 @@ export class FundsModuleApi {
     this.getTotalLProposals$ = getter;
   }
 
-  public setUnpaidInterestGetter(getter: (address: string) => Observable<BN>) {
+  public setUnpaidInterestGetter(getter: (address: string) => Observable<LiquidityAmount>) {
     this.getUnpaidInterest$ = getter;
+  }
+
+  public toLiquidityAmount$(amount$: Observable<BN | IToBN>): Observable<LiquidityAmount>;
+  public toLiquidityAmount$(amount$: Observable<Array<BN | IToBN>>): Observable<LiquidityAmount[]>;
+  @autobind
+  public toLiquidityAmount$(
+    amount$: Observable<BN | IToBN | Array<BN | IToBN>>,
+  ): Observable<LiquidityAmount | LiquidityAmount[]> {
+    return combineLatest([this.getLiquidityCurrency$(), amount$]).pipe(
+      map(([currency, amounts]) =>
+        Array.isArray(amounts)
+          ? amounts.map(amount => new LiquidityAmount(amount, currency))
+          : new LiquidityAmount(amounts, currency),
+      ),
+    );
+  }
+
+  @memoize()
+  @autobind
+  // liquidity token is not an ERC20 token!
+  // eslint-disable-next-line class-methods-use-this
+  public getLiquidityCurrency$(): Observable<Currency> {
+    return of(new Currency('$', 18)); // TODO take decimals from contract
   }
 
   @memoize(R.identity)
   @autobind
-  public getMaxWithdrawAmountInDai$(address: string): Observable<BN> {
+  public getMaxWithdrawAmount$(address: string): Observable<LiquidityAmount> {
     if (!this.getUnpaidInterest$) {
       throw new Error('Getter for unpaidInterest is not found');
     }
 
     return combineLatest([this.getUnpaidInterest$(address), this.curveModuleApi.getConfig$()]).pipe(
       switchMap(([unpaidInterestInDai, { percentDivider, withdrawFeePercent }]) =>
-        this.convertDaiToPtkExit$(
-          calcTotalWithdrawAmountByUserWithdrawAmount({
+        this.convertLiquidityToPtkExit$(
+          calcWithdrawAmountBeforeFee({
             percentDivider,
             withdrawFeePercent,
-            userWithdrawAmountInDai: unpaidInterestInDai,
-          }).toString(),
+            withdrawAmountAfterFee: unpaidInterestInDai,
+          }),
         ),
       ),
       switchMap(unpaidInterestInPtk =>
@@ -71,16 +95,32 @@ export class FundsModuleApi {
     );
   }
 
+  @memoize()
+  @autobind
+  // eslint-disable-next-line class-methods-use-this
+  public getSupportedTokens$(): Observable<Token[]> {
+    // TODO take from contract
+    return of([ETH_NETWORK_CONFIG.contracts.dai]).pipe(
+      switchMap(addresses =>
+        combineLatest(addresses.map(address => this.tokensApi.getToken$(address))),
+      ),
+    );
+  }
+
   @memoize(R.identity)
   @autobind
-  public getUserWithdrawAmountInDai$(fullWithdrawAmountInPtk: string): Observable<BN> {
-    return this.getPtkToDaiExitInfo$(fullWithdrawAmountInPtk).pipe(map(({ user }) => user));
+  public getWithdrawingAmountAfterFee$(
+    fullWithdrawAmountInPtk: string,
+  ): Observable<LiquidityAmount> {
+    return this.toLiquidityAmount$(
+      this.getPtkToDaiExitInfo$(fullWithdrawAmountInPtk).pipe(map(({ user }) => user)),
+    );
   }
 
   @memoize(R.identity)
   @autobind
   public getPtkBalanceInDaiWithoutFee$(address: string): Observable<BN> {
-    return this.tokensApi.getBalance$('ptk', address).pipe(
+    return this.tokensApi.getPtkBalance$(address).pipe(
       switchMap(balance => this.getPtkToDaiExitInfo$(balance.toString())),
       map(item => item.total),
     );
@@ -89,36 +129,9 @@ export class FundsModuleApi {
   @memoize(R.identity)
   @autobind
   public getPtkBalanceInDaiWithFee$(address: string): Observable<BN> {
-    return this.tokensApi.getBalance$('ptk', address).pipe(
+    return this.tokensApi.getPtkBalance$(address).pipe(
       switchMap(balance => this.getPtkToDaiExitInfo$(balance.toString())),
       map(item => item.user),
-    );
-  }
-
-  @memoize(R.identity)
-  @autobind
-  public getDaiToDaiExitInfo$(daiValue: string): Observable<{ total: BN; user: BN; fee: BN }> {
-    return this.convertDaiToPtkExit$(daiValue).pipe(
-      switchMap(ptkValue => this.getPtkToDaiExitInfo$(ptkValue.toString())),
-    );
-  }
-
-  @memoize(R.identity)
-  @autobind
-  // eslint-disable-next-line class-methods-use-this
-  public convertPtkToDaiForLocked$(value: string): Observable<BN> {
-    return combineLatest([
-      this.tokensApi.getTokenInfo$('dai'),
-      this.tokensApi.getTokenInfo$('ptk'),
-    ]).pipe(
-      switchMap(([daiInfo, ptkInfo]) =>
-        this.convertDaiToPtkEnter$(decimalsToWei(daiInfo.decimals).toString()).pipe(
-          map(oneDaiPrice => ({ oneDaiPrice, ptkInfo })),
-        ),
-      ),
-      map(({ oneDaiPrice, ptkInfo }) =>
-        new BN(value).mul(decimalsToWei(ptkInfo.decimals)).div(oneDaiPrice),
-      ),
     );
   }
 
@@ -135,17 +148,20 @@ export class FundsModuleApi {
         );
   }
 
-  @memoize(R.identity)
+  @memoize((value: LiquidityAmount) => value.toString())
   @autobind
-  public convertDaiToPtkExit$(value: string): Observable<BN> {
-    const lAmount = new BN(value);
+  public convertLiquidityToPtkExit$(value: LiquidityAmount): Observable<TokenAmount> {
+    const lAmount = value.toBN();
 
-    return lAmount.isZero()
-      ? of(lAmount)
-      : this.readonlyContract.methods.calculatePoolExit(
-          { lAmount },
-          this.readonlyContract.events.Status(),
-        );
+    return this.tokensApi.toTokenAmount(
+      ETH_NETWORK_CONFIG.contracts.ptk,
+      lAmount.isZero()
+        ? of(lAmount)
+        : this.readonlyContract.methods.calculatePoolExit(
+            { lAmount },
+            this.readonlyContract.events.Status(),
+          ),
+    );
   }
 
   @memoize(R.identity)
@@ -178,18 +194,17 @@ export class FundsModuleApi {
     address: string,
     additionalPtkBalance: string = '0',
     additionalLiquidity: string = '0',
-  ): Observable<BN> {
-    return combineLatest([
-      this.tokensApi.getBalance$('ptk', address),
-      this.getCurrentLiquidity$(),
-    ]).pipe(
-      switchMap(([ptkBalance, currentLiquidity]) =>
-        this.curveModuleApi
-          .calculateExitInverse$(
-            currentLiquidity.add(new BN(additionalLiquidity)).toString(),
-            max(new BN(0), ptkBalance.add(new BN(additionalPtkBalance))).toString(),
-          )
-          .pipe(map(info => info.user)),
+  ): Observable<LiquidityAmount> {
+    return this.toLiquidityAmount$(
+      combineLatest([this.tokensApi.getPtkBalance$(address), this.getCurrentLiquidity$()]).pipe(
+        switchMap(([ptkBalance, currentLiquidity]) =>
+          this.curveModuleApi
+            .calculateExitInverse$(
+              currentLiquidity.add(new BN(additionalLiquidity)).toString(),
+              max(new BN(0), ptkBalance.add(new BN(additionalPtkBalance))).toString(),
+            )
+            .pipe(map(info => info.user)),
+        ),
       ),
     );
   }
@@ -209,7 +224,7 @@ export class FundsModuleApi {
   ): Observable<TokenAmount> {
     return this.tokensApi.toTokenAmount(
       ETH_NETWORK_CONFIG.contracts.dai,
-      combineLatest([this.tokensApi.getBalance$('ptk', address), this.getCurrentLiquidity$()]).pipe(
+      combineLatest([this.tokensApi.getPtkBalance$(address), this.getCurrentLiquidity$()]).pipe(
         switchMap(([ptkBalance, currentLiquidity]) =>
           combineLatest([
             this.curveModuleApi.calculateExitInverse$(

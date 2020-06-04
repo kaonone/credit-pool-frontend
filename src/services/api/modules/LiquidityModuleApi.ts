@@ -7,8 +7,8 @@ import { min } from 'utils/bn';
 import { ETH_NETWORK_CONFIG } from 'env';
 import { createLiquidityModule } from 'generated/contracts';
 import { memoize } from 'utils/decorators';
-import { calcTotalWithdrawAmountByUserWithdrawAmount } from 'model';
-import { TokenAmount } from 'model/entities';
+import { calcWithdrawAmountBeforeFee } from 'model';
+import { TokenAmount, LiquidityAmount } from 'model/entities';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TokensApi } from './TokensApi';
@@ -68,30 +68,29 @@ export class LiquidityModuleApi {
   }
 
   @autobind
-  public async sellPtk(fromAddress: string, values: { sourceAmount: TokenAmount }): Promise<void> {
-    const { sourceAmount: lAmountWithoutFee } = values;
+  public async sellPtk(fromAddress: string, lAmountAfterFee: LiquidityAmount): Promise<void> {
     const txLiquidityModule = getCurrentValueOrThrow(this.txContract);
 
     const { percentDivider, withdrawFeePercent } = await first(this.curveModuleApi.getConfig$());
-    const lAmountWithFee = calcTotalWithdrawAmountByUserWithdrawAmount({
-      userWithdrawAmountInDai: lAmountWithoutFee.value,
+    const lAmountBeforeFee = calcWithdrawAmountBeforeFee({
+      withdrawAmountAfterFee: lAmountAfterFee,
       percentDivider,
       withdrawFeePercent,
     });
 
     const pAmountWithFee = await first(
-      this.fundsModuleApi.convertDaiToPtkExit$(lAmountWithFee.toString()),
+      this.fundsModuleApi.convertLiquidityToPtkExit$(lAmountBeforeFee),
     );
-    const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
+    const pBalance = await first(this.tokensApi.getPtkBalance$(fromAddress));
 
     const promiEvent = txLiquidityModule.methods.withdraw(
-      { lAmountMin: new BN(0), pAmount: min(pAmountWithFee, pBalance) },
+      { lAmountMin: new BN(0), pAmount: min(pAmountWithFee.toBN(), pBalance) },
       { from: fromAddress },
     );
 
     this.transactionsApi.pushToSubmittedTransactions$('liquidity.sellPtk', promiEvent, {
       address: fromAddress,
-      ...values,
+      sourceAmount: lAmountAfterFee,
     });
 
     await promiEvent;
@@ -102,7 +101,7 @@ export class LiquidityModuleApi {
     const { sourceAmount } = values;
     const txLiquidityModule = getCurrentValueOrThrow(this.txContract);
 
-    await this.tokensApi.approveDai(
+    await this.tokensApi.approve(
       fromAddress,
       ETH_NETWORK_CONFIG.contracts.fundsModule,
       sourceAmount,

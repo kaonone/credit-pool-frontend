@@ -105,7 +105,7 @@ function GetLoanButton(props: Props) {
 
   const getConfirmMessage = useCallback(
     ({ sourceAmount }: ISubmittedFormData & IExtraFormData) => {
-      return api.loanModule.getMinLoanCollateralByDaiInDai$(sourceAmount.toString()).pipe(
+      return api.loanModule.getMinLoanCollateral$(sourceAmount).pipe(
         map(collateral => {
           return t(tKeys.confirmMessage.getKey(), {
             collateral: sourceAmount.withValue(collateral).toFormattedString(),

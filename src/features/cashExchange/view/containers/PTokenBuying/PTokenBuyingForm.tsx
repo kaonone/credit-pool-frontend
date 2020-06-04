@@ -20,7 +20,7 @@ export function PTokenBuyingForm({ onCancel }: IFormProps) {
   const api = useApi();
 
   const getMaxSourceValue: PTokenExchangingProps['getMaxSourceValue'] = useCallback(
-    ({ account }) => api.tokens.getBalance$('dai', account),
+    ({ account }) => api.tokens.getDaiBalance$(account),
     [],
   );
   const getMinSourceValue: PTokenExchangingProps['getMinSourceValue'] = useCallback(

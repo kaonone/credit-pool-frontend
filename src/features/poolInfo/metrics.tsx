@@ -8,6 +8,7 @@ import { usePoolMetricsSubscription, usePoolMetricByDateSubscription } from 'gen
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 import { useAvgPoolAPR } from 'model/hooks';
+import { ETH_NETWORK_CONFIG } from 'env';
 
 const tKeys = tKeysAll.app.components.header;
 
@@ -153,7 +154,7 @@ export function TotalPtkSupply() {
   const api = useApi();
 
   const [totalSupply, totalSupplyMeta] = useSubscribable(
-    () => api.tokens.getTotalSupply$('ptk'),
+    () => api.tokens.getTotalSupply$(ETH_NETWORK_CONFIG.contracts.ptk),
     [api],
     new BN(0),
   );

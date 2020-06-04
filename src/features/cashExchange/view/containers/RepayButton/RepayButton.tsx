@@ -92,7 +92,7 @@ function RepayButton(props: IProps) {
     new BN(0),
   );
   const [availableDaiBalance, availableDaiBalanceMeta] = useSubscribable(
-    () => api.tokens.getBalance$('dai', account || zeroAddress),
+    () => api.tokens.getDaiBalance$(account || zeroAddress),
     [account],
     new BN(0),
   );
