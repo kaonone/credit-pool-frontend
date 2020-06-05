@@ -44,7 +44,6 @@ export class DefiModuleApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getAvailableInterest$(account: string): Observable<TokenAmount> {
     return this.tokensApi.toTokenAmount(
       ETH_NETWORK_CONFIG.contracts.dai,

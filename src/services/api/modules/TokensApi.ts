@@ -75,7 +75,6 @@ export class TokensApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getTokenInfo$(token: TokenType): Observable<ITokenInfo> {
     return combineLatest([
       this.readonlyContracts[token].methods.symbol(),
@@ -86,7 +85,6 @@ export class TokensApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getERC20TokenInfo$(address: string): Observable<ITokenInfo> {
     const contract = createErc20(this.web3Manager.web3, address);
 
@@ -96,7 +94,6 @@ export class TokensApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getToken$(address: string): Observable<Token> {
     return this.getERC20TokenInfo$(address).pipe(
       map(({ decimals, symbol }) => new Token(address, symbol, decimals)),
@@ -111,7 +108,6 @@ export class TokensApi {
   }
 
   @memoize((...args: string[]) => args.join())
-  @autobind
   public getBalance$(token: TokenType, address: string): Observable<BN> {
     return this.readonlyContracts[token].methods.balanceOf({ account: address }, [
       this.readonlyContracts[token].events.Transfer({ filter: { from: address } }),
@@ -120,7 +116,6 @@ export class TokensApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getPtkDistributionBalance$(address: string): Observable<BN> {
     if (!this.events) {
       throw new Error('Events for reload not found');
@@ -133,7 +128,6 @@ export class TokensApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getTotalSupply$(token: TokenType): Observable<BN> {
     return this.readonlyContracts[token].methods.totalSupply(
       undefined,
@@ -160,7 +154,6 @@ export class TokensApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getUnclaimedDistributions$(account: string): Observable<BN> {
     return this.readonlyContracts.ptk.methods.calculateUnclaimedDistributions({ account }, [
       this.readonlyContracts.ptk.events.DistributionCreated(),
@@ -169,7 +162,6 @@ export class TokensApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getAccumulatedUserDistributions$(account: string): Observable<BN> {
     return combineLatest([
       this.getAccumulatedPoolDistributions$(),
@@ -183,7 +175,6 @@ export class TokensApi {
   }
 
   @memoize()
-  @autobind
   public getAccumulatedPoolDistributions$(): Observable<BN> {
     return this.readonlyContracts.ptk.methods.distributionAccumulator(undefined, [
       this.readonlyContracts.ptk.events.DistributionAccumulatorIncreased(),
@@ -192,7 +183,6 @@ export class TokensApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getDistributionBalanceOf$(account: string): Observable<BN> {
     return this.readonlyContracts.ptk.methods.distributionBalanceOf({ account }, [
       this.readonlyContracts.ptk.events.Transfer({ filter: { from: account } }),
@@ -201,7 +191,6 @@ export class TokensApi {
   }
 
   @memoize()
-  @autobind
   public getDistributionTotalSupply$(): Observable<BN> {
     return this.readonlyContracts.ptk.methods.distributionTotalSupply(
       undefined,
@@ -210,7 +199,6 @@ export class TokensApi {
   }
 
   @memoize()
-  @autobind
   public getNextDistributionTimestamp$(): Observable<number> {
     return this.readonlyContracts.ptk.methods
       .nextDistributionTimestamp(undefined, this.readonlyContracts.ptk.events.DistributionCreated())

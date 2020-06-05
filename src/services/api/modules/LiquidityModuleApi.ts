@@ -57,7 +57,6 @@ export class LiquidityModuleApi {
   }
 
   @memoize()
-  @autobind
   public getConfig$(): Observable<{ lDepositMin: BN; pWithdrawMin: BN }> {
     return this.readonlyContract.methods.limits().pipe(
       map(([lDepositMin, pWithdrawMin]) => ({

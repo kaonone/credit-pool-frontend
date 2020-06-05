@@ -1,7 +1,6 @@
 import { Observable, combineLatest, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import BN from 'bn.js';
-import { autobind } from 'core-decorators';
 
 import { memoize } from 'utils/decorators';
 import { createCurveModule } from 'generated/contracts';
@@ -20,7 +19,6 @@ export class CurveModuleApi {
   }
 
   @memoize()
-  @autobind
   public getConfig$(): Observable<{
     curveA: BN;
     curveB: BN;
@@ -43,7 +41,6 @@ export class CurveModuleApi {
   }
 
   @memoize((...args: string[]) => args.join())
-  @autobind
   public calculateExitInverse$(
     liquidAssets: string,
     pAmount: string,

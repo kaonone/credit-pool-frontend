@@ -16,7 +16,6 @@ export class SwarmApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public read<T>(inputHash: string): Observable<T> {
     const hash = inputHash.startsWith('0x') ? inputHash.slice(2) : inputHash;
     return from(this.bzz.downloadData<T>(hash));

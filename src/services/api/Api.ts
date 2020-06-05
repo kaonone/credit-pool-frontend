@@ -36,8 +36,12 @@ export class Api {
   );
 
   constructor() {
-    this.fundsModule.setTotalLProposalGetter(this.loanModule.getTotalLProposals$);
-    this.fundsModule.setUnpaidInterestGetter(this.loanModule.getUnpaidInterest$);
+    this.fundsModule.setTotalLProposalGetter(
+      this.loanModule.getTotalLProposals$.bind(this.loanModule), // TODO add binding to memoize decorator
+    );
+    this.fundsModule.setUnpaidInterestGetter(
+      this.loanModule.getUnpaidInterest$.bind(this.loanModule),
+    );
     this.tokens.setEvents({
       forReloadPtkDistributionBalance: [
         this.loanModule.readonlyContracts.proposals.events.DebtProposalExecuted(),

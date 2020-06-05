@@ -2,7 +2,6 @@ import { Observable, combineLatest, BehaviorSubject, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
-import { autobind } from 'core-decorators';
 
 import { memoize } from 'utils/decorators';
 import { createFundsModule } from 'generated/contracts';
@@ -49,7 +48,6 @@ export class FundsModuleApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getMaxWithdrawAmountInDai$(address: string): Observable<BN> {
     if (!this.getUnpaidInterest$) {
       throw new Error('Getter for unpaidInterest is not found');
@@ -72,13 +70,11 @@ export class FundsModuleApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getUserWithdrawAmountInDai$(fullWithdrawAmountInPtk: string): Observable<BN> {
     return this.getPtkToDaiExitInfo$(fullWithdrawAmountInPtk).pipe(map(({ user }) => user));
   }
 
   @memoize(R.identity)
-  @autobind
   public getPtkBalanceInDaiWithoutFee$(address: string): Observable<BN> {
     return this.tokensApi.getBalance$('ptk', address).pipe(
       switchMap(balance => this.getPtkToDaiExitInfo$(balance.toString())),
@@ -87,7 +83,6 @@ export class FundsModuleApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getPtkBalanceInDaiWithFee$(address: string): Observable<BN> {
     return this.tokensApi.getBalance$('ptk', address).pipe(
       switchMap(balance => this.getPtkToDaiExitInfo$(balance.toString())),
@@ -96,7 +91,6 @@ export class FundsModuleApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getDaiToDaiExitInfo$(daiValue: string): Observable<{ total: BN; user: BN; fee: BN }> {
     return this.convertDaiToPtkExit$(daiValue).pipe(
       switchMap(ptkValue => this.getPtkToDaiExitInfo$(ptkValue.toString())),
@@ -104,7 +98,6 @@ export class FundsModuleApi {
   }
 
   @memoize(R.identity)
-  @autobind
   // eslint-disable-next-line class-methods-use-this
   public convertPtkToDaiForLocked$(value: string): Observable<BN> {
     return combineLatest([
@@ -123,7 +116,6 @@ export class FundsModuleApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public convertDaiToPtkEnter$(value: string): Observable<BN> {
     const lAmount = new BN(value);
 
@@ -136,7 +128,6 @@ export class FundsModuleApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public convertDaiToPtkExit$(value: string): Observable<BN> {
     const lAmount = new BN(value);
 
@@ -149,7 +140,6 @@ export class FundsModuleApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getPtkToDaiExitInfo$(value: string): Observable<{ total: BN; user: BN; fee: BN }> {
     const pAmount = new BN(value);
 
@@ -173,7 +163,6 @@ export class FundsModuleApi {
    * @param additionalLiquidity how much illiquid funds will be returned to liquidity
    */
   @memoize(R.identity)
-  @autobind
   public getAvailableBalance$(
     address: string,
     additionalPtkBalance: string = '0',
@@ -201,7 +190,6 @@ export class FundsModuleApi {
    * @param additionalLiquidity how much illiquid funds will be returned to liquidity
    */
   @memoize(R.identity)
-  @autobind
   public getAvailableBalanceIncreasing$(
     address: string,
     additionalPtkBalance: string,
@@ -227,7 +215,6 @@ export class FundsModuleApi {
   }
 
   @memoize()
-  @autobind
   public getCurrentLiquidity$(): Observable<BN> {
     if (!this.getTotalLProposals$) {
       throw new Error('Getter for totalLProposals is not found');
@@ -240,7 +227,6 @@ export class FundsModuleApi {
   }
 
   @memoize()
-  @autobind
   public getFundsLBalance$(): Observable<BN> {
     return this.readonlyContract.methods.lBalance(undefined, this.readonlyContract.events.Status());
   }
