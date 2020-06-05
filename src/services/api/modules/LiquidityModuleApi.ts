@@ -57,7 +57,6 @@ export class LiquidityModuleApi {
   }
 
   @memoize()
-  @autobind
   public getConfig$(): Observable<{ lDepositMin: BN; pWithdrawMin: BN }> {
     return this.readonlyContract.methods.limits().pipe(
       map(([lDepositMin, pWithdrawMin]) => ({
@@ -97,24 +96,19 @@ export class LiquidityModuleApi {
   }
 
   @autobind
-  public async buyPtk(fromAddress: string, values: { sourceAmount: TokenAmount }): Promise<void> {
-    const { sourceAmount } = values;
+  public async buyPtk(fromAddress: string, amount: TokenAmount): Promise<void> {
     const txLiquidityModule = getCurrentValueOrThrow(this.txContract);
 
-    await this.tokensApi.approve(
-      fromAddress,
-      ETH_NETWORK_CONFIG.contracts.fundsModule,
-      sourceAmount,
-    );
+    await this.tokensApi.approve(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, amount);
 
     const promiEvent = txLiquidityModule.methods.deposit(
-      { lAmount: sourceAmount.value, pAmountMin: new BN(0) },
+      { lAmount: amount.value, pAmountMin: new BN(0) },
       { from: fromAddress },
     );
 
     this.transactionsApi.pushToSubmittedTransactions$('liquidity.buyPtk', promiEvent, {
       address: fromAddress,
-      ...values,
+      sourceAmount: amount,
     });
 
     await promiEvent;

@@ -1,5 +1,3 @@
-export { PTokenBuyingButton } from './view/containers/PTokenBuying/PTokenBuyingButton';
-export { JoiningToPoolModal } from './view/containers/PTokenBuying/JoiningToPoolModal';
 export { StakeButton } from './view/containers/StakeButton/StakeButton';
 export { UnstakeButton } from './view/containers/UnstakeButton/UnstakeButton';
 export { GetLoanButton } from './view/containers/GetLoanButton/GetLoanButton';

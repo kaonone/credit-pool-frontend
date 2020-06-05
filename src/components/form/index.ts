@@ -6,6 +6,7 @@ export { TextInputField } from './TextInputField';
 export { DecimalsField } from './DecimalsField';
 export { SpyField } from './SpyField';
 export { TokenAmountField } from './TokenAmountField';
+export { LiquidityAmountField } from './LiquidityAmountField';
 export { FormTemplate, FormTemplateProps } from './FormTemplate';
 export { FormWithConfirmation, FormWithConfirmationProps } from './FormWithConfirmation';
 export * from './types';

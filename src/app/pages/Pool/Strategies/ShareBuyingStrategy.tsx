@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import BN from 'bn.js';
 
 import { Loading, FormattedBalance } from 'components';
-import { PTokenBuyingButton } from 'features/cashExchange';
+import { BuyingShareButton } from 'features/buyShare';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 import { decimalsToWei } from 'utils/bn';
@@ -72,7 +72,7 @@ export function ShareBuyingStrategy() {
         </Loading>
       }
       description="Some text"
-      actionButton={<PTokenBuyingButton fullWidth color="primary" variant="contained" />}
+      actionButton={<BuyingShareButton fullWidth color="primary" variant="contained" />}
     />
   );
 }

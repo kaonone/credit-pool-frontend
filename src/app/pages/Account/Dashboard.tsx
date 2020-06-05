@@ -3,7 +3,8 @@ import BN from 'bn.js';
 import { of } from 'rxjs';
 
 import { Grid, Loading, FormattedBalance } from 'components';
-import { PTokenBuyingButton, WithdrawDefiYieldButton } from 'features/cashExchange';
+import { WithdrawDefiYieldButton } from 'features/cashExchange';
+import { BuyingShareButton } from 'features/buyShare';
 import { SellingShareButton } from 'features/sellShare';
 import { WithdrawDistributionsButton } from 'features/distibutions';
 import { useApi } from 'services/api';
@@ -85,7 +86,7 @@ function Balance() {
         </Loading>
       }
       actionButtons={[
-        <PTokenBuyingButton fullWidth color="primary" variant="contained" />,
+        <BuyingShareButton fullWidth color="primary" variant="contained" />,
         <SellingShareButton fullWidth color="primary" variant="contained" />,
       ]}
     />

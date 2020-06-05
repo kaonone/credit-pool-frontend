@@ -99,7 +99,6 @@ export class LoanModuleApi {
   }
 
   @memoize()
-  @autobind
   public getConfig$(): Observable<{
     limits: {
       lDebtAmountMin: BN;
@@ -152,7 +151,6 @@ export class LoanModuleApi {
   }
 
   @memoize()
-  @autobind
   public getAprDecimals$(): Observable<number> {
     // on the contract, apr is measured in fractions of a unit, so we need to shift the decimals by 2
     const toPercentMultiplierDivider = 2;
@@ -167,7 +165,6 @@ export class LoanModuleApi {
   }
 
   @memoize()
-  @autobind
   public getTotalLProposals$(): Observable<BN> {
     return this.readonlyContracts.proposals.methods.totalLProposals(undefined, [
       this.readonlyContracts.proposals.events.PledgeAdded(),
@@ -177,7 +174,6 @@ export class LoanModuleApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getUnpaidInterest$(borrower: string): Observable<LiquidityAmount> {
     const marginOfSeconds = 15 * 60;
     const recalcInterestIntervalInMs = 3 * 60 * 1000;
@@ -203,7 +199,6 @@ export class LoanModuleApi {
   }
 
   @memoize()
-  @autobind
   public getTotalLDebts$(): Observable<BN> {
     return this.readonlyContracts.loan.methods.totalLDebts(undefined, [
       this.readonlyContracts.proposals.events.DebtProposalExecuted(),
@@ -213,7 +208,6 @@ export class LoanModuleApi {
   }
 
   @memoize()
-  @autobind
   private getMaxDebts$(): Observable<BN> {
     return combineLatest([
       this.getConfig$(),
@@ -484,7 +478,6 @@ export class LoanModuleApi {
   }
 
   @memoize(R.identity)
-  @autobind
   public getMaxAvailableLoanSizeInDai$(address: string): Observable<BN> {
     return this.tokensApi.getPtkBalance$(address).pipe(
       switchMap(balance => {
@@ -495,7 +488,6 @@ export class LoanModuleApi {
   }
 
   @memoize((...args: string[]) => args.join())
-  @autobind
   public getDebtRequiredPayments$(
     borrower: string,
     debtId: string,

@@ -3,11 +3,10 @@ import { combineLatest } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 
-import { FormWithConfirmation, FieldNames } from 'components/form';
+import { FormWithConfirmation, LiquidityAmountField, FieldNames } from 'components/form';
 import { LiquidityAmount } from 'model/entities';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { LiquidityAmountField } from 'components/form/LiquidityAmountField';
 import { useSubscribable, useValidateAmount } from 'utils/react';
 import { Loading } from 'components';
 

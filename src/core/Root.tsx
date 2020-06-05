@@ -11,7 +11,7 @@ import { CookiesMsg } from 'features/cookies';
 import { NetworkWarning } from 'features/networkWarning';
 import { ErrorBoundary, Snackbar, CssBaseline } from 'components';
 import { theme } from 'utils/styles';
-import { JoiningToPoolModal } from 'features/cashExchange';
+import { JoiningToPoolModal } from 'features/buyShare';
 
 export function Root(): React.ReactElement<{}> {
   const api = new Api();
