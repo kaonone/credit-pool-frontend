@@ -114,14 +114,14 @@ const en = {
       placeholder: 'Enter sum',
       confirmMessage: 'Are you sure you want deposit %{sourceAmount}?',
     },
+    giveStake: {
+      buttonTitle: 'Stake',
+      formTitle: 'Stake',
+      placeholder: 'Enter sum',
+      confirmMessage:
+        'Are you sure you want to stake %{sourceAmount}? Your interest share will increase by %{interestShareDelta}',
+    },
     cashExchange: {
-      stakeButton: {
-        buttonTitle: 'Stake',
-        formTitle: 'Stake',
-        placeholder: 'Enter sum',
-        confirmMessage:
-          'Are you sure you want to stake %{sourceAmount}? Your interest share will increase by %{interestShareDelta}',
-      },
       unstakeButton: {
         buttonTitle: 'Unstake',
         formTitle: 'Unstake',

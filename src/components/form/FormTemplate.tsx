@@ -40,7 +40,7 @@ export function FormTemplate<FormValues extends AnyObject>(props: FormTemplatePr
               {children[0]}
             </Grid>
             {children.length > 1 &&
-              children.map((item, index) => (
+              children.slice(1).map((item, index) => (
                 <Grid key={index} item xs={12}>
                   {item}
                 </Grid>
