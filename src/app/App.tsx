@@ -31,7 +31,7 @@ export function App() {
 
         <Route exact path={routes.proposals.getRoutePath()} component={ActivitiesPage} />
         <Route exact path={routes.balance.getRoutePath()} component={BalancesPage} />
-        <Redirect to={routes.pool.getRedirectPath()} />
+        <Redirect to={routes.stats.getRedirectPath()} />
       </Switch>
     </BaseLayout>
   );
