@@ -19,7 +19,8 @@
     "test:coverage": "jest --coverage --watch",
     "codegen:beta": "graphql-codegen --config codegen-beta.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
     "codegen:beta-defi": "graphql-codegen --config codegen-beta-defi.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
-    "codegen:sandbox": "graphql-codegen --config codegen-sandbox.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json"
+    "codegen:sandbox": "graphql-codegen --config codegen-sandbox.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
+    "deploy:sandbox": "gh-pages -d build -r https://github.com/akropolisio/credit-pool-frontend-sandbox.git"
   },
   "betterScripts": {
     "node": {
