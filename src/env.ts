@@ -149,13 +149,13 @@ export const PLEDGE_MARGIN_DIVIDER = 1000000;
 const subgraphHttpUrlsByMode: Record<Mode, string> = {
   beta: 'https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os-beta',
   'beta-defi': 'https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os-beta-defi',
-  sandbox: 'https://api.thegraph.com/subgraphs/name/in19farkt/akropolis-os-mainnet',
+  sandbox: 'https://api.thegraph.com/subgraphs/name/in19farkt/akropolis-os-sandbox',
 };
 
 const subgraphWsUrlsByMode: Record<Mode, string> = {
   beta: 'wss://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os-beta',
   'beta-defi': 'wss://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os-beta-defi',
-  sandbox: 'wss://api.thegraph.com/subgraphs/name/in19farkt/akropolis-os-mainnet',
+  sandbox: 'wss://api.thegraph.com/subgraphs/name/in19farkt/akropolis-os-sandbox',
 };
 
 export const SUBGRAPH_HTTP_URL = subgraphHttpUrlsByMode[getEnv().mode];
