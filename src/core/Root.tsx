@@ -11,7 +11,6 @@ import { CookiesMsg } from 'features/cookies';
 import { NetworkWarning } from 'features/networkWarning';
 import { ErrorBoundary, Snackbar, CssBaseline } from 'components';
 import { theme } from 'utils/styles';
-import { JoiningToPoolModal } from 'features/cashExchange';
 
 export function Root(): React.ReactElement<{}> {
   const api = new Api();
@@ -33,7 +32,6 @@ export function Root(): React.ReactElement<{}> {
                   <TransactionsNotifications />
                   <CookiesMsg />
                   <NetworkWarning />
-                  <JoiningToPoolModal />
                 </ApolloProvider>
               </MuiThemeProvider>
             </I18nProvider>
