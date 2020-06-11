@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 import { useApi } from 'services/api';
 import { useSubscribable, useOnChangeState } from 'utils/react';
@@ -17,11 +18,13 @@ export function JoiningToPoolModal() {
   const classes = useStyles();
 
   const api = useApi();
-  const [account] = useSubscribable(() => api.web3Manager.account, [api]);
 
   const [balance] = useSubscribable(
-    () => (account ? api.tokens.getPtkBalance$(account) : of(null)),
-    [api, account],
+    () =>
+      api.web3Manager.account.pipe(
+        switchMap(account => (account ? api.tokens.getPtkBalance$(account) : of(null))),
+      ),
+    [api],
     null,
   );
 
