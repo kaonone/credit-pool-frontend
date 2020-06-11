@@ -121,6 +121,18 @@ const en = {
       confirmMessage:
         'Are you sure you want to stake %{sourceAmount}? Your interest share will increase by %{interestShareDelta}',
     },
+    createLoanProposal: {
+      buttonTitle: 'Borrow',
+      formTitle: 'Get loan',
+      amountPlaceholder: 'Enter sum',
+      amountLabel: 'Loan sum',
+      percentPlaceholder: 'Enter percent value',
+      percentLabel: 'Percent',
+      descriptionPlaceholder: 'Enter reason',
+      descriptionLabel: 'Reason',
+      confirmMessage:
+        'Are you sure you want get loan %{sourceAmount} with collateral %{collateral}?',
+    },
     cashExchange: {
       unstakeButton: {
         buttonTitle: 'Unstake',
@@ -142,18 +154,6 @@ const en = {
           },
         },
         insufficientBalanceError: 'Insufficient balance. You have only %{value}.',
-      },
-      getLoanButton: {
-        buttonTitle: 'Borrow',
-        formTitle: 'Get loan',
-        amountPlaceholder: 'Enter sum',
-        amountLabel: 'Loan sum',
-        percentPlaceholder: 'Enter percent value',
-        percentLabel: 'Percent',
-        descriptionPlaceholder: 'Enter reason',
-        descriptionLabel: 'Reason',
-        confirmMessage:
-          'Are you sure you want get loan %{sourceAmount} with collateral %{collateral}?',
       },
       activateLoanButton: {
         confirmMessage:
