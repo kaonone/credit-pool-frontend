@@ -51,7 +51,7 @@ export function formatBalance({
   }`;
   const short = long.replace(/^(\d+?\.\d*?)0*$/, '$1').replace(/^(\d+?)\.$/, '$1');
 
-  return withUnit(variant === 'short' ? short : long, { symbolPosition, tokenSymbol });
+  return withUnit(variant === 'short' ? short : long, { symbolPosition, tokenSymbol }).trim();
 }
 
 const unitsGetterByPosition: Record<SymbolPosition, (tokenSymbol: string) => string> = {
