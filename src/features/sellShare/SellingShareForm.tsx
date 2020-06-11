@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { combineLatest } from 'rxjs';
+import { combineLatest, empty } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 
@@ -33,7 +33,7 @@ export function SellingShareForm({ onCancel, account }: SellingShareFormProps) {
   const { t } = useTranslate();
   const api = useApi();
 
-  const maxValue = useMemo(() => api.fundsModule.getMaxWithdrawAmount$(account), [account]);
+  const maxValue = useMemo(() => api.fundsModule.getMaxWithdrawAmount$(account), [api, account]);
   const minValue = useMemo(
     () =>
       api.liquidityModule
@@ -43,7 +43,7 @@ export function SellingShareForm({ onCancel, account }: SellingShareFormProps) {
             api.fundsModule.getWithdrawingAmountAfterFee$(pWithdrawMin.toString()),
           ),
         ),
-    [],
+    [api],
   );
 
   const validateAmount = useValidateAmount({
@@ -87,9 +87,9 @@ export function SellingShareForm({ onCancel, account }: SellingShareFormProps) {
               );
             }),
           )
-        : t(tKeys.confirmMessage.getKey(), { sourceAmount: '⏳' });
+        : empty();
     },
-    [account],
+    [api, account],
   );
 
   return (

@@ -133,6 +133,20 @@ const en = {
       confirmMessage:
         'Are you sure you want get loan %{sourceAmount} with collateral %{collateral}?',
     },
+    repayLoan: {
+      buttonTitle: 'Repay',
+      formTitle: 'Repay',
+      placeholder: 'Enter sum',
+      confirmMessage:
+        'Are you sure you want to repay %{sourceAmount}? Loan body: ~%{body}, interest: ~%{interest}',
+      fields: {
+        repaymentMethod: {
+          fromOwnBalance: 'from own balance',
+          fromAvailablePoolBalance: 'from available pool balance',
+        },
+      },
+      insufficientBalanceError: 'Insufficient balance. You have only %{value}.',
+    },
     cashExchange: {
       unstakeButton: {
         buttonTitle: 'Unstake',
@@ -140,20 +154,6 @@ const en = {
         placeholder: 'Enter sum',
         confirmMessage:
           'Are you sure you want to unstake %{sourceAmount}? Your interest share will decrease by %{interestShareDelta}',
-      },
-      repayButton: {
-        buttonTitle: 'Repay',
-        formTitle: 'Repay',
-        placeholder: 'Enter sum',
-        confirmMessage:
-          'Are you sure you want to repay %{sourceAmount}? Loan body: ~%{body}, interest: ~%{interest}',
-        fields: {
-          repaymentMethod: {
-            fromOwnBalance: 'from own balance',
-            fromAvailablePoolBalance: 'from available pool balance',
-          },
-        },
-        insufficientBalanceError: 'Insufficient balance. You have only %{value}.',
       },
       activateLoanButton: {
         confirmMessage:

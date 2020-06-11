@@ -10,12 +10,12 @@ import { useApi } from 'services/api';
 import { getLoanDuePaymentDate, getPledgeId } from 'model';
 import {
   ActivateLoanButton,
-  RepayButton,
   UnstakeButton,
   UnlockButton,
   LiquidateLoanButton,
   CancelProposalButton,
 } from 'features/cashExchange';
+import { LoanRepayingButton } from 'features/repayLoan';
 
 import { PartialDebt } from './types';
 
@@ -87,12 +87,7 @@ export function ActionsCell({ debt, account }: IProps) {
       </CancelProposalButton>
     ) : null,
     isAvailableForRepay && lastUpdate && debtId ? (
-      <RepayButton
-        account={borrower.id}
-        debtId={debtId}
-        lastPaymentDate={lastUpdate}
-        {...commonProps}
-      />
+      <LoanRepayingButton debtId={debtId} lastPaymentDate={lastUpdate} {...commonProps} />
     ) : null,
     isAvailableForUnstake ? (
       <UnstakeButton
