@@ -257,7 +257,7 @@ export class LoanModuleApi {
   public async unstakePtk(
     fromAddress: string,
     values: {
-      sourceAmount: TokenAmount; // in DAI by currentFullStakeCost
+      sourceAmount: LiquidityAmount; // in Liquidity by currentFullStakeCost
       borrower: string;
       proposalId: string;
       lInitialLocked: string;

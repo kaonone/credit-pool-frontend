@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
-import { combineLatest, empty } from 'rxjs';
+import { empty, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import BN from 'bn.js';
 
 import { FormWithConfirmation, LiquidityAmountField, FieldNames, SpyField } from 'components/form';
 import { LiquidityAmount } from 'model/entities';
@@ -8,15 +9,16 @@ import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable, useValidateAmount } from 'utils/react';
 import { Loading } from 'components';
-import { roundWei, min } from 'utils/bn';
-import { calcInterestShare } from 'model';
+import { calcInterestShare, getPledgeId } from 'model';
 import { formatBalance } from 'utils/format';
+import { zeroAddress } from 'utils/mock';
+import { usePledgeSubscription } from 'generated/gql/pool';
 
 interface FormData {
   amount: LiquidityAmount | null;
 }
 
-interface GivingStakeFormProps {
+interface UnstakingFormProps {
   account: string;
   loanSize: string;
   proposalId: string;
@@ -32,46 +34,37 @@ const initialValues: FormData = {
   amount: null,
 };
 
-const tKeys = tKeysAll.features.giveStake;
+const tKeys = tKeysAll.features.unstake;
 
-export function GivingStakeForm({
+const zero = new BN(0);
+
+export function UnstakingForm({
   onCancel,
   account,
   borrower,
   loanSize,
   proposalId,
-}: GivingStakeFormProps) {
+}: UnstakingFormProps) {
   const { t } = useTranslate();
   const api = useApi();
 
+  const pledgeGqlResult = usePledgeSubscription({
+    variables: {
+      pledgeHash: account && proposalId ? getPledgeId(account, borrower, proposalId) : '',
+    },
+  });
+  const pInitialLocked = pledgeGqlResult.data?.pledge?.pInitialLocked || '0';
+  const lInitialLocked = pledgeGqlResult.data?.pledge?.lInitialLocked || '0';
+
   const maxValue = useMemo(
     () =>
-      combineLatest([
-        api.fundsModule.getLiquidityCurrency$(),
-        api.fundsModule.getPtkBalanceInDaiWithoutFee$(account),
-        api.loanModule.getPledgeRequirements$(borrower, proposalId),
-      ]).pipe(
-        map(([liquidityCurrency, balance, { maxLPledge }]) => {
-          const roundedBalance = roundWei(balance, liquidityCurrency.decimals, 'floor', 2);
-          const roundedMaxStakeSize = roundWei(
-            maxLPledge.toBN(),
-            liquidityCurrency.decimals,
-            'ceil',
-            2,
-          );
+      api.fundsModule
+        .getAvailableBalanceIncreasing$(account || zeroAddress, pInitialLocked, lInitialLocked)
+        .pipe(map(item => item.value)),
+    [api, account, pInitialLocked, lInitialLocked],
+  );
 
-          return min(roundedBalance, roundedMaxStakeSize);
-        }),
-      ),
-    [api, account, borrower, proposalId],
-  );
-  const minValue = useMemo(
-    () =>
-      api.loanModule
-        .getPledgeRequirements$(borrower, proposalId)
-        .pipe(map(({ minLPledge }) => minLPledge)),
-    [api, borrower, proposalId],
-  );
+  const minValue = zero;
 
   const validateAmount = useValidateAmount({
     required: true,
@@ -83,14 +76,16 @@ export function GivingStakeForm({
   const handleFormSubmit = useCallback(
     ({ amount }: FormData) => {
       return amount
-        ? api.loanModule.stakePtk(account, {
+        ? api.loanModule.unstakePtk(account, {
             borrower,
             proposalId,
+            lInitialLocked,
+            pInitialLocked,
             sourceAmount: amount,
           })
         : undefined;
     },
-    [account, api, borrower, proposalId],
+    [account, api, borrower, proposalId, lInitialLocked, pInitialLocked],
   );
 
   const [liquidityCurrency, liquidityCurrencyMeta] = useSubscribable(
@@ -101,13 +96,23 @@ export function GivingStakeForm({
   const getConfirmationMessage = useCallback(
     ({ amount }: FormData) => {
       return amount
-        ? api.loanModule.calculateFullLoanStake$(loanSize).pipe(
-            map(fullLoanStake => {
-              const rawSourceAmount = amount.toBN();
-
+        ? combineLatest([
+            api.fundsModule.getAvailableBalanceIncreasing$(
+              account || zeroAddress,
+              pInitialLocked,
+              lInitialLocked,
+            ),
+            api.loanModule.calculateFullLoanStake$(loanSize),
+          ]).pipe(
+            map(([currentFullStakeCost, fullLoanStake]) => {
               const interestShareDecimals = 2;
+
+              const lAmountForUnstakeByInitial = new BN(lInitialLocked)
+                .mul(amount.toBN())
+                .div(currentFullStakeCost.value);
+
               const rawInterestShareDelta = calcInterestShare(
-                rawSourceAmount,
+                lAmountForUnstakeByInitial,
                 fullLoanStake,
                 interestShareDecimals,
               );
@@ -118,14 +123,14 @@ export function GivingStakeForm({
               })}%`;
 
               return t(tKeys.confirmMessage.getKey(), {
-                interestShareDelta,
                 sourceAmount: amount.toFormattedString(),
+                interestShareDelta,
               });
             }),
           )
         : empty();
     },
-    [api, loanSize],
+    [api, loanSize, loanSize, pInitialLocked, lInitialLocked],
   );
 
   return (

@@ -1,4 +1,3 @@
-export { UnstakeButton } from './view/containers/UnstakeButton/UnstakeButton';
 export { ActivateLoanButton } from './view/containers/ActivateLoanButton/ActivateLoanButton';
 export { UnlockButton } from './view/containers/UnlockButton/UnlockButton';
 export { LiquidateLoanButton } from './view/containers/LiquidateLoanButton/LiquidateLoanButton';

@@ -46,7 +46,7 @@ export type SubmittedTransaction =
     >
   | IGenericSubmittedTransaction<
       'loan.unstakePledge',
-      { address: string; sourceAmount: TokenAmount }
+      { address: string; sourceAmount: LiquidityAmount }
     >
   | IGenericSubmittedTransaction<
       'loan.withdrawUnlockedPledge',

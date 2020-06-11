@@ -147,14 +147,14 @@ const en = {
       },
       insufficientBalanceError: 'Insufficient balance. You have only %{value}.',
     },
+    unstake: {
+      buttonTitle: 'Unstake',
+      formTitle: 'Unstake',
+      placeholder: 'Enter sum',
+      confirmMessage:
+        'Are you sure you want to unstake %{sourceAmount}? Your interest share will decrease by %{interestShareDelta}',
+    },
     cashExchange: {
-      unstakeButton: {
-        buttonTitle: 'Unstake',
-        formTitle: 'Unstake',
-        placeholder: 'Enter sum',
-        confirmMessage:
-          'Are you sure you want to unstake %{sourceAmount}? Your interest share will decrease by %{interestShareDelta}',
-      },
       activateLoanButton: {
         confirmMessage:
           'Are you sure you want to activate a loan? Please note that your loan will be transferred directly to your wallet.',
