@@ -68,7 +68,9 @@ export class FundsModuleApi {
   // liquidity token is not an ERC20 token!
   // eslint-disable-next-line class-methods-use-this
   public getLiquidityCurrency$(): Observable<Currency> {
-    return of(new Currency('$', 18)); // TODO take decimals from contract
+    // TODO take decimals from contract
+    // TODO change 'DAI' to '$'
+    return of(new Currency('DAI', 18));
   }
 
   @memoize(R.identity)

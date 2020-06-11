@@ -1,15 +1,16 @@
 import BN from 'bn.js';
 
-import { LiquidityAmount } from './entities';
+import { Amount } from './entities';
+import { ICurrency } from './types';
 
-export function calcWithdrawAmountBeforeFee({
+export function calcWithdrawAmountBeforeFee<T extends Amount<ICurrency>>({
   withdrawAmountAfterFee: userWithdrawAmountInDai,
   withdrawFeePercent,
   percentDivider,
 }: {
-  withdrawAmountAfterFee: LiquidityAmount;
+  withdrawAmountAfterFee: T;
   withdrawFeePercent: BN;
   percentDivider: BN;
-}): LiquidityAmount {
+}): T {
   return userWithdrawAmountInDai.mul(percentDivider).div(percentDivider.sub(withdrawFeePercent));
 }

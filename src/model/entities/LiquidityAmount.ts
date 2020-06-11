@@ -21,7 +21,8 @@ export class LiquidityAmount extends Amount<Currency> {
       tokenSymbol: this.currency.symbol,
       baseDecimals: this.currency.decimals,
       precision,
-      symbolPosition: 'start',
+      symbolPosition: 'end-space',
+      // symbolPosition: 'start', // TODO uncomment after adding of multiple tokens
     });
   }
 }

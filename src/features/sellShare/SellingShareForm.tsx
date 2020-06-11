@@ -3,15 +3,15 @@ import { combineLatest, empty } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 
-import { FormWithConfirmation, LiquidityAmountField, FieldNames, SpyField } from 'components/form';
-import { LiquidityAmount } from 'model/entities';
+import { FormWithConfirmation, TokenAmountField, FieldNames, SpyField } from 'components/form';
+import { TokenAmount } from 'model/entities';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable, useValidateAmount } from 'utils/react';
 import { Loading } from 'components';
 
 interface FormData {
-  amount: LiquidityAmount | null;
+  amount: TokenAmount | null;
 }
 
 interface SellingShareFormProps {
@@ -60,8 +60,8 @@ export function SellingShareForm({ onCancel, account }: SellingShareFormProps) {
     [account, api],
   );
 
-  const [liquidityCurrency, liquidityCurrencyMeta] = useSubscribable(
-    () => api.fundsModule.getLiquidityCurrency$(),
+  const [supportedTokens, supportedTokensMeta] = useSubscribable(
+    () => api.fundsModule.getSupportedTokens$(),
     [api],
   );
 
@@ -74,7 +74,7 @@ export function SellingShareForm({ onCancel, account }: SellingShareFormProps) {
           ]).pipe(
             map(([maxWithdrawAmount, availableBalance]) => {
               const interestAmount = availableBalance.sub(maxWithdrawAmount);
-              const fullAmount = amount.add(interestAmount);
+              const fullAmount = amount.add(interestAmount.toBN());
 
               return (
                 t(tKeys.confirmMessage.getKey(), { sourceAmount: amount.toFormattedString() }) +
@@ -100,12 +100,12 @@ export function SellingShareForm({ onCancel, account }: SellingShareFormProps) {
       onSubmit={handleFormSubmit}
       onCancel={onCancel}
     >
-      <Loading meta={liquidityCurrencyMeta}>
-        {liquidityCurrency && (
+      <Loading meta={supportedTokensMeta}>
+        {supportedTokens && (
           <>
-            <LiquidityAmountField
+            <TokenAmountField
               name={fieldNames.amount}
-              currencies={[liquidityCurrency]}
+              currencies={supportedTokens}
               placeholder={t(tKeys.placeholder.getKey())}
               validate={validateAmount}
               maxValue={maxValue}

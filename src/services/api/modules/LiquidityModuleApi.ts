@@ -1,4 +1,4 @@
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { first as firstOperator, map } from 'rxjs/operators';
 import BN from 'bn.js';
 import { autobind } from 'core-decorators';
@@ -8,7 +8,7 @@ import { ETH_NETWORK_CONFIG } from 'env';
 import { createLiquidityModule } from 'generated/contracts';
 import { memoize } from 'utils/decorators';
 import { calcWithdrawAmountBeforeFee } from 'model';
-import { TokenAmount, LiquidityAmount } from 'model/entities';
+import { TokenAmount } from 'model/entities';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TokensApi } from './TokensApi';
@@ -67,15 +67,21 @@ export class LiquidityModuleApi {
   }
 
   @autobind
-  public async sellPtk(fromAddress: string, lAmountAfterFee: LiquidityAmount): Promise<void> {
+  public async sellPtk(fromAddress: string, amountAfterFee: TokenAmount): Promise<void> {
     const txLiquidityModule = getCurrentValueOrThrow(this.txContract);
 
     const { percentDivider, withdrawFeePercent } = await first(this.curveModuleApi.getConfig$());
-    const lAmountBeforeFee = calcWithdrawAmountBeforeFee({
-      withdrawAmountAfterFee: lAmountAfterFee,
-      percentDivider,
-      withdrawFeePercent,
-    });
+    const lAmountBeforeFee = await first(
+      this.fundsModuleApi.toLiquidityAmount$(
+        of(
+          calcWithdrawAmountBeforeFee({
+            withdrawAmountAfterFee: amountAfterFee,
+            percentDivider,
+            withdrawFeePercent,
+          }),
+        ),
+      ),
+    );
 
     const pAmountWithFee = await first(
       this.fundsModuleApi.convertLiquidityToPtkExit$(lAmountBeforeFee),
@@ -89,7 +95,7 @@ export class LiquidityModuleApi {
 
     this.transactionsApi.pushToSubmittedTransactions$('liquidity.sellPtk', promiEvent, {
       address: fromAddress,
-      sourceAmount: lAmountAfterFee,
+      sourceAmount: amountAfterFee,
     });
 
     await promiEvent;

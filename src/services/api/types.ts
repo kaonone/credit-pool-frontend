@@ -36,7 +36,7 @@ export type SubmittedTransaction =
     >
   | IGenericSubmittedTransaction<
       'liquidity.sellPtk',
-      { address: string; sourceAmount: LiquidityAmount }
+      { address: string; sourceAmount: TokenAmount }
     >
   | IGenericSubmittedTransaction<'liquidity.buyPtk', { address: string; sourceAmount: TokenAmount }>
   | IGenericSubmittedTransaction<'defi.withdrawInterest', { address: string }>
