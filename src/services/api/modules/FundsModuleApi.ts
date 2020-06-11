@@ -179,7 +179,7 @@ export class FundsModuleApi {
    * @param additionalPtkBalance how many tokens increase the balance
    * @param additionalLiquidity how much illiquid funds will be returned to liquidity
    */
-  @memoize(R.identity)
+  @memoize((...args: string[]) => args.join())
   public getAvailableBalance$(
     address: string,
     additionalPtkBalance: string = '0',
@@ -205,7 +205,7 @@ export class FundsModuleApi {
    * @param additionalPtkBalance how many tokens increase the balance
    * @param additionalLiquidity how much illiquid funds will be returned to liquidity
    */
-  @memoize(R.identity)
+  @memoize((...args: string[]) => args.join())
   public getAvailableBalanceIncreasing$(
     address: string,
     additionalPtkBalance: string,

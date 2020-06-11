@@ -63,16 +63,16 @@ const ethNetworkConfigsForStaging: Record<NetworkID, INetworkConfig> = {
     id: 4,
     name: 'rinkeby',
     contracts: {
-      dai: '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa',
-      pool: '0xaddF2d0C18a1989b800e9a4a8D496d856bBd0413',
-      ptk: '0xB0E4aF12900380337D6D2b85063f2b791DCAc895',
-      curveModule: '0x4eB5f040CEE9425516fD1930cDCE3682D9379f26',
-      liquidityModule: '0x88c6D8073a9f4f92c503397F33C4587537a6FA7B',
-      loanModule: '0xf72ecaD9F29CC99F59aE3862c8948E20E7Ee1062',
-      loanLimitsModule: '0xB2EA6fE10925d521B44a652c39982837A58B9DfC',
-      loanProposalsModule: '0x53668dA77ddaB3D90aC0c46AdE11Ebc1f9ADCf76',
-      fundsModule: '0x2fC82FF38325e6A4D5eD587aAfb90827c1b0FCb4',
-      defiModule: '0xBc3426D4Cf4DFe01cCc088F61b59EDb3BA099Af5',
+      dai: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
+      pool: '0x113462A2c643dFEb47E9Cc3938FCBab04a058dF9',
+      ptk: '0x6553789Cb23a656f2CcbC312AeBFC8C3d697dB1b',
+      curveModule: '0xB49c4b7996E36654436F5a8F3C5d97018379971B',
+      liquidityModule: '0xE45dD10Bb723b13Dd6A226718D1A40cad9518C24',
+      loanModule: '0x49Cc5A2d862567D3b6d8566eDB3FDc174aee8c37',
+      loanLimitsModule: '0xFAc465D511a68059C9C659926Ee881e8331234E6',
+      loanProposalsModule: '0xC98560141039adb69d6B5F7949b5403FB8CC5B78',
+      fundsModule: '0xa157b6A439ae79dC6e6bf2E170bf0DcfcAEB5AdE',
+      defiModule: '0x8413433fb3A7EC491c51d415AC437A32C5C81a40',
     },
     etherskanDomain: 'https://rinkeby.etherscan.io/',
   },
@@ -149,13 +149,13 @@ export const PLEDGE_MARGIN_DIVIDER = 1000000;
 const subgraphHttpUrlsByMode: Record<Mode, string> = {
   beta: 'https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os-beta',
   'beta-defi': 'https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os-beta-defi',
-  sandbox: 'https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os-sandbox',
+  sandbox: 'https://api.thegraph.com/subgraphs/name/in19farkt/akropolis-os-sandbox',
 };
 
 const subgraphWsUrlsByMode: Record<Mode, string> = {
   beta: 'wss://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os-beta',
   'beta-defi': 'wss://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os-beta-defi',
-  sandbox: 'wss://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os-sandbox',
+  sandbox: 'wss://api.thegraph.com/subgraphs/name/in19farkt/akropolis-os-sandbox',
 };
 
 export const SUBGRAPH_HTTP_URL = subgraphHttpUrlsByMode[getEnv().mode];
