@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { combineLatest, empty } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { FormWithConfirmation, LiquidityAmountField, FieldNames } from 'components/form';
+import { FormWithConfirmation, LiquidityAmountField, FieldNames, SpyField } from 'components/form';
 import { LiquidityAmount } from 'model/entities';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
@@ -72,7 +72,7 @@ export function GivingStakeForm({
         .pipe(map(({ minLPledge }) => minLPledge)),
     [api, borrower, proposalId],
   );
-  // TODO revalidate on validator changing
+
   const validateAmount = useValidateAmount({
     required: true,
     moreThenZero: true,
@@ -138,13 +138,16 @@ export function GivingStakeForm({
     >
       <Loading meta={liquidityCurrencyMeta}>
         {liquidityCurrency && (
-          <LiquidityAmountField
-            name={fieldNames.amount}
-            currencies={[liquidityCurrency]}
-            placeholder={t(tKeys.placeholder.getKey())}
-            validate={validateAmount}
-            maxValue={maxValue}
-          />
+          <>
+            <LiquidityAmountField
+              name={fieldNames.amount}
+              currencies={[liquidityCurrency]}
+              placeholder={t(tKeys.placeholder.getKey())}
+              validate={validateAmount}
+              maxValue={maxValue}
+            />
+            <SpyField name="__" fieldValue={validateAmount} />
+          </>
         )}
       </Loading>
     </FormWithConfirmation>

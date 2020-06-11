@@ -97,7 +97,7 @@ export class FundsModuleApi {
   // eslint-disable-next-line class-methods-use-this
   public getSupportedTokens$(): Observable<Token[]> {
     // TODO take from contract
-    return of([ETH_NETWORK_CONFIG.contracts.dai, ETH_NETWORK_CONFIG.contracts.ptk]).pipe(
+    return of([ETH_NETWORK_CONFIG.contracts.dai]).pipe(
       switchMap(addresses =>
         combineLatest(addresses.map(address => this.tokensApi.getToken$(address))),
       ),

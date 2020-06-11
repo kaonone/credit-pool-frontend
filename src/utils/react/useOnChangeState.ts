@@ -5,14 +5,14 @@ type Handler<T> = (prevValue: T, value: T) => void;
 
 export function useOnChangeState<T extends any>(
   value: T,
-  predicate: Predicate<T>,
-  handler: Handler<T>,
+  needToRunEffect: Predicate<T>,
+  effect: Handler<T>,
 ) {
   const valueRef = useRef(value);
 
   useEffect(() => {
-    if (predicate(valueRef.current, value)) {
-      handler(valueRef.current, value);
+    if (needToRunEffect(valueRef.current, value)) {
+      effect(valueRef.current, value);
     }
     valueRef.current = value;
   }, [value]);

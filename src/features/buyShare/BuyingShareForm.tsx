@@ -4,7 +4,7 @@ import { FormSpy } from 'react-final-form';
 import { FormState } from 'final-form';
 import { empty } from 'rxjs';
 
-import { FormWithConfirmation, TokenAmountField, FieldNames } from 'components/form';
+import { FormWithConfirmation, TokenAmountField, FieldNames, SpyField } from 'components/form';
 import { TokenAmount, Token } from 'model/entities';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
@@ -44,7 +44,7 @@ export function BuyingShareForm({ onCancel, account }: BuyingShareFormProps) {
     () => api.liquidityModule.getConfig$().pipe(map(({ lDepositMin }) => lDepositMin)),
     [api],
   );
-  // TODO revalidate on validator changing
+
   const validateAmount = useValidateAmount({
     required: true,
     moreThenZero: true,
@@ -101,6 +101,7 @@ export function BuyingShareForm({ onCancel, account }: BuyingShareFormProps) {
               maxValue={maxValue}
             />
             <FormSpy<FormData> subscription={{ values: true }} onChange={handleFormChange} />
+            <SpyField name="__" fieldValue={validateAmount} />
           </>
         )}
       </Loading>

@@ -39,7 +39,7 @@ export function useValidateAmount(options: ValidateAmountOptions) {
           minValue: BN.isBN(min) ? min : min?.toBN(),
         })),
       ),
-    [options.maxValue?.toString(), options.minValue?.toString()],
+    [options.maxValue, options.minValue],
     {},
   );
 
