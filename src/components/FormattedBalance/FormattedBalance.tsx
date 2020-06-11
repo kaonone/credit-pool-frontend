@@ -4,11 +4,11 @@ import Tooltip from '@material-ui/core/Tooltip/Tooltip';
 
 import { useFormattedBalance } from 'utils/react';
 import { Loading } from 'components/Loading';
-import { Token } from 'model/types';
+import { TokenType, IToBN } from 'model/types';
 
 interface IProps {
-  sum: BN | string;
-  token: Token;
+  sum: BN | IToBN | string;
+  token: TokenType;
   className?: string;
   children?: FunctionComponent<{ formattedBalance: string }>;
 }

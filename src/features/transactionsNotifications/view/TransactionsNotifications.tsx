@@ -62,7 +62,7 @@ function NotificationText({ transaction, type: notType }: NotificationProps) {
 
 function getTranslateParams(transaction: SubmittedTransaction): Record<string, string> {
   switch (transaction.type) {
-    case 'dai.approve':
+    case 'erc20.approve':
       return {
         amount: transaction.payload.value.toFormattedString(),
       };

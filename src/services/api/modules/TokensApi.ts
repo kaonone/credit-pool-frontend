@@ -7,7 +7,6 @@ import { EventEmitter } from 'web3/types';
 
 import { memoize } from 'utils/decorators';
 import { createErc20, createPToken } from 'generated/contracts';
-import { Token as TokenType, ITokenInfo } from 'model/types';
 import { Token, TokenAmount } from 'model/entities';
 import { ETH_NETWORK_CONFIG } from 'env';
 
@@ -25,27 +24,19 @@ function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNulla
 }
 
 export class TokensApi {
-  private readonlyContracts: Pick<Contracts, 'dai' | 'ptk'>;
-  private txContracts = new BehaviorSubject<null | Pick<Contracts, 'dai' | 'ptk'>>(null);
+  private readonlyPtkContract: Contracts['ptk'];
+  private txPtkContract = new BehaviorSubject<null | Contracts['ptk']>(null);
   private events: { forReloadPtkDistributionBalance: EventEmitter[] } | null = null;
 
   constructor(private web3Manager: Web3ManagerModule, private transactionsApi: TransactionsApi) {
-    this.readonlyContracts = {
-      dai: createErc20(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.dai),
-      ptk: createPToken(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.ptk),
-    };
+    this.readonlyPtkContract = createPToken(
+      this.web3Manager.web3,
+      ETH_NETWORK_CONFIG.contracts.ptk,
+    );
 
     this.web3Manager.txWeb3
-      .pipe(
-        map(
-          txWeb3 =>
-            txWeb3 && {
-              dai: createErc20(txWeb3, ETH_NETWORK_CONFIG.contracts.dai),
-              ptk: createPToken(txWeb3, ETH_NETWORK_CONFIG.contracts.ptk),
-            },
-        ),
-      )
-      .subscribe(this.txContracts);
+      .pipe(map(txWeb3 => txWeb3 && createPToken(txWeb3, ETH_NETWORK_CONFIG.contracts.ptk)))
+      .subscribe(this.txPtkContract);
   }
 
   public setEvents(events: NonNullable<TokensApi['events']>) {
@@ -53,19 +44,15 @@ export class TokensApi {
   }
 
   @autobind
-  public async approveDai(
-    fromAddress: string,
-    spender: string,
-    amount: TokenAmount,
-  ): Promise<void> {
-    const txDai = getCurrentValueOrThrow(this.txContracts).dai;
+  public async approve(fromAddress: string, spender: string, amount: TokenAmount): Promise<void> {
+    const txDai = this.getErc20TxContract(amount.currency.address);
 
     const promiEvent = txDai.methods.approve(
       { spender, amount: amount.value },
       { from: fromAddress },
     );
 
-    this.transactionsApi.pushToSubmittedTransactions$('dai.approve', promiEvent, {
+    this.transactionsApi.pushToSubmittedTransactions$('erc20.approve', promiEvent, {
       spender,
       fromAddress,
       value: amount,
@@ -75,28 +62,11 @@ export class TokensApi {
   }
 
   @memoize(R.identity)
-  public getTokenInfo$(token: TokenType): Observable<ITokenInfo> {
-    return combineLatest([
-      this.readonlyContracts[token].methods.symbol(),
-      this.readonlyContracts[token].methods.decimals(),
-    ]).pipe(
-      map(([tokenSymbol, decimals]) => ({ symbol: tokenSymbol, decimals: decimals.toNumber() })),
-    );
-  }
-
-  @memoize(R.identity)
-  public getERC20TokenInfo$(address: string): Observable<ITokenInfo> {
-    const contract = createErc20(this.web3Manager.web3, address);
+  public getToken$(address: string): Observable<Token> {
+    const contract = this.getErc20ReadonlyContract(address);
 
     return combineLatest([contract.methods.symbol(), contract.methods.decimals()]).pipe(
-      map(([tokenSymbol, decimals]) => ({ symbol: tokenSymbol, decimals: decimals.toNumber() })),
-    );
-  }
-
-  @memoize(R.identity)
-  public getToken$(address: string): Observable<Token> {
-    return this.getERC20TokenInfo$(address).pipe(
-      map(({ decimals, symbol }) => new Token(address, symbol, decimals)),
+      map(([symbol, decimals]) => new Token(address, symbol, decimals.toNumber())),
     );
   }
 
@@ -107,11 +77,25 @@ export class TokensApi {
     );
   }
 
+  @memoize(R.identity)
+  // TODO return TokenAmount
+  public getPtkBalance$(account: string): Observable<BN> {
+    return this.getBalance$(ETH_NETWORK_CONFIG.contracts.ptk, account);
+  }
+
+  // TODO remove this
+  @memoize(R.identity)
+  public getDaiBalance$(account: string): Observable<BN> {
+    return this.getBalance$(ETH_NETWORK_CONFIG.contracts.dai, account);
+  }
+
   @memoize((...args: string[]) => args.join())
-  public getBalance$(token: TokenType, address: string): Observable<BN> {
-    return this.readonlyContracts[token].methods.balanceOf({ account: address }, [
-      this.readonlyContracts[token].events.Transfer({ filter: { from: address } }),
-      this.readonlyContracts[token].events.Transfer({ filter: { to: address } }),
+  public getBalance$(tokenAddress: string, account: string): Observable<BN> {
+    const contract = this.getErc20ReadonlyContract(tokenAddress);
+
+    return contract.methods.balanceOf({ account }, [
+      contract.events.Transfer({ filter: { from: account } }),
+      contract.events.Transfer({ filter: { to: account } }),
     ]);
   }
 
@@ -120,26 +104,24 @@ export class TokensApi {
     if (!this.events) {
       throw new Error('Events for reload not found');
     }
-    return this.readonlyContracts.ptk.methods.distributionBalanceOf({ account: address }, [
-      this.readonlyContracts.ptk.events.Transfer({ filter: { from: address } }),
-      this.readonlyContracts.ptk.events.Transfer({ filter: { to: address } }),
+    return this.readonlyPtkContract.methods.distributionBalanceOf({ account: address }, [
+      this.readonlyPtkContract.events.Transfer({ filter: { from: address } }),
+      this.readonlyPtkContract.events.Transfer({ filter: { to: address } }),
       ...this.events.forReloadPtkDistributionBalance,
     ]);
   }
 
   @memoize(R.identity)
-  public getTotalSupply$(token: TokenType): Observable<BN> {
-    return this.readonlyContracts[token].methods.totalSupply(
-      undefined,
-      this.readonlyContracts[token].events.Transfer(),
-    );
+  public getTotalSupply$(address: string): Observable<BN> {
+    const contract = this.getErc20ReadonlyContract(address);
+    return contract.methods.totalSupply(undefined, contract.events.Transfer());
   }
 
   @autobind
   public async withdrawUnclaimedDistributions(fromAddress: string): Promise<void> {
-    const txContracts = getCurrentValueOrThrow(this.txContracts);
+    const txContracts = getCurrentValueOrThrow(this.txPtkContract);
 
-    const promiEvent = txContracts.ptk.methods.claimDistributions(
+    const promiEvent = txContracts.methods.claimDistributions(
       {
         account: fromAddress,
       },
@@ -155,9 +137,9 @@ export class TokensApi {
 
   @memoize(R.identity)
   public getUnclaimedDistributions$(account: string): Observable<BN> {
-    return this.readonlyContracts.ptk.methods.calculateUnclaimedDistributions({ account }, [
-      this.readonlyContracts.ptk.events.DistributionCreated(),
-      this.readonlyContracts.ptk.events.DistributionsClaimed({ filter: { account } }),
+    return this.readonlyPtkContract.methods.calculateUnclaimedDistributions({ account }, [
+      this.readonlyPtkContract.events.DistributionCreated(),
+      this.readonlyPtkContract.events.DistributionsClaimed({ filter: { account } }),
     ]);
   }
 
@@ -176,32 +158,42 @@ export class TokensApi {
 
   @memoize()
   public getAccumulatedPoolDistributions$(): Observable<BN> {
-    return this.readonlyContracts.ptk.methods.distributionAccumulator(undefined, [
-      this.readonlyContracts.ptk.events.DistributionAccumulatorIncreased(),
-      this.readonlyContracts.ptk.events.DistributionCreated(),
+    return this.readonlyPtkContract.methods.distributionAccumulator(undefined, [
+      this.readonlyPtkContract.events.DistributionAccumulatorIncreased(),
+      this.readonlyPtkContract.events.DistributionCreated(),
     ]);
   }
 
   @memoize(R.identity)
   public getDistributionBalanceOf$(account: string): Observable<BN> {
-    return this.readonlyContracts.ptk.methods.distributionBalanceOf({ account }, [
-      this.readonlyContracts.ptk.events.Transfer({ filter: { from: account } }),
-      this.readonlyContracts.ptk.events.Transfer({ filter: { to: account } }),
+    return this.readonlyPtkContract.methods.distributionBalanceOf({ account }, [
+      this.readonlyPtkContract.events.Transfer({ filter: { from: account } }),
+      this.readonlyPtkContract.events.Transfer({ filter: { to: account } }),
     ]);
   }
 
   @memoize()
   public getDistributionTotalSupply$(): Observable<BN> {
-    return this.readonlyContracts.ptk.methods.distributionTotalSupply(
+    return this.readonlyPtkContract.methods.distributionTotalSupply(
       undefined,
-      this.readonlyContracts.ptk.events.Transfer(),
+      this.readonlyPtkContract.events.Transfer(),
     );
   }
 
   @memoize()
   public getNextDistributionTimestamp$(): Observable<number> {
-    return this.readonlyContracts.ptk.methods
-      .nextDistributionTimestamp(undefined, this.readonlyContracts.ptk.events.DistributionCreated())
+    return this.readonlyPtkContract.methods
+      .nextDistributionTimestamp(undefined, this.readonlyPtkContract.events.DistributionCreated())
       .pipe(map(item => item.toNumber()));
+  }
+
+  private getErc20TxContract(address: string): Contracts['erc20'] {
+    const txWeb3 = getCurrentValueOrThrow(this.web3Manager.txWeb3);
+
+    return createErc20(txWeb3, address);
+  }
+
+  private getErc20ReadonlyContract(address: string): Contracts['erc20'] {
+    return createErc20(this.web3Manager.web3, address);
   }
 }

@@ -3,7 +3,7 @@ import BN from 'bn.js';
 
 import { Metric } from 'components/Metric/Metric';
 import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
-import { Token } from 'model/types';
+import { TokenType } from 'model/types';
 import { Growth } from 'components/Growth/Growth';
 
 export interface ICashMetricProps {
@@ -11,7 +11,7 @@ export interface ICashMetricProps {
   value: string;
   previousValue?: string;
   primaryValue?: 'value' | 'previousValue';
-  token: Token;
+  token: TokenType;
   needed?: string;
   icon?: React.ReactNode;
 }

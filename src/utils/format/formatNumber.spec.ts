@@ -18,7 +18,7 @@ describe('formatNumber', (): void => {
   it('formats Compact<BN>', (): void => {
     expect(
       formatNumber({
-        toBn: (): BN => new BN(12345),
+        toBN: (): BN => new BN(12345),
         unwrap: (): BN => new BN(0),
       }),
     ).toEqual('12,345');

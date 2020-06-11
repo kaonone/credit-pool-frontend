@@ -36,11 +36,11 @@ function PoolBalanceChart() {
   const api = useApi();
   const { t } = useTranslate();
 
-  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
-    () => api.tokens.getTokenInfo$('dai'),
+  const [liquidityCurrency, liquidityCurrencyMeta] = useSubscribable(
+    () => api.fundsModule.getLiquidityCurrency$(),
     [],
   );
-  const decimals = daiTokenInfo?.decimals || 0;
+  const decimals = liquidityCurrency?.decimals || 0;
 
   const yearAgoDate = React.useMemo(() => moment().subtract(1, 'years').unix(), []); // Date in seconds
 
@@ -92,7 +92,7 @@ function PoolBalanceChart() {
   );
 
   return (
-    <Loading gqlResults={balancesResult} meta={daiTokenInfoMeta}>
+    <Loading gqlResults={balancesResult} meta={liquidityCurrencyMeta}>
       <BalanceChart
         chartPoints={chartPoints}
         chartLines={['lExitPrice', 'lEnterPrice']}

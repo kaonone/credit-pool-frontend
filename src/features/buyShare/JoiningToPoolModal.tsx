@@ -5,8 +5,9 @@ import { useApi } from 'services/api';
 import { useSubscribable, useOnChangeState } from 'utils/react';
 import { Dialog, DialogContent } from 'components';
 import { makeStyles } from 'utils/styles';
+import { WithAccount } from 'app/components/WithAccount/WithAccount';
 
-import { PTokenBuyingForm } from './PTokenBuyingForm';
+import { BuyingShareForm } from './BuyingShareForm';
 
 export function JoiningToPoolModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +20,7 @@ export function JoiningToPoolModal() {
   const [account] = useSubscribable(() => api.web3Manager.account, [api]);
 
   const [balance] = useSubscribable(
-    () => (account ? api.tokens.getBalance$('ptk', account) : of(null)),
+    () => (account ? api.tokens.getPtkBalance$(account) : of(null)),
     [api, account],
     null,
   );
@@ -29,7 +30,9 @@ export function JoiningToPoolModal() {
   return (
     <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={close}>
       <DialogContent className={classes.dialogContent}>
-        <PTokenBuyingForm onCancel={close} />
+        <WithAccount>
+          {({ account }) => <BuyingShareForm onCancel={close} account={account} />}
+        </WithAccount>
       </DialogContent>
     </Dialog>
   );

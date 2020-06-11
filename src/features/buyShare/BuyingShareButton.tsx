@@ -4,14 +4,15 @@ import Button from '@material-ui/core/Button';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { BuyCashIcon } from 'components/icons';
 import { ModalButton } from 'components/ModalButton/ModalButton';
+import { WithAccount } from 'app/components/WithAccount/WithAccount';
 
-import { PTokenBuyingForm } from './PTokenBuyingForm';
+import { BuyingShareForm } from './BuyingShareForm';
 
-type IButtonProps = React.ComponentPropsWithoutRef<typeof Button>;
+type IProps = React.ComponentPropsWithoutRef<typeof Button>;
 
-const tKeys = tKeysAll.features.cashExchange.pTokenBuying;
+const tKeys = tKeysAll.features.buyShare;
 
-export function PTokenBuyingButton(props: IButtonProps) {
+export function BuyingShareButton(props: IProps) {
   const { t } = useTranslate();
 
   return (
@@ -21,7 +22,11 @@ export function PTokenBuyingButton(props: IButtonProps) {
       fullWidth
       {...props}
     >
-      {({ closeModal }) => <PTokenBuyingForm onCancel={closeModal} />}
+      {({ closeModal }) => (
+        <WithAccount>
+          {({ account }) => <BuyingShareForm account={account} onCancel={closeModal} />}
+        </WithAccount>
+      )}
     </ModalButton>
   );
 }

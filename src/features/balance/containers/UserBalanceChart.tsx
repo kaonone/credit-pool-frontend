@@ -43,11 +43,11 @@ function UserBalanceChart() {
       api.fundsModule.getAvailableBalance$(account || zeroAddress, pLockedSum, unlockLiquiditySum),
     [account, pLockedSum, unlockLiquiditySum],
   );
-  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
-    () => api.tokens.getTokenInfo$('dai'),
+  const [liquidityToken, liquidityTokenMeta] = useSubscribable(
+    () => api.fundsModule.getLiquidityCurrency$(),
     [],
   );
-  const decimals = daiTokenInfo?.decimals;
+  const decimals = liquidityToken?.decimals;
 
   const yearAgoDate = React.useMemo(() => moment().subtract(1, 'years').unix(), []); // Date in seconds
 
@@ -105,7 +105,7 @@ function UserBalanceChart() {
   return (
     <Loading
       gqlResults={[balancesResult, myUserResult]}
-      meta={[accountMeta, daiTokenInfoMeta, currentBalanceMeta]}
+      meta={[accountMeta, liquidityTokenMeta, currentBalanceMeta]}
     >
       <BalanceChart
         renderCurrentBalance={renderCurrentBalance}
