@@ -44,40 +44,41 @@ export function GivingStakeForm({
   const { t } = useTranslate();
   const api = useApi();
 
-  const maxValue = useMemo(
+  const [liquidityCurrency, liquidityCurrencyMeta] = useSubscribable(
+    () => api.fundsModule.getLiquidityCurrency$(),
+    [api],
+  );
+
+  const maxValue$ = useMemo(
     () =>
       combineLatest([
         api.fundsModule.getLiquidityCurrency$(),
         api.fundsModule.getPtkBalanceInDaiWithoutFee$(account),
         api.loanModule.getPledgeRequirements$(borrower, proposalId),
       ]).pipe(
-        map(([liquidityCurrency, balance, { maxLPledge }]) => {
-          const roundedBalance = roundWei(balance, liquidityCurrency.decimals, 'floor', 2);
-          const roundedMaxStakeSize = roundWei(
-            maxLPledge.toBN(),
-            liquidityCurrency.decimals,
-            'ceil',
-            2,
-          );
+        map(([currency, balance, { maxLPledge }]) => {
+          const roundedBalance = roundWei(balance, currency.decimals, 'floor', 2);
+          const roundedMaxStakeSize = roundWei(maxLPledge.toBN(), currency.decimals, 'ceil', 2);
 
           return min(roundedBalance, roundedMaxStakeSize);
         }),
       ),
     [api, account, borrower, proposalId],
   );
-  const minValue = useMemo(
+  const minValue$ = useMemo(
     () =>
       api.loanModule
         .getPledgeRequirements$(borrower, proposalId)
         .pipe(map(({ minLPledge }) => minLPledge)),
     [api, borrower, proposalId],
   );
+  const [minValue] = useSubscribable(() => minValue$, [minValue$]);
 
   const validateAmount = useValidateAmount({
     required: true,
     moreThenZero: true,
-    maxValue,
-    minValue,
+    maxValue: maxValue$,
+    minValue: minValue$,
   });
 
   const handleFormSubmit = useCallback(
@@ -91,11 +92,6 @@ export function GivingStakeForm({
         : undefined;
     },
     [account, api, borrower, proposalId],
-  );
-
-  const [liquidityCurrency, liquidityCurrencyMeta] = useSubscribable(
-    () => api.fundsModule.getLiquidityCurrency$(),
-    [api],
   );
 
   const getConfirmationMessage = useCallback(
@@ -128,6 +124,13 @@ export function GivingStakeForm({
     [api, loanSize],
   );
 
+  const amountPlaceholder = t(tKeys.placeholder.getKey(), {
+    amount:
+      liquidityCurrency && minValue
+        ? new LiquidityAmount(minValue, liquidityCurrency).toFormattedString()
+        : '⏳',
+  });
+
   return (
     <FormWithConfirmation<FormData>
       title={t(tKeys.formTitle.getKey())}
@@ -142,9 +145,9 @@ export function GivingStakeForm({
             <LiquidityAmountField
               name={fieldNames.amount}
               currencies={[liquidityCurrency]}
-              placeholder={t(tKeys.placeholder.getKey())}
+              placeholder={amountPlaceholder}
               validate={validateAmount}
-              maxValue={maxValue}
+              maxValue={maxValue$}
             />
             <SpyField name="__" fieldValue={validateAmount} />
           </>

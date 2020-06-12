@@ -103,7 +103,7 @@ const en = {
     sellShare: {
       buttonTitle: 'Sell',
       formTitle: 'Sell share',
-      placeholder: 'Enter sum',
+      placeholder: 'Enter sum starting from %{amount}',
       confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
       interestConfirmation:
         ' Additional ~%{interestAmount} will be deducted from your available balance as a payment for the the accumulated interest on your outstanding loans. Full amount to be written off from your available balance will be ~%{fullAmount}.',
@@ -111,22 +111,22 @@ const en = {
     buyShare: {
       buttonTitle: 'Buy',
       formTitle: 'Buy share',
-      placeholder: 'Enter sum',
+      placeholder: 'Enter sum starting from %{amount}',
       confirmMessage: 'Are you sure you want deposit %{sourceAmount}?',
     },
     giveStake: {
       buttonTitle: 'Stake',
       formTitle: 'Stake',
-      placeholder: 'Enter sum',
+      placeholder: 'Enter sum starting from %{amount}',
       confirmMessage:
         'Are you sure you want to stake %{sourceAmount}? Your interest share will increase by %{interestShareDelta}',
     },
     createLoanProposal: {
       buttonTitle: 'Borrow',
       formTitle: 'Get loan',
-      amountPlaceholder: 'Enter sum',
+      amountPlaceholder: 'Enter sum starting from %{amount}',
       amountLabel: 'Loan sum',
-      percentPlaceholder: 'Enter percent value',
+      percentPlaceholder: 'Enter percent value starting from %{percent}',
       percentLabel: 'Percent',
       descriptionPlaceholder: 'Enter reason',
       descriptionLabel: 'Reason',

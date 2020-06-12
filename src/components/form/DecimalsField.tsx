@@ -10,7 +10,7 @@ import { TextInput, DecimalsInput } from '../inputs';
 
 interface IOwnProps {
   baseDecimals: number;
-  baseUnitName: string;
+  baseUnitName?: string;
   maxValue?: BN;
   withSelect?: boolean;
 }

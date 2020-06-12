@@ -30,6 +30,11 @@ function DecimalsInput(props: IProps) {
   } = props;
 
   const [suffix, setSuffix] = React.useState('');
+  const [needToShowEmpty, setNeedToShowEmpty] = React.useState(() => !value || value === '0');
+
+  React.useEffect(() => {
+    needToShowEmpty && value && value !== '0' && setNeedToShowEmpty(false);
+  }, [needToShowEmpty, value]);
 
   const amount = React.useMemo(() => value && fromBaseUnit(value, baseDecimals) + suffix, [
     value,
@@ -45,6 +50,8 @@ function DecimalsInput(props: IProps) {
       );
 
       if (inputValidationRegExp.test(event.target.value)) {
+        setNeedToShowEmpty(!event.target.value);
+
         const suffixMatch = event.target.value.match(/^.+?((\.|\.0+)|(\.[0-9]*?(0*)))$/);
 
         if (suffixMatch) {
@@ -68,11 +75,11 @@ function DecimalsInput(props: IProps) {
   return (
     <>
       <Grid container spacing={1}>
-        <Grid item xs={10}>
+        <Grid item xs={baseUnitName ? 10 : 12}>
           <TextInput
             {...restInputProps}
             disabled={disabled}
-            value={amount}
+            value={needToShowEmpty ? '' : amount}
             variant="outlined"
             fullWidth
             onChange={handleInputChange}

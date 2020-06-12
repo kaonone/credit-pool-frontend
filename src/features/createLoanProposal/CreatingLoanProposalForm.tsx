@@ -64,7 +64,7 @@ export function CreatingLoanProposalForm({ onCancel, account }: CreatingLoanProp
 
   const [currentToken, setCurrentToken] = useState<Token | null>(null);
 
-  const maxValue = useMemo(
+  const maxValue$ = useMemo(
     () =>
       currentToken
         ? api.loanModule
@@ -73,10 +73,11 @@ export function CreatingLoanProposalForm({ onCancel, account }: CreatingLoanProp
         : empty(),
     [api, account, currentToken],
   );
-  const minValue = useMemo(
+  const minValue$ = useMemo(
     () => api.loanModule.getConfig$().pipe(map(({ limits: { lDebtAmountMin } }) => lDebtAmountMin)),
     [api],
   );
+  const [minValue] = useSubscribable(() => minValue$, [minValue$]);
 
   const [percentDecimals, percentDecimalsMeta] = useSubscribable(
     () => api.loanModule.getAprDecimals$(),
@@ -85,17 +86,19 @@ export function CreatingLoanProposalForm({ onCancel, account }: CreatingLoanProp
 
   const [config] = useSubscribable(() => api.loanModule.getConfig$(), [api]);
   const minApr = config?.limits.debtInterestMin || zero;
-  const formattedMinPercent = formatBalance({
-    amountInBaseUnits: minApr,
-    baseDecimals: percentDecimals || 0,
-    precision: 2,
-  });
+  const formattedMinPercent = config
+    ? `${formatBalance({
+        amountInBaseUnits: minApr,
+        baseDecimals: percentDecimals || 0,
+        precision: 2,
+      })}%`
+    : '⏳';
 
   const validateAmount = useValidateAmount({
     required: true,
     moreThenZero: true,
-    maxValue,
-    minValue,
+    maxValue: maxValue$,
+    minValue: minValue$,
   });
 
   const validateApr = useMemo(() => {
@@ -104,10 +107,7 @@ export function CreatingLoanProposalForm({ onCancel, account }: CreatingLoanProp
       validateInteger,
       (value: string) => moreThen(new BN(0), new BN(value)),
       ...(!minApr.isZero()
-        ? [
-            (value: string) =>
-              moreThenOrEqual(minApr, new BN(value), () => `${formattedMinPercent}%`),
-          ]
+        ? [(value: string) => moreThenOrEqual(minApr, new BN(value), () => formattedMinPercent)]
         : []),
     );
   }, [minApr, formattedMinPercent]);
@@ -151,6 +151,11 @@ export function CreatingLoanProposalForm({ onCancel, account }: CreatingLoanProp
     [account],
   );
 
+  const amountPlaceholder = t(tKeys.amountPlaceholder.getKey(), {
+    amount:
+      currentToken && minValue ? new TokenAmount(minValue, currentToken).toFormattedString() : '⏳',
+  });
+
   return (
     <FormWithConfirmation<FormData>
       title={t(tKeys.formTitle.getKey())}
@@ -166,9 +171,9 @@ export function CreatingLoanProposalForm({ onCancel, account }: CreatingLoanProp
               name={fieldNames.amount}
               currencies={supportedTokens}
               label={t(tKeys.amountLabel.getKey())}
-              placeholder={t(tKeys.amountPlaceholder.getKey())}
+              placeholder={amountPlaceholder}
               validate={validateAmount}
-              maxValue={maxValue}
+              maxValue={maxValue$}
             />
             <FormSpy<FormData> subscription={{ values: true }} onChange={handleFormChange} />
             <SpyField name="__" fieldValue={validateAmount} />
@@ -181,14 +186,10 @@ export function CreatingLoanProposalForm({ onCancel, account }: CreatingLoanProp
             <DecimalsField
               validate={validateApr}
               baseDecimals={percentDecimals}
-              baseUnitName="%"
               name={fieldNames.apr}
               label={t(tKeys.percentLabel.getKey())}
-              placeholder={t(tKeys.percentPlaceholder.getKey())}
+              placeholder={t(tKeys.percentPlaceholder.getKey(), { percent: formattedMinPercent })}
               withSelect={false}
-              InputLabelProps={{
-                shrink: true,
-              }}
             />
             <SpyField name="__" fieldValue={validateApr} />
           </>
@@ -201,9 +202,6 @@ export function CreatingLoanProposalForm({ onCancel, account }: CreatingLoanProp
         placeholder={t(tKeys.descriptionPlaceholder.getKey())}
         variant="outlined"
         fullWidth
-        InputLabelProps={{
-          shrink: true,
-        }}
       />
     </FormWithConfirmation>
   );

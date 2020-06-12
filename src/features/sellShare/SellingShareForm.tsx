@@ -1,10 +1,12 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { combineLatest, empty } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
+import { FormState } from 'final-form';
+import { FormSpy } from 'react-final-form';
 
 import { FormWithConfirmation, TokenAmountField, FieldNames, SpyField } from 'components/form';
-import { TokenAmount } from 'model/entities';
+import { TokenAmount, Token } from 'model/entities';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable, useValidateAmount } from 'utils/react';
@@ -33,8 +35,15 @@ export function SellingShareForm({ onCancel, account }: SellingShareFormProps) {
   const { t } = useTranslate();
   const api = useApi();
 
-  const maxValue = useMemo(() => api.fundsModule.getMaxWithdrawAmount$(account), [api, account]);
-  const minValue = useMemo(
+  const [currentToken, setCurrentToken] = useState<Token | null>(null);
+
+  const [supportedTokens, supportedTokensMeta] = useSubscribable(
+    () => api.fundsModule.getSupportedTokens$(),
+    [api],
+  );
+
+  const maxValue$ = useMemo(() => api.fundsModule.getMaxWithdrawAmount$(account), [api, account]);
+  const minValue$ = useMemo(
     () =>
       api.liquidityModule
         .getConfig$()
@@ -45,24 +54,29 @@ export function SellingShareForm({ onCancel, account }: SellingShareFormProps) {
         ),
     [api],
   );
+  const [minValue] = useSubscribable(() => minValue$, [minValue$]);
 
   const validateAmount = useValidateAmount({
     required: true,
     moreThenZero: true,
-    maxValue,
-    minValue,
+    maxValue: maxValue$,
+    minValue: minValue$,
   });
+
+  const handleFormChange = useCallback(
+    ({ values: { amount } }: FormState<FormData>) => {
+      if (!currentToken || !amount || !currentToken.equals(amount.currency)) {
+        setCurrentToken(amount?.currency || null);
+      }
+    },
+    [currentToken],
+  );
 
   const handleFormSubmit = useCallback(
     ({ amount }: FormData) => {
       return amount ? api.liquidityModule.sellPtk(account, amount) : undefined;
     },
     [account, api],
-  );
-
-  const [supportedTokens, supportedTokensMeta] = useSubscribable(
-    () => api.fundsModule.getSupportedTokens$(),
-    [api],
   );
 
   const getConfirmationMessage = useCallback(
@@ -92,6 +106,11 @@ export function SellingShareForm({ onCancel, account }: SellingShareFormProps) {
     [api, account],
   );
 
+  const amountPlaceholder = t(tKeys.placeholder.getKey(), {
+    amount:
+      currentToken && minValue ? new TokenAmount(minValue, currentToken).toFormattedString() : '⏳',
+  });
+
   return (
     <FormWithConfirmation<FormData>
       title={t(tKeys.formTitle.getKey())}
@@ -106,10 +125,11 @@ export function SellingShareForm({ onCancel, account }: SellingShareFormProps) {
             <TokenAmountField
               name={fieldNames.amount}
               currencies={supportedTokens}
-              placeholder={t(tKeys.placeholder.getKey())}
+              placeholder={amountPlaceholder}
               validate={validateAmount}
-              maxValue={maxValue}
+              maxValue={maxValue$}
             />
+            <FormSpy<FormData> subscription={{ values: true }} onChange={handleFormChange} />
             <SpyField name="__" fieldValue={validateAmount} />
           </>
         )}

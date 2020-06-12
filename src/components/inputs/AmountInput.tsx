@@ -67,12 +67,17 @@ export function AmountInput<A extends Amount<ICurrency>>(props: AmountInputProps
       currentCurrency && !currencies.find(item => item.equals(currentCurrency));
 
     if (defaultCurrency && (!tokenAmount || isWrongCurrentCurrency)) {
-      onChange(makeAmount(currentValue, defaultCurrency));
+      // async change is necessary for the correct working of subscriptions in the final-form during the first render
+      Promise.resolve().then(() => onChange(makeAmount(currentValue, defaultCurrency)));
     }
   }, [currentCurrency, currencies]);
 
   const [suffix, setSuffix] = React.useState('');
-  const [needToShowEmpty, setNeedToShowEmpty] = React.useState(false);
+  const [needToShowEmpty, setNeedToShowEmpty] = React.useState(() => !value || value.isZero());
+
+  useEffect(() => {
+    needToShowEmpty && value && !value.toBN().isZero() && setNeedToShowEmpty(false);
+  }, [needToShowEmpty, value]);
 
   useEffect(() => setSuffix(''), [currentValue.toString(), currentDecimals]);
 
@@ -154,34 +159,38 @@ export function AmountInput<A extends Amount<ICurrency>>(props: AmountInputProps
         }}
         className={classes.amount}
       />
-      <TextInput
-        select
-        disabled={isDisabledCurrencySelector}
-        value={currentCurrency && getCurrencyIdentifier(currentCurrency)}
-        variant="outlined"
-        onChange={handleCurrencyChange}
-      >
-        {currencies.map(item => {
-          const id = getCurrencyIdentifier(item);
-          return (
-            <MenuItem key={id} value={id}>
-              {item.symbol}
-            </MenuItem>
-          );
-        })}
-      </TextInput>
+      {/* TODO uncomment after adding multiple tokens */}
+      {false && (
+        <TextInput
+          select
+          disabled={isDisabledCurrencySelector}
+          value={currentCurrency && getCurrencyIdentifier(currentCurrency!)}
+          variant="outlined"
+          onChange={handleCurrencyChange}
+        >
+          {currencies.map(item => {
+            const id = getCurrencyIdentifier(item);
+            return (
+              <MenuItem key={id} value={id}>
+                {item.symbol}
+              </MenuItem>
+            );
+          })}
+        </TextInput>
+      )}
     </div>
   );
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
   },
   amount: {
     width: 0,
     flexGrow: 1,
-    marginRight: theme.spacing(1),
+    // TODO uncomment after adding multiple tokens
+    // marginRight: theme.spacing(1),
   },
 }));
 

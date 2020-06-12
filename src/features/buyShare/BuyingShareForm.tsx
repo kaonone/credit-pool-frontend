@@ -36,20 +36,26 @@ export function BuyingShareForm({ onCancel, account }: BuyingShareFormProps) {
 
   const [currentToken, setCurrentToken] = useState<Token | null>(null);
 
-  const maxValue = useMemo(
+  const [supportedTokens, supportedTokensMeta] = useSubscribable(
+    () => api.fundsModule.getSupportedTokens$(),
+    [api],
+  );
+
+  const maxValue$ = useMemo(
     () => (currentToken ? api.tokens.getBalance$(currentToken.address, account) : empty()),
     [api, account, currentToken],
   );
-  const minValue = useMemo(
+  const minValue$ = useMemo(
     () => api.liquidityModule.getConfig$().pipe(map(({ lDepositMin }) => lDepositMin)),
     [api],
   );
+  const [minValue] = useSubscribable(() => minValue$, [minValue$]);
 
   const validateAmount = useValidateAmount({
     required: true,
     moreThenZero: true,
-    maxValue,
-    minValue,
+    maxValue: maxValue$,
+    minValue: minValue$,
   });
 
   const handleFormChange = useCallback(
@@ -68,11 +74,6 @@ export function BuyingShareForm({ onCancel, account }: BuyingShareFormProps) {
     [account, api],
   );
 
-  const [supportedTokens, supportedTokensMeta] = useSubscribable(
-    () => api.fundsModule.getSupportedTokens$(),
-    [api],
-  );
-
   const getConfirmationMessage = useCallback(
     ({ amount }: FormData) => {
       return t(tKeys.confirmMessage.getKey(), {
@@ -81,6 +82,11 @@ export function BuyingShareForm({ onCancel, account }: BuyingShareFormProps) {
     },
     [account],
   );
+
+  const amountPlaceholder = t(tKeys.placeholder.getKey(), {
+    amount:
+      currentToken && minValue ? new TokenAmount(minValue, currentToken).toFormattedString() : '⏳',
+  });
 
   return (
     <FormWithConfirmation<FormData>
@@ -96,9 +102,9 @@ export function BuyingShareForm({ onCancel, account }: BuyingShareFormProps) {
             <TokenAmountField
               name={fieldNames.amount}
               currencies={supportedTokens}
-              placeholder={t(tKeys.placeholder.getKey())}
+              placeholder={amountPlaceholder}
               validate={validateAmount}
-              maxValue={maxValue}
+              maxValue={maxValue$}
             />
             <FormSpy<FormData> subscription={{ values: true }} onChange={handleFormChange} />
             <SpyField name="__" fieldValue={validateAmount} />
