@@ -26,6 +26,7 @@ export function AuthButton(props: IProps) {
   const handleDisconnectClick = React.useCallback(() => {
     api.web3Manager.disconnect();
     connectCommunication.reset();
+    setIsOpened(false);
   }, [connectCommunication.reset]);
 
   useOnChangeState(
