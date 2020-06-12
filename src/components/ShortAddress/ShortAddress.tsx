@@ -7,7 +7,7 @@ import { getShortAddress } from 'utils/format';
 
 import { useStyles } from './ShortAddress.style';
 
-function ShortAddress({ address }: { address: string }) {
+function ShortAddress({ address, disableCopy }: { address: string; disableCopy?: boolean }) {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -33,7 +33,9 @@ function ShortAddress({ address }: { address: string }) {
     clearTimeout(closeTimeout.current);
   }, [tooltipTitle]);
 
-  return (
+  return disableCopy ? (
+    <span className={classes.shortAddress}>{shortAddress}</span>
+  ) : (
     <Tooltip
       className={classes.tooltip}
       title={tooltipTitle}

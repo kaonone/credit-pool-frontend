@@ -18,6 +18,7 @@ export const colors = {
   dustyGray: '#979797',
   electricViolet: '#9013FE',
   frenchGray: '#B6B3C0',
+  fruitSalad: '#5bad53',
   geraldine: '#FF7888',
   ghostGray: '#F4F3F5',
   ghostWhite: '#F7F5FB',

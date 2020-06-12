@@ -3,7 +3,7 @@ import { GetProps } from '_helpers';
 
 import { useApi } from 'services/api';
 import { getShortAddress } from 'utils/format';
-import { useSubscribable, useCommunication } from 'utils/react';
+import { useSubscribable, useCommunication, useOnChangeState } from 'utils/react';
 import { Button, Loading } from 'components';
 
 import { AuthModal } from './components/AuthModal';
@@ -15,7 +15,7 @@ export function AuthButton(props: IProps) {
   const [isOpened, setIsOpened] = React.useState(false);
   const api = useApi();
 
-  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
+  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, [], null);
   const [status] = useSubscribable(() => api.web3Manager.status, [], 'pending');
   const [connectedWallet] = useSubscribable(() => api.web3Manager.connectedWallet, [], null);
 
@@ -28,12 +28,20 @@ export function AuthButton(props: IProps) {
     connectCommunication.reset();
   }, [connectCommunication.reset]);
 
+  useOnChangeState(
+    { isOpened, connectedWallet },
+    (prev, cur) =>
+      cur.isOpened && !!cur.connectedWallet && prev.connectedWallet !== cur.connectedWallet,
+    () => setIsOpened(false),
+  );
+
   return (
     <>
       <Button
         color={color}
         variant="outlined"
         onClick={toggleIsOpened}
+        disabled={!accountMeta.loaded}
         endIcon={
           <Loading
             ignoreError
@@ -51,12 +59,11 @@ export function AuthButton(props: IProps) {
         </Loading>
       </Button>
       <AuthModal
-        status={status}
         connectedWallet={connectedWallet}
         isOpened={isOpened}
         onClose={toggleIsOpened}
         account={account}
-        connectCommunication={connectCommunication}
+        connecting={connectCommunication}
         connect={connectCommunication.execute}
         disconnect={handleDisconnectClick}
       />
