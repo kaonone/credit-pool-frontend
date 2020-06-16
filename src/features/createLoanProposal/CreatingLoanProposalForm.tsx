@@ -174,6 +174,9 @@ export function CreatingLoanProposalForm({ onCancel, account }: CreatingLoanProp
               placeholder={amountPlaceholder}
               validate={validateAmount}
               maxValue={maxValue$}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
             <FormSpy<FormData> subscription={{ values: true }} onChange={handleFormChange} />
             <SpyField name="__" fieldValue={validateAmount} />
@@ -190,6 +193,9 @@ export function CreatingLoanProposalForm({ onCancel, account }: CreatingLoanProp
               label={t(tKeys.percentLabel.getKey())}
               placeholder={t(tKeys.percentPlaceholder.getKey(), { percent: formattedMinPercent })}
               withSelect={false}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
             <SpyField name="__" fieldValue={validateApr} />
           </>
@@ -202,6 +208,9 @@ export function CreatingLoanProposalForm({ onCancel, account }: CreatingLoanProp
         placeholder={t(tKeys.descriptionPlaceholder.getKey())}
         variant="outlined"
         fullWidth
+        InputLabelProps={{
+          shrink: true,
+        }}
       />
     </FormWithConfirmation>
   );
