@@ -47,7 +47,7 @@ export function formatBalance({
   );
 
   const long = `${isNegative ? '-' : ''}${formatDecimal(prefix || '0')}${
-    baseDecimals ? `.${postfix}` : ''
+    baseDecimals && postfix ? `.${postfix}` : ''
   }`;
   const short = long.replace(/^(\d+?\.\d*?)0*$/, '$1').replace(/^(\d+?)\.$/, '$1');
 

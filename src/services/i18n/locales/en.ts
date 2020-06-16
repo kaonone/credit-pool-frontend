@@ -117,6 +117,7 @@ const en = {
     giveStake: {
       buttonTitle: 'Stake',
       formTitle: 'Stake',
+      description: 'The more money you invest, the more the interest share you receive',
       placeholder: 'Enter sum starting from %{amount}',
       confirmMessage:
         'Are you sure you want to stake %{sourceAmount}? Your interest share will increase by %{interestShareDelta}',

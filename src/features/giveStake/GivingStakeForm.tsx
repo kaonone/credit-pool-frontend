@@ -7,10 +7,12 @@ import { LiquidityAmount } from 'model/entities';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable, useValidateAmount } from 'utils/react';
-import { Loading } from 'components';
+import { Loading, Typography, Box } from 'components';
 import { roundWei, min } from 'utils/bn';
 import { calcInterestShare } from 'model';
 import { formatBalance } from 'utils/format';
+
+import { AmountPrefiller } from './AmountPrefiller';
 
 interface FormData {
   amount: LiquidityAmount | null;
@@ -52,15 +54,15 @@ export function GivingStakeForm({
   const maxValue$ = useMemo(
     () =>
       combineLatest([
-        api.fundsModule.getLiquidityCurrency$(),
         api.fundsModule.getPtkBalanceInDaiWithoutFee$(account),
         api.loanModule.getPledgeRequirements$(borrower, proposalId),
       ]).pipe(
-        map(([currency, balance, { maxLPledge }]) => {
+        map(([balance, { maxLPledge }]) => {
+          const { currency } = maxLPledge;
           const roundedBalance = roundWei(balance, currency.decimals, 'floor', 2);
           const roundedMaxStakeSize = roundWei(maxLPledge.toBN(), currency.decimals, 'ceil', 2);
 
-          return min(roundedBalance, roundedMaxStakeSize);
+          return maxLPledge.withValue(min(roundedBalance, roundedMaxStakeSize));
         }),
       ),
     [api, account, borrower, proposalId],
@@ -139,6 +141,7 @@ export function GivingStakeForm({
       onSubmit={handleFormSubmit}
       onCancel={onCancel}
     >
+      <Typography>{t(tKeys.description.getKey())}</Typography>
       <Loading meta={liquidityCurrencyMeta}>
         {liquidityCurrency && (
           <>
@@ -149,6 +152,14 @@ export function GivingStakeForm({
               validate={validateAmount}
               maxValue={maxValue$}
             />
+            <Box mt={0.5}>
+              <AmountPrefiller
+                fieldName={fieldNames.amount}
+                loanSize={loanSize}
+                maxValue$={maxValue$}
+                minValue$={minValue$}
+              />
+            </Box>
             <SpyField name="__" fieldValue={validateAmount} />
           </>
         )}

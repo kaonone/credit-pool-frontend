@@ -1,5 +1,5 @@
 export { default as Box } from '@material-ui/core/Box';
-export { default as Button } from '@material-ui/core/Button';
+export { default as Button, ButtonProps } from '@material-ui/core/Button';
 export { default as ButtonBase } from '@material-ui/core/ButtonBase';
 export { default as CircularProgress } from '@material-ui/core/CircularProgress';
 export { default as CssBaseline } from '@material-ui/core/CssBaseline';

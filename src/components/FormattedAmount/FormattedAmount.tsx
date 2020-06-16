@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from 'react';
 import Tooltip from '@material-ui/core/Tooltip/Tooltip';
 
-import { TokenAmount } from 'model/entities';
+import { Amount } from 'model/entities';
+import { ICurrency } from 'model/types';
 
 interface IProps {
-  sum: TokenAmount;
+  sum: Amount<ICurrency>;
   precision?: number;
   className?: string;
   children?: FunctionComponent<{ formattedBalance: string; notRoundedBalance: string }>;
