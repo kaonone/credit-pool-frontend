@@ -1,4 +1,3 @@
-import MuiThemeProvider from '@material-ui/styles/ThemeProvider';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -6,11 +5,11 @@ import { App } from 'app/App';
 import { Api, ApiContext } from 'services/api';
 import { ApolloProvider } from 'services/apollo';
 import { I18nProvider } from 'services/i18n';
+import { ThemeProvider } from 'services/theme';
 import { TransactionsNotifications } from 'features/transactionsNotifications';
 import { CookiesMsg } from 'features/cookies';
 import { NetworkWarning } from 'features/networkWarning';
 import { ErrorBoundary, Snackbar, CssBaseline } from 'components';
-import { theme } from 'utils/styles';
 
 export function Root(): React.ReactElement<{}> {
   const api = new Api();
@@ -23,9 +22,9 @@ export function Root(): React.ReactElement<{}> {
     <ErrorBoundary>
       <BrowserRouter>
         <ApiContext.Provider value={api}>
-          <Snackbar>
-            <I18nProvider>
-              <MuiThemeProvider theme={theme}>
+          <I18nProvider>
+            <ThemeProvider>
+              <Snackbar>
                 <ApolloProvider>
                   <CssBaseline />
                   <App />
@@ -33,9 +32,9 @@ export function Root(): React.ReactElement<{}> {
                   <CookiesMsg />
                   <NetworkWarning />
                 </ApolloProvider>
-              </MuiThemeProvider>
-            </I18nProvider>
-          </Snackbar>
+              </Snackbar>
+            </ThemeProvider>
+          </I18nProvider>
         </ApiContext.Provider>
       </BrowserRouter>
     </ErrorBoundary>

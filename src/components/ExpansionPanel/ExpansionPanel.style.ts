@@ -1,4 +1,4 @@
-import { makeStyles, Theme, colors } from 'utils/styles';
+import { makeStyles, Theme } from 'utils/styles';
 
 export const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -10,7 +10,11 @@ export const useStyles = makeStyles((theme: Theme) => ({
     position: 'relative',
     top: '0.25em',
     marginRight: theme.spacing(1),
-    color: colors.royalPurple,
+    color: theme.palette.type === 'dark' ? theme.colors.heliotrope : theme.colors.royalPurple,
+
+    '&$expanded': {
+      transform: 'rotate(180deg)',
+    },
   },
 
   summary: {
@@ -19,10 +23,12 @@ export const useStyles = makeStyles((theme: Theme) => ({
 
   summaryContent: {
     width: 0,
-    color: colors.topaz,
+    color: theme.palette.text.secondary,
   },
 
   summaryTitle: {
-    color: colors.royalPurple,
+    color: theme.palette.type === 'dark' ? theme.colors.heliotrope : theme.colors.royalPurple,
   },
+
+  expanded: {},
 }));

@@ -6,7 +6,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import { useCommunication } from 'utils/react';
 import { ButtonBase, Loading, Typography, Box, ShortAddress, Grid } from 'components';
 import { WalletType } from 'services/api';
-import { makeStyles, Theme, colors } from 'utils/styles';
+import { makeStyles, Theme, colors, darken, lighten } from 'utils/styles';
 import { zeroAddress } from 'utils/mock';
 import { Bitski, Fortmatic, Metamask, Portis, WalletConnect } from 'components/icons/wallets';
 
@@ -103,15 +103,32 @@ function Address({ address }: { address: string }) {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     padding: theme.spacing(1),
-    backgroundColor: theme.palette.grey[200],
-    border: `1px solid ${theme.palette.grey[500]}`,
     borderRadius: theme.spacing(1.5),
+    transition: theme.transitions.create(['background-color']),
+    backgroundColor:
+      theme.palette.type === 'dark'
+        ? lighten(theme.palette.background.paper, 0.1)
+        : darken(theme.palette.background.paper, 0.1),
+    border: `1px solid ${
+      theme.palette.type === 'dark'
+        ? lighten(theme.palette.background.paper, 0.2)
+        : darken(theme.palette.background.paper, 0.2)
+    }`,
 
     '&:hover, &$focusVisible': {
-      backgroundColor: theme.palette.grey[100],
-      border: `1px solid ${theme.palette.grey[400]}`,
+      backgroundColor:
+        theme.palette.type === 'dark'
+          ? lighten(theme.palette.background.paper, 0.2)
+          : darken(theme.palette.background.paper, 0.2),
+      borderColor:
+        theme.palette.type === 'dark'
+          ? lighten(theme.palette.background.paper, 0.3)
+          : darken(theme.palette.background.paper, 0.3),
       '& $actionName': {
-        border: `1px solid ${theme.palette.grey[400]}`,
+        borderColor:
+          theme.palette.type === 'dark'
+            ? lighten(theme.palette.background.paper, 0.3)
+            : darken(theme.palette.background.paper, 0.3),
       },
     },
   },
@@ -130,8 +147,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white',
-    border: `1px solid ${theme.palette.grey[500]}`,
+    backgroundColor: theme.palette.background.paper,
+    border: `1px solid ${
+      theme.palette.type === 'dark'
+        ? lighten(theme.palette.background.paper, 0.2)
+        : darken(theme.palette.background.paper, 0.2)
+    }`,
     textTransform: 'uppercase',
   },
 

@@ -4,7 +4,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
   root: {},
 
   title: {
-    color: colors.haiti,
+    color: theme.palette.text.primary,
   },
 
   percentValue: {

@@ -1,8 +1,8 @@
 import { makeStyles, colors } from 'utils/styles';
 
-export const useStyles = makeStyles(() => ({
+export const useStyles = makeStyles(theme => ({
   timeLeftTitle: {
-    color: colors.haiti,
+    color: theme.palette.text.primary,
   },
 
   timeLeftValue: {

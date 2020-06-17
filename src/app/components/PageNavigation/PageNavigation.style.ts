@@ -5,7 +5,6 @@ export const useStyles = makeStyles(() => ({
     textTransform: 'none',
     fontSize: '1rem',
     fontWeight: 500,
-    color: colors.topaz,
   },
 
   additionalTab: {

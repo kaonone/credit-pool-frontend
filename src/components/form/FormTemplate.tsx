@@ -53,7 +53,7 @@ export function FormTemplate<FormValues extends AnyObject>(props: FormTemplatePr
               </Grid>
             )}
             <Grid item xs={6}>
-              <Button variant="outlined" color="primary" fullWidth onClick={onCancel}>
+              <Button variant="outlined" fullWidth onClick={onCancel}>
                 {cancelButton || 'Cancel'}
               </Button>
             </Grid>

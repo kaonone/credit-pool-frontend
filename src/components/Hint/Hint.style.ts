@@ -1,4 +1,4 @@
-import { Theme, colors, makeStyles, lighten } from 'utils/styles';
+import { Theme, makeStyles, lighten } from 'utils/styles';
 
 export const useStyles = makeStyles((theme: Theme) => {
   return {
@@ -8,6 +8,7 @@ export const useStyles = makeStyles((theme: Theme) => {
       justifyContent: 'center',
       borderRadius: '0.25rem',
       textAlign: 'center',
+      transition: theme.transitions.create('background-color'),
 
       '&$isSmall': {
         padding: theme.spacing(0.5, 1.5),
@@ -20,7 +21,7 @@ export const useStyles = makeStyles((theme: Theme) => {
       },
 
       '&$colorDefault': {
-        backgroundColor: colors.whiteLilac,
+        backgroundColor: theme.palette.background.hint,
       },
 
       '&$colorError': {

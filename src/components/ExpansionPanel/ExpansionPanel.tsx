@@ -1,11 +1,12 @@
 import React from 'react';
+import cn from 'classnames';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-
-import { ContainedCircleArrow, OutlinedCircleArrow } from 'components/icons';
+import ArrowDropDownCircleRoundedIcon from '@material-ui/icons/ArrowDropDownCircleRounded';
+import ArrowDropDownCircleOutlinedIcon from '@material-ui/icons/ArrowDropDownCircleOutlined';
 
 import { useStyles } from './ExpansionPanel.style';
 
@@ -39,8 +40,12 @@ function ExpansionPanelComponent(props: IProps) {
       >
         <Grid item xs className={classes.summaryContent}>
           <Typography noWrap={!!showPreview}>
-            {expanded && <ContainedCircleArrow className={classes.toggleExpandIcon} />}
-            {!expanded && <OutlinedCircleArrow className={classes.toggleExpandIcon} />}
+            {expanded && (
+              <ArrowDropDownCircleRoundedIcon
+                className={cn(classes.toggleExpandIcon, classes.expanded)}
+              />
+            )}
+            {!expanded && <ArrowDropDownCircleOutlinedIcon className={classes.toggleExpandIcon} />}
             <span className={classes.summaryTitle}>{title}</span>
             {!expanded && showPreview && details}
           </Typography>

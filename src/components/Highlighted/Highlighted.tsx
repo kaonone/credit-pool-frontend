@@ -1,9 +1,9 @@
 import * as React from 'react';
 import cn from 'classnames';
 
-import { colors, makeStyles, lighten } from 'utils/styles';
+import { colors, makeStyles, lighten, darken } from 'utils/styles';
 
-export const useStyles = makeStyles(() => {
+export const useStyles = makeStyles(theme => {
   return {
     root: {
       border: '1px solid',
@@ -11,8 +11,14 @@ export const useStyles = makeStyles(() => {
       borderRadius: 6,
     },
     positive: {
-      backgroundColor: lighten(colors.apple, 0.75),
-      borderColor: lighten(colors.apple, 0.4),
+      backgroundColor:
+        theme.palette.type === 'dark'
+          ? darken(lighten(colors.apple, 0.75), 0.6)
+          : lighten(colors.apple, 0.75),
+      borderColor:
+        theme.palette.type === 'dark'
+          ? darken(lighten(colors.apple, 0.4), 0.3)
+          : lighten(colors.apple, 0.4),
     },
     negative: {
       backgroundColor: lighten(colors.persianRed, 0.75),

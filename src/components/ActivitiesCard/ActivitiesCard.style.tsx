@@ -3,7 +3,7 @@ import { makeStyles, Theme, colors } from 'utils/styles';
 export const useStyles = makeStyles((theme: Theme) => ({
   root: {
     borderRadius: '0.25rem',
-    backgroundColor: colors.white,
+    backgroundColor: theme.palette.background.paper,
     boxShadow: '0px 1px 0px rgba(0, 0, 0, 0.1)',
   },
 
@@ -12,7 +12,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
 
   metrics: {
-    color: colors.haiti,
+    color: theme.palette.text.primary,
   },
 
   asideContent: {

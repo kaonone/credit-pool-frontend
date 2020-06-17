@@ -7,7 +7,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
 
   highlightedMetric: {
-    color: colors.royalPurple,
+    color: theme.palette.type === 'dark' ? colors.heliotrope : colors.royalPurple,
   },
 
   votingForIcon: {

@@ -1,9 +1,11 @@
-import { makeStyles, Theme, gradients } from 'utils/styles';
+import { makeStyles, Theme } from 'utils/styles';
 
 export const useStyles = makeStyles((theme: Theme) => ({
   root: {
     padding: theme.spacing(3, 5),
-    background: gradients.purple,
+    background:
+      theme.palette.type === 'dark' ? theme.colors.shark : theme.gradients.main.linear('to top'),
+    transition: theme.transitions.create('background'),
     borderRadius: 4,
     color: '#fff',
   },

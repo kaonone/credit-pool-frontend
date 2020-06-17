@@ -19,7 +19,8 @@ interface IProps {
   isOpen: boolean;
   title?: string;
   message: string | AsyncMessage;
-  yesText: string;
+  yesButton?: React.ReactElement;
+  yesText?: string;
   noText?: string;
   onConfirm: () => Promise<void>;
   onCancel?: () => void;
@@ -34,6 +35,7 @@ function ConfirmationDialog(props: IProps) {
     message,
     noText,
     yesText,
+    yesButton,
     modalType = 'drawer',
   } = props;
 
@@ -96,7 +98,6 @@ function ConfirmationDialog(props: IProps) {
           <Grid item xs={6}>
             <Button
               variant="outlined"
-              color="primary"
               fullWidth
               onClick={handleCancel}
               disabled={status === 'pending'}
@@ -106,16 +107,18 @@ function ConfirmationDialog(props: IProps) {
           </Grid>
         )}
         <Grid item xs={6}>
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            fullWidth
-            onClick={communication.execute}
-            disabled={status === 'pending' || !messageLoaded}
-          >
-            {status === 'pending' ? <CircularProgress size={24} /> : yesText}
-          </Button>
+          {yesButton || (
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              fullWidth
+              onClick={communication.execute}
+              disabled={status === 'pending' || !messageLoaded}
+            >
+              {status === 'pending' ? <CircularProgress size={24} /> : yesText}
+            </Button>
+          )}
         </Grid>
       </Grid>
     </Wrapper>

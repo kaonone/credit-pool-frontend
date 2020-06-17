@@ -7,15 +7,11 @@ export const useStyles = makeStyles((theme: Theme) => ({
 
   title: {
     fontWeight: 500,
-    color: colors.topaz,
+    color: theme.palette.text.secondary,
   },
 
   header: {
     marginBottom: theme.spacing(3),
-  },
-
-  headerTitle: {
-    color: colors.topaz,
   },
 
   avatar: {

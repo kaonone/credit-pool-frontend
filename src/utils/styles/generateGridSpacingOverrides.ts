@@ -11,7 +11,12 @@ export function generateGridSpacingOverrides(
   return gridSpacingClasses.reduce(
     (acc, cur, index) => ({
       ...acc,
-      [cur]: { width: `calc(100% + ${spacing(index + 1)}px + 1px)` },
+      [cur]: {
+        width: `calc(100% + ${spacing(index + 1)}px + 1px)`,
+        [`& > $item`]: {
+          padding: `${(index + 1) * 4}px ${(index + 1) * 4 + 1}px`,
+        },
+      },
     }),
     {} as Record<
       typeof gridSpacingClasses[number],

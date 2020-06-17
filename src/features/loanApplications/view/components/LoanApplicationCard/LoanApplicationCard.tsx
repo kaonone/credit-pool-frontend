@@ -104,6 +104,7 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
     ],
     [
       t,
+      classes,
       lendValue,
       borrower,
       aprValue,

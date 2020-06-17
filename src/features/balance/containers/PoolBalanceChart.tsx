@@ -7,21 +7,18 @@ import { BalanceChart, Loading, FormattedBalance } from 'components';
 import { usePoolBalancesSubscription } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { makeStyles } from 'utils/styles';
+import { makeStyles, useTheme } from 'utils/styles';
 import { useSubscribable } from 'utils/react';
 import { decimalsToWei } from 'utils/bn';
 
-const enterPriceColor = '#2ED573';
-const exitPriceColor = '#613AAF';
-
-export const useStyles = makeStyles({
+export const useStyles = makeStyles(theme => ({
   enterPrice: {
-    color: enterPriceColor,
+    color: theme.colors.shamrock,
   },
   exitPrice: {
-    color: exitPriceColor,
+    color: theme.palette.type === 'dark' ? theme.colors.heliotrope : theme.palette.primary.dark,
   },
-});
+}));
 
 const tKeys = tKeysAll.app.pages.overview;
 
@@ -33,6 +30,7 @@ interface PoolPoint {
 
 function PoolBalanceChart() {
   const classes = useStyles();
+  const theme = useTheme();
   const api = useApi();
   const { t } = useTranslate();
 
@@ -96,7 +94,11 @@ function PoolBalanceChart() {
       <BalanceChart
         chartPoints={chartPoints}
         chartLines={['lExitPrice', 'lEnterPrice']}
-        chartLineColors={{ lEnterPrice: enterPriceColor, lExitPrice: exitPriceColor }}
+        chartLineColors={{
+          lEnterPrice: theme.colors.shamrock,
+          lExitPrice:
+            theme.palette.type === 'dark' ? theme.colors.heliotrope : theme.palette.primary.dark,
+        }}
         title={t(tKeys.poolBalanceTitle.getKey())}
         renderCurrentBalance={renderCurrentBalance}
       />
