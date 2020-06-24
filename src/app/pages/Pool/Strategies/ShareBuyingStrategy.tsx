@@ -57,7 +57,7 @@ export function ShareBuyingStrategy() {
       title="Buy share"
       primaryMetric={
         <Loading meta={daiBalanceMeta}>
-          –<FormattedBalance sum={daiBalance.toString()} token="dai" />
+          <FormattedBalance sum={daiBalance.toString()} token="dai" />
         </Loading>
       }
       secondaryMetric={
