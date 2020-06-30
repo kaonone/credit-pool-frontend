@@ -114,6 +114,7 @@ const config: webpack.Configuration = {
                       sandbox: 'ghPageRootSandbox',
                       'beta-defi': 'ghPageRootBetaDefi',
                       beta: 'ghPageRoot',
+                      mainnet: 'ghPageRootMainnet',
                     }[mode]
                   }/**`,
                   destination: `build`,

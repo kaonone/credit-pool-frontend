@@ -11,6 +11,7 @@
     "build:beta": "better-npm-run build",
     "build:beta-defi": "cross-env MODE=beta-defi better-npm-run build",
     "build:sandbox": "cross-env MODE=sandbox better-npm-run build",
+    "build:mainnet": "cross-env MODE=mainnet better-npm-run build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx && tsc --noEmit --incremental false --pretty",
     "lint:autofix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "test": "jest && npm run lint",
@@ -19,7 +20,8 @@
     "test:coverage": "jest --coverage --watch",
     "codegen:beta": "graphql-codegen --config codegen-beta.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
     "codegen:beta-defi": "graphql-codegen --config codegen-beta-defi.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
-    "codegen:sandbox": "graphql-codegen --config codegen-sandbox.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json"
+    "codegen:sandbox": "graphql-codegen --config codegen-sandbox.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
+    "codegen:mainnet": "graphql-codegen --config codegen-mainnet.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json"
   },
   "betterScripts": {
     "node": {

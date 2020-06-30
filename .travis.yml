@@ -3,6 +3,7 @@ branches:
     - beta
     - sandbox
     - beta-defi
+    - mainnet
 
 language: node_js
 node_js:
@@ -16,10 +17,12 @@ before_deploy:
   - if [ "$TRAVIS_BRANCH" = "beta" ]; then yarn codegen:beta; fi
   - if [ "$TRAVIS_BRANCH" = "beta-defi" ]; then yarn codegen:beta-defi; fi
   - if [ "$TRAVIS_BRANCH" = "sandbox" ]; then yarn codegen:sandbox; fi
+  - if [ "$TRAVIS_BRANCH" = "mainnet" ]; then yarn codegen:mainnet; fi
   - yarn test
   - if [ "$TRAVIS_BRANCH" = "beta" ]; then yarn build:beta; fi
   - if [ "$TRAVIS_BRANCH" = "beta-defi" ]; then yarn build:beta-defi; fi
   - if [ "$TRAVIS_BRANCH" = "sandbox" ]; then yarn build:sandbox; fi
+  - if [ "$TRAVIS_BRANCH" = "mainnet" ]; then yarn build:mainnet; fi
 
 deploy:
   - provider: pages
@@ -44,6 +47,14 @@ deploy:
     repo: akropolisio/credit-pool-frontend-beta-defi
     on:
       branch: beta-defi
+
+  - provider: pages
+    skip-cleanup: true
+    github-token: $GITHUB_TOKEN
+    local-dir: "./build"
+    repo: akropolisio/sparta-mainnet-frontend
+    on:
+      branch: mainnet
 
 notifications:
   slack: akropolisio:xUhLQpSGEoBylmWK3DW8Kblm
