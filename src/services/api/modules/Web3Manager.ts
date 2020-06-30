@@ -7,7 +7,6 @@ import { FortmaticConnector } from '@web3-wallets-kit/fortmatic-connector';
 import { ConnectWalletConnector } from '@web3-wallets-kit/connect-wallet-connector';
 import { BitskiConnector } from '@web3-wallets-kit/bitski-connector';
 import { PortisConnector } from '@web3-wallets-kit/portis-connector';
-import { SquarelinkConnector } from '@web3-wallets-kit/squarelink-connector';
 
 import { getEnv } from 'core/getEnv';
 import { Storage, localStorageAdapter } from 'services/storage';
@@ -15,14 +14,7 @@ import { ETH_NETWORK_CONFIG } from 'env';
 
 export { ConnectionStatus } from '@web3-wallets-kit/core';
 
-export const wallets = [
-  'bitski',
-  'metamask',
-  'connectWallet',
-  'fortmatic',
-  'portis',
-  'squarelink',
-] as const;
+export const wallets = ['bitski', 'metamask', 'connectWallet', 'fortmatic', 'portis'] as const;
 
 export type WalletType = typeof wallets[number];
 
@@ -45,8 +37,6 @@ const FORTMATIC_API_KEY = 'pk_test_508AC5D15FD0D930';
 
 const PORTIS_API_KEY = '4ab3cbfe-0ea7-4bce-aa27-04a19a8b78ea';
 
-const SQUARELINK_API_KEY = 'd023ebcfeb78fb3bb3bc';
-
 const connectors: Record<WalletType, Connector> = {
   metamask: new InpageConnector(),
   connectWallet: new ConnectWalletConnector({
@@ -59,10 +49,6 @@ const connectors: Record<WalletType, Connector> = {
     network: ETH_NETWORK_CONFIG.name,
   }),
   portis: new PortisConnector({ apiKey: PORTIS_API_KEY, network: ETH_NETWORK_CONFIG.name }),
-  squarelink: new SquarelinkConnector({
-    apiKey: SQUARELINK_API_KEY,
-    network: ETH_NETWORK_CONFIG.name,
-  }),
 };
 
 const initialStorageState: StorageState = {

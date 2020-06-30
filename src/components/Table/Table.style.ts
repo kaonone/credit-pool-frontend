@@ -1,4 +1,4 @@
-import { Theme, makeStyles, colors } from 'utils/styles';
+import { Theme, makeStyles } from 'utils/styles';
 
 const bottomBorder = `0px 1px 0px rgba(0, 0, 0, 0.1)`;
 
@@ -35,7 +35,7 @@ export const useStyles = makeStyles((theme: Theme) => {
 
       '& tr': {
         borderRadius,
-        background: colors.white,
+        background: theme.palette.background.paper,
       },
 
       '& td, & th': {
@@ -55,7 +55,8 @@ export const useStyles = makeStyles((theme: Theme) => {
       },
 
       '& thead tr': {
-        backgroundColor: '#F4F3F5',
+        backgroundColor: theme.palette.background.tableHeader,
+        transition: theme.transitions.create('background-color'),
         borderRadius,
       },
 
@@ -64,7 +65,7 @@ export const useStyles = makeStyles((theme: Theme) => {
       },
 
       '& thead td, & thead th': {
-        color: colors.topaz,
+        color: theme.palette.text.secondary,
       },
     },
 

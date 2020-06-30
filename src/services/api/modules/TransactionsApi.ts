@@ -26,7 +26,7 @@ export class TransactionsApi {
     );
 
     this.submittedTransaction.next({
-      type: transactionName as 'dai.approve',
+      type: transactionName as 'erc20.approve',
       tx: promise,
       promiEvent,
       payload,

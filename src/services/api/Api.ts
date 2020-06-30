@@ -37,7 +37,7 @@ export class Api {
 
   constructor() {
     this.fundsModule.setTotalLProposalGetter(
-      this.loanModule.getTotalLProposals$.bind(this.loanModule), // TODO add binding to memoize decorator
+      this.loanModule.getTotalLProposals$.bind(this.loanModule), // TODO add autobind to memoize decorator
     );
     this.fundsModule.setUnpaidInterestGetter(
       this.loanModule.getUnpaidInterest$.bind(this.loanModule),

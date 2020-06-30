@@ -5,7 +5,8 @@ import BN from 'bn.js';
 import { useApi } from 'services/api';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { MyStakeCost } from 'features/stake';
-import { StakeButton, UnstakeButton } from 'features/cashExchange';
+import { UnstakingButton } from 'features/unstake';
+import { GivingStakeButton } from 'features/giveStake';
 import { CashMetric, Metric, ShortAddress, ActivitiesCard, Loading } from 'components';
 import { LendIcon } from 'components/icons';
 import { getPledgeId } from 'model';
@@ -103,6 +104,7 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
     ],
     [
       t,
+      classes,
       lendValue,
       borrower,
       aprValue,
@@ -130,7 +132,7 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
         {proposalId && (
           <Grid item>
             <Loading meta={accountMeta} progressVariant="linear">
-              <StakeButton
+              <GivingStakeButton
                 loanSize={lendValue}
                 proposalId={proposalId}
                 borrower={borrower}
@@ -145,7 +147,7 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
         {needToShowUnstake && proposalId && (
           <Grid item>
             <Loading meta={[accountMeta]} progressVariant="linear">
-              <UnstakeButton
+              <UnstakingButton
                 loanSize={lendValue}
                 proposalId={proposalId}
                 borrower={borrower}

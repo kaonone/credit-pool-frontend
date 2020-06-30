@@ -1,4 +1,4 @@
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { first as firstOperator, map } from 'rxjs/operators';
 import BN from 'bn.js';
 import { autobind } from 'core-decorators';
@@ -7,7 +7,7 @@ import { min } from 'utils/bn';
 import { ETH_NETWORK_CONFIG } from 'env';
 import { createLiquidityModule } from 'generated/contracts';
 import { memoize } from 'utils/decorators';
-import { calcTotalWithdrawAmountByUserWithdrawAmount } from 'model';
+import { calcWithdrawAmountBeforeFee } from 'model';
 import { TokenAmount } from 'model/entities';
 
 import { Contracts, Web3ManagerModule } from '../types';
@@ -67,54 +67,54 @@ export class LiquidityModuleApi {
   }
 
   @autobind
-  public async sellPtk(fromAddress: string, values: { sourceAmount: TokenAmount }): Promise<void> {
-    const { sourceAmount: lAmountWithoutFee } = values;
+  public async sellPtk(fromAddress: string, amountAfterFee: TokenAmount): Promise<void> {
     const txLiquidityModule = getCurrentValueOrThrow(this.txContract);
 
     const { percentDivider, withdrawFeePercent } = await first(this.curveModuleApi.getConfig$());
-    const lAmountWithFee = calcTotalWithdrawAmountByUserWithdrawAmount({
-      userWithdrawAmountInDai: lAmountWithoutFee.value,
-      percentDivider,
-      withdrawFeePercent,
-    });
+    const lAmountBeforeFee = await first(
+      this.fundsModuleApi.toLiquidityAmount$(
+        of(
+          calcWithdrawAmountBeforeFee({
+            withdrawAmountAfterFee: amountAfterFee,
+            percentDivider,
+            withdrawFeePercent,
+          }),
+        ),
+      ),
+    );
 
     const pAmountWithFee = await first(
-      this.fundsModuleApi.convertDaiToPtkExit$(lAmountWithFee.toString()),
+      this.fundsModuleApi.convertLiquidityToPtkExit$(lAmountBeforeFee),
     );
-    const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
+    const pBalance = await first(this.tokensApi.getPtkBalance$(fromAddress));
 
     const promiEvent = txLiquidityModule.methods.withdraw(
-      { lAmountMin: new BN(0), pAmount: min(pAmountWithFee, pBalance) },
+      { lAmountMin: new BN(0), pAmount: min(pAmountWithFee.toBN(), pBalance) },
       { from: fromAddress },
     );
 
     this.transactionsApi.pushToSubmittedTransactions$('liquidity.sellPtk', promiEvent, {
       address: fromAddress,
-      ...values,
+      sourceAmount: amountAfterFee,
     });
 
     await promiEvent;
   }
 
   @autobind
-  public async buyPtk(fromAddress: string, values: { sourceAmount: TokenAmount }): Promise<void> {
-    const { sourceAmount } = values;
+  public async buyPtk(fromAddress: string, amount: TokenAmount): Promise<void> {
     const txLiquidityModule = getCurrentValueOrThrow(this.txContract);
 
-    await this.tokensApi.approveDai(
-      fromAddress,
-      ETH_NETWORK_CONFIG.contracts.fundsModule,
-      sourceAmount,
-    );
+    await this.tokensApi.approve(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, amount);
 
     const promiEvent = txLiquidityModule.methods.deposit(
-      { lAmount: sourceAmount.value, pAmountMin: new BN(0) },
+      { lAmount: amount.value, pAmountMin: new BN(0) },
       { from: fromAddress },
     );
 
     this.transactionsApi.pushToSubmittedTransactions$('liquidity.buyPtk', promiEvent, {
       address: fromAddress,
-      ...values,
+      sourceAmount: amount,
     });
 
     await promiEvent;

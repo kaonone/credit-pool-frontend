@@ -3,11 +3,12 @@ import { of } from 'rxjs';
 import BN from 'bn.js';
 
 import { Loading, FormattedBalance } from 'components';
-import { PTokenBuyingButton } from 'features/cashExchange';
+import { BuyingShareButton } from 'features/buyShare';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 import { decimalsToWei } from 'utils/bn';
 import { formatBalance } from 'utils/format';
+import { ETH_NETWORK_CONFIG } from 'env';
 
 import { StrategyCard } from '../StrategyCard';
 
@@ -16,7 +17,7 @@ export function ShareBuyingStrategy() {
   const [account] = useSubscribable(() => api.web3Manager.account, []);
 
   const [daiBalance, daiBalanceMeta] = useSubscribable(
-    () => (account ? api.tokens.getBalance$('dai', account) : of(new BN(0))),
+    () => (account ? api.tokens.getDaiBalance$(account) : of(new BN(0))),
     [api, account],
     new BN(0),
   );
@@ -34,7 +35,7 @@ export function ShareBuyingStrategy() {
   );
 
   const [ptkTotalSupply, ptkTotalSupplyMeta] = useSubscribable(
-    () => (account ? api.tokens.getTotalSupply$('ptk') : of(new BN(0))),
+    () => (account ? api.tokens.getTotalSupply$(ETH_NETWORK_CONFIG.contracts.ptk) : of(new BN(0))),
     [api, account],
     new BN(0),
   );
@@ -56,7 +57,7 @@ export function ShareBuyingStrategy() {
       title="Buy share"
       primaryMetric={
         <Loading meta={daiBalanceMeta}>
-          –<FormattedBalance sum={daiBalance.toString()} token="dai" />
+          <FormattedBalance sum={daiBalance.toString()} token="dai" />
         </Loading>
       }
       secondaryMetric={
@@ -71,7 +72,7 @@ export function ShareBuyingStrategy() {
         </Loading>
       }
       description="Some text"
-      actionButton={<PTokenBuyingButton fullWidth color="primary" variant="contained" />}
+      actionButton={<BuyingShareButton fullWidth color="primary" variant="contained" />}
     />
   );
 }

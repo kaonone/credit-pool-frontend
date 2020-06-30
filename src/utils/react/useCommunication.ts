@@ -16,7 +16,7 @@ export interface CommunicationState<E, O extends IOptions<E>> {
 }
 
 export interface CommunicationHandlers<E> {
-  execute(...args: InferArgs<E>): void;
+  execute(...args: InferArgs<E>): Promise<void>;
   cancelRequest(): void;
   reset(): void;
 }
@@ -63,7 +63,7 @@ export function useCommunication<
       const communication = makeCancelablePromise<InferResult<E>>(effect(...args));
       launchedCommunicationRef.current = communication;
 
-      communication
+      return communication
         .then(res => {
           setResult(res);
           setStatus('success');

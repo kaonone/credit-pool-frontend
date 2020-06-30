@@ -10,6 +10,7 @@ interface Props {
   children: React.ReactNode | ((props: { account: string }) => React.ReactNode);
 }
 
+// TODO move to another place
 export function WithAccount({ children }: Props) {
   const { t, tKeys } = useTranslate();
 

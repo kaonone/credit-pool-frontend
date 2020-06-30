@@ -18,8 +18,8 @@ import {
   PLEDGE_MARGIN_DIVIDER,
 } from 'env';
 import { RepaymentMethod } from 'model/types';
-import { calcTotalWithdrawAmountByUserWithdrawAmount } from 'model';
-import { TokenAmount } from 'model/entities';
+import { calcWithdrawAmountBeforeFee } from 'model';
+import { TokenAmount, LiquidityAmount } from 'model/entities';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
@@ -179,24 +179,26 @@ export class LoanModuleApi {
   }
 
   @memoize(R.identity)
-  public getUnpaidInterest$(borrower: string): Observable<BN> {
+  public getUnpaidInterest$(borrower: string): Observable<LiquidityAmount> {
     const marginOfSeconds = 15 * 60;
     const recalcInterestIntervalInMs = 3 * 60 * 1000;
 
-    return timer(0, recalcInterestIntervalInMs).pipe(
-      switchMap(() =>
-        this.readonlyContracts.loan.methods.getUnpaidInterest(
-          {
-            borrower,
-          },
-          [
-            this.readonlyContracts.loan.events.Repay({ filter: { sender: borrower } }),
-            this.readonlyContracts.loan.events.DebtDefaultExecuted({ filter: { borrower } }),
-          ],
+    return this.fundsModuleApi.toLiquidityAmount$(
+      timer(0, recalcInterestIntervalInMs).pipe(
+        switchMap(() =>
+          this.readonlyContracts.loan.methods.getUnpaidInterest(
+            {
+              borrower,
+            },
+            [
+              this.readonlyContracts.loan.events.Repay({ filter: { sender: borrower } }),
+              this.readonlyContracts.loan.events.DebtDefaultExecuted({ filter: { borrower } }),
+            ],
+          ),
         ),
-      ),
-      map(([unpaidInterest, interestPerSecond]) =>
-        unpaidInterest.add(interestPerSecond.muln(marginOfSeconds)),
+        map(([unpaidInterest, interestPerSecond]) =>
+          unpaidInterest.add(interestPerSecond.muln(marginOfSeconds)),
+        ),
       ),
     );
   }
@@ -226,25 +228,23 @@ export class LoanModuleApi {
   @autobind
   public async stakePtk(
     fromAddress: string,
-    values: { sourceAmount: TokenAmount; borrower: string; proposalId: string },
+    values: { sourceAmount: LiquidityAmount; borrower: string; proposalId: string },
   ): Promise<void> {
     const { sourceAmount, borrower, proposalId } = values;
     const txLoanModule = getCurrentValueOrThrow(this.txContracts.proposals);
 
-    const daiInfo = await first(this.tokensApi.getTokenInfo$('dai'));
-
-    const pledgeMargin = decimalsToWei(daiInfo.decimals).divn(PLEDGE_MARGIN_DIVIDER);
+    const pledgeMargin = decimalsToWei(sourceAmount.currency.decimals).divn(PLEDGE_MARGIN_DIVIDER);
 
     const pAmount = await first(
-      this.fundsModuleApi.convertDaiToPtkExit$(sourceAmount.add(pledgeMargin).toString()),
+      this.fundsModuleApi.convertLiquidityToPtkExit$(sourceAmount.add(pledgeMargin)),
     );
-    const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
+    const pBalance = await first(this.tokensApi.getPtkBalance$(fromAddress));
 
     const promiEvent = txLoanModule.methods.addPledge(
       {
         borrower,
         lAmountMin: new BN(0),
-        pAmount: min(pAmount, pBalance),
+        pAmount: min(pAmount.toBN(), pBalance),
         proposal: bnToBn(proposalId),
       },
       { from: fromAddress },
@@ -262,7 +262,7 @@ export class LoanModuleApi {
   public async unstakePtk(
     fromAddress: string,
     values: {
-      sourceAmount: TokenAmount; // in DAI by currentFullStakeCost
+      sourceAmount: LiquidityAmount; // in Liquidity by currentFullStakeCost
       borrower: string;
       proposalId: string;
       lInitialLocked: string;
@@ -336,17 +336,13 @@ export class LoanModuleApi {
 
     const hash = await this.swarmApi.upload<string>(description);
 
-    const minLCollateral = await first(
-      this.getMinLoanCollateralByDaiInDai$(sourceAmount.toString()),
-    );
-    const pAmount = await first(
-      this.fundsModuleApi.convertDaiToPtkExit$(minLCollateral.toString()),
-    );
-    const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
+    const minLCollateral = await first(this.getMinLoanCollateral$(sourceAmount));
+    const pAmount = await first(this.fundsModuleApi.convertLiquidityToPtkExit$(minLCollateral));
+    const pBalance = await first(this.tokensApi.getPtkBalance$(fromAddress));
 
     const promiEvent = txLoanModule.methods.createDebtProposal(
       {
-        pAmountMax: min(pAmount, pBalance),
+        pAmountMax: min(pAmount.toBN(), pBalance),
         debtLAmount: sourceAmount.value,
         interest: new BN(apr),
         descriptionHash: hash,
@@ -432,7 +428,7 @@ export class LoanModuleApi {
   public async repay(
     fromAddress: string,
     debtId: string,
-    lAmount: TokenAmount,
+    tokenAmountAfterFee: TokenAmount,
     method: RepaymentMethod,
   ): Promise<void> {
     const txLoanModule = getCurrentValueOrThrow(this.txContracts.loan);
@@ -441,31 +437,38 @@ export class LoanModuleApi {
 
     if (method === 'fromAvailablePoolBalance') {
       const { percentDivider, withdrawFeePercent } = await first(this.curveModuleApi.getConfig$());
+      const lAmountAfterFee = await first(
+        this.fundsModuleApi.toLiquidityAmount$(of(tokenAmountAfterFee)),
+      );
 
-      const totalWithdrawAmount = calcTotalWithdrawAmountByUserWithdrawAmount({
+      const totalWithdrawAmount = calcWithdrawAmountBeforeFee({
         percentDivider,
-        userWithdrawAmountInDai: lAmount.value,
+        withdrawAmountAfterFee: lAmountAfterFee,
         withdrawFeePercent,
       });
 
       const pAmount = await first(
-        this.fundsModuleApi.convertDaiToPtkExit$(totalWithdrawAmount.toString()),
+        this.fundsModuleApi.convertLiquidityToPtkExit$(totalWithdrawAmount),
       );
-      const pBalance = await first(this.tokensApi.getBalance$('ptk', fromAddress));
+      const pBalance = await first(this.tokensApi.getPtkBalance$(fromAddress));
 
       promiEvent = txLoanModule.methods.repayPTK(
-        { debt: bnToBn(debtId), lAmountMin: lAmount.value, pAmount: min(pAmount, pBalance) },
+        {
+          debt: bnToBn(debtId),
+          lAmountMin: tokenAmountAfterFee.value,
+          pAmount: min(pAmount.toBN(), pBalance),
+        },
         { from: fromAddress },
       );
     } else {
-      await this.tokensApi.approveDai(
+      await this.tokensApi.approve(
         fromAddress,
         ETH_NETWORK_CONFIG.contracts.fundsModule,
-        lAmount,
+        tokenAmountAfterFee,
       );
 
       promiEvent = txLoanModule.methods.repay(
-        { debt: bnToBn(debtId), lAmount: lAmount.value },
+        { debt: bnToBn(debtId), lAmount: tokenAmountAfterFee.value },
         { from: fromAddress },
       );
     }
@@ -473,7 +476,7 @@ export class LoanModuleApi {
     this.transactionsApi.pushToSubmittedTransactions$('loan.repay', promiEvent, {
       address: fromAddress,
       debtId,
-      amount: lAmount.value,
+      amount: tokenAmountAfterFee.value,
     });
 
     await promiEvent;
@@ -481,7 +484,7 @@ export class LoanModuleApi {
 
   @memoize(R.identity)
   public getMaxAvailableLoanSizeInDai$(address: string): Observable<BN> {
-    return this.tokensApi.getBalance$('ptk', address).pipe(
+    return this.tokensApi.getPtkBalance$(address).pipe(
       switchMap(balance => {
         return this.fundsModuleApi.getPtkToDaiExitInfo$(balance.toString());
       }),
@@ -528,25 +531,32 @@ export class LoanModuleApi {
   public getPledgeRequirements$(
     borrower: string,
     proposalId: string,
-  ): Observable<{ minLPledge: BN; maxLPledge: BN; minPPledge: BN; maxPPledge: BN }> {
-    return this.readonlyContracts.proposals.methods
-      .getPledgeRequirements(
-        {
-          borrower,
-          proposal: bnToBn(proposalId),
-        },
-        [
-          this.readonlyContracts.proposals.events.PledgeAdded(),
-          this.readonlyContracts.proposals.events.PledgeWithdrawn(),
-        ],
-        1000,
+  ): Observable<{
+    minLPledge: LiquidityAmount;
+    maxLPledge: LiquidityAmount;
+    minPPledge: TokenAmount;
+    maxPPledge: TokenAmount;
+  }> {
+    return this.fundsModuleApi
+      .toLiquidityAmount$(
+        this.readonlyContracts.proposals.methods.getPledgeRequirements(
+          {
+            borrower,
+            proposal: bnToBn(proposalId),
+          },
+          [
+            this.readonlyContracts.proposals.events.PledgeAdded(),
+            this.readonlyContracts.proposals.events.PledgeWithdrawn(),
+          ],
+          1000,
+        ),
       )
       .pipe(
         switchMap(([minLPledge, maxLPledge]) => {
           return combineLatest([
             of([minLPledge, maxLPledge]),
-            this.fundsModuleApi.convertDaiToPtkExit$(minLPledge.toString()),
-            this.fundsModuleApi.convertDaiToPtkExit$(maxLPledge.toString()),
+            this.fundsModuleApi.convertLiquidityToPtkExit$(minLPledge),
+            this.fundsModuleApi.convertLiquidityToPtkExit$(maxLPledge),
           ]);
         }),
         map(([[minLPledge, maxLPledge], minPPledge, maxPPledge]) => ({
@@ -558,10 +568,12 @@ export class LoanModuleApi {
       );
   }
 
-  @memoize(R.identity)
-  // eslint-disable-next-line class-methods-use-this
-  public getMinLoanCollateralByDaiInDai$(ptkBalanceInDai: string): Observable<BN> {
-    return of(new BN(ptkBalanceInDai).muln(MIN_COLLATERAL_PERCENT_FOR_BORROWER).divn(100));
+  @memoize((loanSize: TokenAmount) => loanSize.toString())
+  // TODO take MIN_COLLATERAL_PERCENT_FOR_BORROWER from contract
+  public getMinLoanCollateral$(loanSize: TokenAmount): Observable<LiquidityAmount> {
+    return this.fundsModuleApi.toLiquidityAmount$(
+      of(loanSize.muln(MIN_COLLATERAL_PERCENT_FOR_BORROWER).divn(100)),
+    );
   }
 
   @memoize(R.identity)

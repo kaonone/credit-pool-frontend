@@ -7,21 +7,18 @@ import { BalanceChart, Loading, FormattedBalance } from 'components';
 import { usePoolBalancesSubscription } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { makeStyles } from 'utils/styles';
+import { makeStyles, useTheme } from 'utils/styles';
 import { useSubscribable } from 'utils/react';
 import { decimalsToWei } from 'utils/bn';
 
-const enterPriceColor = '#2ED573';
-const exitPriceColor = '#613AAF';
-
-export const useStyles = makeStyles({
+export const useStyles = makeStyles(theme => ({
   enterPrice: {
-    color: enterPriceColor,
+    color: theme.colors.shamrock,
   },
   exitPrice: {
-    color: exitPriceColor,
+    color: theme.palette.type === 'dark' ? theme.colors.heliotrope : theme.palette.primary.dark,
   },
-});
+}));
 
 const tKeys = tKeysAll.app.pages.overview;
 
@@ -33,14 +30,15 @@ interface PoolPoint {
 
 function PoolBalanceChart() {
   const classes = useStyles();
+  const theme = useTheme();
   const api = useApi();
   const { t } = useTranslate();
 
-  const [daiTokenInfo, daiTokenInfoMeta] = useSubscribable(
-    () => api.tokens.getTokenInfo$('dai'),
+  const [liquidityCurrency, liquidityCurrencyMeta] = useSubscribable(
+    () => api.fundsModule.getLiquidityCurrency$(),
     [],
   );
-  const decimals = daiTokenInfo?.decimals || 0;
+  const decimals = liquidityCurrency?.decimals || 0;
 
   const yearAgoDate = React.useMemo(() => moment().subtract(1, 'years').unix(), []); // Date in seconds
 
@@ -92,11 +90,15 @@ function PoolBalanceChart() {
   );
 
   return (
-    <Loading gqlResults={balancesResult} meta={daiTokenInfoMeta}>
+    <Loading gqlResults={balancesResult} meta={liquidityCurrencyMeta}>
       <BalanceChart
         chartPoints={chartPoints}
         chartLines={['lExitPrice', 'lEnterPrice']}
-        chartLineColors={{ lEnterPrice: enterPriceColor, lExitPrice: exitPriceColor }}
+        chartLineColors={{
+          lEnterPrice: theme.colors.shamrock,
+          lExitPrice:
+            theme.palette.type === 'dark' ? theme.colors.heliotrope : theme.palette.primary.dark,
+        }}
         title={t(tKeys.poolBalanceTitle.getKey())}
         renderCurrentBalance={renderCurrentBalance}
       />

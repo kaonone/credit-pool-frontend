@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import BN from 'bn.js';
 
 import { Loading, FormattedBalance } from 'components';
-import { GetLoanButton } from 'features/cashExchange';
+import { CreatingLoanProposalButton } from 'features/createLoanProposal';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 import { formatBalance } from 'utils/format';
@@ -45,7 +45,7 @@ export function BorrowingStrategy() {
         </Loading>
       }
       description="Some text"
-      actionButton={<GetLoanButton />}
+      actionButton={<CreatingLoanProposalButton variant="contained" color="primary" />}
     />
   );
 }

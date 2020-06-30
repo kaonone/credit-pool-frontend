@@ -1,4 +1,11 @@
-export class Token {
+import { isEqualHex } from 'utils/hex';
+import { ICurrency, IBrand } from 'model/types';
+
+const uniqType = Symbol('Token');
+
+export class Token implements ICurrency, IBrand {
+  public _type: typeof uniqType = uniqType;
+
   constructor(
     public readonly address: string,
     public readonly symbol: string,
@@ -14,6 +21,10 @@ export class Token {
     };
 
     return view;
+  }
+
+  equals(a: Token): boolean {
+    return isEqualHex(this.address, a.address);
   }
 }
 

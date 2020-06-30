@@ -1,12 +1,11 @@
 import BN from 'bn.js';
 
-import { ToBn } from 'utils/types';
-import { isToBn } from 'utils/bn';
+import { IToBN, isToBN } from 'model/types';
 
-function getValue<ExtToBn extends ToBn>(value?: BN | ExtToBn | Date | number | null): number {
+function getValue<ExtToBn extends IToBN>(value?: BN | ExtToBn | Date | number | null): number {
   if (value) {
-    if (isToBn(value)) {
-      return getValue(value.toBn());
+    if (isToBN(value)) {
+      return getValue(value.toBN());
     }
 
     if (value instanceof Date) {
@@ -21,7 +20,7 @@ function getValue<ExtToBn extends ToBn>(value?: BN | ExtToBn | Date | number | n
   return (value as number) || 0;
 }
 
-export function formatElapsed<ExtToBn extends ToBn>(
+export function formatElapsed<ExtToBn extends IToBN>(
   now?: Date | null,
   value?: BN | ExtToBn | Date | number | null,
 ): string {

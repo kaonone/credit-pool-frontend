@@ -52,15 +52,13 @@ export function MyStakeCost({
   const interestShare =
     fullLoanStake && calcInterestShare(lInitialLocked, fullLoanStake, interestShareDecimals);
 
-  const interestShareColor = interestShare?.ltn(1500) ? 'negative' : 'positive';
-
   return (
     <Loading gqlResults={pledgeGqlResult} meta={[myStakeCostMeta, fullLoanStakeMeta]}>
       {new BN(pLocked).gtn(0) ? (
         <>
           {myStakeCost && <FormattedAmount sum={myStakeCost} />}{' '}
           {interestShare && (
-            <Highlighted color={interestShareColor}>
+            <Highlighted color="positive">
               {formatBalance({
                 amountInBaseUnits: interestShare,
                 baseDecimals: interestShareDecimals,

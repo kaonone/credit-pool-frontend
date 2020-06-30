@@ -1,4 +1,4 @@
-import { Theme, colors, makeStyles } from 'utils/styles';
+import { Theme, makeStyles, lighten } from 'utils/styles';
 
 export const useStyles = makeStyles((theme: Theme) => {
   return {
@@ -7,8 +7,8 @@ export const useStyles = makeStyles((theme: Theme) => {
       alignItems: 'center',
       justifyContent: 'center',
       borderRadius: '0.25rem',
-      backgroundColor: colors.whiteLilac,
       textAlign: 'center',
+      transition: theme.transitions.create('background-color'),
 
       '&$isSmall': {
         padding: theme.spacing(0.5, 1.5),
@@ -19,9 +19,21 @@ export const useStyles = makeStyles((theme: Theme) => {
         padding: theme.spacing(1.5, 3),
         minHeight: theme.spacing(6),
       },
+
+      '&$colorDefault': {
+        backgroundColor: theme.palette.background.hint,
+      },
+
+      '&$colorError': {
+        color: theme.palette.error.main,
+        backgroundColor: lighten(theme.palette.error.main, 0.8),
+      },
     },
 
     isSmall: {},
     isMedium: {},
+
+    colorDefault: {},
+    colorError: {},
   };
 });

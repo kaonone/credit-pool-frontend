@@ -7,3 +7,4 @@ export * from './useCommunication';
 export * from './usePagination';
 export * from './useSubgraphPagination';
 export * from './useFormattedBalance';
+export * from './useValidateAmount';

@@ -1,7 +1,7 @@
 // tslint:disable:max-line-length
 const en = {
   app: {
-    mainTitle: 'Akropolis Pool',
+    mainTitle: 'Sparta Pool',
     connectingWarning: 'You need connect to wallet',
     pages: {
       overview: {
@@ -34,7 +34,7 @@ const en = {
       applicationNetwork: 'This application works with the network "%{networkName}"',
     },
     notifications: {
-      'dai.approve': {
+      'erc20.approve': {
         pending: 'Approving %{amount} transfer. Pending',
         success: 'Approving %{amount} transfer. Successful',
         error: 'Approving %{amount} transfer. Failed',
@@ -100,67 +100,62 @@ const en = {
         error: 'Loan repaying. Failed',
       },
     },
+    sellShare: {
+      buttonTitle: 'Sell',
+      formTitle: 'Sell share',
+      placeholder: 'Enter sum starting from %{amount}',
+      confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
+      interestConfirmation:
+        ' Additional ~%{interestAmount} will be deducted from your available balance as a payment for the the accumulated interest on your outstanding loans. Full amount to be written off from your available balance will be ~%{fullAmount}.',
+    },
+    buyShare: {
+      buttonTitle: 'Buy',
+      formTitle: 'Buy share',
+      placeholder: 'Enter sum starting from %{amount}',
+      confirmMessage: 'Are you sure you want deposit %{sourceAmount}?',
+    },
+    giveStake: {
+      buttonTitle: 'Stake',
+      formTitle: 'Stake',
+      description: 'The more money you invest, the more the interest share you receive',
+      placeholder: 'Enter sum starting from %{amount}',
+      confirmMessage:
+        'Are you sure you want to stake %{sourceAmount}? Your interest share will increase by %{interestShareDelta}',
+    },
+    createLoanProposal: {
+      buttonTitle: 'Borrow',
+      formTitle: 'Get loan',
+      amountPlaceholder: 'Enter sum starting from %{amount}',
+      amountLabel: 'Loan sum',
+      percentPlaceholder: 'Enter percent value starting from %{percent}',
+      percentLabel: 'Percent',
+      descriptionPlaceholder: 'Enter reason',
+      descriptionLabel: 'Reason',
+      confirmMessage:
+        'Are you sure you want get loan %{sourceAmount} with collateral %{collateral}?',
+    },
+    repayLoan: {
+      buttonTitle: 'Repay',
+      formTitle: 'Repay',
+      placeholder: 'Enter sum',
+      confirmMessage:
+        'Are you sure you want to repay %{sourceAmount}? Loan body: ~%{body}, interest: ~%{interest}',
+      fields: {
+        repaymentMethod: {
+          fromOwnBalance: 'from own balance',
+          fromAvailablePoolBalance: 'from available pool balance',
+        },
+      },
+      insufficientBalanceError: 'Insufficient balance. You have only %{value}.',
+    },
+    unstake: {
+      buttonTitle: 'Unstake',
+      formTitle: 'Unstake',
+      placeholder: 'Enter sum',
+      confirmMessage:
+        'Are you sure you want to unstake %{sourceAmount}? Your interest share will decrease by %{interestShareDelta}',
+    },
     cashExchange: {
-      pTokenBuying: {
-        buttonTitle: 'Buy',
-        formTitle: 'Buy share',
-        placeholder: 'Enter sum',
-        confirmMessage: 'Are you sure you want deposit %{sourceAmount}?',
-      },
-      pTokenSellingButton: {
-        buttonTitle: 'Sell',
-        formTitle: 'Sell share',
-        placeholder: 'Enter sum',
-        fields: {
-          withdrawMethod: {
-            availableBalance: 'from available pool balance',
-            defiYield: 'from investment yield',
-          },
-        },
-        confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
-        interestConfirmation:
-          ' Additional ~%{interestAmount} will be deducted from your available balance as a payment for the the accumulated interest on your outstanding loans. Full amount to be written off from your available balance will be ~%{fullAmount}.',
-      },
-      stakeButton: {
-        buttonTitle: 'Stake',
-        formTitle: 'Stake',
-        placeholder: 'Enter sum',
-        confirmMessage:
-          'Are you sure you want to stake %{sourceAmount}? Your interest share will increase by %{interestShareDelta}',
-      },
-      unstakeButton: {
-        buttonTitle: 'Unstake',
-        formTitle: 'Unstake',
-        placeholder: 'Enter sum',
-        confirmMessage:
-          'Are you sure you want to unstake %{sourceAmount}? Your interest share will decrease by %{interestShareDelta}',
-      },
-      repayButton: {
-        buttonTitle: 'Repay',
-        formTitle: 'Repay',
-        placeholder: 'Enter sum',
-        confirmMessage:
-          'Are you sure you want to repay %{sourceAmount}? Loan body: ~%{body}, interest: ~%{interest}',
-        fields: {
-          repaymentMethod: {
-            fromOwnBalance: 'from own balance',
-            fromAvailablePoolBalance: 'from available pool balance',
-          },
-        },
-        insufficientBalanceError: 'Insufficient balance. You have only %{value}.',
-      },
-      getLoanButton: {
-        buttonTitle: 'Borrow',
-        formTitle: 'Get loan',
-        amountPlaceholder: 'Enter sum',
-        amountLabel: 'Loan sum',
-        percentPlaceholder: 'Enter percent value',
-        percentLabel: 'Percent',
-        descriptionPlaceholder: 'Enter reason',
-        descriptionLabel: 'Reason',
-        confirmMessage:
-          'Are you sure you want get loan %{sourceAmount} with collateral %{collateral}?',
-      },
       activateLoanButton: {
         confirmMessage:
           'Are you sure you want to activate a loan? Please note that your loan will be transferred directly to your wallet.',
@@ -183,6 +178,7 @@ const en = {
       },
       exchangingForm: {
         cancelButtonText: 'Cancel',
+        submitButtonText: 'Submit',
         givenAmountText: 'You get ~%{formattedAmount}',
         targetAmountError: 'Please wait until amount is calculated',
       },

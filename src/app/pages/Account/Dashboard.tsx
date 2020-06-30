@@ -3,11 +3,9 @@ import BN from 'bn.js';
 import { of } from 'rxjs';
 
 import { Grid, Loading, FormattedBalance } from 'components';
-import {
-  PTokenBuyingButton,
-  PTokenSellingButton,
-  WithdrawDefiYieldButton,
-} from 'features/cashExchange';
+import { WithdrawDefiYieldButton } from 'features/cashExchange';
+import { BuyingShareButton } from 'features/buyShare';
+import { SellingShareButton } from 'features/sellShare';
 import { WithdrawDistributionsButton } from 'features/distibutions';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
@@ -65,7 +63,7 @@ function Balance() {
   const api = useApi();
   const [account] = useSubscribable(() => api.web3Manager.account, []);
   const [ptkBalance, ptkBalanceMeta] = useSubscribable(
-    () => (account ? api.tokens.getBalance$('ptk', account) : of(new BN(0))),
+    () => (account ? api.tokens.getPtkBalance$(account) : of(new BN(0))),
     [api, account],
     new BN(0),
   );
@@ -88,8 +86,8 @@ function Balance() {
         </Loading>
       }
       actionButtons={[
-        <PTokenBuyingButton fullWidth color="primary" variant="contained" />,
-        <PTokenSellingButton fullWidth color="primary" variant="contained" />,
+        <BuyingShareButton fullWidth color="primary" variant="contained" />,
+        <SellingShareButton fullWidth color="primary" variant="contained" />,
       ]}
     />
   );
