@@ -15,20 +15,14 @@ export function StatsPage() {
       <Grid item xs={6}>
         <Card className={classes.card}>
           <CardContent>
-            <PoolMetrics
-              orientation="vertical"
-              includes={['availableBalance', 'depositPlusWithdraw24Volume', 'members']}
-            />
+            <PoolMetrics orientation="vertical" includes={['availableBalance', 'members']} />
           </CardContent>
         </Card>
       </Grid>
       <Grid item xs={6}>
         <Card className={classes.card}>
           <CardContent>
-            <PoolMetrics
-              orientation="vertical"
-              includes={['investmentApr', 'loans', 'totalPtkSupply']}
-            />
+            <PoolMetrics orientation="vertical" includes={['loans', 'totalPtkSupply']} />
           </CardContent>
         </Card>
       </Grid>

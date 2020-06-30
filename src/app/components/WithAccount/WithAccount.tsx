@@ -4,9 +4,10 @@ import { useTranslate } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 import { Loading, Hint } from 'components';
+import { zeroAddress } from 'utils/mock';
 
 interface Props {
-  children(props: { account: string }): React.ReactNode;
+  children: React.ReactNode | ((props: { account: string }) => React.ReactNode);
 }
 
 export function WithAccount({ children }: Props) {
@@ -15,9 +16,12 @@ export function WithAccount({ children }: Props) {
   const api = useApi();
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
+  const child =
+    typeof children === 'function' ? children({ account: account || zeroAddress }) : children;
+
   return (
     <Loading meta={accountMeta}>
-      {account ? children({ account }) : <Hint>{t(tKeys.app.connectingWarning.getKey())}</Hint>}
+      {account ? child : <Hint>{t(tKeys.app.connectingWarning.getKey())}</Hint>}
     </Loading>
   );
 }

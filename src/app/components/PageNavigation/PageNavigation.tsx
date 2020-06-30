@@ -52,13 +52,15 @@ function PageNavigation() {
           to={routes.account.getRedirectPath()}
         />
       )}
-      <Tab
-        className={classes.tab}
-        label="Pool"
-        component={Link}
-        value={routes.pool.getElementKey()}
-        to={routes.pool.getRedirectPath()}
-      />
+      {account && (
+        <Tab
+          className={classes.tab}
+          label="Pool"
+          component={Link}
+          value={routes.pool.getElementKey()}
+          to={routes.pool.getRedirectPath()}
+        />
+      )}
       <Tab
         className={classes.tab}
         label="Stats"
