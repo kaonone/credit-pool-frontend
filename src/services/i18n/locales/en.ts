@@ -1,7 +1,7 @@
 // tslint:disable:max-line-length
 const en = {
   app: {
-    mainTitle: 'Sparta Pool',
+    mainTitle: 'Sparta',
     connectingWarning: 'You need connect to wallet',
     pages: {
       overview: {
