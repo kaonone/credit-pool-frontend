@@ -2,8 +2,8 @@ import * as React from 'react';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 
 import { ThemeButton } from 'services/theme';
-import { Back, InfoIcon } from 'components/icons';
-import { Grid, IconButton, Typography, Tooltip, Button } from 'components';
+import { Back } from 'components/icons';
+import { Grid, IconButton, Typography, Button } from 'components';
 import { AuthButton } from 'features/auth';
 
 import { useStyles } from './Header.style';
@@ -32,15 +32,7 @@ function HeaderComponent(props: IProps) {
 
         <Grid item xs zeroMinWidth>
           <Typography variant="h4" noWrap className={classes.title}>
-            {title}{' '}
-            <Tooltip
-              title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, nobis!"
-              placement="right"
-            >
-              <span>
-                <InfoIcon className={classes.infoIcon} />
-              </span>
-            </Tooltip>
+            {title}
           </Typography>
         </Grid>
 
