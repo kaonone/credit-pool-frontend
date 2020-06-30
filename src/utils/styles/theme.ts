@@ -80,6 +80,18 @@ function getTheme(type: PaletteType) {
           transition: defaultTheme.transitions.create(['background-color', 'box-shadow']),
         },
       },
+      MuiLink: {
+        underlineHover: {
+          borderWidth: '0 0 1px 0',
+          borderStyle: 'solid',
+          borderColor: type === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
+
+          '&:hover': {
+            textDecoration: 'none',
+            borderColor: 'inherit',
+          },
+        },
+      },
       MuiCssBaseline: {
         '@global': {
           '@font-face': [
