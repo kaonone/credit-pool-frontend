@@ -1,10 +1,11 @@
 import * as React from 'react';
 
 import { CommunicationState } from 'utils/react';
-import { Dialog, DialogTitle, DialogContent, Hint, Typography, Grid } from 'components';
+import { Dialog, DialogTitle, DialogContent, Hint, Typography, Grid, Link } from 'components';
 import { WalletType, wallets } from 'services/api';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { ETH_NETWORK_CONFIG } from 'env';
+import { T_AND_C_URL, PRIVACY_POLICY_URL } from 'docs';
 
 import { ProviderButton } from './ProviderButton';
 
@@ -32,7 +33,17 @@ export function AuthModal(props: AuthModalProps) {
         {isLogged ? 'Choose another wallet or disconnect:' : 'Choose your wallet:'}
       </DialogTitle>
       <DialogContent>
-        <Typography>By connecting to the wallet you accept Terms of Service.</Typography>
+        <Typography>
+          By connecting to the wallet you accept{' '}
+          <Link href={PRIVACY_POLICY_URL} target="_blank" rel="noopener noreferrer" color="inherit">
+            Privacy Policy
+          </Link>{' '}
+          and{' '}
+          <Link href={T_AND_C_URL} target="_blank" rel="noopener noreferrer" color="inherit">
+            Terms of Service
+          </Link>
+          .
+        </Typography>
       </DialogContent>
       <DialogContent>
         <Grid container spacing={1} justify="center">

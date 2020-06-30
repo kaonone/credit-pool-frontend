@@ -8,6 +8,7 @@
     "dev:beta": "npm run codegen:beta && better-npm-run dev",
     "dev:beta-defi": "npm run codegen:beta-defi && cross-env MODE=beta-defi better-npm-run dev",
     "dev:sandbox": "npm run codegen:sandbox && cross-env MODE=sandbox better-npm-run dev",
+    "dev:mainnet": "npm run codegen:mainnet && cross-env MODE=mainnet better-npm-run dev",
     "build:beta": "better-npm-run build",
     "build:beta-defi": "cross-env MODE=beta-defi better-npm-run build",
     "build:sandbox": "cross-env MODE=sandbox better-npm-run build",

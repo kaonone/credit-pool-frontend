@@ -31,7 +31,7 @@ export function CookiesMsg() {
         <span id="message-id">
           We use cookies on our website. By continuing to use the site, or by clicking &quot;I
           agree&quot;, you consent to the use of cookies. For more info&nbsp;
-          <Link href={PRIVACY_POLICY_URL} target="_blank" rel="noopener noreferrer">
+          <Link href={PRIVACY_POLICY_URL} target="_blank" rel="noopener noreferrer" color="inherit">
             click here
           </Link>
         </span>
