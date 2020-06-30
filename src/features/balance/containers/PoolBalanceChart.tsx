@@ -113,9 +113,15 @@ function convertPtkPriceToDaiPrice(
   decimals: number,
   output: 'number' | 'weiBN',
 ): number | BN {
+  const bnPrice = new BN(price);
+
   const byOutput = {
-    number: () => decimalsToWei(decimals).muln(100).div(new BN(price)).toNumber() / 100,
-    weiBN: () => decimalsToWei(decimals).mul(decimalsToWei(decimals)).div(new BN(price)),
+    number: () =>
+      bnPrice.isZero() ? bnPrice : decimalsToWei(decimals).muln(100).div(bnPrice).toNumber() / 100,
+    weiBN: () =>
+      bnPrice.isZero()
+        ? bnPrice
+        : decimalsToWei(decimals).mul(decimalsToWei(decimals)).div(bnPrice),
   };
 
   return byOutput[output]();
