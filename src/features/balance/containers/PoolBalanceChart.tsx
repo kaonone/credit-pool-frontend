@@ -10,6 +10,8 @@ import { useApi } from 'services/api';
 import { makeStyles, useTheme } from 'utils/styles';
 import { useSubscribable } from 'utils/react';
 import { decimalsToWei } from 'utils/bn';
+import { isEqualHex } from 'utils/hex';
+import { ETH_NETWORK_CONFIG } from 'env';
 
 export const useStyles = makeStyles(theme => ({
   enterPrice: {
@@ -45,6 +47,13 @@ function PoolBalanceChart() {
   const balancesResult = usePoolBalancesSubscription({
     variables: {
       date: `0x${yearAgoDate.toString(16)}`, // Date in seconds
+      // filter wrong values, only for mainnet pool 0x73067fdd366Cb678E9b539788F4C0f34C5700246
+      minUsersLength: isEqualHex(
+        ETH_NETWORK_CONFIG.contracts.pool,
+        '0x73067fdd366Cb678E9b539788F4C0f34C5700246',
+      )
+        ? '3'
+        : '1',
     },
   });
   const pools = balancesResult.data?.pools || [];
