@@ -96,7 +96,7 @@ function Chart<P extends IPoint>(props: IProps<P>) {
               tickSize={0}
               tick={renderTick}
             />
-            <YAxis padding={{ top: 30, bottom: 1 }} hide />
+            <YAxis padding={{ top: 30, bottom: 1 }} hide domain={['dataMin', 'dataMax']} />
             <CartesianGrid stroke="#EAE9ED" horizontal={false} />
             {lines.map(line => (
               <Line
