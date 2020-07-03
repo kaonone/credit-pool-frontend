@@ -439,61 +439,6 @@
   },
   {
     "constant": false,
-    "inputs": [{
-        "internalType": "address[]",
-        "name": "accounts",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "toDistribution",
-        "type": "uint256"
-      }
-    ],
-    "name": "claimDistributions",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-      "internalType": "address[]",
-      "name": "accounts",
-      "type": "address[]"
-    }],
-    "name": "claimDistributions",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "toDistribution",
-        "type": "uint256"
-      }
-    ],
-    "name": "claimDistributions",
-    "outputs": [{
-      "internalType": "uint256",
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
     "inputs": [],
     "name": "createDistribution",
     "outputs": [],
