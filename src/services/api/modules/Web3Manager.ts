@@ -35,7 +35,7 @@ const BITSKI_REDIR_URL = getEnv().isDevelopment
 
 const FORTMATIC_API_KEY = 'pk_test_508AC5D15FD0D930';
 
-const PORTIS_API_KEY = '4ab3cbfe-0ea7-4bce-aa27-04a19a8b78ea';
+const PORTIS_API_KEY = 'a7e75afe-29c6-4e7e-9bcb-87bbec6d0be8';
 
 const connectors: Record<WalletType, Connector> = {
   metamask: new InpageConnector(),
