@@ -10,6 +10,7 @@ import { TransactionsNotifications } from 'features/transactionsNotifications';
 import { CookiesMsg } from 'features/cookies';
 import { NetworkWarning } from 'features/networkWarning';
 import { ErrorBoundary, Snackbar, CssBaseline } from 'components';
+import { AdaptabilityProvider } from 'services/adaptability';
 
 export function Root(): React.ReactElement<{}> {
   const api = new Api();
@@ -24,15 +25,17 @@ export function Root(): React.ReactElement<{}> {
         <ApiContext.Provider value={api}>
           <I18nProvider>
             <ThemeProvider>
-              <Snackbar>
-                <ApolloProvider>
-                  <CssBaseline />
-                  <App />
-                  <TransactionsNotifications />
-                  <CookiesMsg />
-                  <NetworkWarning />
-                </ApolloProvider>
-              </Snackbar>
+              <AdaptabilityProvider>
+                <Snackbar>
+                  <ApolloProvider>
+                    <CssBaseline />
+                    <App />
+                    <TransactionsNotifications />
+                    <CookiesMsg />
+                    <NetworkWarning />
+                  </ApolloProvider>
+                </Snackbar>
+              </AdaptabilityProvider>
             </ThemeProvider>
           </I18nProvider>
         </ApiContext.Provider>

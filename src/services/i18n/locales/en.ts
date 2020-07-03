@@ -29,6 +29,25 @@ const en = {
       },
     },
   },
+  modules: {
+    navigation: {
+      products: 'Product',
+      company: 'Company',
+      tutorials: 'Tutorials',
+      wiki: 'Wiki',
+      app: 'App',
+      roadmap: 'Roadmap',
+      whitepaper: 'Whitepaper',
+      events: 'Events',
+      blog: 'Blog',
+      quest: 'Quest',
+      cashflowRelay: 'Cashflow Relay',
+      chamaNetwork: 'Akropolis Network',
+      privacyPolicy: 'Privacy Policy',
+      termsConditions: 'Terms & Conditions',
+      pointSystem: 'Point System',
+    },
+  },
   features: {
     auth: {
       applicationNetwork: 'This application works with the network "%{networkName}"',
