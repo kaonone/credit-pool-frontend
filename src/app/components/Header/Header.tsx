@@ -51,7 +51,7 @@ function HeaderComponent(props: IProps) {
             </Grid>
             <Grid item>
               <Button
-                href="https://wiki.akropolis.io/poolfaq/"
+                href="https://wiki.akropolis.io/spartafaq/"
                 target="_blank"
                 rel="noopener noreferrer"
                 color="secondary"
