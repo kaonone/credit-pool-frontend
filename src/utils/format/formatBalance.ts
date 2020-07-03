@@ -39,7 +39,12 @@ export function formatBalance({
   const mid = balanceString.length - baseDecimals;
   const prefix = balanceString.substr(0, mid);
   const padding = mid < 0 ? 0 - mid : 0;
-  const decimalsZerosLength = baseDecimals < precision ? baseDecimals : precision;
+
+  const minPrecision =
+    baseDecimals - precision > balanceString.length - 1
+      ? baseDecimals - balanceString.length + 1
+      : precision;
+  const decimalsZerosLength = baseDecimals < minPrecision ? baseDecimals : minPrecision;
 
   const postfix = `${`${'0'.repeat(padding)}${balanceString}`.substr(mid < 0 ? 0 : mid)}000`.substr(
     0,

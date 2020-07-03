@@ -15,16 +15,6 @@ describe('formatBalance', (): void => {
     ).toEqual('0 Unit');
   });
 
-  it('formats 123,456,789,000 (decimals=15)', (): void => {
-    expect(
-      formatBalance({
-        amountInBaseUnits: TESTVAL,
-        baseDecimals: 15,
-        tokenSymbol: 'Unit',
-      }),
-    ).toEqual('0.00 Unit');
-  });
-
   it('formats 123,456,789,000 (decimals=12)', (): void => {
     expect(
       formatBalance({
@@ -112,5 +102,15 @@ describe('formatBalance', (): void => {
         precision: 12,
       }),
     ).toEqual('0.123456789000');
+  });
+
+  it('should increase precision to first non zero digit', (): void => {
+    expect(
+      formatBalance({
+        amountInBaseUnits: '123',
+        baseDecimals: 8,
+        precision: 2,
+      }),
+    ).toEqual('0.000001');
   });
 });
