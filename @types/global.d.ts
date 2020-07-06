@@ -5,10 +5,6 @@ interface Window {
   __PRERENDER_INJECTED__?: {
     isServer: boolean;
   };
-  __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?(): any;
-  __data: any; // initial redux state, maybe undefined
-  idensic: any;
-  requestIdleCallback: any;
 }
 
 declare module '*.woff' {
