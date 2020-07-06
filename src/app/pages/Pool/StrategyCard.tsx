@@ -7,7 +7,7 @@ interface StrategyCardProps {
   title: React.ReactNode;
   primaryMetric: React.ReactNode;
   secondaryMetric: React.ReactNode;
-  description: React.ReactNode;
+  description?: React.ReactNode;
   actionButton: React.ReactNode;
 }
 
@@ -16,7 +16,7 @@ export function StrategyCard(props: StrategyCardProps) {
   const classes = useStyles();
 
   return (
-    <Card>
+    <Card className={classes.card}>
       <CardContent>
         <Typography variant="h6" component="h3" align="center" paragraph>
           {title}
@@ -27,7 +27,7 @@ export function StrategyCard(props: StrategyCardProps) {
         <Typography variant="h5" align="center" paragraph>
           {secondaryMetric}
         </Typography>
-        <Typography align="center">{description}</Typography>
+        {description && <Typography align="center">{description}</Typography>}
       </CardContent>
       <CardContent className={classes.actions}>{actionButton}</CardContent>
     </Card>
@@ -37,6 +37,8 @@ export function StrategyCard(props: StrategyCardProps) {
 const useStyles = makeStyles({
   card: {
     height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
   },
   actions: {
     marginTop: 'auto',
