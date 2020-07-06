@@ -1,70 +1,150 @@
-// eslint-disable-next-line no-restricted-imports
-import type { PaletteType } from '@material-ui/core';
-import { createMuiTheme, Theme, lighten, darken } from '@material-ui/core/styles';
+import { createMuiTheme, Theme } from '@material-ui/core/styles';
 
 import { colors } from 'utils/styles/colors';
 
 import {
-  robotoThin,
-  robotoThinItalic,
-  robotoLight,
-  robotoLightItalic,
-  robotoRegular,
-  robotoItalic,
-  robotoMedium,
-  robotoMediumItalic,
-  robotoBold,
-  robotoBoldItalic,
-  robotoBlack,
-  robotoBlackItalic,
+  helveticaNeueBold,
+  helveticaNeueBoldItalic,
+  helveticaNeueCondensedBlack,
+  helveticaNeueCondensedBold,
+  helveticaNeueItalic,
+  helveticaNeueLight,
+  helveticaNeueLightItalic,
+  helveticaNeueMedium,
+  helveticaNeueMediumItalic,
+  helveticaNeueThin,
+  helveticaNeueThinItalic,
+  helveticaNeueUltraLight,
+  helveticaNeueUltraLightItalic,
+  helveticaNeue,
 } from './fonts';
-import { generateGridSpacingOverrides } from './generateGridSpacingOverrides';
 import { makeGradient } from './makeGradient';
+import { generateGridSpacingOverrides } from './generateGridSpacingOverrides';
 
 export { Theme };
 
-const gradients = {
-  main: makeGradient([
-    {
-      color: colors.trueV,
-      offset: '0%',
-    },
-    {
-      color: colors.mediumPurple,
-      offset: '100%',
-    },
-  ]),
-};
-
 const defaultTheme = createMuiTheme();
 
-export const lightTheme: Theme = getTheme('light');
-export const darkTheme: Theme = getTheme('dark');
+function getGradients(type: 'dark' | 'light') {
+  return {
+    main: makeGradient([colors.heliotrope, colors.royalBlue]),
+    products: [
+      makeGradient(
+        type === 'dark' ? [colors.jacarta, colors.blueZodiac] : [colors.zumthor2, colors.linkWater],
+      ),
+      makeGradient(
+        type === 'dark' ? [colors.jacarta2, colors.bunting] : [colors.whisper, colors.blueChalk],
+      ),
+      makeGradient(
+        type === 'dark' ? [colors.bossanova, colors.valhalla] : [colors.snuff, colors.amour],
+      ),
+    ] as const,
+    button: makeGradient([
+      colors.heliotrope,
+      colors.royalBlue,
+      colors.heliotrope2,
+      colors.heliotrope,
+    ]),
+  };
+}
 
-function getTheme(type: PaletteType) {
+const lightPalette = {
+  primary: {
+    main: colors.purpleHeart,
+    light: colors.heliotrope,
+    dark: colors.mediumPurple,
+    contrastText: colors.white,
+  },
+  secondary: {
+    main: colors.electricViolet,
+    light: colors.electricViolet,
+    dark: colors.electricViolet,
+    contrastText: colors.electricViolet,
+  },
+  text: {
+    primary: colors.black,
+  },
+  error: {
+    main: colors.monza,
+  },
+  background: {
+    default: colors.white,
+  },
+  type: 'light' as const,
+};
+
+export const darkPalette = {
+  primary: {
+    main: colors.purpleHeart,
+    light: colors.heliotrope,
+    dark: colors.mediumPurple,
+    contrastText: colors.white,
+  },
+  secondary: {
+    main: colors.electricViolet,
+    light: colors.electricViolet,
+    dark: colors.electricViolet,
+    contrastText: colors.electricViolet,
+  },
+  text: {
+    primary: colors.white,
+  },
+  error: {
+    main: colors.monza,
+  },
+  background: {
+    default: colors.charade,
+  },
+  type: 'dark' as const,
+};
+
+export const lightTheme = getTheme('light');
+export const darkTheme = getTheme('dark');
+
+function getTheme(type: 'light' | 'dark'): Theme {
   return createMuiTheme({
-    gradients,
     colors,
-    palette: {
-      type,
-      primary: {
-        main: type === 'dark' ? lighten(colors.purpleHeart, 0.2) : colors.purpleHeart,
-        light: type === 'dark' ? lighten(colors.heliotrope, 0.2) : colors.heliotrope,
-        dark: type === 'dark' ? lighten(colors.royalPurple, 0.2) : colors.royalPurple,
-        contrastText: colors.white,
+    gradients: getGradients(type),
+    palette: type === 'light' ? lightPalette : darkPalette,
+    breakpoints: {
+      keys: [
+        'xs',
+        'sm',
+        'md',
+        'lg',
+        'xl',
+        'desktopXL',
+        'desktopLG',
+        'desktopMD',
+        'desktopSM',
+        'desktopXS',
+        'tabletSM',
+        'tabletXS',
+        'mobileSM',
+        'mobileXS',
+      ],
+      values: {
+        xs: 0,
+        sm: 375,
+        md: 767,
+        lg: 1023,
+        xl: 1919,
+        desktopXL: 2560,
+        desktopLG: 1920,
+        desktopMD: 1440,
+        desktopSM: 1360,
+        desktopXS: 1280,
+        tabletSM: 1024,
+        tabletXS: 768,
+        mobileSM: 414,
+        mobileXS: 0,
       },
-      secondary: {
-        main: colors.white,
-        light: colors.white,
-        dark: colors.white,
-        contrastText: colors.royalPurple,
-      },
-      background: {
-        default: type === 'dark' ? colors.charade : colors.alabaster,
-        paper: type === 'dark' ? colors.scarpaFlow : colors.white,
-        hint: type === 'dark' ? colors.scarpaFlow : colors.whiteLilac,
-        tableHeader: type === 'dark' ? lighten(colors.scarpaFlow, 0.2) : darken(colors.white, 0.07),
-      },
+    },
+    typography: {
+      fontFamily: ['Helvetica Neue', 'Arial', 'sans-serif'].join(','),
+    },
+    shape: {
+      borderRadius: 4,
     },
     overrides: {
       MuiDrawer: {
@@ -95,25 +175,27 @@ function getTheme(type: PaletteType) {
       MuiCssBaseline: {
         '@global': {
           '@font-face': [
-            robotoThin,
-            robotoThinItalic,
-            robotoLight,
-            robotoLightItalic,
-            robotoRegular,
-            robotoItalic,
-            robotoMedium,
-            robotoMediumItalic,
-            robotoBold,
-            robotoBoldItalic,
-            robotoBlack,
-            robotoBlackItalic,
+            helveticaNeueBold,
+            helveticaNeueBoldItalic,
+            helveticaNeueCondensedBlack,
+            helveticaNeueCondensedBold,
+            helveticaNeueItalic,
+            helveticaNeueLight,
+            helveticaNeueLightItalic,
+            helveticaNeueMedium,
+            helveticaNeueMediumItalic,
+            helveticaNeueThin,
+            helveticaNeueThinItalic,
+            helveticaNeueUltraLight,
+            helveticaNeueUltraLightItalic,
+            helveticaNeue,
           ],
           html: {
             boxSizing: 'border-box',
             WebkitFontSmoothing: 'antialiased',
             MozOsxFontSmoothing: 'grayscale',
             fontSize: 16,
-            fontFamily: 'Roboto, sans-serif',
+            fontFamily: 'helvetica, sans-serif',
           },
 
           body: {
@@ -179,6 +261,19 @@ function getTheme(type: PaletteType) {
       MuiGrid: {
         ...generateGridSpacingOverrides(defaultTheme.spacing),
       },
+      MuiSnackbarContent: {
+        root: {
+          backgroundColor: '#fff',
+        },
+        message: {
+          color: colors.rhino,
+        },
+      },
+      MuiFormControlLabel: {
+        root: {
+          marginRight: 0,
+        },
+      },
     },
   });
 }
@@ -186,12 +281,12 @@ function getTheme(type: PaletteType) {
 declare module '@material-ui/core/styles/createMuiTheme' {
   interface Theme {
     colors: typeof colors;
-    gradients: typeof gradients;
+    gradients: ReturnType<typeof getGradients>;
   }
 
   interface ThemeOptions {
     colors: typeof colors;
-    gradients: typeof gradients;
+    gradients: ReturnType<typeof getGradients>;
   }
 }
 
@@ -199,5 +294,19 @@ declare module '@material-ui/core/styles/createPalette' {
   interface TypeBackground {
     hint: string;
     tableHeader: string;
+  }
+}
+
+declare module '@material-ui/core/styles/createBreakpoints' {
+  interface BreakpointOverrides {
+    desktopXL: true;
+    desktopLG: true;
+    desktopMD: true;
+    desktopSM: true;
+    desktopXS: true;
+    tabletSM: true;
+    tabletXS: true;
+    mobileSM: true;
+    mobileXS: true;
   }
 }
