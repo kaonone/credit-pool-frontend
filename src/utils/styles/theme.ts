@@ -98,64 +98,11 @@ export const darkPalette = {
   type: 'dark' as const,
 };
 
-const unit = 8;
-
-const baseThemeStyles = {
-  palette: lightPalette,
-  colors,
-  gradients: getGradients('light'),
-  sizes: {
-    control: {
-      borderRadius: 4,
-    },
-    maxContentWidth: 1400,
-    maxSubtitleWidth: 1000,
-  },
-  spacing: {
-    unit,
-    layoutContentSkew: {
-      xsHeight: unit * 3,
-      lgHeight: unit * 4,
-    },
-    headerHeight: {
-      xs: 80,
-      md: 96,
-      lg: 112,
-    },
-    horizontalPagePaddings: {
-      xs: {
-        small: unit,
-        medium: unit * 2,
-        large: unit * 3,
-      },
-      md: {
-        small: unit * 1.5,
-        medium: unit * 4,
-        large: unit * 10.5,
-      },
-      lg: {
-        small: unit * 1.5,
-        medium: unit * 8.5,
-        large: unit * 12,
-      },
-    },
-  },
-  typography: {
-    primaryFont: ['Helvetica Neue', 'Arial', 'sans-serif'].join(','),
-    secondaryFont: ['Helvetica Neue', 'Arial', 'sans-serif'].join(','), // TODO remove
-  },
-  zIndex: {
-    tooltip: 1500,
-  },
-  defaultTransitionDuration: '0.4s',
-};
-
 export const lightTheme = getTheme('light');
 export const darkTheme = getTheme('dark');
 
 function getTheme(type: 'light' | 'dark'): Theme {
   return createMuiTheme({
-    extra: baseThemeStyles,
     colors,
     gradients: getGradients(type),
     palette: type === 'light' ? lightPalette : darkPalette,
@@ -194,10 +141,10 @@ function getTheme(type: 'light' | 'dark'): Theme {
       },
     },
     typography: {
-      fontFamily: baseThemeStyles.typography.primaryFont,
+      fontFamily: ['Helvetica Neue', 'Arial', 'sans-serif'].join(','),
     },
     shape: {
-      borderRadius: baseThemeStyles.sizes.control.borderRadius,
+      borderRadius: 4,
     },
     overrides: {
       MuiDrawer: {
@@ -333,13 +280,11 @@ function getTheme(type: 'light' | 'dark'): Theme {
 
 declare module '@material-ui/core/styles/createMuiTheme' {
   interface Theme {
-    extra: typeof baseThemeStyles;
     colors: typeof colors;
     gradients: ReturnType<typeof getGradients>;
   }
 
   interface ThemeOptions {
-    extra: typeof baseThemeStyles;
     colors: typeof colors;
     gradients: ReturnType<typeof getGradients>;
   }
