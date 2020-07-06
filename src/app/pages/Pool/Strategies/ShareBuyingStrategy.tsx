@@ -71,7 +71,6 @@ export function ShareBuyingStrategy() {
           )}
         </Loading>
       }
-      description="Some text"
       actionButton={<BuyingShareButton fullWidth color="primary" variant="contained" />}
     />
   );

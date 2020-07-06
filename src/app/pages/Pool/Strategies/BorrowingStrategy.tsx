@@ -44,7 +44,6 @@ export function BorrowingStrategy() {
           {formattedMinInterestApr && <span>min {formattedMinInterestApr}% APR</span>}
         </Loading>
       }
-      description="Some text"
       actionButton={<CreatingLoanProposalButton variant="contained" color="primary" />}
     />
   );
