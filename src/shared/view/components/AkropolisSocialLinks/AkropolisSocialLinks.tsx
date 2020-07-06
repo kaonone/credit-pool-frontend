@@ -4,8 +4,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { SocialLink } from 'shared/view/elements';
 import { MainSvgGradient } from 'shared/view/elements/Icons';
-
-import { StylesProps, provideStyles } from './AkropolisSocialLinks.style';
+import { makeStyles } from 'shared/styles';
 
 interface IProps {
   direction?: 'row' | 'column';
@@ -20,8 +19,9 @@ const links: Array<[string, boolean]> = [
   ['https://discord.gg/Y58CGUW', true],
 ];
 
-function Component(props: IProps & StylesProps) {
-  const { classes, direction = 'row' } = props;
+function AkropolisSocialLinks(props: IProps) {
+  const { direction = 'row' } = props;
+  const classes = useStyles();
   return (
     <div className={cn(classes.root, { [classes[direction]]: true })}>
       <div className={classes.hidden}>
@@ -40,6 +40,37 @@ function Component(props: IProps & StylesProps) {
   );
 }
 
-const AkropolisSocialLinks = provideStyles(Component);
+const useStyles = makeStyles(() => ({
+  root: {
+    display: 'flex',
+
+    '&$row': {
+      flexDirection: 'row',
+    },
+
+    '&$column': {
+      flexDirection: 'column',
+    },
+  },
+
+  link: {
+    color: 'inherit',
+  },
+
+  fillPath: {
+    '& path, & circle': {
+      fill: `url(#${MainSvgGradient.ID})`,
+    },
+  },
+
+  hidden: {
+    opacity: 1,
+    width: 0,
+    height: 0,
+  },
+
+  row: {},
+  column: {},
+}));
 
 export { AkropolisSocialLinks };
