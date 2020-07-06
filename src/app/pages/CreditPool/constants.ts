@@ -1,4 +1,4 @@
-import { SPARTA_PRIVACY_POLICY_URL, SPARTA_T_AND_C_URL } from 'assets';
+import { PRIVACY_POLICY_URL, T_AND_C_URL } from 'docs';
 import { IMenuItem } from 'shared/types/common';
 import { tKeys } from 'services/i18n';
 import { Benefit } from 'app/components/Benefits/Benefits';
@@ -18,11 +18,11 @@ export const menuItems: IMenuItem[] = [
 
 export const footerNavItems: IMenuItem[] = [
   {
-    path: SPARTA_PRIVACY_POLICY_URL,
+    path: PRIVACY_POLICY_URL,
     title: tKeys.modules.navigation.privacyPolicy.getKey(),
   },
   {
-    path: SPARTA_T_AND_C_URL,
+    path: T_AND_C_URL,
     title: tKeys.modules.navigation.termsConditions.getKey(),
   },
 ];
