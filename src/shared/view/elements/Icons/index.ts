@@ -6,13 +6,8 @@ export { default as ChromeReaderMode } from '@material-ui/icons/ChromeReaderMode
 export { LogoWithNameIcon } from './LogoWithNameIcon';
 export { MediumIcon } from './MediumIcon';
 export { TwitterIcon } from './TwitterIcon';
-export { ChevronRightIcon } from './ChevronRightIcon';
 export { GithubIcon } from './GithubIcon';
-export { LinkedinIcon } from './LinkedinIcon';
 export { TelegramIcon } from './TelegramIcon';
-export { RiotIcon } from './RiotIcon';
 export { DiscordIcon } from './DiscordIcon';
 export { getSocialIconByLink } from './getSocialIconByLink';
-export * from './Sun';
-export * from './Moon';
 export * from './MainSvgGradient';

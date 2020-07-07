@@ -1,7 +1,6 @@
 export { MoneyIcon } from './MoneyIcon';
 export { EyeIcon } from './EyeIcon';
 export { Back } from './Back';
-export { Checked } from './Checked';
 export { ContainedCross } from './ContainedCross';
 export { LendIcon } from './LendIcon';
 export { SellCashIcon } from './SellCashIcon';
