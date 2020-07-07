@@ -29,6 +29,7 @@ export { Benefit, Benefits } from './Benefits/Benefits';
 export { Preview } from './Preview/Preview';
 export { NavInline } from './NavInline/NavInline';
 export { Section } from './Section/Section';
+export { SocialLink } from './SocialLink/SocialLink';
 export * from './ErrorBoundary';
 export * from './Hint/Hint';
 export * from './Loading';

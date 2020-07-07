@@ -4,7 +4,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import { NavInline } from 'components';
 import { Adaptive } from 'services/adaptability';
 import { ThemeButton } from 'services/theme';
-import { LogoWithNameIcon } from 'shared/view/elements/Icons';
+import { LogoWithNameIcon } from 'components/icons';
 import { IMenuItem } from 'utils/types/common';
 
 import { menuItems } from './constants';

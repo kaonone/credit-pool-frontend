@@ -2,9 +2,10 @@ import * as React from 'react';
 import cn from 'classnames';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import { SocialLink } from 'shared/view/elements';
-import { MainSvgGradient } from 'shared/view/elements/Icons';
 import { makeStyles } from 'utils/styles';
+
+import { SocialLink } from '../SocialLink/SocialLink';
+import { MainSvgGradient } from '../icons';
 
 interface IProps {
   direction?: 'row' | 'column';

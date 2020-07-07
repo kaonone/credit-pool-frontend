@@ -2,7 +2,7 @@ import * as React from 'react';
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
 import IconButton from '@material-ui/core/IconButton';
 
-import { getSocialIconByLink } from '../Icons';
+import { getSocialIconByLink } from '../icons';
 
 interface IProps {
   className?: string;
