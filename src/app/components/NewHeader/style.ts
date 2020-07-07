@@ -19,4 +19,4 @@ export const useStyles = makeStyles(theme => ({
   rightPart: {
     display: 'flex',
   },
-}));
+}), { name: 'header' });

@@ -4,6 +4,7 @@ export const useStyles = makeStyles(theme => ({
   root: {
     background: theme.colors.codGray,
     display: 'flex',
+    minHeight: '100vh',
   },
 
   headerAndContent: {
@@ -16,4 +17,4 @@ export const useStyles = makeStyles(theme => ({
   },
 
   content: {},
-}));
+}), { name: 'main-layout' });

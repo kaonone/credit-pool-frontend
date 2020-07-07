@@ -24,4 +24,4 @@ export const useStyles = makeStyles(theme => ({
   linkActive: {
     opacity: 1,
   }
-}));
+}), { name: 'sidebar' });
