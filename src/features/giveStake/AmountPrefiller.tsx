@@ -70,9 +70,7 @@ export function AmountPrefiller(props: AmountPrefillerProps) {
             variant="contained"
             className={classes.buttonOverride}
           >
-            <FormattedAmount sum={value} precision={0} />
-            {' -> '}
-            {sharePercent}
+            <FormattedAmount sum={value} precision={0} /> -&gt; {sharePercent}
           </ApplyValueButton>
         </Grid>
       ))}
@@ -82,9 +80,7 @@ export function AmountPrefiller(props: AmountPrefillerProps) {
 
 const useStyles = makeStyles({
   buttonOverride: {
-    paddingTop: 0,
-    paddingBottom: 0,
-    borderRadius: '1em',
+    display: 'block',
   },
 });
 

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as R from 'ramda';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import { LineChart, XAxis, YAxis, CartesianGrid, Line, ResponsiveContainer } from 'recharts';
 
+import { Button } from '../Button/Button';
 import { makeFormatDateByPeriod, getTicks } from './helpers';
 import { useStyles } from './Chart.style';
 

@@ -1,16 +1,15 @@
 import React, { useCallback } from 'react';
-import Button from '@material-ui/core/Button';
 import BN from 'bn.js';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { ConfirmationDialog, Loading, FormattedBalance } from 'components';
+import { ConfirmationDialog, Loading, FormattedBalance, Button, ButtonProps } from 'components';
 import { useSubscribable } from 'utils/react';
 import { usePledgeSubscription } from 'generated/gql/pool';
 import { getPledgeId } from 'model';
 import { zeroAddress } from 'utils/mock';
 
-type IProps = React.ComponentPropsWithoutRef<typeof Button> & {
+type IProps = ButtonProps & {
   proposalId: string;
   debtId: string;
   borrower: string;

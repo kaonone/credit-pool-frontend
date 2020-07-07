@@ -1,5 +1,4 @@
 export { default as Box } from '@material-ui/core/Box';
-export { default as Button, ButtonProps } from '@material-ui/core/Button';
 export { default as ButtonBase } from '@material-ui/core/ButtonBase';
 export { default as CircularProgress } from '@material-ui/core/CircularProgress';
 export { default as CssBaseline } from '@material-ui/core/CssBaseline';
@@ -19,8 +18,9 @@ export { default as Card } from '@material-ui/core/Card';
 export { default as CardContent } from '@material-ui/core/CardContent';
 export { default as FormControlLabel } from '@material-ui/core/FormControlLabel';
 export { default as Radio } from '@material-ui/core/Radio';
-export { default as Link } from '@material-ui/core/Link';
+export { default as Link, LinkProps } from '@material-ui/core/Link';
 
+export { Button, ButtonProps } from './Button/Button';
 export * from './ErrorBoundary';
 export * from './Hint/Hint';
 export * from './Loading';
