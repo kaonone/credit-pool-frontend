@@ -26,10 +26,11 @@
   },
   "betterScripts": {
     "node": {
-      "command": "node --max_old_space_size=8192 ./node_modules/.bin/cross-env",
+      "command": "node ./node_modules/.bin/cross-env",
       "env": {
         "TS_NODE_PROJECT": "webpack/tsconfig.json",
-        "TS_NODE_FILES": true
+        "TS_NODE_FILES": true,
+        "NODE_OPTIONS": "--max_old_space_size=8192"
       }
     },
     "build": {
