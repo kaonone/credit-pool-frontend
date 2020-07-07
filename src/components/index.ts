@@ -8,7 +8,7 @@ export { default as DialogContent } from '@material-ui/core/DialogContent';
 export { default as DialogContentText } from '@material-ui/core/DialogContentText';
 export { default as DialogTitle } from '@material-ui/core/DialogTitle';
 export { default as Grid } from '@material-ui/core/Grid';
-export { default as Typography } from '@material-ui/core/Typography';
+export { default as Typography, TypographyProps } from '@material-ui/core/Typography';
 export { default as IconButton } from '@material-ui/core/IconButton';
 export { default as Tabs } from '@material-ui/core/Tabs';
 export { default as Tab } from '@material-ui/core/Tab';

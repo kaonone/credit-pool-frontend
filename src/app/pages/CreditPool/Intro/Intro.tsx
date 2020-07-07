@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Button, Intro } from 'components';
-import { Link, LinkProps } from 'shared/view/elements';
+import { Button, Intro, Link, LinkProps } from 'components';
 import { makeStyles } from 'utils/styles';
 
 import { CreditPoolIcon } from '../Icons';

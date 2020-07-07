@@ -1,7 +1,6 @@
 import * as React from 'react';
 import cn from 'classnames';
-
-import { Typography } from 'shared/view/elements';
+import Typography from '@material-ui/core/Typography';
 
 import { useStyles } from './Preview.style';
 

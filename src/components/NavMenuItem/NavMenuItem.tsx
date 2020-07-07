@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import MuiLink, { LinkProps } from '@material-ui/core/Link';
 
 import { IMenuItem } from 'utils/types/common';
-import { Link as MuiLink, LinkProps } from 'shared/view/elements';
 
 interface Props {
   color?: LinkProps['color'];

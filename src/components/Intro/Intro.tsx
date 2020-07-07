@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { Typography } from 'shared/view/elements';
+import Typography from '@material-ui/core/Typography';
 
 import { useStyles } from './Intro.styles';
 
