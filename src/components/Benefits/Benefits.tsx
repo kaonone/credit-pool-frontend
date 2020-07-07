@@ -1,10 +1,11 @@
 import * as React from 'react';
 import cn from 'classnames';
 
-import { Section } from 'app/components/Section/Section';
 import { Card } from 'app/components/Card';
 import { makeStyles, getGrid } from 'shared/styles';
-import { Preview } from 'app/components/Preview/Preview';
+
+import { Preview } from '../Preview/Preview';
+import { Section } from '../Section/Section';
 
 export interface Benefit {
   title: React.ReactNode;

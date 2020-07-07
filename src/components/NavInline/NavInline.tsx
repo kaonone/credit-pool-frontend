@@ -1,10 +1,10 @@
 import * as React from 'react';
 import cn from 'classnames';
 
-import { NavMenuItem } from 'components';
 import { useTranslate } from 'services/i18n';
 import { IMenuItem } from 'shared/types/common';
 
+import { NavMenuItem } from '../NavMenuItem/NavMenuItem';
 import { useStyles } from './NavInline.style';
 
 interface Props {

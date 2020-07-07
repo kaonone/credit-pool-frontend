@@ -1,7 +1,7 @@
 import React from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import { NavInline } from 'app/components/NavInline/NavInline';
+import { NavInline } from 'components';
 import { Adaptive } from 'services/adaptability';
 import { ThemeButton } from 'services/theme';
 import { LogoWithNameIcon } from 'shared/view/elements/Icons';
