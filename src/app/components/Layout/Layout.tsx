@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'classnames';
 
 import { attachStaticFields } from 'shared/helpers/object';
-import { AkropolisSocialLinks } from 'shared/view/components';
+import { AkropolisSocialLinks } from 'components';
 
 import { useStyles } from './Layout.style';
 import { TopWave, BottomWave } from './waves';

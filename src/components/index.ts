@@ -20,6 +20,8 @@ export { default as FormControlLabel } from '@material-ui/core/FormControlLabel'
 export { default as Radio } from '@material-ui/core/Radio';
 export { default as Link, LinkProps } from '@material-ui/core/Link';
 
+export { NavMenuItem } from './NavMenuItem/NavMenuItem';
+export { AkropolisSocialLinks } from './AkropolisSocialLinks/AkropolisSocialLinks';
 export { Button, ButtonProps } from './Button/Button';
 export * from './ErrorBoundary';
 export * from './Hint/Hint';
