@@ -8,6 +8,11 @@ const rawTree = {
   stats: null,
   proposals: null,
   distributions: null,
+  buy: null,
+  sell: null,
+  history: null,
+  bounty: null,
+  liquidation: null,
 };
 
 export const routes = build(rawTree);
