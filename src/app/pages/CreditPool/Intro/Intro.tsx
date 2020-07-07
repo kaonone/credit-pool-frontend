@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Button, Link, LinkProps } from 'shared/view/elements';
+import { Button } from 'components';
+import { Link, LinkProps } from 'shared/view/elements';
 import { Intro } from 'app/components/Intro/Intro';
 import { makeStyles } from 'shared/styles';
 
@@ -27,8 +28,8 @@ export function CreditPoolIntro() {
           fullWidth
           size="large"
           variant="contained"
-          color="gradient"
-          component={Link as React.FunctionComponent<Omit<LinkProps, 'color' | 'variant'>>}
+          color="primary"
+          component={Link as React.FunctionComponent<Omit<LinkProps, 'variant'>>}
           underline="none"
           href="https://sparta-rinkeby.akropolis.io"
           target="_blank"
@@ -42,8 +43,8 @@ export function CreditPoolIntro() {
           fullWidth
           size="large"
           variant="contained"
-          color="gradient"
-          component={Link as React.FunctionComponent<Omit<LinkProps, 'color' | 'variant'>>}
+          color="primary"
+          component={Link as React.FunctionComponent<Omit<LinkProps, 'variant'>>}
           underline="none"
           href="https://sparta.akropolis.io"
           target="_blank"

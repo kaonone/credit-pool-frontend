@@ -7,7 +7,6 @@ import React, {
   useState,
 } from 'react';
 import BN from 'bn.js';
-import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Observable } from 'rxjs';
 
@@ -18,6 +17,7 @@ import { makeStyles } from 'utils/styles';
 import { ICurrency, IToBN } from 'model/types';
 import { useSubscribable } from 'utils/react';
 
+import { Button } from '../Button/Button';
 import { TextInput } from './TextInput';
 
 interface IOwnProps<A extends Amount<ICurrency>> {

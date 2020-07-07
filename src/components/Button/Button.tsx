@@ -1,21 +1,14 @@
 import * as React from 'react';
 import cn from 'classnames';
-import { SubSet } from '_helpers';
 import MuiButton, { ButtonTypeMap as MuiButtonTypeMap } from '@material-ui/core/Button';
 import { OverridableComponent, OverrideProps } from '@material-ui/core/OverridableComponent';
 
 import { useStyles } from './Button.style';
 
-const muiColors = ['primary', 'default', 'secondary', 'inherit'] as const;
-type MuiColor = SubSet<MuiButtonTypeMap['props']['color'], typeof muiColors[number]>;
-
 type ButtonClassKey = keyof ReturnType<typeof useStyles>;
 
 interface ButtonTypeMap<P = {}, D extends React.ElementType = 'button'> {
-  props: P &
-    Omit<MuiButtonTypeMap['props'], 'classes' | 'color'> & {
-      color: 'gradient' | MuiColor;
-    };
+  props: P & MuiButtonTypeMap['props'];
   defaultComponent: D;
   classKey: ButtonClassKey;
 }
@@ -30,24 +23,21 @@ const Button: OverridableComponent<ButtonTypeMap> = function ButtonFunc<
   D extends React.ElementType = 'button'
 >(props: ButtonProps<D, P>) {
   const classes = useStyles();
-  const { color, className, ...rest } = props;
+  const { classes: muiClasses = {}, ...rest } = props;
 
-  const buttonColor =
-    color && muiColors.includes(color as MuiColor) ? (color as MuiColor) : undefined;
   return (
     <MuiButton
       {...rest}
       classes={{
-        root: cn(classes.root, className, { [classes.colorGradient]: color === 'gradient' }),
-        disabled: classes.disabled,
-        sizeLarge: classes.sizeLarge,
-        sizeSmall: classes.sizeSmall,
-        focusVisible: classes.focusVisible,
-        outlined: classes.outlined,
-        contained: classes.contained,
+        root: cn(classes.root, muiClasses.root),
+        disabled: cn(classes.disabled, muiClasses.disabled),
+        sizeLarge: cn(classes.sizeLarge, muiClasses.sizeLarge),
+        sizeSmall: cn(classes.sizeSmall, muiClasses.sizeSmall),
+        focusVisible: cn(classes.focusVisible, muiClasses.focusVisible),
+        containedPrimary: cn(classes.containedPrimary, muiClasses.containedPrimary),
+        outlinedPrimary: cn(classes.outlinedPrimary, muiClasses.outlinedPrimary),
         ...rest.classes,
       }}
-      color={buttonColor}
     />
   );
 };

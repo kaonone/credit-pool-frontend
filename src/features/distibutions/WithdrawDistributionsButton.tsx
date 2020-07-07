@@ -1,14 +1,13 @@
 import React, { useCallback } from 'react';
-import Button from '@material-ui/core/Button';
 import BN from 'bn.js';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { ConfirmationDialog, Loading, FormattedAmount } from 'components';
+import { ConfirmationDialog, Loading, FormattedAmount, Button, ButtonProps } from 'components';
 import { useSubscribable } from 'utils/react';
 import { zeroAddress } from 'utils/mock';
 
-type IProps = React.ComponentPropsWithoutRef<typeof Button>;
+type IProps = ButtonProps;
 
 const tKeysConfirmation = tKeysAll.features.cashExchange.exchangingConfirmation;
 const tKeys = tKeysAll.features.distributions;

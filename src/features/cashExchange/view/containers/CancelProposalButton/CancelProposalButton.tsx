@@ -1,11 +1,10 @@
 import React, { useCallback } from 'react';
-import Button from '@material-ui/core/Button';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { ConfirmationDialog } from 'components';
+import { ConfirmationDialog, Button, ButtonProps } from 'components';
 
-type IProps = React.ComponentPropsWithoutRef<typeof Button> & {
+type IProps = ButtonProps & {
   proposalId: string;
   borrower: string;
 };
