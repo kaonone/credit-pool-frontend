@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 
-import { attachStaticFields } from 'shared/helpers/object';
+import { attachStaticFields } from 'utils/object';
 
 import { AkropolisSocialLinks } from '../AkropolisSocialLinks/AkropolisSocialLinks';
 import { useStyles } from './Layout.style';
