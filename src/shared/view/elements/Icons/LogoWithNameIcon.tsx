@@ -2,22 +2,20 @@ import * as React from 'react';
 import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import { rule } from 'shared/helpers/style';
-import { withStyles, WithStyles } from 'utils/styles';
+import { makeStyles } from 'utils/styles';
 
 import { MainSvgGradient } from './MainSvgGradient';
 
-const styles = {
-  root: rule({
+const useStyles = makeStyles({
+  root: {
     width: 'unset',
-  }),
-};
-
-export type StylesProps = WithStyles<typeof styles>;
+  },
+});
 
 // tslint:disable:max-line-length
-function Component(props: GetProps<typeof SvgIcon> & StylesProps) {
-  const { classes, ...rest } = props;
+function LogoWithNameIcon(props: GetProps<typeof SvgIcon>) {
+  const { classes: _, ...rest } = props;
+  const classes = useStyles();
 
   return (
     <SvgIcon {...rest} classes={{ root: classes.root }} viewBox="0 0 86 20">
@@ -35,7 +33,5 @@ function Component(props: GetProps<typeof SvgIcon> & StylesProps) {
     </SvgIcon>
   );
 }
-
-const LogoWithNameIcon = withStyles(styles)(Component);
 
 export { LogoWithNameIcon };

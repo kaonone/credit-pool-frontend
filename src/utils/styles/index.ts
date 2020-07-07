@@ -1,14 +1,7 @@
 import { hexToRgb } from '@material-ui/core/styles';
 
 export { CSSProperties, StyleRules } from '@material-ui/styles';
-export {
-  makeStyles,
-  WithStyles,
-  withStyles,
-  useTheme,
-  lighten,
-  darken,
-} from '@material-ui/core/styles';
+export { makeStyles, useTheme, lighten, darken } from '@material-ui/core/styles';
 
 export * from './theme';
 export * from './colors';
