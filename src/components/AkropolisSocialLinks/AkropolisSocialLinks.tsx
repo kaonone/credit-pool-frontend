@@ -4,7 +4,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { SocialLink } from 'shared/view/elements';
 import { MainSvgGradient } from 'shared/view/elements/Icons';
-import { makeStyles } from 'shared/styles';
+import { makeStyles } from 'utils/styles';
 
 interface IProps {
   direction?: 'row' | 'column';

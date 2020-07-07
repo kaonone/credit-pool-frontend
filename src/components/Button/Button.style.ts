@@ -1,4 +1,4 @@
-import { makeStyles } from 'shared/styles';
+import { makeStyles } from 'utils/styles';
 
 const shadowOffset = 3;
 const largeShadowOffset = 3;

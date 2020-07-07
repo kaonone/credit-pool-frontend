@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useTheme } from 'shared/styles';
+import { useTheme } from 'utils/styles';
 import { attachStaticFields } from 'shared/helpers/object';
 
 const ID = 'svg-main-gradient';

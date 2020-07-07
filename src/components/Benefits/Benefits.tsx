@@ -2,7 +2,7 @@ import * as React from 'react';
 import cn from 'classnames';
 
 import { Card } from 'app/components/Card';
-import { makeStyles, getGrid } from 'shared/styles';
+import { makeStyles, getGrid } from 'utils/styles';
 
 import { Preview } from '../Preview/Preview';
 import { Section } from '../Section/Section';

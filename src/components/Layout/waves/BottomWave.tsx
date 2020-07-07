@@ -4,7 +4,7 @@ import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { Adaptive } from 'services/adaptability';
-import { makeStyles } from 'shared/styles';
+import { makeStyles } from 'utils/styles';
 
 const useStyles = makeStyles({
   root: {

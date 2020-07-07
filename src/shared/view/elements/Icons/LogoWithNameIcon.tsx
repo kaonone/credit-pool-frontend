@@ -3,7 +3,7 @@ import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { rule } from 'shared/helpers/style';
-import { withStyles, WithStyles } from 'shared/styles';
+import { withStyles, WithStyles } from 'utils/styles';
 
 import { MainSvgGradient } from './MainSvgGradient';
 

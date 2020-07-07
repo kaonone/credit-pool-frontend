@@ -1,6 +1,6 @@
-export * from './theme';
-export * from './colors';
-export * from './WithDarkTheme';
+import { hexToRgb } from '@material-ui/core/styles';
+
+export { CSSProperties, StyleRules } from '@material-ui/styles';
 export {
   makeStyles,
   WithStyles,
@@ -9,3 +9,14 @@ export {
   lighten,
   darken,
 } from '@material-ui/core/styles';
+
+export * from './theme';
+export * from './colors';
+export * from './WithDarkTheme';
+export * from './getGrid';
+
+export function rgba(hex: string, alfa: number) {
+  const rgb = hexToRgb(hex).replace(/^rgb\((.+?)\)$/, '$1');
+
+  return `rgba(${rgb}, ${alfa})`;
+}

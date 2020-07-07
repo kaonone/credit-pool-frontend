@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Button, Intro } from 'components';
 import { Link, LinkProps } from 'shared/view/elements';
-import { makeStyles } from 'shared/styles';
+import { makeStyles } from 'utils/styles';
 
 import { CreditPoolIcon } from '../Icons';
 

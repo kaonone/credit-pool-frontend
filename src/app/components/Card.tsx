@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'classnames';
 
 import { Typography } from 'shared/view/elements';
-import { makeStyles, rgba } from 'shared/styles';
+import { makeStyles, rgba } from 'utils/styles';
 
 interface CardProps {
   className?: string;

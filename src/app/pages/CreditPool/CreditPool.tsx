@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Layout, Benefits } from 'components';
 import { Header } from 'app/components/CreditPoolHeader/Header';
 import { Footer } from 'app/components/Footer/Footer';
-import { makeStyles } from 'shared/styles';
+import { makeStyles } from 'utils/styles';
 
 import { CreditPoolIntro } from './Intro/Intro';
 import { CreditPoolLogo } from './Icons';

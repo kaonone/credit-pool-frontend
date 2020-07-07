@@ -4,7 +4,7 @@ import cn from 'classnames';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 
-import { useTheme, makeStyles, Theme } from 'shared/styles';
+import { useTheme, makeStyles, Theme } from 'utils/styles';
 import { useAdaptabilityContext } from 'services/adaptability/AdaptabilityContext';
 
 interface IProps {
