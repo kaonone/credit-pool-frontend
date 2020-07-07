@@ -18,7 +18,9 @@ export const MainLayout: React.FC<Props> = props => {
         <div className={classes.header}>
           <NewHeader />
         </div>
-        <props.Content />
+        <div className={classes.content}>
+          <props.Content />
+        </div>
       </div>
     </div>
   );

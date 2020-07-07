@@ -1,26 +1,19 @@
 import * as React from 'react';
 
 import { Layout } from 'app/components/Layout/Layout';
-import { Header } from 'app/components/CreditPoolHeader/Header';
 import { Footer } from 'app/components/Footer/Footer';
 import { Benefits } from 'app/components/Benefits/Benefits';
 import { makeStyles } from 'shared/styles';
 
 import { CreditPoolIntro } from './Intro/Intro';
-import { CreditPoolLogo } from './Icons';
 import { benefits, footerNavItems } from './constants';
 
 export function CreditPool() {
   const classes = useStyles();
   return (
     <Layout>
-      <Layout.Header>
-        <Header CustomLogo={CreditPoolLogo} customNavItems={[]} />
-      </Layout.Header>
-      <Layout.Container>
-        <CreditPoolIntro />
-        <Benefits benefits={benefits} className={classes.section} />
-      </Layout.Container>
+      <CreditPoolIntro />
+      <Benefits benefits={benefits} className={classes.section} />
       <Layout.Footer>
         <Footer customNavItems={footerNavItems} />
       </Layout.Footer>

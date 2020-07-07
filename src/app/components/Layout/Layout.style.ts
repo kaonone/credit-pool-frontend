@@ -2,12 +2,13 @@ import { makeStyles } from 'shared/styles';
 
 export const useStyles = makeStyles(theme => ({
   root: {
-    margin: '0 auto',
-    maxWidth: theme.breakpoints.values.desktopXL,
-    position: 'relative',
     display: 'flex',
+    position: 'relative',
     flexDirection: 'column',
-    minHeight: '100%',
+    margin: '0 auto',
+    height: '100%',
+    maxWidth: theme.breakpoints.values.desktopXL,
+    justifyContent: 'space-between',
   },
 
   container: {

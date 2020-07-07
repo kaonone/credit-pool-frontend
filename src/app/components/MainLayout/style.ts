@@ -8,6 +8,8 @@ export const useStyles = makeStyles(theme => ({
   },
 
   headerAndContent: {
+    display: 'flex',
+    flexDirection: 'column',
     paddingLeft: '50px',
     paddingRight: '30px',
   },
@@ -16,5 +18,7 @@ export const useStyles = makeStyles(theme => ({
     paddingTop: '30px',
   },
 
-  content: {},
+  content: {
+    flex: 1,
+  },
 }), { name: 'main-layout' });

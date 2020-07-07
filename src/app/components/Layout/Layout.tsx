@@ -50,10 +50,6 @@ interface ContainerProps {
   className?: string;
 }
 
-function Header({ children, className }: ContainerProps) {
-  const classes = useStyles();
-  return <div className={cn(className, classes.container, classes.header)}>{children}</div>;
-}
 
 function Container({ children, className }: ContainerProps) {
   const classes = useStyles();
@@ -66,7 +62,6 @@ function Footer({ children, className }: ContainerProps) {
 }
 
 export const Layout = attachStaticFields(LayoutComponent, {
-  Header,
   Container,
   Footer,
   WrapTopWave,
