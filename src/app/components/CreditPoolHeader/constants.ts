@@ -1,5 +1,5 @@
 import { tKeys } from 'services/i18n';
-import { IMenuItem } from 'shared/types/common';
+import { IMenuItem } from 'utils/types/common';
 
 export const menuItems: IMenuItem[] = [
   {

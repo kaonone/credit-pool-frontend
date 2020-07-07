@@ -5,7 +5,7 @@ import { NavInline } from 'components';
 import { Adaptive } from 'services/adaptability';
 import { ThemeButton } from 'services/theme';
 import { LogoWithNameIcon } from 'shared/view/elements/Icons';
-import { IMenuItem } from 'shared/types/common';
+import { IMenuItem } from 'utils/types/common';
 
 import { menuItems } from './constants';
 import { useStyles } from './Header.style';

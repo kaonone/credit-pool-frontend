@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { IMenuItem } from 'shared/types/common';
+import { IMenuItem } from 'utils/types/common';
 import { Link as MuiLink, LinkProps } from 'shared/view/elements';
 
 interface Props {
