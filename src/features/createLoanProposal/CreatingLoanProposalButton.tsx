@@ -1,13 +1,13 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 
+import { ButtonProps } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { ModalButton } from 'components/ModalButton/ModalButton';
 import { WithAccount } from 'app/components/WithAccount/WithAccount';
 
 import { CreatingLoanProposalForm } from './CreatingLoanProposalForm';
 
-type IProps = React.ComponentPropsWithoutRef<typeof Button>;
+type IProps = ButtonProps;
 
 const tKeys = tKeysAll.features.createLoanProposal;
 

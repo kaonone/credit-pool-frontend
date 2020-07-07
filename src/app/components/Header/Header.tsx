@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
+import { withRouter, RouteComponentProps, Link as RouterLink } from 'react-router-dom';
 
 import { ThemeButton } from 'services/theme';
 import { Back, InfoIcon } from 'components/icons';
-import { Grid, IconButton, Typography, Button, Tooltip } from 'components';
+import { Grid, IconButton, Typography, Button, Tooltip, Link, LinkProps } from 'components';
 import { AuthButton } from 'features/auth';
 
 import { useStyles } from './Header.style';
@@ -24,7 +24,7 @@ function HeaderComponent(props: IProps) {
       <Grid container alignItems="center" spacing={3}>
         {backRoutePath && (
           <Grid item>
-            <IconButton component={Link} to={backRoutePath} className={classes.backButton}>
+            <IconButton component={RouterLink} to={backRoutePath} className={classes.backButton}>
               <Back />
             </IconButton>
           </Grid>
@@ -51,17 +51,18 @@ function HeaderComponent(props: IProps) {
             </Grid>
             <Grid item>
               <Button
+                component={Link as React.FunctionComponent<Omit<LinkProps, 'variant'>>}
                 href="https://wiki.akropolis.io/spartafaq/"
                 target="_blank"
                 rel="noopener noreferrer"
-                color="secondary"
+                color="primary"
                 variant="outlined"
               >
                 FAQ
               </Button>
             </Grid>
             <Grid item>
-              <AuthButton color="secondary" />
+              <AuthButton color="primary" />
             </Grid>
           </Grid>
         </Grid>

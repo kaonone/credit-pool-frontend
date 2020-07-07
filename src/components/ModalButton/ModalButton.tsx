@@ -2,10 +2,11 @@ import * as React from 'react';
 import { GetProps } from '_helpers';
 import Dialog, { DialogProps } from '@material-ui/core/Dialog';
 import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
 import DialogContent from '@material-ui/core/DialogContent';
 
 import { makeStyles, WithDarkTheme } from 'utils/styles';
+
+import { Button } from '../Button/Button';
 
 interface IChildrenProps {
   closeModal(): void;
