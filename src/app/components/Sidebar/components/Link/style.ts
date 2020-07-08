@@ -7,6 +7,8 @@ export const useStyles = makeStyles(theme => ({
     color: theme.colors.white,
     textDecoration: 'none',
     fontSize: '16px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
 
     '&:hover $inactiveIcon path': {
       opacity: 1,

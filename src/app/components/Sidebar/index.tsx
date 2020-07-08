@@ -50,11 +50,11 @@ export const Sidebar: React.FC = () => {
   const [isExpanded, setIsExpanded] = React.useState(true);
 
   return (
-    <div className={classes.root}>
-      <div className={cn({
-        [classes.links]: true,
-        [classes.linksShort]: !isExpanded,
-      })}>
+    <div className={cn({
+      [classes.root]: true,
+      [classes.rootShort]: !isExpanded,
+    })}>
+      <div>
         {upperLinks.map(makeLinkRenderer(isExpanded,))}
         {isExpanded && <LowerLinks />}
       </div>
@@ -73,7 +73,7 @@ export const Sidebar: React.FC = () => {
 
 const LowerLinks: React.FC = () => {
   const classes = useStyles();
-  console.log('>> render lower');
+
   return (
     <div className={classes.lowerLinks}>
       {lowerLinks.map(makeLinkRenderer(true))}

@@ -7,14 +7,12 @@ export const useStyles = makeStyles(theme => ({
     padding: '100px 20px 20px 20px',
     background: theme.colors.charade,
     justifyContent: 'space-between',
+    width: '180px',
+    transition: 'width 100ms',
   },
 
-  links: {
-    minWidth: '128px',
-  },
-
-  linksShort: {
-    minWidth: '24px',
+  rootShort: {
+    width: '64px',
   },
 
   lowerLinks: {
@@ -52,6 +50,7 @@ export const useStyles = makeStyles(theme => ({
   switch: {
     marginTop: '16px',
     marginBottom: '20px',
+    padding: '5px',
     cursor: 'pointer',
     alignSelf: 'flex-end',
 
