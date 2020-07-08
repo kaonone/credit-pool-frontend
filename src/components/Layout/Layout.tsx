@@ -5,7 +5,6 @@ import { attachStaticFields } from 'utils/object';
 
 import { AkropolisSocialLinks } from '../AkropolisSocialLinks/AkropolisSocialLinks';
 import { useStyles } from './Layout.style';
-import { TopWave, BottomWave } from './waves';
 
 interface IOwnProps {
   children: React.ReactNode;
@@ -22,25 +21,6 @@ function LayoutComponent({ children }: IProps) {
       <div className={classes.socials}>
         <AkropolisSocialLinks direction="column" />
       </div>
-    </div>
-  );
-}
-
-function WrapTopWave({ type, children }: { type: 'top' | 'bottom'; children: React.ReactNode }) {
-  const classes = useStyles();
-  const wave = {
-    top: <TopWave className={cn(classes.wave, classes[type])} />,
-    bottom: <BottomWave className={cn(classes.wave, classes[type])} />,
-  }[type];
-
-  return (
-    <div className={cn(classes.withWave, classes[type])}>
-      <div className={classes.waveContainer}>
-        {type === 'top' && <div className={classes.waveStrut} />}
-        {wave}
-        {type === 'bottom' && <div className={classes.waveStrut} />}
-      </div>
-      {children}
     </div>
   );
 }
@@ -69,5 +49,4 @@ export const Layout = attachStaticFields(LayoutComponent, {
   Header,
   Container,
   Footer,
-  WrapTopWave,
 });
