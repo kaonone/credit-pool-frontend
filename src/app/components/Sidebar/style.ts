@@ -4,7 +4,7 @@ export const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    padding: '100px 50px 20px 50px',
+    padding: '100px 30px 20px 30px',
     background: theme.colors.charade,
     justifyContent: 'space-between',
   },
@@ -31,6 +31,14 @@ export const useStyles = makeStyles(theme => ({
     color: theme.colors.white,
     textDecoration: 'none',
     fontSize: '16px',
+
+    '&:hover $inactiveLinkIcon path': {
+      opacity: 1,
+    },
+
+    '&:hover $linkLabel': {
+      opacity: 0.75,
+    }
   },
 
   linkIcon: {
@@ -63,5 +71,15 @@ export const useStyles = makeStyles(theme => ({
 
   switch: {
     marginBottom: '20px',
+    cursor: 'pointer',
+    alignSelf: 'flex-end',
+
+    '& path': {
+      opacity: 0.5,
+    },
+
+    '&:hover path': {
+      opacity: 1,
+    },
   },
 }), { name: 'sidebar' });
