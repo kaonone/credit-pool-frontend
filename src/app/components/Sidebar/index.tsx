@@ -1,22 +1,13 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom'
+import cn from 'classnames';
 
 import { routes } from '../../routes';
 import { useStyles } from './style';
 import * as icons from './icons';
+import { Link } from './models';
+import * as components from './components';
 
-// TODO fix build-route-tree
-export type RouteNode = {
-  getRoutePath(): string;
-}
-
-type Entry = {
-  Icon?: icons.models.SidebarIcon;
-  label: string;
-  target: RouteNode | string;
-}
-
-export const upperEntries: Entry[] = [
+export const upperLinks: Link[] = [
   {
     target: routes.account,
     label: 'Account',
@@ -48,58 +39,56 @@ export const upperEntries: Entry[] = [
   },
 ];
 
-export const lowerEntries: Entry[] = [
+export const lowerLinks: Link[] = [
   { target: routes['privacy-policy'], label: 'Privacy policy' },
   { target: routes['terms-of-service'], label: 'Terms of service' },
 ]
 
-
 export const Sidebar: React.FC = () => {
   const classes = useStyles();
 
+  const [isExpanded, setIsExpanded] = React.useState(true);
+
   return (
     <div className={classes.root}>
-      <div className={classes.links}>
-        {upperEntries.map(renderLink)}
-        <div className={classes.lowerLinks}>
-          {lowerEntries.map(renderLink)}
-        </div>
+      <div className={cn({
+        [classes.links]: true,
+        [classes.linksShort]: !isExpanded,
+      })}>
+        {upperLinks.map(makeLinkRenderer(isExpanded,))}
+        {isExpanded && <LowerLinks />}
       </div>
-      <div className={classes.switch}>
+      <div
+        className={cn({
+          [classes.switch]: true,
+          [classes.switchInverted]: !isExpanded,
+        })}
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
         <icons.Switch />
       </div>
     </div>
   );
 };
 
-function renderLink({ label, target, Icon }: Entry) {
+const LowerLinks: React.FC = () => {
   const classes = useStyles();
-
-  const to = typeof target === 'string'
-    ? target
-    : target.getRoutePath();
-
+  console.log('>> render lower');
   return (
-    <NavLink
-      key={label}
-      to={to}
-      className={classes.link}
-      activeClassName={classes.linkActive}
-      exact
-    >
-      {Icon && (
-        <div className={classes.linkIcon}>
-          <div className={classes.activeLinkIcon}>
-            <Icon.active />
-          </div>
-          <div className={classes.inactiveLinkIcon}>
-            <Icon.inactive />
-          </div>
-        </div>
-      )}
-      <div className={classes.linkLabel}>
-        {label}
-      </div>
-    </NavLink >
+    <div className={classes.lowerLinks}>
+      {lowerLinks.map(makeLinkRenderer(true))}
+    </div>
   );
+};
+
+function makeLinkRenderer(shouldRenderLabel: boolean) {
+  return (link: Link) => {
+    return (
+      <components.Link
+        key={link.label}
+        link={link}
+        shouldRenderLabel={shouldRenderLabel}
+      />
+    )
+  };
 }

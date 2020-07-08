@@ -4,21 +4,17 @@ export const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    padding: '100px 30px 20px 30px',
+    padding: '100px 20px 20px 20px',
     background: theme.colors.charade,
     justifyContent: 'space-between',
   },
 
-  separator: {
-    margin: '40px 0',
-    width: '100px',
-    height: '1px',
-    background: theme.colors.white,
-    opacity: '0.2',
-  },
-
   links: {
     minWidth: '128px',
+  },
+
+  linksShort: {
+    minWidth: '24px',
   },
 
   lowerLinks: {
@@ -27,22 +23,6 @@ export const useStyles = makeStyles(theme => ({
 
   link: {
     marginTop: '30px',
-    display: 'flex',
-    color: theme.colors.white,
-    textDecoration: 'none',
-    fontSize: '16px',
-
-    '&:hover $inactiveLinkIcon path': {
-      opacity: 1,
-    },
-
-    '&:hover $linkLabel': {
-      opacity: 0.75,
-    }
-  },
-
-  linkIcon: {
-    marginRight: '12px',
   },
 
   activeLinkIcon: {
@@ -70,6 +50,7 @@ export const useStyles = makeStyles(theme => ({
   },
 
   switch: {
+    marginTop: '16px',
     marginBottom: '20px',
     cursor: 'pointer',
     alignSelf: 'flex-end',
@@ -82,4 +63,8 @@ export const useStyles = makeStyles(theme => ({
       opacity: 1,
     },
   },
+
+  switchInverted: {
+    transform: 'rotate(180deg)',
+  }
 }), { name: 'sidebar' });
