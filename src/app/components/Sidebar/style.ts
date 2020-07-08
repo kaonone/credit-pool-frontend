@@ -14,16 +14,28 @@ export const useStyles = makeStyles(theme => ({
     opacity: '0.2',
   },
 
+  lowerLinks: {
+    marginTop: '300px',
+  },
+
   link: {
-    display: 'block',
+    marginTop: '30px',
+    display: 'flex',
     color: theme.colors.white,
     opacity: 0.5,
-    marginTop: '30px',
     textDecoration: 'none',
     fontSize: '16px',
   },
 
+  linkLabel: {
+    marginLeft: '12px',
+  },
+
   linkActive: {
     opacity: 1,
+
+    '& path': {
+      fill: 'url(#grad) #fff',
+    }
   }
 }), { name: 'sidebar' });
