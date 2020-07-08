@@ -6,7 +6,6 @@ import { Footer } from 'app/components/Footer/Footer';
 import { makeStyles } from 'utils/styles';
 
 import { CreditPoolIntro } from './Intro/Intro';
-import { CreditPoolLogo } from './Icons';
 import { benefits, footerNavItems } from './constants';
 
 export function CreditPool() {
@@ -14,7 +13,7 @@ export function CreditPool() {
   return (
     <Layout>
       <Layout.Header>
-        <Header CustomLogo={CreditPoolLogo} customNavItems={[]} />
+        <Header customNavItems={[]} />
       </Layout.Header>
       <Layout.Container>
         <CreditPoolIntro />
@@ -31,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
       backgroundColor:
-        theme.palette.type === 'light' ? theme.colors.athensGray : theme.colors.shark,
+        theme.palette.type === 'light' ? theme.colors.athensGray : theme.colors.obsidian,
     },
   },
 

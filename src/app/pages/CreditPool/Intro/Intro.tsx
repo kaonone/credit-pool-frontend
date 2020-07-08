@@ -3,13 +3,18 @@ import React from 'react';
 import { Button, Intro, Link, LinkProps } from 'components';
 import { makeStyles } from 'utils/styles';
 
-import { CreditPoolIcon } from '../Icons';
+import { CreditPoolIcon, CreditPoolTextLogo } from '../Icons';
 
 export function CreditPoolIntro() {
   const classes = useStyles();
   return (
     <Intro
-      icon={<CreditPoolIcon fontSize="inherit" />}
+      icon={
+        <>
+          <CreditPoolIcon fontSize="inherit" />
+          <CreditPoolTextLogo className={classes.textLogo} />
+        </>
+      }
       title={
         <>
           <span>Create your own community bank.</span>
@@ -56,6 +61,10 @@ export function CreditPoolIntro() {
 }
 
 const useStyles = makeStyles(theme => ({
+  textLogo: {
+    fontSize: theme.spacing(2.75),
+    marginLeft: theme.spacing(2.5),
+  },
   content: {
     display: 'flex',
     alignItems: 'center',

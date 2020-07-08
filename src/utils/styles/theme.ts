@@ -45,6 +45,12 @@ function getGradients(type: 'dark' | 'light') {
       colors.heliotrope2,
       colors.heliotrope,
     ]),
+    creditPoolIcon: makeGradient(
+      type === 'dark'
+        ? [colors.northWesternPurple, colors.darkPurple]
+        : [colors.lilac, colors.iris],
+    ),
+    creditPoolText: makeGradient([colors.blueViolet, colors.lavenderBlue]),
   };
 }
 
