@@ -3,7 +3,7 @@ import * as React from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import { GetProps } from '_helpers';
 
-import { makeStyles } from 'shared/styles';
+import { makeStyles } from 'utils/styles';
 
 const useStyles = makeStyles(theme => ({
   root: {

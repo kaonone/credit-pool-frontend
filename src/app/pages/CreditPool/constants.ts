@@ -1,7 +1,7 @@
 import { PRIVACY_POLICY_URL, T_AND_C_URL } from 'docs';
-import { IMenuItem } from 'shared/types/common';
+import { IMenuItem } from 'utils/types/common';
 import { tKeys } from 'services/i18n';
-import { Benefit } from 'app/components/Benefits/Benefits';
+import { Benefit } from 'components';
 
 export const menuItems: IMenuItem[] = [
   {

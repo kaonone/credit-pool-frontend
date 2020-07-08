@@ -1,7 +1,20 @@
+export { default as StarIcon } from '@material-ui/icons/Star';
+export { default as MenuIcon } from '@material-ui/icons/Menu';
+export { default as ClearIcon } from '@material-ui/icons/Clear';
+export { default as LaunchIcon } from '@material-ui/icons/Launch';
+export { default as ChromeReaderMode } from '@material-ui/icons/ChromeReaderMode';
+
+export { LogoWithNameIcon } from './LogoWithNameIcon';
+export { MediumIcon } from './MediumIcon';
+export { TwitterIcon } from './TwitterIcon';
+export { GithubIcon } from './GithubIcon';
+export { TelegramIcon } from './TelegramIcon';
+export { DiscordIcon } from './DiscordIcon';
+export { getSocialIconByLink } from './getSocialIconByLink';
+export * from './MainSvgGradient';
 export { MoneyIcon } from './MoneyIcon';
 export { EyeIcon } from './EyeIcon';
 export { Back } from './Back';
-export { Checked } from './Checked';
 export { ContainedCross } from './ContainedCross';
 export { LendIcon } from './LendIcon';
 export { SellCashIcon } from './SellCashIcon';

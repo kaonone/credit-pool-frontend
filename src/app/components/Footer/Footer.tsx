@@ -2,8 +2,8 @@ import React from 'react';
 
 import { PRIVACY_POLICY_URL, T_AND_C_URL } from 'docs';
 import { tKeys, useTranslate } from 'services/i18n';
-import { IMenuItem } from 'shared/types/common';
-import { Link, Typography } from 'shared/view/elements';
+import { IMenuItem } from 'utils/types/common';
+import { Link, Typography } from 'components';
 
 import { useStyles } from './Footer.style';
 import { Messari, Etherium } from './Icons';
