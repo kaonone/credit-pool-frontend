@@ -11,17 +11,16 @@ export type RouteNode = {
 }
 
 type Entry = {
-  Icon?: React.ComponentType;
+  Icon?: icons.models.SidebarIcon;
   label: string;
   target: RouteNode | string;
 }
-
 
 export const upperEntries: Entry[] = [
   {
     target: routes.account,
     label: 'Account',
-    Icon: icons.Account
+    Icon: icons.Account,
   },
 
   {
@@ -60,9 +59,14 @@ export const Sidebar: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      {upperEntries.map(renderLink)}
-      <div className={classes.lowerLinks}>
-        {lowerEntries.map(renderLink)}
+      <div className={classes.links}>
+        {upperEntries.map(renderLink)}
+        <div className={classes.lowerLinks}>
+          {lowerEntries.map(renderLink)}
+        </div>
+      </div>
+      <div className={classes.switch}>
+        <icons.Switch />
       </div>
     </div>
   );
@@ -83,7 +87,16 @@ function renderLink({ label, target, Icon }: Entry) {
       activeClassName={classes.linkActive}
       exact
     >
-      {Icon && <Icon />}
+      {Icon && (
+        <div className={classes.linkIcon}>
+          <div className={classes.activeLinkIcon}>
+            <Icon.active />
+          </div>
+          <div className={classes.inactiveLinkIcon}>
+            <Icon.inactive />
+          </div>
+        </div>
+      )}
       <div className={classes.linkLabel}>
         {label}
       </div>

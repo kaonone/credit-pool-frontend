@@ -2,8 +2,11 @@ import { makeStyles } from 'utils/styles';
 
 export const useStyles = makeStyles(theme => ({
   root: {
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '100px 50px 20px 50px',
     background: theme.colors.charade,
-    padding: '100px 50px',
+    justifyContent: 'space-between',
   },
 
   separator: {
@@ -14,6 +17,10 @@ export const useStyles = makeStyles(theme => ({
     opacity: '0.2',
   },
 
+  links: {
+    minWidth: '128px',
+  },
+
   lowerLinks: {
     marginTop: '300px',
   },
@@ -22,20 +29,39 @@ export const useStyles = makeStyles(theme => ({
     marginTop: '30px',
     display: 'flex',
     color: theme.colors.white,
-    opacity: 0.5,
     textDecoration: 'none',
     fontSize: '16px',
   },
 
+  linkIcon: {
+    marginRight: '12px',
+  },
+
+  activeLinkIcon: {
+    display: 'none',
+  },
+
+  inactiveLinkIcon: {},
+
   linkLabel: {
-    marginLeft: '12px',
+    opacity: 0.5,
   },
 
   linkActive: {
-    opacity: 1,
+    '& $linkLabel': {
+      opacity: 1,
+    },
 
-    '& path': {
-      fill: 'url(#grad) #fff',
-    }
-  }
+    '& $activeLinkIcon': {
+      display: 'block',
+    },
+
+    '& $inactiveLinkIcon': {
+      display: 'none',
+    },
+  },
+
+  switch: {
+    marginBottom: '20px',
+  },
 }), { name: 'sidebar' });
