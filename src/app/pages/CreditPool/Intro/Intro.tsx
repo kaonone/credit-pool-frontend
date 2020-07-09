@@ -34,26 +34,26 @@ export function CreditPoolIntro() {
           color="primary"
           component={Link as React.FunctionComponent<Omit<LinkProps, 'variant'>>}
           underline="none"
-          href="https://sparta-rinkeby.akropolis.io/stats"
+          href="https://sparta.akropolis.io/stats"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Rinkeby
+          Mainnet
         </Button>
         or
         <Button
           className={classes.button}
           fullWidth
           size="large"
-          variant="contained"
+          variant="outlined"
           color="primary"
           component={Link as React.FunctionComponent<Omit<LinkProps, 'variant'>>}
           underline="none"
-          href="https://sparta.akropolis.io/stats"
+          href="https://sparta-rinkeby.akropolis.io/stats"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Mainnet
+          Rinkeby
         </Button>
       </div>
     </Intro>
