@@ -89,4 +89,11 @@ export const colors = {
   whiteWine: '#FAF9FD',
   wildSand: '#f4f4f4',
   trueV: '#7357D2',
+  obsidian: '#0a0a0e',
+  northWesternPurple: '#4d2c66',
+  darkPurple: '#1d134a',
+  lilac: '#e8e4fc',
+  iris: '#b2a1ff',
+  blueViolet: '#8f70d2',
+  lavenderBlue: '#6742f4',
 };
