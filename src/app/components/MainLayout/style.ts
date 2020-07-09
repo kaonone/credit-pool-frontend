@@ -4,7 +4,7 @@ export const useStyles = makeStyles(theme => ({
   root: {
     background: theme.colors.codGray,
     display: 'flex',
-    minHeight: '100vh',
+    height: '100%',
   },
 
   headerAndContent: {
