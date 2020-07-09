@@ -8,7 +8,7 @@ export const useStyles = makeStyles(theme => ({
     background: theme.colors.charade,
     justifyContent: 'space-between',
     width: '180px',
-    transition: 'width 100ms',
+    transition: 'width 200ms',
   },
 
   rootShort: {
