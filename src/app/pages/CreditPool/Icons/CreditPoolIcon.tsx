@@ -15,6 +15,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+let hackForGradientUpdating = 1;
+
 export function CreditPoolIcon(props: GetProps<typeof SvgIcon>) {
   const classes = useStyles();
   const theme = useTheme();
@@ -27,9 +29,14 @@ export function CreditPoolIcon(props: GetProps<typeof SvgIcon>) {
     [theme],
   );
 
+  React.useEffect(() => {
+    hackForGradientUpdating += 1;
+  }, [gradientStops]);
+
   return (
     <SvgIcon {...props} classes={classes} viewBox="0 0 96 66">
-      <defs>
+      {/* chome bug: it doesn't rerender gradient inside svg after theme change, but rerenders after defs remount */}
+      <defs key={hackForGradientUpdating}>
         <linearGradient id="CreditPoolIcon-gradient-a" x1="50%" x2="50%" y1="0%" y2="100%">
           {gradientStops}
         </linearGradient>
