@@ -142,4 +142,4 @@ export const useStyles = makeStyles(theme => ({
   },
 
   isAbsolute: {},
-}));
+}), { name: 'Layout' });
