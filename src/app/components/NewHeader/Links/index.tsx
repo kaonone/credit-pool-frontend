@@ -37,7 +37,7 @@ function renderLink(link: Link.models.Link) {
   const classes = useStyles();
 
   return (
-    <div className={classes.link}>
+    <div className={classes.link} key={link.label}>
       <Link.Link link={link} shouldRenderLabel />
     </div>
   )
