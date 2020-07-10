@@ -5,7 +5,7 @@ export const useStyles = makeStyles(theme => ({
     background: theme.colors.codGray,
     display: 'flex',
     justifyContent: 'space-between',
-    marginBottom: '30px',
+    marginBottom: 30,
   },
 
   leftPart: {
@@ -13,7 +13,7 @@ export const useStyles = makeStyles(theme => ({
   },
 
   authButton: {
-    marginRight: '50px',
+    marginRight: 50,
   },
 
   rightPart: {
@@ -22,7 +22,7 @@ export const useStyles = makeStyles(theme => ({
 
   links: {
     display: 'flex',
-    marginLeft: '10px',
+    marginLeft: 10,
     alignItems: 'center',
   },
 }), { name: 'header' });

@@ -5,7 +5,7 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     color: theme.colors.white,
     textDecoration: 'none',
-    fontSize: '16px',
+    fontSize: 16,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
 
@@ -30,7 +30,7 @@ export const useStyles = makeStyles(theme => ({
     opacity: 0.5,
 
     '$icon + &': {
-      marginLeft: '12px',
+      marginLeft: 12,
     },
   },
 

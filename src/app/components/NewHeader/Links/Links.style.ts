@@ -6,6 +6,6 @@ export const useStyles = makeStyles(() => ({
   },
 
   link: {
-    marginLeft: '50px',
+    marginLeft: 50,
   }
 }), { name: 'links' });

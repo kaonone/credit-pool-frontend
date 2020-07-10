@@ -16,12 +16,12 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
-    paddingLeft: '50px',
-    paddingRight: '30px',
+    paddingLeft: 50,
+    paddingRight: 30,
   },
 
   header: {
-    paddingTop: '30px',
+    paddingTop: 30,
   },
 
   content: {
