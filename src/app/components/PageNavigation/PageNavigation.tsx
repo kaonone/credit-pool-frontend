@@ -1,14 +1,11 @@
 import * as React from 'react';
 import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
-import cn from 'classnames';
 
 import { routes } from 'app/routes';
-import { Tabs, Tab } from 'components';
+import { TabsList, TabContext, Tab } from 'components';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
-
-import { useStyles } from './PageNavigation.style';
 
 const additionalRoutes = new Map([
   [
@@ -21,7 +18,6 @@ const additionalRoutes = new Map([
 ]);
 
 function PageNavigation() {
-  const classes = useStyles();
   const match = useRouteMatch<{ page: string }>('/:page');
 
   const [additionalPage, setAdditionalPage] = React.useState<string | null>();
@@ -30,61 +26,55 @@ function PageNavigation() {
   const api = useApi();
   const [account] = useSubscribable(() => api.web3Manager.account, []);
 
-  const page = match && match.params.page;
+  const page = match ? match.params.page : routes.stats.getElementKey();
 
   React.useEffect(() => {
     page && additionalRoutes.has(page) && setAdditionalPage(page);
   }, [page]);
 
   return (
-    <Tabs
-      value={page}
-      indicatorColor="primary"
-      textColor="primary"
-      classes={{ flexContainer: classes.tabsFlexContainer }}
-    >
-      {account && (
-        <Tab
-          className={classes.tab}
-          label="Account"
-          component={Link}
-          value={routes.account.getElementKey()}
-          to={routes.account.getRedirectPath()}
-        />
-      )}
-      {account && (
-        <Tab
-          className={classes.tab}
-          label="Pool"
-          component={Link}
-          value={routes.pool.getElementKey()}
-          to={routes.pool.getRedirectPath()}
-        />
-      )}
-      <Tab
-        className={classes.tab}
-        label="Stats"
-        component={Link}
-        value={routes.stats.getElementKey()}
-        to={routes.stats.getRedirectPath()}
-      />
-      <Tab
-        className={classes.tab}
-        label="Distributions"
-        component={Link}
-        value={routes.distributions.getElementKey()}
-        to={routes.distributions.getRedirectPath()}
-      />
-      {additionalRoute && (
-        <Tab
-          className={cn(classes.tab, classes.additionalTab)}
-          label={additionalRoute.label}
-          component={Link}
-          value={additionalRoute.route.getElementKey()}
-          to={additionalRoute.route.getRedirectPath()}
-        />
-      )}
-    </Tabs>
+    <TabContext value={page}>
+      <TabsList value={page}>
+        {[
+          account && (
+            <Tab
+              label="Account"
+              component={Link}
+              value={routes.account.getElementKey()}
+              to={routes.account.getRedirectPath()}
+            />
+          ),
+          account && (
+            <Tab
+              label="Pool"
+              component={Link}
+              value={routes.pool.getElementKey()}
+              to={routes.pool.getRedirectPath()}
+            />
+          ),
+          <Tab
+            label="Stats"
+            component={Link}
+            value={routes.stats.getElementKey()}
+            to={routes.stats.getRedirectPath()}
+          />,
+          <Tab
+            label="Distributions"
+            component={Link}
+            value={routes.distributions.getElementKey()}
+            to={routes.distributions.getRedirectPath()}
+          />,
+          additionalRoute && (
+            <Tab
+              label={additionalRoute.label}
+              component={Link}
+              value={additionalRoute.route.getElementKey()}
+              to={additionalRoute.route.getRedirectPath()}
+            />
+          ),
+        ].filter(Boolean)}
+      </TabsList>
+    </TabContext>
   );
 }
 
