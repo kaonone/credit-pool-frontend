@@ -9,6 +9,7 @@ import { IMenuItem } from 'utils/types/common';
 
 import { menuItems } from './constants';
 import { useStyles } from './Header.style';
+import { AppButton } from './components/AppButton/AppButton';
 
 interface Props {
   customNavItems?: IMenuItem[];
@@ -47,6 +48,14 @@ export function Header({ customNavItems, CustomLogo }: Props) {
             </Adaptive>
             <Adaptive from="tabletXS">
               <ThemeButton />
+            </Adaptive>
+          </React.Fragment>,
+          <React.Fragment key="1">
+            <Adaptive to="tabletXS">
+              <AppButton size="small" />
+            </Adaptive>
+            <Adaptive from="tabletXS">
+              <AppButton />
             </Adaptive>
           </React.Fragment>,
         ]}

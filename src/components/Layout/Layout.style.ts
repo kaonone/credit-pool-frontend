@@ -24,6 +24,7 @@ export const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('desktopXS')]: {
       paddingLeft: theme.spacing(11),
       paddingRight: theme.spacing(11),
+      paddingTop: theme.spacing(5),
     },
     [theme.breakpoints.up('desktopMD')]: {
       paddingLeft: theme.spacing(13.5),
@@ -132,7 +133,7 @@ export const useStyles = makeStyles(theme => ({
     position: 'fixed',
     display: 'none',
     marginRight: theme.spacing(2),
-    top: '13%',
+    top: '29%',
     right: 0,
 
     [theme.breakpoints.up('lg')]: {

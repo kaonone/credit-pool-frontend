@@ -13,7 +13,7 @@ export function CreditPool() {
   return (
     <Layout>
       <Layout.Header>
-        <Header customNavItems={[]} />
+        <Header />
       </Layout.Header>
       <Layout.Container>
         <CreditPoolIntro />
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
       backgroundColor:
-        theme.palette.type === 'light' ? theme.colors.athensGray : theme.colors.shark,
+        theme.palette.type === 'light' ? theme.colors.athensGray : theme.colors.obsidian,
     },
   },
 

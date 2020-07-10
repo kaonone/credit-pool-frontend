@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
+import { routes } from 'app/routes';
 import { Button, Intro, Link, LinkProps } from 'components';
 import { makeStyles } from 'utils/styles';
 
@@ -26,7 +28,18 @@ export function CreditPoolIntro() {
     >
       <div className={classes.content}>
         Try it on
-        <Button
+        <Button<typeof RouterLink>
+          className={classes.button}
+          fullWidth
+          size="large"
+          variant="contained"
+          color="primary"
+          component={RouterLink}
+          to={routes.stats.getRedirectPath()}
+        >
+          Mainnet
+        </Button>
+        {/* <Button
           className={classes.button}
           fullWidth
           size="large"
@@ -39,7 +52,7 @@ export function CreditPoolIntro() {
           rel="noopener noreferrer"
         >
           Mainnet
-        </Button>
+        </Button> */}
         or
         <Button
           className={classes.button}
