@@ -10,7 +10,6 @@ export const Content: React.FC = () => {
       {process.env.NODE_ENV !== 'production' && (
         <Route exact path={routes.demo.getRoutePath()} component={pages.DemoPage} />
       )}
-      <Route exact path="/" component={pages.CreditPool} />
       <Route exact path={routes.account.getRoutePath()} component={pages.AccountPage} />
       <Route
         exact
