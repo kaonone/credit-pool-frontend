@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import * as components from './components';
+import { MainLayout, Content } from './components';
 
 export function App() {
-  return <components.MainLayout Content={components.Content} />;
+  return <MainLayout Content={Content} />;
 }
