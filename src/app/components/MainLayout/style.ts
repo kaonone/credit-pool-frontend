@@ -4,7 +4,12 @@ export const useStyles = makeStyles(theme => ({
   root: {
     background: theme.colors.codGray,
     display: 'flex',
-    height: '100%',
+  },
+
+  sidebar: {
+    position: 'sticky',
+    top: 0,
+    height: '100vh'
   },
 
   headerAndContent: {

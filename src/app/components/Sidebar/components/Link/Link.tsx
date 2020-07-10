@@ -21,4 +21,5 @@ const LinkWrapper: React.FC<Props> = props => {
     </div>
   );
 };
+
 export { LinkWrapper as Link }

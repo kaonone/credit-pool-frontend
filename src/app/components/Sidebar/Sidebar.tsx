@@ -67,10 +67,20 @@ export const Sidebar: React.FC = () => {
       [classes.root]: true,
       [classes.rootShort]: !isExpanded,
     })}>
-      <div>
-        {upperLinks.map(makeLinkRenderer(isExpanded,))}
-        {isExpanded && <LowerLinks />}
+      <div className={classes.upperPart}>
+        <nav className={classes.upperLinks}>
+          {upperLinks.map(makeLinkRenderer(isExpanded))}
+        </nav>
       </div>
+      <div className={classes.lowerPart}>
+        {isExpanded && <LowerLinks />}
+        {renderSwitch()}
+      </div>
+    </div>
+  );
+
+  function renderSwitch() {
+    return (
       <div
         className={cn({
           [classes.switch]: true,
@@ -80,17 +90,17 @@ export const Sidebar: React.FC = () => {
       >
         <icons.Switch />
       </div>
-    </div>
-  );
+    )
+  }
 };
 
 const LowerLinks: React.FC = () => {
   const classes = useStyles();
 
   return (
-    <div className={classes.lowerLinks}>
+    <nav className={classes.lowerLinks}>
       {lowerLinks.map(makeLinkRenderer(true))}
-    </div>
+    </nav>
   );
 };
 

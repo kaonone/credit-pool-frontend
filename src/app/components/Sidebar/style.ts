@@ -3,6 +3,7 @@ import { makeStyles } from 'utils/styles';
 export const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
+    height: '100%',
     flexDirection: 'column',
     padding: '100px 20px 20px 20px',
     background: theme.colors.charade,
@@ -11,41 +12,18 @@ export const useStyles = makeStyles(theme => ({
     transition: 'width 200ms',
   },
 
+  upperPart: {},
+  lowerPart: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  upperLinks: {},
+
   rootShort: {
     width: '64px',
   },
 
-  lowerLinks: {
-    marginTop: '300px',
-  },
-
-  link: {
-    marginTop: '30px',
-  },
-
-  activeLinkIcon: {
-    display: 'none',
-  },
-
-  inactiveLinkIcon: {},
-
-  linkLabel: {
-    opacity: 0.5,
-  },
-
-  linkActive: {
-    '& $linkLabel': {
-      opacity: 1,
-    },
-
-    '& $activeLinkIcon': {
-      display: 'block',
-    },
-
-    '& $inactiveLinkIcon': {
-      display: 'none',
-    },
-  },
+  lowerLinks: {},
 
   switch: {
     marginTop: '16px',

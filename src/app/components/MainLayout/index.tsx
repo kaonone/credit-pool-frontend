@@ -13,7 +13,9 @@ export const MainLayout: React.FC<Props> = props => {
 
   return (
     <div className={classes.root}>
-      <Sidebar />
+      <div className={classes.sidebar}>
+        <Sidebar />
+      </div>
       <div className={classes.headerAndContent}>
         <div className={classes.header}>
           <NewHeader />
