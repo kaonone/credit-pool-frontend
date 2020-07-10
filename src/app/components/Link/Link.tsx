@@ -10,37 +10,60 @@ type Props = {
 }
 
 export const Link: React.FC<Props> = props => {
-  const { link: { label, target, icon }, shouldRenderLabel } = props;
+  const { link, shouldRenderLabel } = props;
 
-  const classes = useStyles();
+  switch (link.kind) {
+    case 'internal':
+      return renderInternalLink(link);
+    case 'external':
+      return renderExternalLink(link);
+  }
 
-  const to = typeof target === 'string'
-    ? target
-    : target.getRoutePath();
+  function renderExternalLink(link: models.ExternalLink) {
+    const classes = useStyles();
 
-  return (
-    <NavLink
-      key={label}
-      to={to}
-      className={classes.root}
-      activeClassName={classes.active}
-      exact
-    >
-      {icon && (
-        <div className={classes.icon}>
-          <div className={classes.activeIcon}>
-            <icon.Active />
-          </div>
-          <div className={classes.inactiveIcon}>
-            <icon.Inactive />
-          </div>
-        </div>
-      )}
-      {shouldRenderLabel && (
+    const { label, target } = link;
+    return (
+      <a
+        className={classes.root}
+        href={target}
+      >
         <div className={classes.label}>
           {label}
         </div>
-      )}
-    </NavLink >
-  );
+      </a>
+    )
+  }
+
+  function renderInternalLink(link: models.InternalLink) {
+    const classes = useStyles();
+
+    const { label, target, icon } = link;
+
+    return (
+      <NavLink
+        key={label}
+        to={target}
+        className={classes.root}
+        activeClassName={classes.active}
+        exact
+      >
+        {icon && (
+          <div className={classes.icon}>
+            <div className={classes.activeIcon}>
+              <icon.Active />
+            </div>
+            <div className={classes.inactiveIcon}>
+              <icon.Inactive />
+            </div>
+          </div>
+        )}
+        {shouldRenderLabel && (
+          <div className={classes.label}>
+            {label}
+          </div>
+        )}
+      </NavLink >
+    );
+  }
 };

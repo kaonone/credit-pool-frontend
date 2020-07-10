@@ -9,39 +9,52 @@ import * as components from './components';
 
 const upperLinks: Link.models.Link[] = [
   {
-    target: routes.account,
+    kind: 'internal',
+    target: routes.account.getRoutePath(),
     label: 'Account',
     icon: icons.Account,
   },
 
   {
-    target: routes.lend,
+    kind: 'internal',
+    target: routes.lend.getRoutePath(),
     label: 'Lend',
     icon: icons.Lend,
   },
 
   {
-    target: routes.borrow,
+    kind: 'internal',
+    target: routes.borrow.getRoutePath(),
     label: 'Borrow',
     icon: icons.Borrow,
   },
 
   {
-    target: routes.liquidations,
+    kind: 'internal',
+    target: routes.liquidations.getRoutePath(),
     label: 'Liquidations',
     icon: icons.Liquidations,
   },
 
   {
-    target: routes.history,
+    kind: 'internal',
+    target: routes.history.getRoutePath(),
     label: 'History',
     icon: icons.History,
   },
 ];
 
 const lowerLinks: Link.models.Link[] = [
-  { target: routes['privacy-policy'], label: 'Privacy policy' },
-  { target: routes['terms-of-service'], label: 'Terms of service' },
+  {
+    kind: 'internal',
+    label: 'Privacy policy',
+    target: routes['privacy-policy'].getRoutePath(),
+  },
+  {
+    kind: 'internal',
+    target: routes['terms-of-service'].getRoutePath(),
+    label: 'Terms of service'
+  },
 ]
 
 export const Sidebar: React.FC = () => {

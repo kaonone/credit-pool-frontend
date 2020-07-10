@@ -35,7 +35,7 @@ export const useStyles = makeStyles(theme => ({
   },
 
   active: {
-    '& $linkLabel': {
+    '& $label': {
       opacity: 1,
     },
 
