@@ -340,6 +340,13 @@ const en = {
     activitiesCard: {
       expansionPanelTitle: 'Reason',
     },
+    metrics: {
+      myBalance: {
+        myBalance: 'My balance (USD)',
+        deposit: 'Deposit',
+        description: 'Here is a title description',
+      },
+    },
   },
 };
 

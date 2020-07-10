@@ -152,6 +152,10 @@ function getTheme(type: 'light' | 'dark'): Theme {
     },
     typography: {
       fontFamily: ['Helvetica Neue', 'Arial', 'sans-serif'].join(','),
+      h6: {
+        fontSize: 16,
+        fontWeight: 400,
+      },
     },
     shape: {
       borderRadius: 4,
