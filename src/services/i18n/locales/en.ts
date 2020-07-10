@@ -351,6 +351,9 @@ const en = {
         totalPoolLiquidity: 'Total Pool Liquidity',
         description: 'Here is a title description',
       },
+      apy: {
+        description: 'Here is a title description',
+      },
     },
   },
 };

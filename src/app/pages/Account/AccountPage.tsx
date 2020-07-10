@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { MyBalance, MyPoolShare } from 'components/Metrics';
+import { MyBalance, MyPoolShare, APY } from 'components/Metrics';
 import { Grid, Typography } from 'components';
 import { MyLoans, MyGuarantees } from 'features/loans';
 import { makeStyles } from 'utils/styles';
@@ -31,6 +31,9 @@ export function AccountPage() {
                   fractional: '00',
                 }}
               />
+            </Grid>
+            <Grid item xs className={classes.metric}>
+              <APY percent="11.06" period="24h" />
             </Grid>
           </Grid>
           <Grid item xs={12}>
