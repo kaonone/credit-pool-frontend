@@ -346,6 +346,11 @@ const en = {
         deposit: 'Deposit',
         description: 'Here is a title description',
       },
+      myPoolShare: {
+        myPoolShare: 'My Pool Share',
+        totalPoolLiquidity: 'Total Pool Liquidity',
+        description: 'Here is a title description',
+      },
     },
   },
 };

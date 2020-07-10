@@ -10,10 +10,11 @@ type Props = {
   titleDescription: string;
   content: JSX.Element;
   button?: JSX.Element;
+  additionalInfo?: JSX.Element;
 };
 
 export function Metric(props: Props) {
-  const { title, titleDescription, content, button } = props;
+  const { title, titleDescription, content, button, additionalInfo } = props;
   const classes = useStyles();
   const theme = useTheme();
 
@@ -29,7 +30,8 @@ export function Metric(props: Props) {
             />
           </Tooltip>
         </Typography>
-        {content}
+        {content && <Grid className={classes.content}>{content}</Grid>}
+        {additionalInfo}
       </Grid>
       <Grid item xs>
         {button}
@@ -51,6 +53,9 @@ const useStyles = makeStyles(
     },
     infoIcon: {
       height: 15,
+    },
+    content: {
+      marginBottom: 8,
     },
   }),
   { name: 'Metric' },
