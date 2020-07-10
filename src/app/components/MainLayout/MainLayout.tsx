@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Sidebar } from '../Sidebar';
 import { NewHeader } from '../NewHeader';
-import { useStyles } from './style';
+import { useStyles } from './MainLayout.style';
 
 type Props = {
   Content: React.FC;

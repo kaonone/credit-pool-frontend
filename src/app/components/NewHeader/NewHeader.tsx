@@ -3,7 +3,7 @@ import React from 'react';
 import { AuthButton } from 'features/auth';
 import { ThemeButton } from 'services/theme';
 
-import { useStyles } from './style';
+import { useStyles } from './NewHeader.style';
 import { Logo } from './icons';
 import { Links } from './Links';
 

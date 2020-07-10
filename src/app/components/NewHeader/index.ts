@@ -1,0 +1,1 @@
+export { NewHeader } from './NewHeader';

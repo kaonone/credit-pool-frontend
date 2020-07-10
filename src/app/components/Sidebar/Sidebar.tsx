@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'classnames';
 
 import { routes } from '../../routes';
-import { useStyles } from './style';
+import { useStyles } from './Sidebar.style';
 import * as icons from './icons';
 import * as Link from '../Link';
 import * as components from './components';
