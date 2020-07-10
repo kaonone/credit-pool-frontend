@@ -45,6 +45,12 @@ function getGradients(type: 'dark' | 'light') {
       colors.heliotrope2,
       colors.heliotrope,
     ]),
+    creditPoolIcon: makeGradient(
+      type === 'dark'
+        ? [colors.northWesternPurple, colors.darkPurple]
+        : [colors.lilac, colors.iris],
+    ),
+    creditPoolText: makeGradient([colors.blueViolet, colors.lavenderBlue]),
   };
 }
 
@@ -102,6 +108,10 @@ export const lightTheme = getTheme('light');
 export const darkTheme = getTheme('dark');
 
 function getTheme(type: 'light' | 'dark'): Theme {
+  const tabsHeight = 36;
+  const tabsIndicatorSpace = 3;
+  const tabsBorderWidth = 1;
+
   return createMuiTheme({
     colors,
     gradients: getGradients(type),
@@ -261,6 +271,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
       MuiGrid: {
         ...generateGridSpacingOverrides(defaultTheme.spacing),
       },
+
       MuiSnackbarContent: {
         root: {
           backgroundColor: '#fff',
@@ -269,9 +280,46 @@ function getTheme(type: 'light' | 'dark'): Theme {
           color: colors.rhino,
         },
       },
+
       MuiFormControlLabel: {
         root: {
           marginRight: 0,
+        },
+      },
+
+      MuiTabs: {
+        root: {
+          display: 'inline-flex',
+          overflow: 'hidden',
+          minHeight: tabsHeight,
+          borderRadius: tabsHeight / 2,
+          padding: tabsIndicatorSpace,
+          border: `${tabsBorderWidth}px solid ${colors.heliotrope}`,
+        },
+
+        indicator: {
+          top: 0,
+          height: tabsHeight - tabsIndicatorSpace * 2 - tabsBorderWidth * 2,
+          borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
+          zIndex: -1,
+          background: 'linear-gradient(to left, #544cf2, #d93cef)',
+        },
+
+        scroller: {
+          overflow: 'hidden',
+          borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
+        },
+      },
+
+      MuiTab: {
+        root: {
+          minHeight: 'unset',
+          padding: defaultTheme.spacing(0.2, 1.5),
+          textTransform: 'unset',
+
+          '&$selected': {
+            color: colors.white,
+          },
         },
       },
     },

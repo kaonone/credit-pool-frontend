@@ -1,4 +1,4 @@
-import { makeStyles } from 'shared/styles';
+import { makeStyles } from 'utils/styles';
 
 const shadowOffset = 3;
 const largeShadowOffset = 3;
@@ -77,7 +77,7 @@ export const useStyles = makeStyles(theme => ({
       bottom: 1,
       left: 1,
       backgroundColor:
-        theme.palette.type === 'light' ? theme.colors.athensGray : theme.colors.shark,
+        theme.palette.type === 'light' ? theme.colors.athensGray : theme.colors.obsidian,
       transition: theme.transitions.create(['opacity', 'background-color']),
 
       borderRadius: theme.spacing(height / 2) - 1,

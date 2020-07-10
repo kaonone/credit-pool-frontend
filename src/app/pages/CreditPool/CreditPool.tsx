@@ -1,9 +1,8 @@
 import * as React from 'react';
 
-import { Layout } from 'app/components/Layout/Layout';
+import { Layout, Benefits } from 'components';
 import { Footer } from 'app/components/Footer/Footer';
-import { Benefits } from 'app/components/Benefits/Benefits';
-import { makeStyles } from 'shared/styles';
+import { makeStyles } from 'utils/styles';
 
 import { CreditPoolIntro } from './Intro/Intro';
 import { benefits, footerNavItems } from './constants';
@@ -12,8 +11,10 @@ export function CreditPool() {
   const classes = useStyles();
   return (
     <Layout>
-      <CreditPoolIntro />
-      <Benefits benefits={benefits} className={classes.section} />
+      <Layout.Container>
+        <CreditPoolIntro />
+        <Benefits benefits={benefits} className={classes.section} />
+      </Layout.Container>
       <Layout.Footer>
         <Footer customNavItems={footerNavItems} />
       </Layout.Footer>
@@ -25,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
       backgroundColor:
-        theme.palette.type === 'light' ? theme.colors.athensGray : theme.colors.shark,
+        theme.palette.type === 'light' ? theme.colors.athensGray : theme.colors.obsidian,
     },
   },
 
