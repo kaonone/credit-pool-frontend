@@ -13,6 +13,15 @@ export const useStyles = makeStyles(
       display: 'flex',
     },
 
+    logo: {
+      display: 'flex',
+
+      fontSize: theme.spacing(2.5),
+      [theme.breakpoints.up('tabletXS')]: {
+        fontSize: theme.spacing(5),
+      },
+    },
+
     authButton: {
       marginRight: 50,
     },

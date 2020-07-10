@@ -7,7 +7,7 @@ export const useStyles = makeStyles(
       height: '100%',
       flexDirection: 'column',
       padding: '100px 20px 20px 20px',
-      background: theme.colors.charade,
+      background: theme.colors.coal,
       justifyContent: 'space-between',
       width: 180,
       transition: 'width 200ms',
