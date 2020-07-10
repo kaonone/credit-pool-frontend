@@ -14,24 +14,19 @@ const links: Link.models.Link[] = [
     kind: 'internal',
     target: routes.governance.getRoutePath(),
     label: 'Governance',
-
   },
   {
     kind: 'external',
     target: 'https://wiki.akropolis.io/spartafaq/',
     label: 'Wiki',
   },
-]
+];
 
 export const Links = () => {
   const classes = useStyles();
 
-  return (
-    <div className={classes.root}>
-      {links.map(renderLink)}
-    </div>
-  );
-}
+  return <div className={classes.root}>{links.map(renderLink)}</div>;
+};
 
 function renderLink(link: Link.models.Link) {
   const classes = useStyles();
@@ -40,5 +35,5 @@ function renderLink(link: Link.models.Link) {
     <div className={classes.link} key={link.label}>
       <Link.Link link={link} shouldRenderLabel />
     </div>
-  )
+  );
 }

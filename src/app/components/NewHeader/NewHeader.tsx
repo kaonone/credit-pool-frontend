@@ -26,4 +26,4 @@ export const NewHeader: React.FC = () => {
       </div>
     </header>
   );
-}
+};

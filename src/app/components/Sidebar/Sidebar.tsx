@@ -53,9 +53,9 @@ const lowerLinks: Link.models.Link[] = [
   {
     kind: 'internal',
     target: routes['terms-of-service'].getRoutePath(),
-    label: 'Terms of service'
+    label: 'Terms of service',
   },
-]
+];
 
 export const Sidebar: React.FC = () => {
   const classes = useStyles();
@@ -63,14 +63,14 @@ export const Sidebar: React.FC = () => {
   const [isExpanded, setIsExpanded] = React.useState(true);
 
   return (
-    <div className={cn({
-      [classes.root]: true,
-      [classes.rootShort]: !isExpanded,
-    })}>
+    <div
+      className={cn({
+        [classes.root]: true,
+        [classes.rootShort]: !isExpanded,
+      })}
+    >
       <div className={classes.upperPart}>
-        <nav className={classes.upperLinks}>
-          {upperLinks.map(makeLinkRenderer(isExpanded))}
-        </nav>
+        <nav className={classes.upperLinks}>{upperLinks.map(makeLinkRenderer(isExpanded))}</nav>
       </div>
       <div className={classes.lowerPart}>
         {isExpanded && <LowerLinks />}
@@ -81,7 +81,8 @@ export const Sidebar: React.FC = () => {
 
   function renderSwitch() {
     return (
-      <div
+      <button
+        type="button"
         className={cn({
           [classes.switch]: true,
           [classes.switchInverted]: !isExpanded,
@@ -89,29 +90,19 @@ export const Sidebar: React.FC = () => {
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <icons.Switch />
-      </div>
-    )
+      </button>
+    );
   }
 };
 
 const LowerLinks: React.FC = () => {
   const classes = useStyles();
 
-  return (
-    <nav className={classes.lowerLinks}>
-      {lowerLinks.map(makeLinkRenderer(true))}
-    </nav>
-  );
+  return <nav className={classes.lowerLinks}>{lowerLinks.map(makeLinkRenderer(true))}</nav>;
 };
 
 function makeLinkRenderer(shouldRenderLabel: boolean) {
   return (link: Link.models.Link) => {
-    return (
-      <components.Link
-        key={link.label}
-        link={link}
-        shouldRenderLabel={shouldRenderLabel}
-      />
-    )
+    return <components.Link key={link.label} link={link} shouldRenderLabel={shouldRenderLabel} />;
   };
 }

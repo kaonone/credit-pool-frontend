@@ -6,7 +6,7 @@ import { useStyles } from './Link.style';
 type Props = {
   shouldRenderLabel: boolean;
   link: Link.models.Link;
-}
+};
 
 const LinkWrapper: React.FC<Props> = props => {
   const { link, shouldRenderLabel } = props;
@@ -14,12 +14,9 @@ const LinkWrapper: React.FC<Props> = props => {
 
   return (
     <div className={classes.root}>
-      <Link.Link
-        link={link}
-        shouldRenderLabel={shouldRenderLabel}
-      />
+      <Link.Link link={link} shouldRenderLabel={shouldRenderLabel} />
     </div>
   );
 };
 
-export { LinkWrapper as Link }
+export { LinkWrapper as Link };

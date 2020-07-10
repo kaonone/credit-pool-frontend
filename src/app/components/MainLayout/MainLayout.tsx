@@ -6,7 +6,7 @@ import { useStyles } from './MainLayout.style';
 
 type Props = {
   Content: React.FC;
-}
+};
 
 export const MainLayout: React.FC<Props> = props => {
   const classes = useStyles();
@@ -26,4 +26,4 @@ export const MainLayout: React.FC<Props> = props => {
       </div>
     </div>
   );
-}
+};

@@ -1,1 +1,1 @@
-export { SidebarIcon } from './SidebarIcon'
+export { SidebarIcon } from './SidebarIcon';

@@ -50,7 +50,6 @@ interface ContainerProps {
   className?: string;
 }
 
-
 function Container({ children, className }: ContainerProps) {
   const classes = useStyles();
   return <div className={cn(className, classes.container)}>{children}</div>;

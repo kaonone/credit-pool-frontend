@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom';
 
 import { useStyles } from './style';
 import * as models from './models';
@@ -7,7 +7,7 @@ import * as models from './models';
 type Props = {
   shouldRenderLabel: boolean;
   link: models.Link;
-}
+};
 
 export const Link: React.FC<Props> = props => {
   const { link, shouldRenderLabel } = props;
@@ -15,30 +15,34 @@ export const Link: React.FC<Props> = props => {
   switch (link.kind) {
     case 'internal':
       return renderInternalLink(link);
+
     case 'external':
       return renderExternalLink(link);
+
+    default: {
+      const badLink: never = link;
+      console.error('bad link kind', badLink);
+
+      return null;
+    }
   }
 
-  function renderExternalLink(link: models.ExternalLink) {
+  function renderExternalLink(x: models.ExternalLink) {
     const classes = useStyles();
 
-    const { label, target } = link;
+    const { label, target } = x;
+
     return (
-      <a
-        className={classes.root}
-        href={target}
-      >
-        <div className={classes.label}>
-          {label}
-        </div>
+      <a className={classes.root} href={target}>
+        <div className={classes.label}>{label}</div>
       </a>
-    )
+    );
   }
 
-  function renderInternalLink(link: models.InternalLink) {
+  function renderInternalLink(x: models.InternalLink) {
     const classes = useStyles();
 
-    const { label, target, icon } = link;
+    const { label, target, icon } = x;
 
     return (
       <NavLink
@@ -58,12 +62,8 @@ export const Link: React.FC<Props> = props => {
             </div>
           </div>
         )}
-        {shouldRenderLabel && (
-          <div className={classes.label}>
-            {label}
-          </div>
-        )}
-      </NavLink >
+        {shouldRenderLabel && <div className={classes.label}>{label}</div>}
+      </NavLink>
     );
   }
 };
