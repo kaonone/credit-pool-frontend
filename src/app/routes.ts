@@ -14,6 +14,7 @@ const rawTree = {
   history: null,
   bounty: null,
   liquidations: null,
+  governance: null,
   'privacy-policy': null,
   'terms-of-service': null,
 };

@@ -1,4 +1,4 @@
 export type SidebarIcon = {
-  active: React.ComponentType;
-  inactive: React.ComponentType;
+  Active: React.ComponentType;
+  Inactive: React.ComponentType;
 }

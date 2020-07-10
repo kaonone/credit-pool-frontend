@@ -3,7 +3,7 @@ import * as React from 'react';
 import { SidebarIcon } from './models';
 
 export const Liquidations: SidebarIcon = {
-  active: () => (
+  Active: () => (
     <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
       <defs>
         <linearGradient id="prefix__b3" x1="100%" x2="0%" y1="50%" y2="50%">
@@ -21,7 +21,7 @@ export const Liquidations: SidebarIcon = {
     </svg>
   ),
 
-  inactive: () => (
+  Inactive: () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24">
       <g fill="none" fillRule="evenodd">
         <path fill="#0A0A0E" fillOpacity=".01" d="M0 0H24V24H0z" transform="translate(.5)" />

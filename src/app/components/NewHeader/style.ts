@@ -13,10 +13,16 @@ export const useStyles = makeStyles(theme => ({
   },
 
   authButton: {
-    marginLeft: '40px',
+    marginRight: '50px',
   },
 
   rightPart: {
     display: 'flex',
+  },
+
+  links: {
+    display: 'flex',
+    marginLeft: '10px',
+    alignItems: 'center',
   },
 }), { name: 'header' });

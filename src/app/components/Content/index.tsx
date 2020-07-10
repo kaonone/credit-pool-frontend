@@ -16,6 +16,7 @@ export const Content: React.FC = () => {
       <Route exact path={routes.borrow.getRoutePath()} component={makeUnimplementedComponent('Borrow')} />
       <Route exact path={routes.liquidations.getRoutePath()} component={makeUnimplementedComponent('Liquidations')} />
       <Route exact path={routes.history.getRoutePath()} component={makeUnimplementedComponent('History')} />
+      <Route exact path={routes.stats.getRoutePath()} component={pages.StatsPage} />
       <Route exact path={routes['privacy-policy'].getRoutePath()} component={makeUnimplementedComponent('Privacy policy')} />
       <Route exact path={routes['terms-of-service'].getRoutePath()} component={makeUnimplementedComponent('Terms of service')} />
       <Redirect to="/" />

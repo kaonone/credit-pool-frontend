@@ -4,42 +4,42 @@ import cn from 'classnames';
 import { routes } from '../../routes';
 import { useStyles } from './style';
 import * as icons from './icons';
-import { Link } from './models';
+import * as Link from '../Link';
 import * as components from './components';
 
-export const upperLinks: Link[] = [
+const upperLinks: Link.models.Link[] = [
   {
     target: routes.account,
     label: 'Account',
-    Icon: icons.Account,
+    icon: icons.Account,
   },
 
   {
-    target: "/",
+    target: routes.lend,
     label: 'Lend',
-    Icon: icons.Lend,
+    icon: icons.Lend,
   },
 
   {
     target: routes.borrow,
     label: 'Borrow',
-    Icon: icons.Borrow,
+    icon: icons.Borrow,
   },
 
   {
     target: routes.liquidations,
     label: 'Liquidations',
-    Icon: icons.Liquidations,
+    icon: icons.Liquidations,
   },
 
   {
     target: routes.history,
     label: 'History',
-    Icon: icons.History,
+    icon: icons.History,
   },
 ];
 
-export const lowerLinks: Link[] = [
+const lowerLinks: Link.models.Link[] = [
   { target: routes['privacy-policy'], label: 'Privacy policy' },
   { target: routes['terms-of-service'], label: 'Terms of service' },
 ]
@@ -82,7 +82,7 @@ const LowerLinks: React.FC = () => {
 };
 
 function makeLinkRenderer(shouldRenderLabel: boolean) {
-  return (link: Link) => {
+  return (link: Link.models.Link) => {
     return (
       <components.Link
         key={link.label}

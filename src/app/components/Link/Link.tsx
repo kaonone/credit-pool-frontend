@@ -2,15 +2,15 @@ import React from 'react';
 import { NavLink } from 'react-router-dom'
 
 import { useStyles } from './style';
-import { Link as LinkModel } from '../../models';
+import * as models from './models';
 
 type Props = {
   shouldRenderLabel: boolean;
-  link: LinkModel;
+  link: models.Link;
 }
 
 export const Link: React.FC<Props> = props => {
-  const { link: { label, target, Icon }, shouldRenderLabel } = props;
+  const { link: { label, target, icon }, shouldRenderLabel } = props;
 
   const classes = useStyles();
 
@@ -26,13 +26,13 @@ export const Link: React.FC<Props> = props => {
       activeClassName={classes.active}
       exact
     >
-      {Icon && (
+      {icon && (
         <div className={classes.icon}>
           <div className={classes.activeIcon}>
-            <Icon.active />
+            <icon.Active />
           </div>
           <div className={classes.inactiveIcon}>
-            <Icon.inactive />
+            <icon.Inactive />
           </div>
         </div>
       )}

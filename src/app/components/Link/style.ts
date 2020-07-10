@@ -3,7 +3,6 @@ import { makeStyles } from 'utils/styles';
 export const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
-    marginTop: '30px',
     color: theme.colors.white,
     textDecoration: 'none',
     fontSize: '16px',

@@ -5,21 +5,25 @@ import { ThemeButton } from 'services/theme';
 
 import { useStyles } from './style';
 import { Logo } from './icons';
+import { Links } from './Links';
 
 export const NewHeader: React.FC = () => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <header className={classes.root}>
       <div className={classes.leftPart}>
         <Logo />
+        <nav className={classes.links}>
+          <Links />
+        </nav>
+      </div>
+      <div className={classes.rightPart}>
         <div className={classes.authButton}>
           <AuthButton />
         </div>
-      </div>
-      <div className={classes.rightPart}>
         <ThemeButton />
       </div>
-    </div>
+    </header>
   );
 }
