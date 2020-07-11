@@ -4,7 +4,7 @@ export type SidebarIcon = models.Icon;
 
 export type AbstractLink = {
   label: string;
-  target: string;
+  ref: string;
 };
 
 export type InternalLink = AbstractLink & {

@@ -30,14 +30,14 @@ export const Link: React.FC<Props> = props => {
   function renderExternalLink(x: models.ExternalLink) {
     const classes = useStyles();
 
-    const { label, target } = x;
+    const { label, ref } = x;
 
     return (
       <a
         target="_blank"
         rel="noopener noreferrer"
         className={classes.root}
-        href={target}
+        href={ref}
       >
         <div className={classes.label}>{label}</div>
       </a>
@@ -47,12 +47,12 @@ export const Link: React.FC<Props> = props => {
   function renderInternalLink(x: models.InternalLink) {
     const classes = useStyles();
 
-    const { label, target, icon } = x;
+    const { label, ref, icon } = x;
 
     return (
       <NavLink
         key={label}
-        to={target}
+        to={ref}
         className={classes.root}
         activeClassName={classes.active}
         exact
