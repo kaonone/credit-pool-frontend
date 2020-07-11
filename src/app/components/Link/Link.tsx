@@ -33,7 +33,12 @@ export const Link: React.FC<Props> = props => {
     const { label, target } = x;
 
     return (
-      <a className={classes.root} href={target}>
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        className={classes.root}
+        href={target}
+      >
         <div className={classes.label}>{label}</div>
       </a>
     );
