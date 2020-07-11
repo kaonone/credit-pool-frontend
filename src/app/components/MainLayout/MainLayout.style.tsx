@@ -5,18 +5,14 @@ export const useStyles = makeStyles(
     root: {
       background: theme.colors.codGray,
       display: 'flex',
-    },
-
-    sidebar: {
-      position: 'sticky',
-      top: 0,
-      height: '100vh',
+      height: '100%'
     },
 
     headerAndContent: {
       display: 'flex',
       flex: 1,
       flexDirection: 'column',
+      overflow: 'auto',
       paddingLeft: 50,
       paddingRight: 30,
     },

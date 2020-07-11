@@ -212,6 +212,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
             margin: 0,
             fontSize: '1rem',
             transition: defaultTheme.transitions.create('background-color'),
+            overflow: 'hidden',
           },
 
           'html, body, #root': {
