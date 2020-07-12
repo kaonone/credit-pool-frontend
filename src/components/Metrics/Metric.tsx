@@ -26,10 +26,12 @@ export function Metric(props: Props) {
           {iconBeforeTitle && <>{iconBeforeTitle}&nbsp;</>}
           {title}
           <Tooltip title={titleDescription} placement="right">
-            <InfoIcon
-              className={classes.infoIcon}
-              backgroundColor={theme.palette.type === 'dark' ? colors.white : colors.gray}
-            />
+            <span>
+              <InfoIcon
+                className={classes.infoIcon}
+                backgroundColor={theme.palette.type === 'dark' ? colors.white : colors.gray}
+              />
+            </span>
           </Tooltip>
         </Typography>
         {content && <Grid className={classes.content}>{content}</Grid>}
