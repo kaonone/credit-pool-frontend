@@ -27,9 +27,12 @@ export function Metric(props: Props) {
           {title}
           <Tooltip title={titleDescription} placement="right">
             <span>
+              &nbsp;
               <InfoIcon
                 className={classes.infoIcon}
                 backgroundColor={theme.palette.type === 'dark' ? colors.white : colors.gray}
+                width={15}
+                height={15}
               />
             </span>
           </Tooltip>
