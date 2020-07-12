@@ -10,6 +10,7 @@ export { TwitterIcon } from './TwitterIcon';
 export { GithubIcon } from './GithubIcon';
 export { TelegramIcon } from './TelegramIcon';
 export { DiscordIcon } from './DiscordIcon';
+export { AKROIcon } from './AKROIcon';
 export { getSocialIconByLink } from './getSocialIconByLink';
 export * from './MainSvgGradient';
 export { MoneyIcon } from './MoneyIcon';

@@ -354,6 +354,9 @@ const en = {
       apy: {
         description: 'Here is a title description',
       },
+      akro: {
+        description: 'Here is a title description',
+      },
     },
   },
 };

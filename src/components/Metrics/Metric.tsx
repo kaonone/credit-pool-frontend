@@ -9,12 +9,13 @@ type Props = {
   title: string;
   titleDescription: string;
   content: JSX.Element;
+  iconBeforeTitle?: JSX.Element;
   button?: JSX.Element;
   additionalInfo?: JSX.Element;
 };
 
 export function Metric(props: Props) {
-  const { title, titleDescription, content, button, additionalInfo } = props;
+  const { title, titleDescription, content, button, additionalInfo, iconBeforeTitle } = props;
   const classes = useStyles();
   const theme = useTheme();
 
@@ -22,6 +23,7 @@ export function Metric(props: Props) {
     <Grid container direction="column" justify="space-between" className={classes.root}>
       <Grid item xs>
         <Typography variant="h6" component="h6" className={classes.title}>
+          {iconBeforeTitle && <>{iconBeforeTitle}&nbsp;</>}
           {title}
           <Tooltip title={titleDescription} placement="right">
             <InfoIcon
