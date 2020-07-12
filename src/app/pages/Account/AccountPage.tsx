@@ -33,7 +33,7 @@ export function AccountPage() {
               />
             </Grid>
             <Grid item xs className={classes.metric}>
-              <APY percent="11.06" period="24h" />
+              <APY percent="11.06" period="24h" onWithdrawClick={() => undefined} />
             </Grid>
             <Grid item xs className={classes.metric}>
               <AKRO

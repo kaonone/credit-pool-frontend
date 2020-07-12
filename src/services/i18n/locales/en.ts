@@ -353,6 +353,7 @@ const en = {
       },
       apy: {
         description: 'Here is a title description',
+        withdraw: 'Withdraw',
       },
       akro: {
         description: 'Here is a title description',
