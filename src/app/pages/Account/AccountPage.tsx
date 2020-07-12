@@ -1,4 +1,5 @@
 import React from 'react';
+import Divider from '@material-ui/core/Divider';
 
 import { MyBalance, MyPoolShare, APY, AKRO } from 'components/Metrics';
 import { Grid, Typography } from 'components';
@@ -12,7 +13,7 @@ export function AccountPage() {
   return (
     <WithAccount>
       {({ account }) => (
-        <Grid container spacing={3}>
+        <Grid container spacing={3} justify="space-between">
           <Grid item container xs={12}>
             <Grid item xs className={classes.metric}>
               <MyBalance
@@ -32,6 +33,7 @@ export function AccountPage() {
                 }}
               />
             </Grid>
+            <Divider orientation="vertical" className={classes.divider} />
             <Grid item xs className={classes.metric}>
               <APY percent="11.06" period="24h" onWithdrawClick={() => undefined} />
             </Grid>
@@ -66,7 +68,12 @@ export function AccountPage() {
 const useStyles = makeStyles(
   () => ({
     metric: {
-      height: 400,
+      height: 300,
+    },
+    divider: {
+      height: 119,
+      marginLeft: 60,
+      marginRight: 60,
     },
   }),
   { name: 'AccountPage' },
