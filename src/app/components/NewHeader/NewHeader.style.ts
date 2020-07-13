@@ -25,6 +25,7 @@ export const useStyles = makeStyles(
 
     rightPart: {
       display: 'flex',
+      alignItems: 'center',
     },
 
     links: {
