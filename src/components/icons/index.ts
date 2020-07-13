@@ -15,6 +15,7 @@ export { USDTIcon } from './USDTIcon';
 export { TUSDIcon } from './TUSDIcon';
 export { DAIIcon } from './DAIIcon';
 export { USDCIcon } from './USDCIcon';
+export { DeFiPulseIcon } from './DeFiPulseIcon';
 export { getSocialIconByLink } from './getSocialIconByLink';
 export * from './MainSvgGradient';
 export { MoneyIcon } from './MoneyIcon';
