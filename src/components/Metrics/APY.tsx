@@ -25,7 +25,7 @@ export function APY(props: Props) {
       title="APY"
       titleDescription={t(tKeys.description.getKey())}
       content={<Typography className={classes.percent}>{percent}&#37;</Typography>}
-      additionalInfo={<Typography className={classes.period}>{period}</Typography>}
+      additionalInfo={<Typography>{period}</Typography>}
       button={
         <Button variant="contained" color="primary" type="submit" onClick={onWithdrawClick}>
           {t(tKeys.withdraw.getKey())}
@@ -41,10 +41,6 @@ const useStyles = makeStyles(
       fontSize: 32,
       fontWeight: 300,
       lineHeight: 'normal',
-    },
-    period: {
-      fontSize: 16,
-      fontWeight: 400,
     },
   }),
   { name: 'APY' },
