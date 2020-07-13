@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { AuthButton } from 'features/auth';
 import { ThemeButton } from 'services/theme';
@@ -13,7 +14,10 @@ export const NewHeader: React.FC = () => {
   return (
     <header className={classes.root}>
       <div className={classes.leftPart}>
-        <Logo />
+        <Link to="/" className={classes.logo}>
+          <Logo />
+        </Link>
+
         <nav className={classes.links}>
           <Links />
         </nav>

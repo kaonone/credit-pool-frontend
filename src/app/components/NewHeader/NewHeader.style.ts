@@ -14,12 +14,18 @@ export const useStyles = makeStyles(
       display: 'flex',
     },
 
+    logo: {
+      display: 'flex',
+    },
+
     authButton: {
       marginRight: 50,
+      display: 'flex',
     },
 
     rightPart: {
       display: 'flex',
+      alignItems: 'center',
     },
 
     links: {

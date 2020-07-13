@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Layout, Benefits } from 'components';
+import { Header } from 'app/components/CreditPoolHeader/Header';
 import { Footer } from 'app/components/Footer/Footer';
 import { makeStyles } from 'utils/styles';
 
@@ -11,6 +12,9 @@ export function CreditPool() {
   const classes = useStyles();
   return (
     <Layout>
+      <Layout.Header>
+        <Header />
+      </Layout.Header>
       <Layout.Container>
         <CreditPoolIntro />
         <Benefits benefits={benefits} className={classes.section} />
