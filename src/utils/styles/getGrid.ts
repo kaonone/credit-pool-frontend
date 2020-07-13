@@ -33,7 +33,7 @@ export function getGrid(
           ...acc,
           [theme.breakpoints.up(breakpoint)]: {
             ...(container[theme.breakpoints.up(breakpoint)] as StyleRules),
-            width: `100%`,
+            width: `calc(100% + ${hPadding}px)`,
             margin: `${-vPadding / 2}px ${-hPadding / 2}px`,
           },
         }),
