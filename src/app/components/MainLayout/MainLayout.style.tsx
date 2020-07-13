@@ -4,7 +4,7 @@ export const useStyles = makeStyles(
   theme => ({
     root: {
       display: 'flex',
-      height: '100%'
+      height: '100%',
     },
 
     headerAndContent: {

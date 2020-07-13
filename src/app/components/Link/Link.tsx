@@ -33,12 +33,7 @@ export const Link: React.FC<Props> = props => {
     const { label, ref } = x;
 
     return (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        className={classes.root}
-        href={ref}
-      >
+      <a target="_blank" rel="noopener noreferrer" className={classes.root} href={ref}>
         <div className={classes.label}>{label}</div>
       </a>
     );
@@ -50,13 +45,7 @@ export const Link: React.FC<Props> = props => {
     const { label, ref, icon } = x;
 
     return (
-      <NavLink
-        key={label}
-        to={ref}
-        className={classes.root}
-        activeClassName={classes.active}
-        exact
-      >
+      <NavLink key={label} to={ref} className={classes.root} activeClassName={classes.active} exact>
         {icon && (
           <div className={classes.icon}>
             <div className={classes.activeIcon}>
