@@ -13,7 +13,7 @@ export function CreditPool() {
   return (
     <Layout>
       <Layout.Header>
-        <Header customNavItems={[]} />
+        <Header />
       </Layout.Header>
       <Layout.Container>
         <CreditPoolIntro />

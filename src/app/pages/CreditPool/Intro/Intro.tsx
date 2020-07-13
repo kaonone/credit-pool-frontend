@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
+import { routes } from 'app/routes';
 import { Button, Intro, Link, LinkProps } from 'components';
 import { makeStyles } from 'utils/styles';
 
@@ -26,17 +28,14 @@ export function CreditPoolIntro() {
     >
       <div className={classes.content}>
         Try it on
-        <Button
+        <Button<typeof RouterLink>
           className={classes.button}
           fullWidth
           size="large"
           variant="contained"
           color="primary"
-          component={Link as React.FunctionComponent<Omit<LinkProps, 'variant'>>}
-          underline="none"
-          href="https://sparta.akropolis.io/stats"
-          target="_blank"
-          rel="noopener noreferrer"
+          component={RouterLink}
+          to={routes.stats.getRedirectPath()}
         >
           Mainnet
         </Button>

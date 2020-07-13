@@ -8,6 +8,15 @@ const rawTree = {
   stats: null,
   proposals: null,
   distributions: null,
+  lend: null,
+  borrow: null,
+  sell: null,
+  history: null,
+  bounty: null,
+  liquidations: null,
+  governance: null,
+  'privacy-policy': null,
+  'terms-of-service': null,
 };
 
 export const routes = build(rawTree);
