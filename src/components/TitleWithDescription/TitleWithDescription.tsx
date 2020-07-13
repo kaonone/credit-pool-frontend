@@ -2,7 +2,7 @@ import * as React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { InfoIcon } from 'components/icons/InfoIcon2';
+import { InfoIconV2 } from 'components/icons';
 import { makeStyles, useTheme, colors } from 'utils/styles';
 
 type Props = {
@@ -24,7 +24,7 @@ export function TitleWithDescription(props: Props) {
       <Tooltip title={description} placement="right">
         <span>
           &nbsp;
-          <InfoIcon
+          <InfoIconV2
             className={classes.infoIcon}
             backgroundColor={theme.palette.type === 'dark' ? colors.white : colors.gray}
             width={15}

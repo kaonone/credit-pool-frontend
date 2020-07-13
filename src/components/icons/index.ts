@@ -27,5 +27,6 @@ export { SellCashIcon } from './SellCashIcon';
 export { BuyCashIcon } from './BuyCashIcon';
 export { AngleArrow } from './AngleArrow';
 export { InfoIcon } from './InfoIcon';
+export { InfoIcon as InfoIconV2 } from './InfoIconV2';
 export { Sun } from './Sun';
 export { Moon } from './Moon';
