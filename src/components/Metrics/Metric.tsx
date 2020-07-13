@@ -29,9 +29,7 @@ export function Metric(props: Props) {
         {content && <Grid className={classes.content}>{content}</Grid>}
         {additionalInfo}
       </Grid>
-      <Grid item xs>
-        {button}
-      </Grid>
+      <Grid item>{button}</Grid>
     </Grid>
   );
 }

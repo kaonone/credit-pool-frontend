@@ -84,7 +84,7 @@ export function MySummary() {
 const useStyles = makeStyles(
   () => ({
     metric: {
-      height: 300,
+      height: 200,
     },
     divider: {
       height: 119,
