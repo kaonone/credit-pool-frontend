@@ -112,8 +112,7 @@ const config: webpack.Configuration = {
                   source: `assets/${
                     {
                       sandbox: 'ghPageRootSandbox',
-                      'beta-defi': 'ghPageRootBetaDefi',
-                      beta: 'ghPageRoot',
+                      testnet: 'ghPageRootTestnet',
                       mainnet: 'ghPageRootMainnet',
                     }[mode]
                   }/**`,

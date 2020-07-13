@@ -135,10 +135,10 @@ function getTheme(type: 'light' | 'dark'): Theme {
       ],
       values: {
         xs: 0,
-        sm: 375,
-        md: 767,
-        lg: 1023,
-        xl: 1919,
+        sm: 600,
+        md: 960,
+        lg: 1280,
+        xl: 1920,
         desktopXL: 2560,
         desktopLG: 1920,
         desktopMD: 1440,
@@ -216,6 +216,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
             margin: 0,
             fontSize: '1rem',
             transition: defaultTheme.transitions.create('background-color'),
+            overflow: 'hidden',
           },
 
           'html, body, #root': {

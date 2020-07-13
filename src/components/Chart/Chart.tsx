@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as R from 'ramda';
 import Grid from '@material-ui/core/Grid';
-import { LineChart, XAxis, YAxis, CartesianGrid, Line, ResponsiveContainer } from 'recharts';
+import { LineChart, XAxis, YAxis, CartesianGrid, Line } from 'recharts';
 
 import { Button } from '../Button/Button';
 import { makeFormatDateByPeriod, getTicks } from './helpers';
@@ -83,34 +83,32 @@ function Chart<P extends IPoint>(props: IProps<P>) {
   return (
     <div className={classes.root}>
       <div className={classes.graphic}>
-        <ResponsiveContainer>
-          <LineChart data={ticks} margin={{ left: 18, right: 18 }}>
-            <XAxis
-              dataKey="date"
-              type="number"
-              axisLine={false}
-              interval={0}
-              domain={[ticks[0].date, ticks[ticks.length - 1].date]}
-              allowDataOverflow
-              ticks={R.pluck('date', ticks)}
-              tickSize={0}
-              tick={renderTick}
+        <LineChart data={ticks} margin={{ left: 18, right: 18 }}>
+          <XAxis
+            dataKey="date"
+            type="number"
+            axisLine={false}
+            interval={0}
+            domain={[ticks[0].date, ticks[ticks.length - 1].date]}
+            allowDataOverflow
+            ticks={R.pluck('date', ticks)}
+            tickSize={0}
+            tick={renderTick}
+          />
+          <YAxis padding={{ top: 30, bottom: 1 }} hide domain={['dataMin', 'dataMax']} />
+          <CartesianGrid stroke="#EAE9ED" horizontal={false} />
+          {lines.map(line => (
+            <Line
+              key={String(line)}
+              dataKey={String(line)}
+              stroke={lineColors[line] || '#613AAF'}
+              strokeWidth={2}
+              dot={false}
+              connectNulls
+              isAnimationActive={false}
             />
-            <YAxis padding={{ top: 30, bottom: 1 }} hide domain={['dataMin', 'dataMax']} />
-            <CartesianGrid stroke="#EAE9ED" horizontal={false} />
-            {lines.map(line => (
-              <Line
-                key={String(line)}
-                dataKey={String(line)}
-                stroke={lineColors[line] || '#613AAF'}
-                strokeWidth={2}
-                dot={false}
-                connectNulls
-                isAnimationActive={false}
-              />
-            ))}
-          </LineChart>
-        </ResponsiveContainer>
+          ))}
+        </LineChart>
       </div>
       <PeriodSwitch period={period} onSelect={setPeriod} />
     </div>
