@@ -365,6 +365,7 @@ const en = {
       apy: 'APY',
       earned: 'Earned',
       balance: 'Balance',
+      description: 'Here is a title description',
     },
   },
 };

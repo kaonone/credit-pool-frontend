@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { makeStyles, rgba, colors } from 'utils/styles';
 
+import { TitleWithDescription } from '../TitleWithDescription/TitleWithDescription';
 import { DAIIcon, USDTIcon, USDCIcon, TUSDIcon } from '../icons';
 
 type Asset = 'DAI' | 'USDC' | 'USDT' | 'TUSD';
@@ -41,7 +42,13 @@ export function PortfolioSnapshot(props: Props) {
   return (
     <div>
       <table className={classes.table}>
-        <caption className={classes.caption}>{t(tKeys.caption.getKey())}</caption>
+        <caption className={classes.caption}>
+          <TitleWithDescription
+            title={t(tKeys.caption.getKey())}
+            titleSize="big"
+            description={t(tKeys.description.getKey())}
+          />
+        </caption>
         <thead>
           <tr>
             {columns.map(x => (
@@ -120,8 +127,6 @@ const useStyles = makeStyles(
     },
     caption: {
       textAlign: 'left',
-      fontSize: 22,
-      fontWeight: 300,
     },
     assetName: {
       marginLeft: 10,
