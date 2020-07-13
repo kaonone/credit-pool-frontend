@@ -96,5 +96,7 @@ export const colors = {
   iris: '#b2a1ff',
   blueViolet: '#8f70d2',
   lavenderBlue: '#6742f4',
-  coal: '#101016',
+
+  // v2
+  darkBlueMagenta: '#101016',
 };

@@ -8,16 +8,16 @@ const links: Link.models.Link[] = [
   {
     kind: 'internal',
     label: 'Statistics',
-    target: routes.stats.getRoutePath(),
+    ref: routes.stats.getRoutePath(),
   },
   {
     kind: 'internal',
-    target: routes.governance.getRoutePath(),
+    ref: routes.governance.getRoutePath(),
     label: 'Governance',
   },
   {
     kind: 'external',
-    target: 'https://wiki.akropolis.io/spartafaq/',
+    ref: 'https://wiki.akropolis.io/spartafaq/',
     label: 'Wiki',
   },
 ];

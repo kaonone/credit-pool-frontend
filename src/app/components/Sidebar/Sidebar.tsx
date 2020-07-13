@@ -10,35 +10,35 @@ import * as components from './components';
 const upperLinks: Link.models.Link[] = [
   {
     kind: 'internal',
-    target: routes.account.getRoutePath(),
+    ref: routes.account.getRoutePath(),
     label: 'Account',
     icon: icons.Account,
   },
 
   {
     kind: 'internal',
-    target: routes.lend.getRoutePath(),
+    ref: routes.lend.getRoutePath(),
     label: 'Lend',
     icon: icons.Lend,
   },
 
   {
     kind: 'internal',
-    target: routes.borrow.getRoutePath(),
+    ref: routes.borrow.getRoutePath(),
     label: 'Borrow',
     icon: icons.Borrow,
   },
 
   {
     kind: 'internal',
-    target: routes.liquidations.getRoutePath(),
+    ref: routes.liquidations.getRoutePath(),
     label: 'Liquidations',
     icon: icons.Liquidations,
   },
 
   {
     kind: 'internal',
-    target: routes.history.getRoutePath(),
+    ref: routes.history.getRoutePath(),
     label: 'History',
     icon: icons.History,
   },
@@ -48,11 +48,11 @@ const lowerLinks: Link.models.Link[] = [
   {
     kind: 'internal',
     label: 'Privacy policy',
-    target: routes['privacy-policy'].getRoutePath(),
+    ref: routes['privacy-policy'].getRoutePath(),
   },
   {
     kind: 'internal',
-    target: routes['terms-of-service'].getRoutePath(),
+    ref: routes['terms-of-service'].getRoutePath(),
     label: 'Terms of service',
   },
 ];

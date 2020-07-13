@@ -5,9 +5,10 @@ export const useStyles = makeStyles(
     root: {
       display: 'flex',
       height: '100%',
+      overflow: 'auto',
       flexDirection: 'column',
       padding: '100px 20px 20px 20px',
-      background: theme.colors.coal,
+      background: theme.colors.darkBlueMagenta,
       justifyContent: 'space-between',
       width: 180,
       transition: 'width 200ms',
