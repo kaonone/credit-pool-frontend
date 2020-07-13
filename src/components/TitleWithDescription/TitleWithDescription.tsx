@@ -25,7 +25,6 @@ export function TitleWithDescription(props: Props) {
         <span>
           &nbsp;
           <InfoIconV2
-            className={classes.infoIcon}
             backgroundColor={theme.palette.type === 'dark' ? colors.white : colors.gray}
             width={15}
             height={15}
@@ -50,12 +49,9 @@ const useStyles = makeStyles(
       fontSize: ({ titleSize }: Props) => (titleSize === 'big' ? 22 : 16),
       fontWeight: ({ titleSize }: Props) => (titleSize === 'big' ? 300 : 400),
     },
-    infoIcon: {
-      height: 15,
-    },
     content: {
       marginBottom: 8,
     },
   }),
-  { name: 'Metric' },
+  { name: 'TitleWithDescription' },
 );
