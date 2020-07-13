@@ -33,6 +33,7 @@ export { NavInline } from './NavInline/NavInline';
 export { Section } from './Section/Section';
 export { SocialLink } from './SocialLink/SocialLink';
 export { PortfolioSnapshot } from './PortfolioSnapshot/PortfolioSnapshot';
+export { ComingSoon } from './ComingSoon/ComingSoon';
 
 export * from './ErrorBoundary';
 export * from './Hint/Hint';
