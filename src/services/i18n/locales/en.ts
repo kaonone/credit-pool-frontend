@@ -366,6 +366,7 @@ const en = {
       earned: 'Earned',
       balance: 'Balance',
       description: 'Here is a title description',
+      loansIssued: 'Loans Issued',
     },
   },
 };

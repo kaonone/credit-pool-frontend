@@ -65,8 +65,8 @@ export function PortfolioSnapshot(props: Props) {
 
 function renderRow(classes: ReturnType<typeof useStyles>) {
   return (rowData: AssetInfo) => {
-    const assetCell = (
-      <>
+    return (
+      <tr key={rowData.asset}>
         <td>
           <div className={classes.assetCellContent}>
             {assetIcons[rowData.asset]}
@@ -76,10 +76,8 @@ function renderRow(classes: ReturnType<typeof useStyles>) {
         <td>{rowData.apy}</td>
         <td>{rowData.earned}</td>
         <td>{rowData.balance}</td>
-      </>
+      </tr>
     );
-
-    return <tr key={rowData.asset}>{assetCell}</tr>;
   };
 }
 
@@ -87,10 +85,12 @@ function renderLoansIssued(
   classes: ReturnType<typeof useStyles>,
   loansIssued: Props['loansIssued'],
 ) {
+  const { t } = useTranslate();
+
   return (
     <Grid container xs={12} justify="space-between">
       <Grid item xs>
-        Loans Issued
+        {t(tKeys.loansIssued.getKey())}
       </Grid>
       <Grid item container alignItems="center" justify="flex-end" xs>
         {assetIcons.DAI}
@@ -114,7 +114,6 @@ const useStyles = makeStyles(
       },
       '& th': {
         fontWeight: 400,
-        textAlign: 'right',
         paddingBottom: 20,
       },
       '& th:first-child': {
