@@ -34,7 +34,7 @@
       "command": "better-npm-run node webpack --config webpack/prod.ts"
     },
     "dev": {
-      "command": "better-npm-run node webpack-dev-server --open --config webpack/dev.ts"
+      "command": "better-npm-run node webpack-dev-server --config webpack/dev.ts"
     }
   },
   "author": "Serdtsev Dmitriy",
