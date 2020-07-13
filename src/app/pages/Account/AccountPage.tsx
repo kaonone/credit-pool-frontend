@@ -42,7 +42,7 @@ export function AccountPage() {
           />
         </Grid>
       </Grid>
-      <Divider />
+      <Divider className={classes.contentDivider} />
       <Grid container>
         <Grid item xs={8} className={classes.portfolioSnapshot}>
           <PortfolioSnapshot
@@ -89,6 +89,10 @@ const useStyles = makeStyles(
       height: 119,
       marginLeft: 60,
       marginRight: 60,
+    },
+    contentDivider: {
+      marginTop: 45,
+      marginBottom: 45,
     },
     portfolioSnapshot: {
       marginLeft: 30,
