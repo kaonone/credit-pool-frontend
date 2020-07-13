@@ -9,7 +9,7 @@ export function MySummary() {
   const classes = useStyles();
 
   return (
-    <Grid container spacing={3}>
+    <div>
       <Grid item container xs={12}>
         <Grid item xs className={classes.metric}>
           <MyBalance
@@ -77,7 +77,7 @@ export function MySummary() {
           />
         </Grid>
       </Grid>
-    </Grid>
+    </div>
   );
 }
 
