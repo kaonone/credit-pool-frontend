@@ -39,20 +39,6 @@ export function CreditPoolIntro() {
         >
           Mainnet
         </Button>
-        {/* <Button
-          className={classes.button}
-          fullWidth
-          size="large"
-          variant="contained"
-          color="primary"
-          component={Link as React.FunctionComponent<Omit<LinkProps, 'variant'>>}
-          underline="none"
-          href="https://sparta.akropolis.io/stats"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Mainnet
-        </Button> */}
         or
         <Button
           className={classes.button}

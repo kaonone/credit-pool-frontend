@@ -14,7 +14,7 @@ export const NewHeader: React.FC = () => {
   return (
     <header className={classes.root}>
       <div className={classes.leftPart}>
-        <Link to="/" className={classes.logo}>
+        <Link to="/">
           <Logo />
         </Link>
 

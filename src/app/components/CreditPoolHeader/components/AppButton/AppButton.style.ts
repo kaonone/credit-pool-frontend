@@ -6,5 +6,5 @@ export const useStyles = makeStyles(
       padding: 0,
     },
   }),
-  { name: 'appButton' },
+  { name: 'app-button' },
 );

@@ -64,71 +64,6 @@ export const useStyles = makeStyles(theme => ({
     },
   },
 
-  withWave: {
-    position: 'relative',
-
-    '&$top': {
-      paddingBottom: theme.spacing(7),
-      [theme.breakpoints.up('tabletXS')]: {
-        paddingBottom: theme.spacing(10),
-      },
-      [theme.breakpoints.up('tabletSM')]: {
-        paddingBottom: theme.spacing(13),
-      },
-      [theme.breakpoints.up('desktopXS')]: {
-        paddingBottom: theme.spacing(14),
-      },
-    },
-
-    '&$bottom': {
-      marginTop: 'auto',
-
-      paddingTop: theme.spacing(10),
-      [theme.breakpoints.up('tabletXS')]: {
-        paddingTop: theme.spacing(12),
-      },
-      [theme.breakpoints.up('desktopXS')]: {
-        paddingTop: theme.spacing(13),
-      },
-    },
-  },
-
-  waveContainer: {
-    position: 'absolute',
-    zIndex: -1,
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-
-  waveStrut: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.type === 'light' ? theme.colors.athensGray : theme.colors.shark,
-  },
-
-  wave: {
-    maxHeight: '100%',
-    width: '100%',
-    transition: theme.transitions.create('color'),
-    color: theme.palette.type === 'light' ? theme.colors.athensGray : theme.colors.shark,
-    transformOrigin: 'right',
-
-    '&$top': {
-      [theme.breakpoints.up('tabletSM')]: {
-        transform: 'scaleX(1.06)',
-      },
-      [theme.breakpoints.up('desktopMD')]: {
-        transform: 'scaleX(1.03)',
-      },
-    },
-  },
-
-  top: {},
-  bottom: {},
-
   socials: {
     position: 'fixed',
     display: 'none',
@@ -140,6 +75,4 @@ export const useStyles = makeStyles(theme => ({
       display: 'block',
     },
   },
-
-  isAbsolute: {},
 }));
