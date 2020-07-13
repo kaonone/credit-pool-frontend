@@ -45,9 +45,6 @@ const useStyles = makeStyles(
       alignContent: 'center',
       lineHeight: 'normal',
     },
-    infoIcon: {
-      height: 15,
-    },
     content: {
       marginBottom: 8,
     },
