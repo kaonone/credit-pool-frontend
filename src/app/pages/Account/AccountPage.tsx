@@ -2,7 +2,7 @@ import React from 'react';
 import Divider from '@material-ui/core/Divider';
 
 import { MyBalance, MyPoolShare, APY, AKRO } from 'components/Metrics';
-import { Grid, Typography } from 'components';
+import { Grid, Typography, PortfolioSnapshot } from 'components';
 import { MyLoans, MyGuarantees } from 'features/loans';
 import { makeStyles } from 'utils/styles';
 
@@ -47,6 +47,40 @@ export function AccountPage() {
               />
             </Grid>
           </Grid>
+          <Divider />
+          <Grid container>
+            <Grid item xs={8} className={classes.portfolioSnapshot}>
+              <PortfolioSnapshot
+                data={[
+                  {
+                    asset: 'DAI',
+                    apy: '0.25%',
+                    earned: '100,220.45',
+                    balance: '123,220.45',
+                  },
+                  {
+                    asset: 'USDC',
+                    apy: '0.25%',
+                    earned: '100,220.45',
+                    balance: '123,220.45',
+                  },
+                  {
+                    asset: 'USDT',
+                    apy: '0.25%',
+                    earned: '100,220.45',
+                    balance: '123,220.45',
+                  },
+                  {
+                    asset: 'TUSD',
+                    apy: '0.25%',
+                    earned: '100,220.45',
+                    balance: '123,220.45',
+                  },
+                ]}
+                loansIssued="6,193.38"
+              />
+            </Grid>
+          </Grid>
           <Grid item xs={12}>
             <Typography variant="h6" gutterBottom>
               Lending
@@ -74,6 +108,9 @@ const useStyles = makeStyles(
       height: 119,
       marginLeft: 60,
       marginRight: 60,
+    },
+    portfolioSnapshot: {
+      marginLeft: 30,
     },
   }),
   { name: 'AccountPage' },

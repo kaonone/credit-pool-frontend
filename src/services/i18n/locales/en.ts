@@ -359,6 +359,13 @@ const en = {
         description: 'Here is a title description',
       },
     },
+    portfolioSnapshot: {
+      caption: 'Portfolio Snapshot',
+      asset: 'Asset',
+      apy: 'APY',
+      earned: 'Earned',
+      balance: 'Balance',
+    },
   },
 };
 
