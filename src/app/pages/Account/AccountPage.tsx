@@ -8,7 +8,7 @@ import { makeStyles } from 'utils/styles';
 export function AccountPage() {
   const classes = useStyles();
   return (
-    <Grid container spacing={3} justify="space-between">
+    <Grid container spacing={3} justify="space-between" className={classes.root}>
       <Grid item container xs={12}>
         <Grid item xs className={classes.metric}>
           <MyBalance
@@ -82,6 +82,10 @@ export function AccountPage() {
 
 const useStyles = makeStyles(
   () => ({
+    root: {
+      backgroundColor: '#13131b',
+      padding: '50px 60px',
+    },
     metric: {
       height: 300,
     },
