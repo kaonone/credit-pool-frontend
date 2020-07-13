@@ -3,7 +3,8 @@ import { makeStyles } from 'utils/styles';
 export const useStyles = makeStyles(
   theme => ({
     root: {
-      background: theme.colors.codGray,
+      background: theme.colors.darkBlueMagenta,
+      padding: '16px 50px',
       display: 'flex',
       justifyContent: 'space-between',
       marginBottom: 30,
