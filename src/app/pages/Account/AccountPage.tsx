@@ -30,18 +30,21 @@ export function AccountPage() {
         <TabsList value={selectedPage} className={classes.tabs} onChange={handleTabChange}>
           <Tab
             label="My Summary"
+            className={classes.tab}
             component={Link}
             value={routes.account.summary.getElementKey()}
             to={routes.account.summary.getRedirectPath()}
           />
           <Tab
             label="My Stakes"
+            className={classes.tab}
             component={Link}
             value={routes.account.stakes.getElementKey()}
             to={routes.account.stakes.getRedirectPath()}
           />
           <Tab
             label="My Borrows"
+            className={classes.tab}
             component={Link}
             value={routes.account.borrows.getElementKey()}
             to={routes.account.borrows.getRedirectPath()}
@@ -66,9 +69,13 @@ const useStyles = makeStyles(
     root: {
       backgroundColor: '#13131b',
       padding: '50px 60px',
+      borderRadius: 6,
     },
     tabs: {
       marginBottom: 40,
+    },
+    tab: {
+      minWidth: 112,
     },
   }),
   { name: 'AccountPage' },

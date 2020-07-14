@@ -22,12 +22,10 @@ export function TitleWithDescription(props: Props) {
       {iconBeforeTitle && <>{iconBeforeTitle}&nbsp;</>}
       {title}
       <Tooltip title={description} placement="right">
-        <span>
+        <span className={classes.infoIcon}>
           &nbsp;
           <InfoIconV2
             backgroundColor={theme.palette.type === 'dark' ? colors.white : colors.gray}
-            width={15}
-            height={15}
           />
         </span>
       </Tooltip>
@@ -51,6 +49,10 @@ const useStyles = makeStyles(
     },
     content: {
       marginBottom: 8,
+    },
+    infoIcon: {
+      display: 'flex',
+      alignItems: 'center',
     },
   }),
   { name: 'TitleWithDescription' },

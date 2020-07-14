@@ -8,8 +8,10 @@ type Props = {
   backgroundColor?: string;
 } & GetProps<typeof SvgIcon>;
 
-function InfoIcon({ backgroundColor, ...rest }: Props) {
-  const classes = useStyles();
+function InfoIcon(props: Props) {
+  const { backgroundColor, ...rest } = props;
+  const classes = useStyles(props);
+
   return (
     <SvgIcon {...rest} viewBox="0 0 16 16" classes={classes}>
       <path
@@ -21,10 +23,9 @@ function InfoIcon({ backgroundColor, ...rest }: Props) {
 }
 
 const useStyles = makeStyles(() => ({
-  root: {
-    width: 'auto',
-    height: 'auto',
-  },
+  root: ({ fontSize }: GetProps<typeof InfoIcon>) => ({
+    fontSize: fontSize === 'inherit' ? 'inherit' : 16,
+  }),
 }));
 
 export { InfoIcon };
