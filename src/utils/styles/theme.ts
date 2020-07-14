@@ -311,6 +311,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
         },
 
         scroller: {
+          zIndex: 1,
           overflow: 'hidden',
           borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
         },
