@@ -51,7 +51,7 @@ export function AmountInput<A extends Amount<ICurrency>>(props: AmountInputProps
 
   const defaultCurrency = currencies[0] as A['currency'] | undefined;
 
-  const currentValue = tokenAmount?.value || new BN(0);
+  const currentValue = tokenAmount?.toBN() || new BN(0);
   const currentCurrency = tokenAmount?.currency || defaultCurrency;
   const currentDecimals = currentCurrency?.decimals || 0;
 
