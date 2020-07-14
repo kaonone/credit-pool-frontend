@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { useTranslate } from 'services/i18n';
+
 import { useStyles } from './style';
 import * as models from './models';
 
@@ -11,6 +13,7 @@ type Props = {
 
 export const Link: React.FC<Props> = props => {
   const { link, shouldRenderLabel } = props;
+  const { t } = useTranslate();
 
   switch (link.kind) {
     case 'internal':
@@ -34,7 +37,7 @@ export const Link: React.FC<Props> = props => {
 
     return (
       <a target="_blank" rel="noopener noreferrer" className={classes.root} href={ref}>
-        <div className={classes.label}>{label}</div>
+        <div className={classes.label}>{t(label)}</div>
       </a>
     );
   }
@@ -56,7 +59,7 @@ export const Link: React.FC<Props> = props => {
             </div>
           </div>
         )}
-        {shouldRenderLabel && <div className={classes.label}>{label}</div>}
+        {shouldRenderLabel && <div className={classes.label}>{t(label)}</div>}
       </NavLink>
     );
   }

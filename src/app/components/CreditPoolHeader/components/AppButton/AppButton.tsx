@@ -3,11 +3,13 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { Button, ButtonProps } from 'components';
 import { routes } from 'app/routes';
+import { tKeys, useTranslate } from 'services/i18n';
 
 import { useStyles } from './AppButton.style';
 
 function AppButton({ size }: Partial<Pick<ButtonProps, 'size'>>) {
   const classes = useStyles();
+  const { t } = useTranslate();
 
   return (
     <Button<typeof RouterLink>
@@ -19,7 +21,7 @@ function AppButton({ size }: Partial<Pick<ButtonProps, 'size'>>) {
       to={routes.stats.getRedirectPath()}
       className={classes.root}
     >
-      App
+      {t(tKeys.modules.navigation.app.getKey())}
     </Button>
   );
 }
