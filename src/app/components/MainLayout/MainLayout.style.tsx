@@ -22,7 +22,14 @@ export const useStyles = makeStyles(
     },
 
     content: {
-      flex: 1,
+      backgroundColor: '#101016',
+      borderRadius: 6,
+    },
+
+    footer: {
+      marginTop: 48,
+      backgroundColor: '#101016',
+      borderRadius: 6,
     },
   }),
   { name: 'main-layout' },
