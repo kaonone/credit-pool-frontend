@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouteMatch } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
 import { useTranslate } from 'services/i18n';
@@ -45,20 +46,12 @@ export const Link: React.FC<Props> = props => {
   function renderInternalLink(x: models.InternalLink) {
     const classes = useStyles();
 
-    const { label, ref, icon } = x;
+    const { label, ref, renderIcon } = x;
+    const isActive = !!useRouteMatch(ref);
 
     return (
       <NavLink key={label} to={ref} className={classes.root} activeClassName={classes.active} exact>
-        {icon && (
-          <div className={classes.icon}>
-            <div className={classes.activeIcon}>
-              <icon.Active />
-            </div>
-            <div className={classes.inactiveIcon}>
-              <icon.Inactive />
-            </div>
-          </div>
-        )}
+        {renderIcon && <div className={classes.icon}>{renderIcon(isActive)}</div>}
         {shouldRenderLabel && <div className={classes.label}>{t(label)}</div>}
       </NavLink>
     );
