@@ -46,6 +46,13 @@ const en = {
       privacyPolicy: 'Privacy Policy',
       termsConditions: 'Terms & Conditions',
       pointSystem: 'Point System',
+      statistics: 'Statistics',
+      governance: 'Governance',
+      account: 'Account',
+      lend: 'Lend',
+      borrow: 'Borrow',
+      liquidations: 'Liquidations',
+      history: 'History',
     },
   },
   features: {

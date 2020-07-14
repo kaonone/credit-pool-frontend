@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { tKeys } from 'services/i18n';
+
 import * as Link from '../../Link';
 import { routes } from '../../../routes';
 import { useStyles } from './Links.style';
@@ -7,18 +9,18 @@ import { useStyles } from './Links.style';
 const links: Link.models.Link[] = [
   {
     kind: 'internal',
-    label: 'Statistics',
+    label: tKeys.modules.navigation.statistics.getKey(),
     ref: routes.stats.getRoutePath(),
   },
   {
     kind: 'internal',
+    label: tKeys.modules.navigation.governance.getKey(),
     ref: routes.governance.getRoutePath(),
-    label: 'Governance',
   },
   {
     kind: 'external',
     ref: 'https://wiki.akropolis.io/spartafaq/',
-    label: 'Wiki',
+    label: tKeys.modules.navigation.wiki.getKey(),
   },
 ];
 

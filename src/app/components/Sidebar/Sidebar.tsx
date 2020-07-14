@@ -1,6 +1,9 @@
 import React from 'react';
 import cn from 'classnames';
 
+import { PRIVACY_POLICY_URL, T_AND_C_URL } from 'docs';
+import { tKeys } from 'services/i18n';
+
 import { routes } from '../../routes';
 import * as Link from '../Link';
 import { useStyles } from './Sidebar.style';
@@ -12,49 +15,49 @@ const upperLinks: Link.models.Link[] = [
   {
     kind: 'internal',
     ref: routes.account.getRoutePath(),
-    label: 'Account',
+    label: tKeys.modules.navigation.account.getKey(),
     renderIcon: makeIconRenderer(icons.Account),
   },
 
   {
     kind: 'internal',
     ref: routes.lend.getRoutePath(),
-    label: 'Lend',
+    label: tKeys.modules.navigation.lend.getKey(),
     renderIcon: makeIconRenderer(icons.Lend),
   },
 
   {
     kind: 'internal',
     ref: routes.borrow.getRoutePath(),
-    label: 'Borrow',
+    label: tKeys.modules.navigation.borrow.getKey(),
     renderIcon: makeIconRenderer(icons.Borrow),
   },
 
   {
     kind: 'internal',
     ref: routes.liquidations.getRoutePath(),
-    label: 'Liquidations',
+    label: tKeys.modules.navigation.liquidations.getKey(),
     renderIcon: makeIconRenderer(icons.Liquidations),
   },
 
   {
     kind: 'internal',
     ref: routes.history.getRoutePath(),
-    label: 'History',
+    label: tKeys.modules.navigation.history.getKey(),
     renderIcon: makeIconRenderer(icons.History),
   },
 ];
 
 const lowerLinks: Link.models.Link[] = [
   {
-    kind: 'internal',
-    label: 'Privacy policy',
-    ref: routes['privacy-policy'].getRoutePath(),
+    kind: 'external',
+    label: tKeys.modules.navigation.privacyPolicy.getKey(),
+    ref: PRIVACY_POLICY_URL,
   },
   {
-    kind: 'internal',
-    ref: routes['terms-of-service'].getRoutePath(),
-    label: 'Terms of service',
+    kind: 'external',
+    label: tKeys.modules.navigation.termsConditions.getKey(),
+    ref: T_AND_C_URL,
   },
 ];
 
