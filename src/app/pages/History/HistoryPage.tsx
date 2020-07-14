@@ -3,11 +3,14 @@ import Grid from '@material-ui/core/Grid';
 import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
+import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { TabsList, TabContext, Tab, TabPanel } from 'components';
 import { routes } from 'app/routes';
 import { makeStyles } from 'utils/styles';
 
 import { ComingSoonPage } from '../ComingSoon/ComingSoon';
+
+const tKeys = tKeysAll.app.pages.history;
 
 export function HistoryPage() {
   const match = useRouteMatch<{ page: string }>('/history/:page');
@@ -27,24 +30,26 @@ export function HistoryPage() {
 
   const classes = useStyles();
 
+  const { t } = useTranslate();
+
   return (
     <Grid className={classes.root}>
       <TabContext value={selectedPage}>
         <TabsList value={selectedPage} className={classes.tabs} onChange={handleTabChange}>
           <Tab
-            label="Transaction History"
+            label={t(tKeys.tabs.transaction.getKey())}
             component={Link}
             value={routes.history.transaction.getElementKey()}
             to={routes.history.transaction.getRedirectPath()}
           />
           <Tab
-            label="LPs Profit"
+            label={t(tKeys.tabs.profit.getKey())}
             component={Link}
             value={routes.history.profit.getElementKey()}
             to={routes.history.profit.getRedirectPath()}
           />
           <Tab
-            label="Liquidations"
+            label={t(tKeys.tabs.liquidations.getKey())}
             component={Link}
             value={routes.history.liquidations.getElementKey()}
             to={routes.history.liquidations.getRedirectPath()}

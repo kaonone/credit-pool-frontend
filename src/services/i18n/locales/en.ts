@@ -14,6 +14,13 @@ const en = {
         balanceChangesTitle: 'Deposit/Withdraw history',
         earningsTitle: 'Earnings',
       },
+      history: {
+        tabs: {
+          transaction: 'Transaction History',
+          profit: 'LPs Profit',
+          liquidations: 'Liquidations',
+        },
+      },
     },
     components: {
       header: {
