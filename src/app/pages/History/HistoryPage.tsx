@@ -7,6 +7,8 @@ import { TabsList, TabContext, Tab, TabPanel } from 'components';
 import { routes } from 'app/routes';
 import { makeStyles } from 'utils/styles';
 
+import { ComingSoonPage } from '../ComingSoon/ComingSoon';
+
 export function HistoryPage() {
   const match = useRouteMatch<{ page: string }>('/history/:page');
   const [selectedPage, setSelectedPage] = React.useState(
@@ -48,12 +50,14 @@ export function HistoryPage() {
             to={routes.history.liquidations.getRedirectPath()}
           />
         </TabsList>
-        <TabPanel value={routes.history.transaction.getElementKey()}>Mock</TabPanel>
+        <TabPanel value={routes.history.transaction.getElementKey()}>
+          <ComingSoonPage />
+        </TabPanel>
         <TabPanel value={routes.history.profit.getElementKey()}>
-          {makeUnimplementedComponent('Stakes')}
+          <ComingSoonPage />
         </TabPanel>
         <TabPanel value={routes.history.liquidations.getElementKey()}>
-          {makeUnimplementedComponent('Borrows')}
+          <ComingSoonPage />
         </TabPanel>
       </TabContext>
     </Grid>
@@ -72,7 +76,3 @@ const useStyles = makeStyles(
   }),
   { name: 'HistoryPage' },
 );
-
-function makeUnimplementedComponent(componentLabel: string) {
-  return () => <div style={{ fontSize: 45 }}>{`${componentLabel} not implemented`}</div>;
-}
