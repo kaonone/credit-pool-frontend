@@ -1,6 +1,8 @@
 import React from 'react';
 import cn from 'classnames';
 
+import { PRIVACY_POLICY_URL, T_AND_C_URL } from 'docs';
+
 import { routes } from '../../routes';
 import { useStyles } from './Sidebar.style';
 import * as icons from './icons';
@@ -46,14 +48,14 @@ const upperLinks: Link.models.Link[] = [
 
 const lowerLinks: Link.models.Link[] = [
   {
-    kind: 'internal',
+    kind: 'external',
     label: 'Privacy policy',
-    ref: routes['privacy-policy'].getRoutePath(),
+    ref: PRIVACY_POLICY_URL,
   },
   {
-    kind: 'internal',
-    ref: routes['terms-of-service'].getRoutePath(),
+    kind: 'external',
     label: 'Terms of service',
+    ref: T_AND_C_URL,
   },
 ];
 
