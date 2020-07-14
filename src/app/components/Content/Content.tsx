@@ -27,7 +27,6 @@ export const Content: React.FC = () => {
         component={makeUnimplementedComponent('Liquidations')}
       />
       <Route
-        exact
         path={routes.history.getRoutePath()}
         component={makeUnimplementedComponent('History')}
       />
