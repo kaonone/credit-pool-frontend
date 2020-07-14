@@ -323,6 +323,12 @@ function getTheme(type: 'light' | 'dark'): Theme {
           },
         },
       },
+
+      MuiSvgIcon: {
+        root: {
+          display: 'block',
+        },
+      },
     },
   });
 }

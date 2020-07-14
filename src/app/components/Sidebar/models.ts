@@ -1,1 +1,1 @@
-export { SidebarIcon as Icon } from './icons/models';
+export { SidebarIconProps } from './icons/models';

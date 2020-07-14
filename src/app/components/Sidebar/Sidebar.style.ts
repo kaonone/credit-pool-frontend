@@ -7,22 +7,30 @@ export const useStyles = makeStyles(
       height: '100%',
       overflow: 'auto',
       flexDirection: 'column',
-      padding: '100px 20px 20px 20px',
+      padding: '100px 15px 20px',
       background: theme.colors.darkBlueMagenta,
       justifyContent: 'space-between',
-      width: 180,
+      width: 208,
       transition: 'width 200ms',
     },
 
     upperPart: {},
+
     lowerPart: {
       display: 'flex',
       flexDirection: 'column',
+      marginLeft: 32,
     },
+
     upperLinks: {},
 
     rootShort: {
-      width: '64px',
+      width: 64,
+      alignItems: 'center',
+
+      '& $lowerPart': {
+        marginLeft: 0,
+      },
     },
 
     lowerLinks: {},
