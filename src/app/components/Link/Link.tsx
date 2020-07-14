@@ -1,5 +1,6 @@
 import React from 'react';
-import { NavLink, withRouter, RouteComponentProps } from 'react-router-dom';
+import { useRouteMatch } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
 import { useStyles } from './style';
 import * as models from './models';
@@ -9,12 +10,8 @@ type Props = {
   link: models.Link;
 };
 
-export const LinkComponent: React.FC<Props & RouteComponentProps> = props => {
-  const {
-    link,
-    shouldRenderLabel,
-    location: { pathname },
-  } = props;
+export const Link: React.FC<Props> = props => {
+  const { link, shouldRenderLabel } = props;
 
   switch (link.kind) {
     case 'internal':
@@ -47,7 +44,7 @@ export const LinkComponent: React.FC<Props & RouteComponentProps> = props => {
     const classes = useStyles();
 
     const { label, ref, renderIcon } = x;
-    const isActive = pathname.startsWith(ref);
+    const isActive = !!useRouteMatch(ref);
 
     return (
       <NavLink key={label} to={ref} className={classes.root} activeClassName={classes.active} exact>
@@ -57,5 +54,3 @@ export const LinkComponent: React.FC<Props & RouteComponentProps> = props => {
     );
   }
 };
-
-export const Link = withRouter(LinkComponent);
