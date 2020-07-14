@@ -2,45 +2,46 @@ import React from 'react';
 import cn from 'classnames';
 
 import { routes } from '../../routes';
+import * as Link from '../Link';
 import { useStyles } from './Sidebar.style';
 import * as icons from './icons';
-import * as Link from '../Link';
 import * as components from './components';
+import { SidebarIconProps } from './icons/models';
 
 const upperLinks: Link.models.Link[] = [
   {
     kind: 'internal',
     ref: routes.account.getRoutePath(),
     label: 'Account',
-    icon: icons.Account,
+    renderIcon: makeIconRenderer(icons.Account),
   },
 
   {
     kind: 'internal',
     ref: routes.lend.getRoutePath(),
     label: 'Lend',
-    icon: icons.Lend,
+    renderIcon: makeIconRenderer(icons.Lend),
   },
 
   {
     kind: 'internal',
     ref: routes.borrow.getRoutePath(),
     label: 'Borrow',
-    icon: icons.Borrow,
+    renderIcon: makeIconRenderer(icons.Borrow),
   },
 
   {
     kind: 'internal',
     ref: routes.liquidations.getRoutePath(),
     label: 'Liquidations',
-    icon: icons.Liquidations,
+    renderIcon: makeIconRenderer(icons.Liquidations),
   },
 
   {
     kind: 'internal',
     ref: routes.history.getRoutePath(),
     label: 'History',
-    icon: icons.History,
+    renderIcon: makeIconRenderer(icons.History),
   },
 ];
 
@@ -105,4 +106,8 @@ function makeLinkRenderer(shouldRenderLabel: boolean) {
   return (link: Link.models.Link) => {
     return <components.Link key={link.label} link={link} shouldRenderLabel={shouldRenderLabel} />;
   };
+}
+
+function makeIconRenderer(Icon: React.ComponentType<SidebarIconProps>) {
+  return (isActive: boolean) => <Icon fontSize="inherit" withGradient={isActive} />;
 }

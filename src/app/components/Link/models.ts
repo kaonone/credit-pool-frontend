@@ -1,7 +1,3 @@
-import { models } from '../Sidebar';
-
-export type SidebarIcon = models.Icon;
-
 export type AbstractLink = {
   label: string;
   ref: string;
@@ -9,7 +5,7 @@ export type AbstractLink = {
 
 export type InternalLink = AbstractLink & {
   kind: 'internal';
-  icon?: SidebarIcon;
+  renderIcon?: (isActive: boolean) => React.ReactElement;
 };
 
 export type ExternalLink = AbstractLink & {
