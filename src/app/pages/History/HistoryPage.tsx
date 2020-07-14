@@ -32,19 +32,19 @@ export function HistoryPage() {
       <TabContext value={selectedPage}>
         <TabsList value={selectedPage} className={classes.tabs} onChange={handleTabChange}>
           <Tab
-            label="My Summary"
+            label="Transaction History"
             component={Link}
             value={routes.history.transaction.getElementKey()}
             to={routes.history.transaction.getRedirectPath()}
           />
           <Tab
-            label="My Stakes"
+            label="LPs Profit"
             component={Link}
             value={routes.history.profit.getElementKey()}
             to={routes.history.profit.getRedirectPath()}
           />
           <Tab
-            label="My Borrows"
+            label="Liquidations"
             component={Link}
             value={routes.history.liquidations.getElementKey()}
             to={routes.history.liquidations.getRedirectPath()}
