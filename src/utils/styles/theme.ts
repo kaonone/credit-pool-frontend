@@ -304,7 +304,8 @@ function getTheme(type: 'light' | 'dark'): Theme {
 
         indicator: {
           top: 0,
-          height: tabsHeight - tabsIndicatorSpace * 2 - tabsBorderWidth * 2,
+          bottom: 0,
+          height: '100%',
           borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
           zIndex: -1,
           background: 'linear-gradient(to left, #544cf2, #d93cef)',
@@ -322,10 +323,20 @@ function getTheme(type: 'light' | 'dark'): Theme {
           minHeight: 'unset',
           padding: defaultTheme.spacing(0.2, 1.5),
           textTransform: 'unset',
+          fontSize: '1rem',
+          borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
 
           '&$selected': {
             color: colors.white,
           },
+        },
+      },
+
+      // TODO: enable @material-ui/lab overrides
+      // @ts-ignore
+      MuiTabPanel: {
+        root: {
+          padding: 0,
         },
       },
     },

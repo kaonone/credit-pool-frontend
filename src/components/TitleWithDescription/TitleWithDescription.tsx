@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import { InfoIconV2 } from 'components/icons';
-import { makeStyles, useTheme, colors } from 'utils/styles';
+import { makeStyles } from 'utils/styles';
 
 type Props = {
   title: string;
@@ -15,20 +15,14 @@ type Props = {
 export function TitleWithDescription(props: Props) {
   const { title, description, iconBeforeTitle } = props;
   const classes = useStyles(props);
-  const theme = useTheme();
 
   return (
     <Typography variant="h6" component="h6" className={classes.title}>
       {iconBeforeTitle && <>{iconBeforeTitle}&nbsp;</>}
-      {title}
+      {title}&nbsp;
       <Tooltip title={description} placement="right">
-        <span>
-          &nbsp;
-          <InfoIconV2
-            backgroundColor={theme.palette.type === 'dark' ? colors.white : colors.gray}
-            width={15}
-            height={15}
-          />
+        <span className={classes.infoIcon}>
+          <InfoIconV2 fontSize="inherit" />
         </span>
       </Tooltip>
     </Typography>
@@ -44,13 +38,17 @@ const useStyles = makeStyles(
     title: {
       marginBottom: 13,
       display: 'flex',
-      alignContent: 'center',
+      alignItems: 'center',
       lineHeight: 'normal',
       fontSize: ({ titleSize }: Props) => (titleSize === 'big' ? 22 : 16),
       fontWeight: ({ titleSize }: Props) => (titleSize === 'big' ? 300 : 400),
     },
     content: {
       marginBottom: 8,
+    },
+    infoIcon: {
+      display: 'flex',
+      fontSize: 16,
     },
   }),
   { name: 'TitleWithDescription' },
