@@ -1,10 +1,8 @@
 import { makeStyles } from 'utils/styles';
 
 export const useStyles = makeStyles(
-  theme => ({
+  {
     root: {
-      background: theme.colors.darkBlueMagenta,
-      borderRadius: 6,
       padding: '16px 50px',
       display: 'flex',
       justifyContent: 'space-between',
@@ -30,6 +28,6 @@ export const useStyles = makeStyles(
       marginLeft: 10,
       alignItems: 'center',
     },
-  }),
+  },
   { name: 'header' },
 );

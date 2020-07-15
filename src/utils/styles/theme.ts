@@ -75,6 +75,7 @@ const lightPalette = {
   },
   background: {
     default: colors.white,
+    paper: '#eff1f5',
   },
   type: 'light' as const,
 };
@@ -100,6 +101,7 @@ export const darkPalette = {
   },
   background: {
     default: colors.charade,
+    paper: '#101016',
   },
   type: 'dark' as const,
 };

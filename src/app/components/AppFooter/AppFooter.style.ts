@@ -7,6 +7,7 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: 50,
     paddingRight: 50,
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
 
   copyright: {
@@ -20,10 +21,6 @@ const useStyles = makeStyles(theme => ({
     opacity: 0.3,
     marginRight: 10,
     borderStyle: 'none',
-    fontWeight: 'normal',
-    fontStretch: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 'normal',
 
     [theme.breakpoints.up('tabletXS')]: {
       fontSize: 12,

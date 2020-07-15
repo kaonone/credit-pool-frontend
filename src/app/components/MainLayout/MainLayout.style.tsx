@@ -19,16 +19,18 @@ export const useStyles = makeStyles(
 
     header: {
       paddingTop: 30,
+      backgroundColor: theme.palette.background.paper,
+      borderRadius: 6,
     },
 
     content: {
-      backgroundColor: '#101016',
+      backgroundColor: theme.palette.background.paper,
       borderRadius: 6,
     },
 
     footer: {
       marginTop: 48,
-      backgroundColor: '#101016',
+      backgroundColor: theme.palette.background.paper,
       borderRadius: 6,
     },
   }),
