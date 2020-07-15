@@ -2,12 +2,9 @@ import * as React from 'react';
 import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-import { makeStyles } from 'utils/styles';
-
 function USDTIcon(props: GetProps<typeof SvgIcon>) {
-  const classes = useStyles();
   return (
-    <SvgIcon {...props} viewBox="0 0 20 20" classes={classes}>
+    <SvgIcon {...props} viewBox="0 0 20 20">
       <g fill="none">
         <path
           fill="#26A17B"
@@ -21,12 +18,5 @@ function USDTIcon(props: GetProps<typeof SvgIcon>) {
     </SvgIcon>
   );
 }
-
-const useStyles = makeStyles(() => ({
-  root: {
-    width: 'auto',
-    height: 'auto',
-  },
-}));
 
 export { USDTIcon };

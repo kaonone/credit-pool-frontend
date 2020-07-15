@@ -21,10 +21,10 @@ type Column = keyof AssetInfo;
 const columns: Column[] = ['asset', 'apy', 'earned', 'balance'];
 
 const assetIcons: Record<Asset, JSX.Element> = {
-  DAI: <DAIIcon width={20} height={20} />,
-  USDC: <USDCIcon width={20} height={20} />,
-  USDT: <USDTIcon width={20} height={20} />,
-  TUSD: <TUSDIcon width={20} height={20} />,
+  DAI: <DAIIcon />,
+  USDC: <USDCIcon />,
+  USDT: <USDTIcon />,
+  TUSD: <TUSDIcon />,
 };
 
 type Props = {
@@ -132,6 +132,7 @@ const useStyles = makeStyles(
     },
     assetCellContent: {
       display: 'flex',
+      alignItems: 'center',
     },
     loansIssuedCount: {
       marginLeft: 10,
