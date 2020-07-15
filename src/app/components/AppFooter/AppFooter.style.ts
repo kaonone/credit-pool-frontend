@@ -18,7 +18,6 @@ const useStyles = makeStyles(theme => ({
     lineHeight: 1.6,
     opacity: 0.3,
     marginRight: 10,
-    borderStyle: 'none',
 
     [theme.breakpoints.up('tabletXS')]: {
       fontSize: 12,

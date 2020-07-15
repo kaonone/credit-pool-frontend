@@ -174,13 +174,11 @@ function getTheme(type: 'light' | 'dark'): Theme {
       },
       MuiLink: {
         underlineHover: {
-          borderWidth: '0 0 1px 0',
-          borderStyle: 'solid',
-          borderColor: type === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
+          textDecoration: 'underline',
+          textDecorationColor: type === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
 
           '&:hover': {
-            textDecoration: 'none',
-            borderColor: 'inherit',
+            textDecorationColor: 'inherit',
           },
         },
       },
