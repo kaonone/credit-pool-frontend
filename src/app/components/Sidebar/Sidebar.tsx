@@ -3,13 +3,15 @@ import cn from 'classnames';
 
 import { PRIVACY_POLICY_URL, T_AND_C_URL } from 'docs';
 import { tKeys } from 'services/i18n';
+import { IconButton } from 'components';
 
 import { routes } from '../../routes';
 import * as Link from '../Link';
 import { useStyles } from './Sidebar.style';
 import * as icons from './icons';
-import * as components from './components';
 import { SidebarIconProps } from './icons/models';
+import * as components from './components';
+
 
 const upperLinks: Link.models.Link[] = [
   {
@@ -78,25 +80,18 @@ export const Sidebar: React.FC = () => {
       </div>
       <div className={classes.lowerPart}>
         {isExpanded && <LowerLinks />}
-        {renderSwitch()}
+        <IconButton
+          className={cn({
+            [classes.switch]: true,
+            [classes.switchInverted]: !isExpanded,
+          })}
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          <icons.Switch fontSize="inherit" />
+        </IconButton>
       </div>
     </div>
   );
-
-  function renderSwitch() {
-    return (
-      <button
-        type="button"
-        className={cn({
-          [classes.switch]: true,
-          [classes.switchInverted]: !isExpanded,
-        })}
-        onClick={() => setIsExpanded(!isExpanded)}
-      >
-        <icons.Switch />
-      </button>
-    );
-  }
 };
 
 const LowerLinks: React.FC = () => {

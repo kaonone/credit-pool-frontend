@@ -7,7 +7,7 @@ export const useStyles = makeStyles(
       height: '100%',
       overflow: 'auto',
       flexDirection: 'column',
-      padding: '100px 15px 20px',
+      padding: '100px 15px 65px',
       background: theme.colors.darkBlueMagenta,
       justifyContent: 'space-between',
       width: 208,
@@ -17,38 +17,25 @@ export const useStyles = makeStyles(
     upperPart: {},
 
     lowerPart: {
-      display: 'flex',
-      flexDirection: 'column',
-      marginLeft: 32,
+      alignSelf: 'flex-end',
     },
 
     upperLinks: {},
 
     rootShort: {
-      width: 64,
-      alignItems: 'center',
+      width: 54,
 
       '& $lowerPart': {
-        marginLeft: 0,
-      },
+        alignSelf: 'center',
+      }
     },
 
     lowerLinks: {},
 
     switch: {
-      border: 0,
-      background: 'transparent',
-      marginTop: 16,
-      marginBottom: 20,
-      padding: 5,
-      cursor: 'pointer',
-      alignSelf: 'flex-end',
+      opacity: 0.5,
 
-      '& path': {
-        opacity: 0.5,
-      },
-
-      '&:hover path': {
+      '&:hover': {
         opacity: 1,
       },
     },
