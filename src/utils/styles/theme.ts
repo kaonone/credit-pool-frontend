@@ -335,6 +335,15 @@ function getTheme(type: 'light' | 'dark'): Theme {
       MuiSvgIcon: {
         root: {
           display: 'block',
+          fontSize: '1.25rem',
+        },
+
+        fontSizeSmall: {
+          fontSize: '1rem',
+        },
+
+        fontSizeLarge: {
+          fontSize: '1.5rem',
         },
       },
 
