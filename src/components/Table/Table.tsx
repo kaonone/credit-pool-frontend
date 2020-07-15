@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import cn from 'classnames';
 
 import { attachStaticFields } from 'utils/object';
 import { filterChildrenByComponent } from 'utils/react';
@@ -18,9 +17,12 @@ interface IHeadProps {
   children: React.ReactNode | string;
 }
 
+
+
 interface ICellProps<T> {
   className?: string;
   align?: 'left' | 'center' | 'right';
+  expander?: React.ComponentType;
   colSpan?: number;
   prop?: keyof T;
   children?: ({ index, data }: { index: number; data: T }) => React.ReactNode;
@@ -35,14 +37,22 @@ interface ITableProps<T> {
   onClick?(): void;
 }
 
+type RowToExpandedState = Record<number, boolean>;
+
+
 function TableComponent<T>(props: ITableProps<T>) {
   const classes = useStyles();
-  const { children, className, data, variant = 'separated' } = props;
+  const { children, data } = props;
 
   interface IAggregatedColumn {
     headProps?: IHeadProps;
     cellProps?: ICellProps<T>;
   }
+
+  const [rowToExpanded, setRowToExpanded] = React.useState<RowToExpandedState>(data.reduce((acc, _, index) => ({
+    ...acc,
+    [index]: false,
+  }), {}));
 
   const columns: IAggregatedColumn[] = filterChildrenByComponent<IColumnProps>(
     children,
@@ -52,10 +62,16 @@ function TableComponent<T>(props: ITableProps<T>) {
     cellProps: (filterChildrenByComponent(column.props.children, Cell)[0] || {}).props,
   }));
 
+
+  const columnWithExpander: number | null = (() => {
+    const index = columns.findIndex(x => x.cellProps?.expander !== undefined);
+    return index === -1 ? null : index;
+  })();
+
   const needToRenderHead = columns.some(column => column.headProps);
 
   return (
-    <table className={cn(classes.root, classes[variant], className)}>
+    <table className={classes.root}>
       {needToRenderHead && (
         <thead>
           <tr>
@@ -65,31 +81,77 @@ function TableComponent<T>(props: ITableProps<T>) {
                   {headProps.children}
                 </td>
               ) : (
-                <td key={index} />
-              ),
+                  <td key={index} />
+                ),
             )}
           </tr>
         </thead>
       )}
       <tbody>
-        {data.map((dataRow, index) => (
-          <tr key={index} className={cn(props.className, { [classes.clickable]: !!props.onClick })}>
-            {columns.map(({ cellProps }, cellIndex) =>
-              cellProps ? (
-                <td key={cellIndex} align={cellProps.align}>
-                  {cellProps.prop
-                    ? dataRow[cellProps.prop]
-                    : cellProps.children && cellProps.children({ index, data: dataRow })}
-                </td>
-              ) : (
-                <td key={cellIndex} />
-              ),
-            )}
-          </tr>
-        ))}
+        {data.map((entry, index) => {
+          if (rowToExpanded[index]) {
+
+            if (columnWithExpander === null) {
+              console.warn('unexpected columnWithExpander = null');
+              return renderRow(entry, index);
+            }
+
+            const ExpandedContent = columns[columnWithExpander].cellProps?.expander;
+
+            return (
+              <>
+                {renderRow(entry, index)}
+                <tr key={index} >
+                  <td colSpan={columns.length}>
+                    {ExpandedContent && <ExpandedContent />}
+                  </td>
+                </tr>
+              </>
+            );
+          }
+
+          return renderRow(entry, index);
+        }
+        )}
       </tbody>
-    </table>
+    </table >
   );
+
+
+  function renderRow(entry: T, index: number) {
+    return (
+      <tr key={index}>
+        {columns.map(({ cellProps }, cellIndex) => {
+          if (cellProps) {
+            const { align, expander, prop, children } = cellProps;
+            if (expander) {
+              const isExpanded = rowToExpanded[index];
+
+              const handleClick = () => setRowToExpanded({ ...rowToExpanded, [index]: !isExpanded });
+
+              return (
+                <td key={cellIndex} onClick={handleClick}>
+                  {isExpanded ? 'close' : 'open'}
+                </td>
+              );
+            }
+            return (
+              <td key={cellIndex} align={align}>
+                {prop
+                  ? entry[prop]
+                  : children && children({ index, data: entry })}
+              </td>
+            )
+          }
+
+          return (
+            <td key={cellIndex} />
+          );
+        }
+        )}
+      </tr>
+    );
+  }
 }
 
 function Column(_props: IColumnProps) {

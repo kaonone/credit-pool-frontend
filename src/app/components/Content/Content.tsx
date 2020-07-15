@@ -14,7 +14,7 @@ export const Content: React.FC = () => {
       <Route
         exact
         path={routes.lend.getRoutePath()}
-        component={makeUnimplementedComponent('Lend')}
+        component={pages.MyLoansPage}
       />
       <Route
         exact
