@@ -56,3 +56,4 @@ export * from './FormattedAmount/FormattedAmount';
 export * from './Growth/Growth';
 export * from './ConfirmationDialog/ConfirmationDialog';
 export * from './Highlighted/Highlighted';
+export * from './Title/Title';

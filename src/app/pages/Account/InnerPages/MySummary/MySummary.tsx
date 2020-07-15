@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Divider from '@material-ui/core/Divider';
 
-import { MyBalance, MyPoolShare, APY, AKRO } from 'components/Metrics';
+import { MyBalance, MyPoolShare, APY, AKRO } from 'features/metrics';
 import { Grid, PortfolioSnapshot, ComingSoon } from 'components';
 import { makeStyles } from 'utils/styles';
 
@@ -12,35 +12,17 @@ export function MySummary() {
     <div>
       <Grid item container xs={12}>
         <Grid item xs className={classes.metric}>
-          <MyBalance
-            decimal={{
-              integral: '126,917',
-              fractional: '25',
-            }}
-            onDepositClick={() => undefined}
-          />
+          <MyBalance />
         </Grid>
         <Grid item xs className={classes.metric}>
-          <MyPoolShare
-            percent="0.15"
-            totalPoolLiquidityDecimal={{
-              integral: '2,750,800',
-              fractional: '00',
-            }}
-          />
+          <MyPoolShare />
         </Grid>
         <Divider orientation="vertical" className={classes.divider} />
         <Grid item xs className={classes.metric}>
-          <APY percent="11.06" period="24h" onWithdrawClick={() => undefined} />
+          <APY />
         </Grid>
         <Grid item xs className={classes.metric}>
-          <AKRO
-            decimal={{
-              integral: '357,856',
-              fractional: '45',
-            }}
-            total="$2,351.00"
-          />
+          <AKRO />
         </Grid>
       </Grid>
       <Divider className={classes.contentDivider} />

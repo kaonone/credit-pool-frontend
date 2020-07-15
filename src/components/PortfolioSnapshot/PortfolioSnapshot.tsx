@@ -3,8 +3,8 @@ import Grid from '@material-ui/core/Grid';
 
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { makeStyles, rgba, colors } from 'utils/styles';
+import { Title } from 'components/Title/Title';
 
-import { TitleWithDescription } from '../TitleWithDescription/TitleWithDescription';
 import { DAIIcon, USDTIcon, USDCIcon, TUSDIcon } from '../icons';
 
 type Asset = 'DAI' | 'USDC' | 'USDT' | 'TUSD';
@@ -43,11 +43,9 @@ export function PortfolioSnapshot(props: Props) {
     <div>
       <table className={classes.table}>
         <caption className={classes.caption}>
-          <TitleWithDescription
-            title={t(tKeys.caption.getKey())}
-            titleSize="big"
-            description={t(tKeys.description.getKey())}
-          />
+          <Title fontSize="large" hint={t(tKeys.description.getKey())}>
+            {t(tKeys.caption.getKey())}
+          </Title>
         </caption>
         <thead>
           <tr>

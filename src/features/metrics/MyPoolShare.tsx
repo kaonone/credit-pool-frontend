@@ -3,30 +3,22 @@ import Typography from '@material-ui/core/Typography';
 
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { makeStyles } from 'utils/styles';
-
-import { Decimal } from './Decimal';
-import { Metric } from './Metric';
-
-type Props = {
-  percent: string;
-  totalPoolLiquidityDecimal: Decimal;
-};
+import { Metric, Title, FormattedAmount } from 'components';
+import { percentAmount, liquidityAmount } from 'utils/mock';
 
 const tKeys = tKeysAll.components.metrics.myPoolShare;
 
-export function MyPoolShare(props: Props) {
-  const { percent, totalPoolLiquidityDecimal } = props;
+export function MyPoolShare() {
   const classes = useStyles();
   const { t } = useTranslate();
 
   return (
     <Metric
-      title={t(tKeys.myPoolShare.getKey())}
-      titleDescription={t(tKeys.description.getKey())}
-      content={<Typography className={classes.percent}>{percent}&#37;</Typography>}
-      additionalInfo={
+      title={<Title hint={t(tKeys.description.getKey())}>{t(tKeys.myPoolShare.getKey())}</Title>}
+      value={<FormattedAmount sum={percentAmount} />}
+      subValue={
         <>
-          <Decimal decimal={totalPoolLiquidityDecimal} currency={<>&#36;</>} size="small" />
+          <FormattedAmount sum={liquidityAmount} />
           <Typography className={classes.totalLiquidity}>
             {t(tKeys.totalPoolLiquidity.getKey())}
           </Typography>
@@ -38,11 +30,6 @@ export function MyPoolShare(props: Props) {
 
 const useStyles = makeStyles(
   () => ({
-    percent: {
-      fontSize: 32,
-      fontWeight: 300,
-      lineHeight: 'normal',
-    },
     totalLiquidity: {
       fontSize: 12,
       fontWeight: 300,
