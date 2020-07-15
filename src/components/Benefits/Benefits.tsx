@@ -62,28 +62,38 @@ const useStyles = makeStyles(theme => ({
 
   item: {
     flexBasis: '100%',
-    flexGrow: 1,
-    marginTop: 20,
+    marginTop: theme.spacing(2.5),
 
     '&:nth-child(1) $card': {
       background: theme.gradients.products[0].linear(),
 
       [theme.breakpoints.up('tabletSM')]: {
-        margin: [[0, 10, 0, 0]],
+        marginTop: 0,
+        marginRight: theme.spacing(2.5),
+      },
+      [theme.breakpoints.up('desktopSM')]: {
+        marginRight: theme.spacing(4.5),
       },
     },
     '&:nth-child(2) $card': {
       background: theme.gradients.products[1].linear(),
 
       [theme.breakpoints.up('tabletSM')]: {
-        margin: [[0, 10]],
+        margin: [[0, theme.spacing(2.5)]],
+      },
+      [theme.breakpoints.up('desktopSM')]: {
+        margin: [[0, theme.spacing(4.5)]],
       },
     },
     '&:nth-child(3) $card': {
       background: theme.gradients.products[2].linear(),
 
       [theme.breakpoints.up('tabletSM')]: {
-        margin: [[0, 0, 0, 10]],
+        marginTop: 0,
+        marginLeft: theme.spacing(2.5),
+      },
+      [theme.breakpoints.up('desktopSM')]: {
+        marginLeft: theme.spacing(4.5),
       },
     },
   },
