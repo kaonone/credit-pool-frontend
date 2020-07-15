@@ -7,7 +7,6 @@ export const useStyles = makeStyles(theme => ({
   },
 
   logo: {
-    display: 'flex',
     marginRight: 'auto',
 
     fontSize: theme.spacing(2.5),

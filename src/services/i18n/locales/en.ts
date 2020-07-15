@@ -14,6 +14,13 @@ const en = {
         balanceChangesTitle: 'Deposit/Withdraw history',
         earningsTitle: 'Earnings',
       },
+      history: {
+        tabs: {
+          transaction: 'Transaction History',
+          profit: 'LPs Profit',
+          liquidations: 'Liquidations',
+        },
+      },
     },
     components: {
       header: {
@@ -46,6 +53,14 @@ const en = {
       privacyPolicy: 'Privacy Policy',
       termsConditions: 'Terms & Conditions',
       pointSystem: 'Point System',
+      statistics: 'Statistics',
+      governance: 'Governance',
+      account: 'Account',
+      lend: 'Lend',
+      borrow: 'Borrow',
+      liquidations: 'Liquidations',
+      history: 'History',
+      copyright: 'Sparta v1.0 by Akropolis Decentralised Ltd',
     },
   },
   features: {

@@ -9,3 +9,4 @@ export { MyLoansPage } from './MyLoans/MyLoans';
 export { PoolPage } from './Pool/PoolPage';
 export { StatsPage } from './Stats/Stats';
 export { CreditPool } from './CreditPool/CreditPool';
+export { HistoryPage } from './History/HistoryPage';

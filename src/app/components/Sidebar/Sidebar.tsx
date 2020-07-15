@@ -1,59 +1,49 @@
 import React from 'react';
 import cn from 'classnames';
 
+import { tKeys } from 'services/i18n';
+
 import { routes } from '../../routes';
+import * as Link from '../Link';
 import { useStyles } from './Sidebar.style';
 import * as icons from './icons';
-import * as Link from '../Link';
 import * as components from './components';
+import { SidebarIconProps } from './icons/models';
 
 const upperLinks: Link.models.Link[] = [
   {
     kind: 'internal',
     ref: routes.account.getRoutePath(),
-    label: 'Account',
-    icon: icons.Account,
+    label: tKeys.modules.navigation.account.getKey(),
+    renderIcon: makeIconRenderer(icons.Account),
   },
 
   {
     kind: 'internal',
     ref: routes.lend.getRoutePath(),
-    label: 'Lend',
-    icon: icons.Lend,
+    label: tKeys.modules.navigation.lend.getKey(),
+    renderIcon: makeIconRenderer(icons.Lend),
   },
 
   {
     kind: 'internal',
     ref: routes.borrow.getRoutePath(),
-    label: 'Borrow',
-    icon: icons.Borrow,
+    label: tKeys.modules.navigation.borrow.getKey(),
+    renderIcon: makeIconRenderer(icons.Borrow),
   },
 
   {
     kind: 'internal',
     ref: routes.liquidations.getRoutePath(),
-    label: 'Liquidations',
-    icon: icons.Liquidations,
+    label: tKeys.modules.navigation.liquidations.getKey(),
+    renderIcon: makeIconRenderer(icons.Liquidations),
   },
 
   {
     kind: 'internal',
     ref: routes.history.getRoutePath(),
-    label: 'History',
-    icon: icons.History,
-  },
-];
-
-const lowerLinks: Link.models.Link[] = [
-  {
-    kind: 'internal',
-    label: 'Privacy policy',
-    ref: routes['privacy-policy'].getRoutePath(),
-  },
-  {
-    kind: 'internal',
-    ref: routes['terms-of-service'].getRoutePath(),
-    label: 'Terms of service',
+    label: tKeys.modules.navigation.history.getKey(),
+    renderIcon: makeIconRenderer(icons.History),
   },
 ];
 
@@ -72,10 +62,7 @@ export const Sidebar: React.FC = () => {
       <div className={classes.upperPart}>
         <nav className={classes.upperLinks}>{upperLinks.map(makeLinkRenderer(isExpanded))}</nav>
       </div>
-      <div className={classes.lowerPart}>
-        {isExpanded && <LowerLinks />}
-        {renderSwitch()}
-      </div>
+      <div className={classes.lowerPart}>{renderSwitch()}</div>
     </div>
   );
 
@@ -95,14 +82,12 @@ export const Sidebar: React.FC = () => {
   }
 };
 
-const LowerLinks: React.FC = () => {
-  const classes = useStyles();
-
-  return <nav className={classes.lowerLinks}>{lowerLinks.map(makeLinkRenderer(true))}</nav>;
-};
-
 function makeLinkRenderer(shouldRenderLabel: boolean) {
   return (link: Link.models.Link) => {
     return <components.Link key={link.label} link={link} shouldRenderLabel={shouldRenderLabel} />;
   };
+}
+
+function makeIconRenderer(Icon: React.ComponentType<SidebarIconProps>) {
+  return (isActive: boolean) => <Icon fontSize="inherit" withGradient={isActive} />;
 }

@@ -1,5 +1,8 @@
 import React from 'react';
+import { useRouteMatch } from 'react-router';
 import { NavLink } from 'react-router-dom';
+
+import { useTranslate } from 'services/i18n';
 
 import { useStyles } from './style';
 import * as models from './models';
@@ -11,6 +14,7 @@ type Props = {
 
 export const Link: React.FC<Props> = props => {
   const { link, shouldRenderLabel } = props;
+  const { t } = useTranslate();
 
   switch (link.kind) {
     case 'internal':
@@ -34,7 +38,7 @@ export const Link: React.FC<Props> = props => {
 
     return (
       <a target="_blank" rel="noopener noreferrer" className={classes.root} href={ref}>
-        <div className={classes.label}>{label}</div>
+        <div className={classes.label}>{t(label)}</div>
       </a>
     );
   }
@@ -42,21 +46,13 @@ export const Link: React.FC<Props> = props => {
   function renderInternalLink(x: models.InternalLink) {
     const classes = useStyles();
 
-    const { label, ref, icon } = x;
+    const { label, ref, renderIcon } = x;
+    const isActive = !!useRouteMatch(ref);
 
     return (
       <NavLink key={label} to={ref} className={classes.root} activeClassName={classes.active} exact>
-        {icon && (
-          <div className={classes.icon}>
-            <div className={classes.activeIcon}>
-              <icon.Active />
-            </div>
-            <div className={classes.inactiveIcon}>
-              <icon.Inactive />
-            </div>
-          </div>
-        )}
-        {shouldRenderLabel && <div className={classes.label}>{label}</div>}
+        {renderIcon && <div className={classes.icon}>{renderIcon(isActive)}</div>}
+        {shouldRenderLabel && <div className={classes.label}>{t(label)}</div>}
       </NavLink>
     );
   }
