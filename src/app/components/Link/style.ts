@@ -4,48 +4,34 @@ export const useStyles = makeStyles(
   theme => ({
     root: {
       display: 'flex',
+      alignItems: 'center',
       color: theme.colors.white,
       textDecoration: 'none',
       fontSize: 16,
       whiteSpace: 'nowrap',
       overflow: 'hidden',
-
-      '&:hover $inactiveIcon path': {
-        opacity: 1,
-      },
-
-      '&:hover $label': {
-        opacity: 0.75,
-      },
-    },
-
-    icon: {},
-
-    activeIcon: {
-      display: 'none',
-    },
-
-    inactiveIcon: {},
-
-    label: {
       opacity: 0.5,
 
-      '$icon + &': {
-        marginLeft: 12,
+      '&:hover': {
+        opacity: 1,
+
+        '& $label': {
+          opacity: 0.75,
+        },
       },
     },
 
     active: {
-      '& $label': {
-        opacity: 1,
-      },
+      opacity: 1,
+    },
 
-      '& $activeIcon': {
-        display: 'block',
-      },
+    icon: {
+      fontSize: 24,
+    },
 
-      '& $inactiveIcon': {
-        display: 'none',
+    label: {
+      '$icon + &': {
+        marginLeft: 12,
       },
     },
   }),
