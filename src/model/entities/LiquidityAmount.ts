@@ -16,14 +16,13 @@ export class LiquidityAmount extends Amount<Currency> {
     return new LiquidityAmount(amount, currency) as this;
   }
 
-  public toFormattedString(precision: number = 2): string {
+  public toFormattedString(precision: number = 2, withSymbol = true): string {
     return formatBalance({
       amountInBaseUnits: this.toBN(),
-      tokenSymbol: this.currency.symbol,
+      tokenSymbol: withSymbol ? this.currency.symbol : undefined,
       baseDecimals: this.currency.decimals,
       precision,
-      symbolPosition: 'end-space',
-      // symbolPosition: 'start', // TODO uncomment after adding multiple tokens
+      symbolPosition: 'start',
     });
   }
 }

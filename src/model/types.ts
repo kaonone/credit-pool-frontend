@@ -20,6 +20,11 @@ export interface ICurrency {
   equals(a: this): boolean;
 }
 
+export type Decimal = {
+  integer: string;
+  fractional: string;
+};
+
 export interface IBrand {
   _type: symbol;
 }

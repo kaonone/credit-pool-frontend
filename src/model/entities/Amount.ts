@@ -1,6 +1,6 @@
 import BN from 'bn.js';
 
-import { ICurrency, IToBN, IToFraction } from 'model/types';
+import { ICurrency, IToBN, IToFraction, Decimal } from 'model/types';
 import { bnToBn } from 'utils/bn';
 
 import { Fraction } from './Fraction';
@@ -9,12 +9,12 @@ export abstract class Amount<C extends ICurrency> implements IToBN, IToFraction 
   public abstract _type: symbol;
   private value: Fraction;
 
-  constructor(amount: string | BN | IToBN | IToFraction, public readonly currency: C) {
+  constructor(amount: string | BN | IToBN | Fraction | IToFraction, public readonly currency: C) {
     this.value = toFraction(amount);
   }
 
   public abstract makeAmount(amount: string | BN | IToBN | IToFraction, currency: C): this;
-  public abstract toFormattedString(precision?: number): string;
+  public abstract toFormattedString(precision?: number, withSymbol?: boolean): string;
 
   public withValue(newValue: string | BN | IToBN): this {
     return this.makeAmount(bnToBn(newValue), this.currency);
@@ -66,6 +66,10 @@ export abstract class Amount<C extends ICurrency> implements IToBN, IToFraction 
     return this.value;
   }
 
+  public toDecimal(precision: number): Decimal {
+    return this.value.toDecimal(this.currency.decimals, precision);
+  }
+
   public toNumber(): number {
     return this.toBN().toNumber();
   }
@@ -75,7 +79,10 @@ export abstract class Amount<C extends ICurrency> implements IToBN, IToFraction 
   }
 }
 
-function toFraction(value: string | BN | IToBN | IToFraction): Fraction {
+function toFraction(value: string | BN | IToBN | Fraction | IToFraction): Fraction {
+  if (value instanceof Fraction) {
+    return value;
+  }
   if (typeof value === 'string' || BN.isBN(value) || 'toBN' in value) {
     return new Fraction(value);
   }

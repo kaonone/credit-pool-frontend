@@ -1,7 +1,8 @@
 import BN from 'bn.js';
 
-import { IToBN } from 'model/types';
+import { IToBN, Decimal } from 'model/types';
 import { bnToBn } from 'utils/bn';
+import { getDecimal } from 'utils/format';
 
 export class Fraction implements IToBN {
   public readonly numerator: BN;
@@ -18,6 +19,15 @@ export class Fraction implements IToBN {
 
   toBN() {
     return this.numerator.div(this.denominator);
+  }
+
+  public toDecimal(baseDecimals: number, precision: number): Decimal {
+    const multiplier = new BN(10).pow(new BN(precision));
+    return getDecimal(
+      this.numerator.mul(multiplier).div(this.denominator).toString(),
+      baseDecimals + precision,
+      precision,
+    );
   }
 
   add(value: Fraction | BN | IToBN) {

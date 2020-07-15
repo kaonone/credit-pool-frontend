@@ -16,10 +16,10 @@ export class TokenAmount extends Amount<Token> {
     return new TokenAmount(amount, token) as this;
   }
 
-  public toFormattedString(precision: number = 2): string {
+  public toFormattedString(precision: number = 2, withSymbol = true): string {
     return formatBalance({
       amountInBaseUnits: this.toBN(),
-      tokenSymbol: this.currency.symbol,
+      tokenSymbol: withSymbol ? this.currency.symbol : undefined,
       baseDecimals: this.currency.decimals,
       precision,
       symbolPosition: 'end-space',

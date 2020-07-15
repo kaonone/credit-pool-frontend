@@ -3,8 +3,8 @@ import BN from 'bn.js';
 import { bnToBn } from 'utils/bn';
 import { IToBN } from 'model/types';
 
-import { formatDecimal } from './formatDecimal';
+import { formatInteger } from './formatInteger';
 
 export function formatNumber<ExtToBn extends IToBN>(value?: ExtToBn | BN | number | null): string {
-  return formatDecimal(bnToBn(value).toString());
+  return formatInteger(bnToBn(value).toString());
 }
