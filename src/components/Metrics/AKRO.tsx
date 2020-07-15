@@ -21,7 +21,7 @@ export function AKRO(props: Props) {
   return (
     <Metric
       title="AKRO"
-      iconBeforeTitle={<AKROIcon width={19} height={20} />}
+      iconBeforeTitle={<AKROIcon />}
       titleDescription={t(tKeys.description.getKey())}
       content={<Decimal decimal={decimal} />}
       additionalInfo={<Typography>{total}</Typography>}
