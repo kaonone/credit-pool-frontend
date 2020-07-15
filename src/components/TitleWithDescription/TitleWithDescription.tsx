@@ -19,11 +19,10 @@ export function TitleWithDescription(props: Props) {
   return (
     <Typography variant="h6" component="h6" className={classes.title}>
       {iconBeforeTitle && <>{iconBeforeTitle}&nbsp;</>}
-      {title}
+      {title}&nbsp;
       <Tooltip title={description} placement="right">
         <span className={classes.infoIcon}>
-          &nbsp;
-          <InfoIconV2 className={classes.infoIcon} />
+          <InfoIconV2 fontSize="inherit" />
         </span>
       </Tooltip>
     </Typography>
@@ -39,7 +38,7 @@ const useStyles = makeStyles(
     title: {
       marginBottom: 13,
       display: 'flex',
-      alignContent: 'center',
+      alignItems: 'center',
       lineHeight: 'normal',
       fontSize: ({ titleSize }: Props) => (titleSize === 'big' ? 22 : 16),
       fontWeight: ({ titleSize }: Props) => (titleSize === 'big' ? 300 : 400),
@@ -49,7 +48,7 @@ const useStyles = makeStyles(
     },
     infoIcon: {
       display: 'flex',
-      alignItems: 'center',
+      fontSize: 16,
     },
   }),
   { name: 'TitleWithDescription' },
