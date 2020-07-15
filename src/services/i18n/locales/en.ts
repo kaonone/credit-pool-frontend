@@ -60,6 +60,7 @@ const en = {
       borrow: 'Borrow',
       liquidations: 'Liquidations',
       history: 'History',
+      copyright: 'Sparta v1.0 by Akropolis Decentralised Ltd',
     },
   },
   features: {

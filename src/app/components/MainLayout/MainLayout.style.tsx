@@ -17,12 +17,27 @@ export const useStyles = makeStyles(
       paddingRight: 30,
     },
 
+    // TODO: remove duplication with extand plugin
+
     header: {
-      paddingTop: 30,
+      marginTop: 30,
+      backgroundColor: theme.palette.background.paper,
+      borderRadius: 6,
+      transition: theme.transitions.create('background-color'),
     },
 
     content: {
-      flex: 1,
+      marginTop: 48,
+      backgroundColor: theme.palette.background.paper,
+      borderRadius: 6,
+      transition: theme.transitions.create('background-color'),
+    },
+
+    footer: {
+      marginTop: 48,
+      backgroundColor: theme.palette.background.paper,
+      borderRadius: 6,
+      transition: theme.transitions.create('background-color'),
     },
   }),
   { name: 'main-layout' },
