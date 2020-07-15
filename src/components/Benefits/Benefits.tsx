@@ -48,6 +48,16 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('desktopMD')]: {
       padding: theme.spacing(3.75, 2.5),
     },
+
+    '$item:nth-child(1) &': {
+      background: theme.gradients.products[0].linear(),
+    },
+    '$item:nth-child(2) &': {
+      background: theme.gradients.products[1].linear(),
+    },
+    '$item:nth-child(3) &': {
+      background: theme.gradients.products[2].linear(),
+    },
   },
 
   container: {
@@ -64,37 +74,23 @@ const useStyles = makeStyles(theme => ({
     flexBasis: '100%',
     marginTop: theme.spacing(2.5),
 
-    '&:nth-child(1) $card': {
-      background: theme.gradients.products[0].linear(),
-
+    '&:first-of-type': {
       [theme.breakpoints.up('tabletSM')]: {
-        marginTop: 0,
-        marginRight: theme.spacing(2.5),
-      },
-      [theme.breakpoints.up('desktopSM')]: {
-        marginRight: theme.spacing(4.5),
+        marginLeft: 0,
       },
     },
-    '&:nth-child(2) $card': {
-      background: theme.gradients.products[1].linear(),
 
+    '&:last-of-type': {
       [theme.breakpoints.up('tabletSM')]: {
-        margin: [[0, theme.spacing(2.5)]],
-      },
-      [theme.breakpoints.up('desktopSM')]: {
-        margin: [[0, theme.spacing(4.5)]],
+        marginRight: 0,
       },
     },
-    '&:nth-child(3) $card': {
-      background: theme.gradients.products[2].linear(),
 
-      [theme.breakpoints.up('tabletSM')]: {
-        marginTop: 0,
-        marginLeft: theme.spacing(2.5),
-      },
-      [theme.breakpoints.up('desktopSM')]: {
-        marginLeft: theme.spacing(4.5),
-      },
+    [theme.breakpoints.up('tabletSM')]: {
+      margin: [[0, theme.spacing(2.5)]],
+    },
+    [theme.breakpoints.up('desktopSM')]: {
+      margin: [[0, theme.spacing(4.5)]],
     },
   },
 }));
