@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import { InfoIconV2 } from 'components/icons';
-import { makeStyles, useTheme, colors } from 'utils/styles';
+import { makeStyles } from 'utils/styles';
 
 type Props = {
   title: string;
@@ -15,7 +15,6 @@ type Props = {
 export function TitleWithDescription(props: Props) {
   const { title, description, iconBeforeTitle } = props;
   const classes = useStyles(props);
-  const theme = useTheme();
 
   return (
     <Typography variant="h6" component="h6" className={classes.title}>
@@ -24,9 +23,7 @@ export function TitleWithDescription(props: Props) {
       <Tooltip title={description} placement="right">
         <span className={classes.infoIcon}>
           &nbsp;
-          <InfoIconV2
-            backgroundColor={theme.palette.type === 'dark' ? colors.white : colors.gray}
-          />
+          <InfoIconV2 className={classes.infoIcon} />
         </span>
       </Tooltip>
     </Typography>
