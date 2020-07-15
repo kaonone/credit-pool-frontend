@@ -18,20 +18,21 @@ export const useStyles = makeStyles(
     },
 
     header: {
-      paddingTop: 30,
-      backgroundColor: theme.palette.background.paper,
-      borderRadius: 6,
+      marginTop: 30,
     },
 
     content: {
-      backgroundColor: theme.palette.background.paper,
-      borderRadius: 6,
+      marginTop: 48,
     },
 
     footer: {
       marginTop: 48,
+    },
+
+    paperBackground: {
       backgroundColor: theme.palette.background.paper,
       borderRadius: 6,
+      transition: theme.transitions.create('background-color'),
     },
   }),
   { name: 'main-layout' },

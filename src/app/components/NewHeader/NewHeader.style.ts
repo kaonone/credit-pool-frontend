@@ -6,7 +6,6 @@ export const useStyles = makeStyles(
       padding: '16px 50px',
       display: 'flex',
       justifyContent: 'space-between',
-      marginBottom: 30,
     },
 
     leftPart: {

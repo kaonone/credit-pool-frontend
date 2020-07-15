@@ -5,7 +5,6 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     minHeight: 49,
     paddingLeft: 50,
-    paddingRight: 50,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
@@ -17,7 +16,6 @@ const useStyles = makeStyles(theme => ({
   text: {
     fontSize: 10,
     lineHeight: 1.6,
-    color: '#ffffff',
     opacity: 0.3,
     marginRight: 10,
     borderStyle: 'none',
