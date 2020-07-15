@@ -1,5 +1,4 @@
 import React from 'react';
-import cn from 'classnames';
 
 import { Sidebar } from '../Sidebar';
 import { NewHeader } from '../NewHeader';
@@ -17,13 +16,13 @@ export const MainLayout: React.FC<Props> = props => {
     <div className={classes.root}>
       <Sidebar />
       <div className={classes.headerAndContent}>
-        <div className={cn(classes.header, classes.paperBackground)}>
+        <div className={classes.header}>
           <NewHeader />
         </div>
-        <div className={cn(classes.header, classes.paperBackground)}>
+        <div className={classes.content}>
           <props.Content />
         </div>
-        <div className={cn(classes.header, classes.paperBackground)}>
+        <div className={classes.footer}>
           <AppFooter />
         </div>
       </div>
