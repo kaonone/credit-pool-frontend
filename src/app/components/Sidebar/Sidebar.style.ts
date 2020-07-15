@@ -27,7 +27,7 @@ export const useStyles = makeStyles(
 
       '& $lowerPart': {
         alignSelf: 'center',
-      }
+      },
     },
 
     lowerLinks: {},
@@ -44,5 +44,5 @@ export const useStyles = makeStyles(
       transform: 'rotate(180deg)',
     },
   }),
-  { name: 'sidebar' },
+  { name: 'Sidebar' },
 );

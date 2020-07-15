@@ -12,7 +12,6 @@ import * as icons from './icons';
 import { SidebarIconProps } from './icons/models';
 import * as components from './components';
 
-
 const upperLinks: Link.models.Link[] = [
   {
     kind: 'internal',

@@ -6,5 +6,5 @@ export const useStyles = makeStyles(
       marginTop: 25,
     },
   }),
-  { name: 'sidebar-link' },
+  { name: 'SidebarLink' },
 );

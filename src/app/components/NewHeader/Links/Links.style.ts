@@ -10,5 +10,5 @@ export const useStyles = makeStyles(
       marginLeft: 50,
     },
   }),
-  { name: 'links' },
+  { name: 'Links' },
 );

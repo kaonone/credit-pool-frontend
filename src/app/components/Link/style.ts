@@ -35,5 +35,5 @@ export const useStyles = makeStyles(
       },
     },
   }),
-  { name: 'link' },
+  { name: 'Link' },
 );

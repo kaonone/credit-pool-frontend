@@ -25,5 +25,5 @@ export const useStyles = makeStyles(
       flex: 1,
     },
   }),
-  { name: 'main-layout' },
+  { name: 'MainLayout' },
 );
