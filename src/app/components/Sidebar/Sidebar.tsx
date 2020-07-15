@@ -1,7 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
 
-import { PRIVACY_POLICY_URL, T_AND_C_URL } from 'docs';
 import { tKeys } from 'services/i18n';
 import { IconButton } from 'components';
 
@@ -49,19 +48,6 @@ const upperLinks: Link.models.Link[] = [
   },
 ];
 
-const lowerLinks: Link.models.Link[] = [
-  {
-    kind: 'external',
-    label: tKeys.modules.navigation.privacyPolicy.getKey(),
-    ref: PRIVACY_POLICY_URL,
-  },
-  {
-    kind: 'external',
-    label: tKeys.modules.navigation.termsConditions.getKey(),
-    ref: T_AND_C_URL,
-  },
-];
-
 export const Sidebar: React.FC = () => {
   const classes = useStyles();
 
@@ -78,7 +64,6 @@ export const Sidebar: React.FC = () => {
         <nav className={classes.upperLinks}>{upperLinks.map(makeLinkRenderer(isExpanded))}</nav>
       </div>
       <div className={classes.lowerPart}>
-        {isExpanded && <LowerLinks />}
         <IconButton
           className={cn({
             [classes.switch]: true,
@@ -87,16 +72,9 @@ export const Sidebar: React.FC = () => {
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <icons.Switch fontSize="inherit" />
-        </IconButton>
-      </div>
+        </IconButton></div>
     </div>
   );
-};
-
-const LowerLinks: React.FC = () => {
-  const classes = useStyles();
-
-  return <nav className={classes.lowerLinks}>{lowerLinks.map(makeLinkRenderer(true))}</nav>;
 };
 
 function makeLinkRenderer(shouldRenderLabel: boolean) {
