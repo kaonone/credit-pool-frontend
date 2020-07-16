@@ -8,6 +8,10 @@ const firstCellStyle = {
   paddingLeft: '50px',
 }
 
+const lastCellStyle = {
+  paddingRight: '50px',
+};
+
 const headStyle = {
   textAlign: 'left',
   ...cellStyle,
@@ -22,14 +26,16 @@ export const useStyles = makeStyles(theme => {
       '& th': headStyle,
 
       '& thead th': {
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-        fontSize: '16px',
+        paddingBottom: 0,
       },
 
       '& td:first-child': firstCellStyle,
       '& th:first-child': firstCellStyle,
 
+      '& th:last-child': lastCellStyle,
+
       '& td:last-child': {
+        ...lastCellStyle,
         paddingRight: '50px',
       },
 
@@ -38,6 +44,11 @@ export const useStyles = makeStyles(theme => {
       '& tbody td': {
         fontWeight: 300,
       },
+    },
+
+    title: {
+      height: 40,
+      borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
     },
 
     singleCellExpandedArea: {

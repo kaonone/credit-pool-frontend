@@ -47,7 +47,9 @@ export function Table<T, U = null>(props: Props<T, U>) {
   function renderTitle(column: M.Column<T, U>, columnIndex: number) {
     return (
       <th key={columnIndex}>
-        {column.renderTitle()}
+        <div className={classes.title}>
+          {column.renderTitle()}
+        </div>
       </th>
     )
   }
