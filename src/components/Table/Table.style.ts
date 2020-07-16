@@ -1,13 +1,35 @@
 import { makeStyles } from 'utils/styles';
 
-// const bottomBorder = `0px 1px 0px rgba(0, 0, 0, 0.1)`;
-
-// const borderRadius = '0.25rem';
-
-export const useStyles = makeStyles(() => {
+export const useStyles = makeStyles(theme => {
   return {
     root: {
       width: '100%',
+      borderSpacing: 0,
+
+      '& thead td': {
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        fontSize: '16px',
+      },
+
+      '& td:first-child': {
+        paddingLeft: '50px',
+      },
+
+      '& td:last-child': {
+        paddingRight: '50px',
+      },
+
+      '& td': {
+        padding: '20px 0',
+      },
+
+      '& tbody td': {
+        fontWeight: 300,
+      },
+    },
+
+    expandedArea: {
+      backgroundColor: theme.colors.jaguar,
     },
   }
 });

@@ -99,4 +99,7 @@ export const colors = {
 
   // v2
   darkBlueMagenta: '#101016',
+  blackRussian: '#191924',
+  grayishNavy: '#393753',
+  jaguar: '#20202D',
 };

@@ -5,6 +5,7 @@ import { attachStaticFields } from 'utils/object';
 import { filterChildrenByComponent } from 'utils/react';
 
 import { useStyles } from './Table.style';
+import * as c from './components';
 
 interface IColumnProps {
   children?: React.ReactNode;
@@ -101,7 +102,7 @@ function TableComponent<T>(props: ITableProps<T>) {
             return (
               <>
                 {renderRow(entry, index)}
-                <tr key={index} >
+                <tr key={index} className={classes.expandedArea}>
                   <td colSpan={columns.length}>
                     {ExpandedContent && <ExpandedContent />}
                   </td>
@@ -127,11 +128,11 @@ function TableComponent<T>(props: ITableProps<T>) {
             if (expander) {
               const isExpanded = rowToExpanded[index];
 
-              const handleClick = () => setRowToExpanded({ ...rowToExpanded, [index]: !isExpanded });
+              const handleToggle = (newValue: boolean) => setRowToExpanded({ ...rowToExpanded, [index]: newValue });
 
               return (
-                <td key={cellIndex} onClick={handleClick}>
-                  {isExpanded ? 'close' : 'open'}
+                <td key={cellIndex} align={align}>
+                  <c.RowExpander expanded={isExpanded} onToggle={handleToggle} />
                 </td>
               );
             }
@@ -149,7 +150,7 @@ function TableComponent<T>(props: ITableProps<T>) {
           );
         }
         )}
-      </tr>
+      </tr >
     );
   }
 }
