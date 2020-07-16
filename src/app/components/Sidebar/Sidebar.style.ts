@@ -16,6 +16,7 @@ export const useStyles = makeStyles(
 
     upperPart: {
       width: '100%',
+      paddingLeft: 5,
     },
 
     lowerPart: {
@@ -26,19 +27,15 @@ export const useStyles = makeStyles(
     upperLinks: {},
 
     rootShort: {
-      width: theme.spacing(7),
-      alignItems: 'center',
+      width: theme.spacing(8),
     },
 
     lowerLinks: {},
 
     switch: {
-      border: 0,
-      background: 'transparent',
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(3),
       padding: 5,
-      cursor: 'pointer',
       alignSelf: 'flex-end',
 
       '& path': {
