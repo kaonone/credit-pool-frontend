@@ -6,10 +6,14 @@ import { Link } from 'react-router-dom';
 import { routes } from 'app/routes';
 import { makeStyles } from 'utils/styles';
 import { TabsList, TabContext, Tab, TabPanel } from 'components';
+import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 
 import { MySummary } from './InnerPages/MySummary/MySummary';
 
+const tKeys = tKeysAll.app.pages.account;
+
 export function AccountPage() {
+  const { t } = useTranslate();
   const match = useRouteMatch<{ page: string }>('/account/:page');
   const [selectedPage, setSelectedPage] = React.useState(routes.account.summary.getElementKey());
 
@@ -29,21 +33,21 @@ export function AccountPage() {
       <TabContext value={selectedPage}>
         <TabsList value={selectedPage} className={classes.tabs} onChange={handleTabChange}>
           <Tab
-            label="My Summary"
+            label={t(tKeys.tabs.summary.getKey())}
             className={classes.tab}
             component={Link}
             value={routes.account.summary.getElementKey()}
             to={routes.account.summary.getRedirectPath()}
           />
           <Tab
-            label="My Stakes"
+            label={t(tKeys.tabs.stakes.getKey())}
             className={classes.tab}
             component={Link}
             value={routes.account.stakes.getElementKey()}
             to={routes.account.stakes.getRedirectPath()}
           />
           <Tab
-            label="My Borrows"
+            label={t(tKeys.tabs.borrows.getKey())}
             className={classes.tab}
             component={Link}
             value={routes.account.borrows.getElementKey()}

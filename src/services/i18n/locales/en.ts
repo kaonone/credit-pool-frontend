@@ -14,6 +14,13 @@ const en = {
         balanceChangesTitle: 'Deposit/Withdraw history',
         earningsTitle: 'Earnings',
       },
+      account: {
+        tabs: {
+          summary: 'My summary',
+          stakes: 'My stakes',
+          borrows: 'My borrows',
+        },
+      },
       history: {
         tabs: {
           transaction: 'Transaction History',
