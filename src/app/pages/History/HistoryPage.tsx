@@ -4,11 +4,9 @@ import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { TabsList, TabContext, Tab, TabPanel } from 'components';
+import { TabsList, TabContext, Tab, TabPanel, ComingSoon } from 'components';
 import { routes } from 'app/routes';
 import { makeStyles } from 'utils/styles';
-
-import { ComingSoonPage } from '../ComingSoon/ComingSoon';
 
 const tKeys = tKeysAll.app.pages.history;
 
@@ -56,13 +54,13 @@ export function HistoryPage() {
           />
         </TabsList>
         <TabPanel value={routes.history.transaction.getElementKey()}>
-          <ComingSoonPage />
+          <ComingSoon />
         </TabPanel>
         <TabPanel value={routes.history.profit.getElementKey()}>
-          <ComingSoonPage />
+          <ComingSoon />
         </TabPanel>
         <TabPanel value={routes.history.liquidations.getElementKey()}>
-          <ComingSoonPage />
+          <ComingSoon />
         </TabPanel>
       </TabContext>
     </Grid>
@@ -72,7 +70,6 @@ export function HistoryPage() {
 const useStyles = makeStyles(
   () => ({
     root: {
-      backgroundColor: '#13131b',
       padding: '50px 60px',
     },
     tabs: {

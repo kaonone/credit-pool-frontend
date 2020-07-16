@@ -8,7 +8,7 @@ export const useStyles = makeStyles(
       overflow: 'auto',
       flexDirection: 'column',
       padding: '100px 15px 20px',
-      background: theme.palette.background.paper,
+      background: theme.palette.background.paperSecondary,
       justifyContent: 'space-between',
       width: theme.spacing(26),
       transition: theme.transitions.create('width'),

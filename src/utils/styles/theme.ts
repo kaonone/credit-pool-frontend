@@ -74,8 +74,10 @@ const lightPalette = {
     main: colors.monza,
   },
   background: {
-    default: colors.white,
-    paper: colors.athensGray,
+    hint: colors.charade,
+    default: colors.athensGray,
+    paper: colors.white,
+    paperSecondary: colors.white,
   },
   type: 'light' as const,
 };
@@ -100,8 +102,10 @@ export const darkPalette = {
     main: colors.monza,
   },
   background: {
-    default: colors.charade,
-    paper: colors.darkBlueMagenta,
+    hint: colors.charade,
+    default: colors.obsidian,
+    paper: colors.foggyNight,
+    paperSecondary: colors.darkBlueMagenta,
   },
   type: 'dark' as const,
 };
@@ -154,6 +158,10 @@ function getTheme(type: 'light' | 'dark'): Theme {
     },
     typography: {
       fontFamily: ['Helvetica Neue', 'Arial', 'sans-serif'].join(','),
+      h6: {
+        fontSize: 16,
+        fontWeight: 400,
+      },
     },
     shape: {
       borderRadius: 4,
@@ -300,13 +308,15 @@ function getTheme(type: 'light' | 'dark'): Theme {
 
         indicator: {
           top: 0,
-          height: tabsHeight - tabsIndicatorSpace * 2 - tabsBorderWidth * 2,
+          bottom: 0,
+          height: '100%',
           borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
           zIndex: -1,
           background: 'linear-gradient(to left, #544cf2, #d93cef)',
         },
 
         scroller: {
+          zIndex: 1,
           overflow: 'hidden',
           borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
         },
@@ -317,6 +327,9 @@ function getTheme(type: 'light' | 'dark'): Theme {
           minHeight: 'unset',
           padding: defaultTheme.spacing(0.2, 1.5),
           textTransform: 'unset',
+          fontSize: '1rem',
+          lineHeight: 1.5,
+          borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
 
           '&$selected': {
             color: colors.white,
@@ -327,6 +340,23 @@ function getTheme(type: 'light' | 'dark'): Theme {
       MuiSvgIcon: {
         root: {
           display: 'block',
+          fontSize: '1.25rem',
+        },
+
+        fontSizeSmall: {
+          fontSize: '1rem',
+        },
+
+        fontSizeLarge: {
+          fontSize: '1.5rem',
+        },
+      },
+
+      // TODO: enable @material-ui/lab overrides
+      // @ts-ignore
+      MuiTabPanel: {
+        root: {
+          padding: 0,
         },
       },
     },
@@ -349,6 +379,7 @@ declare module '@material-ui/core/styles/createPalette' {
   interface TypeBackground {
     hint: string;
     tableHeader: string;
+    paperSecondary: string;
   }
 }
 

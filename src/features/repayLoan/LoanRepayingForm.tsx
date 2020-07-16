@@ -92,13 +92,13 @@ export function LoanRepayingForm({
         repaymentMethod === 'fromAvailablePoolBalance'
           ? lessThenOrEqual(
               availablePoolBalance,
-              amount.value,
+              amount.toBN(),
               () => amount.withValue(availablePoolBalance).toFormattedString(),
               tKeys.insufficientBalanceError.getKey(),
             )
           : lessThenOrEqual(
               availableDaiBalance,
-              amount.value,
+              amount.toBN(),
               () => amount.withValue(availableDaiBalance).toFormattedString(),
               tKeys.insufficientBalanceError.getKey(),
             );

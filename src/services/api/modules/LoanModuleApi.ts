@@ -275,7 +275,9 @@ export class LoanModuleApi {
       ),
     );
 
-    const pAmount = new BN(pInitialLocked).mul(sourceAmount.value).div(currentFullStakeCost.value);
+    const pAmount = new BN(pInitialLocked)
+      .mul(sourceAmount.toBN())
+      .div(currentFullStakeCost.toBN());
 
     const promiEvent = txLoanModule.methods.withdrawPledge(
       {
@@ -338,7 +340,7 @@ export class LoanModuleApi {
     const promiEvent = txLoanModule.methods.createDebtProposal(
       {
         pAmountMax: min(pAmount.toBN(), pBalance),
-        debtLAmount: sourceAmount.value,
+        debtLAmount: sourceAmount.toBN(),
         interest: new BN(apr),
         descriptionHash: hash,
       },
@@ -450,7 +452,7 @@ export class LoanModuleApi {
       promiEvent = txLoanModule.methods.repayPTK(
         {
           debt: bnToBn(debtId),
-          lAmountMin: tokenAmountAfterFee.value,
+          lAmountMin: tokenAmountAfterFee.toBN(),
           pAmount: min(pAmount.toBN(), pBalance),
         },
         { from: fromAddress },
@@ -463,7 +465,7 @@ export class LoanModuleApi {
       );
 
       promiEvent = txLoanModule.methods.repay(
-        { debt: bnToBn(debtId), lAmount: tokenAmountAfterFee.value },
+        { debt: bnToBn(debtId), lAmount: tokenAmountAfterFee.toBN() },
         { from: fromAddress },
       );
     }
@@ -471,7 +473,7 @@ export class LoanModuleApi {
     this.transactionsApi.pushToSubmittedTransactions$('loan.repay', promiEvent, {
       address: fromAddress,
       debtId,
-      amount: tokenAmountAfterFee.value,
+      amount: tokenAmountAfterFee.toBN(),
     });
 
     await promiEvent;
@@ -567,7 +569,7 @@ export class LoanModuleApi {
   // TODO take MIN_COLLATERAL_PERCENT_FOR_BORROWER from contract
   public getMinLoanCollateral$(loanSize: TokenAmount): Observable<LiquidityAmount> {
     return this.fundsModuleApi.toLiquidityAmount$(
-      of(loanSize.muln(MIN_COLLATERAL_PERCENT_FOR_BORROWER).divn(100)),
+      of(loanSize.mul(MIN_COLLATERAL_PERCENT_FOR_BORROWER).div(100)),
     );
   }
 
