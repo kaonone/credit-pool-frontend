@@ -48,7 +48,7 @@ export class TokensApi {
     const txDai = this.getErc20TxContract(amount.currency.address);
 
     const promiEvent = txDai.methods.approve(
-      { spender, amount: amount.value },
+      { spender, amount: amount.toBN() },
       { from: fromAddress },
     );
 

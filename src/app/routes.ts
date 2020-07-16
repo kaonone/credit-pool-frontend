@@ -2,7 +2,11 @@ import build from 'build-route-tree';
 
 const rawTree = {
   demo: null,
-  account: null,
+  account: {
+    summary: null,
+    stakes: null,
+    borrows: null,
+  },
   balance: null,
   pool: null,
   stats: null,

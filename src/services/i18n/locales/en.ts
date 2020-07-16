@@ -14,6 +14,13 @@ const en = {
         balanceChangesTitle: 'Deposit/Withdraw history',
         earningsTitle: 'Earnings',
       },
+      account: {
+        tabs: {
+          summary: 'My summary',
+          stakes: 'My stakes',
+          borrows: 'My borrows',
+        },
+      },
       history: {
         tabs: {
           transaction: 'Transaction History',
@@ -354,6 +361,34 @@ const en = {
     },
     activitiesCard: {
       expansionPanelTitle: 'Reason',
+    },
+    metrics: {
+      myBalance: {
+        myBalance: 'My balance (USD)',
+        deposit: 'Deposit',
+        description: 'Here is a title description',
+      },
+      myPoolShare: {
+        myPoolShare: 'My Pool Share',
+        totalPoolLiquidity: 'Total Pool Liquidity',
+        description: 'Here is a title description',
+      },
+      apy: {
+        description: 'Here is a title description',
+        withdraw: 'Withdraw',
+      },
+      akro: {
+        description: 'Here is a title description',
+      },
+    },
+    portfolioSnapshot: {
+      caption: 'Portfolio Snapshot',
+      asset: 'Asset',
+      apy: 'APY',
+      earned: 'Earned',
+      balance: 'Balance',
+      description: 'Here is a title description',
+      loansIssued: 'Loans Issued',
     },
   },
 };

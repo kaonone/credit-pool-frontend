@@ -49,14 +49,14 @@ export function useValidateAmount(options: ValidateAmountOptions) {
         return required ? isRequired(amount) : undefined;
       }
       return (
-        (positive && validatePositiveNumber(amount.value)) ||
-        (moreThenZero && moreThen(new BN(0), amount.value)) ||
+        (positive && validatePositiveNumber(amount.toBN())) ||
+        (moreThenZero && moreThen(new BN(0), amount.toBN())) ||
         (minValue &&
-          moreThenOrEqual(minValue, amount.value, () =>
+          moreThenOrEqual(minValue, amount.toBN(), () =>
             amount.withValue(minValue).toFormattedString(),
           )) ||
         (maxValue &&
-          lessThenOrEqual(maxValue, amount.value, () =>
+          lessThenOrEqual(maxValue, amount.toBN(), () =>
             amount.withValue(maxValue).toFormattedString(),
           ))
       );

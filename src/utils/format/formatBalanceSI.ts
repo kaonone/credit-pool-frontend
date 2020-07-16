@@ -3,7 +3,7 @@ import BN from 'bn.js';
 import { bnToBn } from 'utils/bn/bnToBn';
 
 import { SI, calcSi, getSiMidIndex } from './si';
-import { formatDecimal } from './formatDecimal';
+import { formatInteger } from './formatInteger';
 
 interface IFormatBalanceSIOptions {
   amountInBaseUnits: string | BN;
@@ -41,7 +41,7 @@ export function formatBalanceSI({
 
   const units = si.value === '-' ? ` ${tokenSymbol}` : `${si.value} ${tokenSymbol}`;
 
-  return `${isNegative ? '-' : ''}${formatDecimal(prefix || '0')}.${postfix}${units.trimEnd()}`;
+  return `${isNegative ? '-' : ''}${formatInteger(prefix || '0')}.${postfix}${units.trimEnd()}`;
 }
 
 formatBalanceSI.getOptions = (baseDecimals: number, baseUnitName?: string) => {
