@@ -72,6 +72,7 @@ const en = {
         connectedTo: 'Connected to',
         disconnect: 'Disconnect',
       },
+      connect: 'Connect to wallet',
     },
     notifications: {
       'erc20.approve': {

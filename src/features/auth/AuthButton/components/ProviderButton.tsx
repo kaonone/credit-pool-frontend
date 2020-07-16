@@ -52,7 +52,7 @@ export function ProviderButton({
       onClick={handleClick}
       focusVisibleClassName={classes.focusVisible}
     >
-      <Grid container direction="column" alignItems="center">
+      <Grid container direction="column" alignItems="center" className={classes.container}>
         <Grid item>
           <Icon className={classes.icon} />
         </Grid>
@@ -116,7 +116,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 
   actionName: {
-    padding: theme.spacing(0.5, 4),
     border: `1px solid ${
       theme.palette.type === 'dark'
         ? lighten(theme.palette.background.paper, 0.2)
@@ -148,5 +147,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 
   icon: {
     fontSize: 56,
+  },
+
+  container: {
+    width: 'auto',
   },
 }));
