@@ -64,7 +64,7 @@ const generateFontRule = (
   fontWeight: number,
   fontStyle: 'normal' | 'italic' = 'normal',
 ) => ({
-  fontFamily: 'HelveticaNeue',
+  fontFamily: 'Helvetica Neue',
   fontStyle,
   fontWeight,
   src: `
