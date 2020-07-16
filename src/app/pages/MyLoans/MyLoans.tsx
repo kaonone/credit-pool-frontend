@@ -98,7 +98,11 @@ export function MyLoansPage() {
       <NewTable.Component columns={columnsWithSubtable} entries={entries} />
 
       <div style={{ marginTop: '30px' }}>
-        <NewTable.Component columns={columns} entries={entries} />
+        <NewTable.Component
+          columns={columns}
+          entries={entries}
+          summary={{ renderLabel: () => 'Sum', renderValue: () => 13 }}
+        />
       </div>
     </>
   )

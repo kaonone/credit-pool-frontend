@@ -9,6 +9,7 @@ import * as M from './models';
 type Props<T, U> = {
   entries: T[];
   columns: Array<M.Column<T, U>>;
+  summary?: M.Summary;
 }
 
 type RowToExpandedState = Record<number, boolean>;
@@ -16,7 +17,7 @@ type RowToExpandedState = Record<number, boolean>;
 export function Table<T, U = null>(props: Props<T, U>) {
   const classes = useStyles();
 
-  const { columns, entries } = props;
+  const { columns, entries, summary } = props;
 
   const [rowToExpanded, setRowToExpanded] = React.useState<RowToExpandedState>(entries.reduce((acc, _, index) => ({
     ...acc,
@@ -40,9 +41,20 @@ export function Table<T, U = null>(props: Props<T, U>) {
       </thead>
       <tbody>
         {entries.map(renderEntry)}
+        {summary && renderSummary(summary)}
       </tbody>
     </table>
   )
+
+  function renderSummary(summary: M.Summary) {
+    return (
+      <tr key="summary">
+        <td colSpan={columns.length}>
+          <views.Summary summary={summary} />
+        </td>
+      </tr>
+    )
+  }
 
   function renderTitle(column: M.Column<T, U>, columnIndex: number) {
     return (

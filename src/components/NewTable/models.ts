@@ -34,3 +34,8 @@ export type SubtableColumn<T> = {
   renderTitle(): React.ReactNode;
   renderCell(subtableEntry: T): React.ReactNode;
 }
+
+export type Summary = {
+  renderLabel(): React.ReactNode;
+  renderValue(): React.ReactNode;
+}
