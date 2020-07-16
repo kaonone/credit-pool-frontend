@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 // tslint:disable:max-line-length
-function TwitterIcon(props: GetProps<typeof SvgIcon>) {
+function TwitterIcon(props: React.ComponentProps<typeof SvgIcon>) {
   const { classes, ...rest } = props;
   return (
     <SvgIcon {...rest} viewBox="0 0 30 24">

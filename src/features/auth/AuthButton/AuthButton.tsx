@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 
 import { useApi } from 'services/api';
 import { getShortAddress } from 'utils/format';
@@ -8,7 +7,7 @@ import { Button, Loading } from 'components';
 
 import { AuthModal } from './components/AuthModal';
 
-type IProps = Pick<GetProps<typeof Button>, 'color'> & {};
+type IProps = Pick<React.ComponentProps<typeof Button>, 'color'> & {};
 
 export function AuthButton(props: IProps) {
   const { color } = props;

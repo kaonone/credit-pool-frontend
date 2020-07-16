@@ -41,5 +41,5 @@ export const useStyles = makeStyles(
       transition: theme.transitions.create('background-color'),
     },
   }),
-  { name: 'main-layout' },
+  { name: 'MainLayout' },
 );

@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-export function WalletConnect(props: GetProps<typeof SvgIcon>) {
+export function WalletConnect(props: React.ComponentProps<typeof SvgIcon>) {
   return (
     <SvgIcon {...props} viewBox="0 0 300 185">
       <path

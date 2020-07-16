@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { makeStyles } from 'utils/styles';
@@ -13,7 +12,7 @@ const useStyles = makeStyles({
 });
 
 // tslint:disable:max-line-length
-function LogoWithNameIcon(props: GetProps<typeof SvgIcon>) {
+function LogoWithNameIcon(props: React.ComponentProps<typeof SvgIcon>) {
   const { classes: _, ...rest } = props;
   const classes = useStyles();
 
