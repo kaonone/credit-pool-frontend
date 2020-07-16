@@ -59,13 +59,9 @@ export class Fraction implements IToBN {
     return new Fraction(this.numerator.mul(numerator), this.denominator.mul(denominator));
   }
 
-  gt(value: Fraction | BN | IToBN): boolean {
+  gt(value: number | Fraction | BN | IToBN): boolean {
     const { denominator, numerator } = toFraction(value);
     return this.numerator.mul(denominator).gt(numerator.mul(this.denominator));
-  }
-
-  gtn(value: number): boolean {
-    return this.numerator.gt(this.denominator.muln(value));
   }
 
   isZero() {
