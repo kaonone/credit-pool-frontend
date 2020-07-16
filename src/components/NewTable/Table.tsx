@@ -3,7 +3,7 @@ import React from 'react';
 import * as R from 'ramda';
 
 import { useStyles } from './Table.style';
-import * as c from './components';
+import * as views from './components';
 import * as M from './models';
 
 type Props<T, U> = {
@@ -56,18 +56,18 @@ export function Table<T, U = null>(props: Props<T, U>) {
 
   function renderEntry(entry: T, rowIndex: number) {
     if (expandedArea === null) {
-      return renderPrimaryEntryRow(entry, rowIndex);
+      return renderEntryRow(entry, rowIndex);
     }
 
     return (
       <React.Fragment key={rowIndex}>
-        {renderPrimaryEntryRow(entry, rowIndex)}
-        {rowToExpanded[rowIndex] && renderExpandedArea(entry, expandedArea)}
+        {renderEntryRow(entry, rowIndex)}
+        {rowToExpanded[rowIndex] && renderEntryExpandedArea(entry, expandedArea)}
       </React.Fragment>
     )
   }
 
-  function renderExpandedArea(entry: T, area: M.ExpandedArea<T, U>) {
+  function renderEntryExpandedArea(entry: T, area: M.ExpandedArea<T, U>) {
     switch (area.kind) {
       case 'single-cell':
         return renderAreaWithingSingleCell(entry, area);
@@ -149,7 +149,7 @@ export function Table<T, U = null>(props: Props<T, U>) {
     }
   }
 
-  function renderPrimaryEntryRow(entry: T, rowIndex: number) {
+  function renderEntryRow(entry: T, rowIndex: number) {
     return (
       <tr>
         {columns.map(makeCellRenderer(entry, rowIndex))}
@@ -183,7 +183,7 @@ export function Table<T, U = null>(props: Props<T, U>) {
 
     return (
       <td key="row-expander">
-        <c.RowExpander expanded={rowToExpanded[rowIndex]} onToggle={handleToggle} />
+        <views.RowExpander expanded={rowToExpanded[rowIndex]} onToggle={handleToggle} />
       </td>
     );
   }
