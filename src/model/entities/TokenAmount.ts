@@ -27,6 +27,6 @@ export class TokenAmount extends Amount<Token> {
   }
 
   public withToken(newToken: Token): TokenAmount {
-    return new TokenAmount(this.toBN(), newToken);
+    return new TokenAmount(this.toFraction(), newToken);
   }
 }
