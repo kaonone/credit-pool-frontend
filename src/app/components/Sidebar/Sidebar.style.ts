@@ -21,18 +21,13 @@ export const useStyles = makeStyles(
     lowerPart: {
       display: 'flex',
       flexDirection: 'column',
-      marginLeft: theme.spacing(4),
     },
 
     upperLinks: {},
 
     rootShort: {
-      width: theme.spacing(8),
+      width: theme.spacing(7),
       alignItems: 'center',
-
-      '& $lowerPart': {
-        alignSelf: 'center',
-      },
     },
 
     lowerLinks: {},
