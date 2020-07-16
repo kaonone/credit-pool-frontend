@@ -3,6 +3,7 @@ import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import Avatar from '@material-ui/core/Avatar';
 import { GetProps } from '_helpers';
 
+import { NETWORK_ID } from 'env';
 import { useApi } from 'services/api';
 import { getShortAddress } from 'utils/format';
 import { useSubscribable, useCommunication, useOnChangeState } from 'utils/react';
@@ -65,8 +66,8 @@ export function AuthButton(props: IProps) {
         <Loading meta={accountMeta}>
           {account ? (
             <>
-              <Avatar>
-                <Jazzicon diameter={40} seed={jsNumberForAddress(account)} />
+              <Avatar className={classes.icon}>
+                <Jazzicon diameter={34} seed={jsNumberForAddress(account)} />
               </Avatar>
               <Grid
                 container
@@ -80,7 +81,8 @@ export function AuthButton(props: IProps) {
                 </Grid>
                 <Grid item>
                   <Typography className={classes.connected}>
-                    {`${t(tKeys.features.auth.modalTitle.connectedTo.getKey())} ${connectedWallet}`}
+                    {`${t(tKeys.features.auth.modalTitle.connectedTo.getKey())} 
+                    ${t(tKeys.features.networkWarning.networkType[NETWORK_ID].getKey())}`}
                   </Typography>
                 </Grid>
               </Grid>
@@ -108,7 +110,6 @@ export function AuthButton(props: IProps) {
 const useStyles = makeStyles({
   root: {
     padding: '0 15px 0 0',
-    borderRadius: 20,
   },
   address: {
     fontSize: 12,
@@ -118,11 +119,16 @@ const useStyles = makeStyles({
     fontSize: 12,
     lineHeight: 1,
     opacity: 0.5,
+    marginTop: 3,
   },
   connect: {
     paddingLeft: 10,
   },
   container: {
     marginLeft: 11,
+  },
+  icon: {
+    width: 34,
+    height: 34,
   },
 });
