@@ -2,7 +2,7 @@ import * as React from 'react';
 import cn from 'classnames';
 
 import { Card } from 'app/components/Card';
-import { makeStyles, getGrid } from 'utils/styles';
+import { makeStyles } from 'utils/styles';
 
 import { Preview } from '../Preview/Preview';
 import { Section } from '../Section/Section';
@@ -48,75 +48,49 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('desktopMD')]: {
       padding: theme.spacing(3.75, 2.5),
     },
+
+    '$item:nth-child(1) &': {
+      background: theme.gradients.products[0].linear(),
+    },
+    '$item:nth-child(2) &': {
+      background: theme.gradients.products[1].linear(),
+    },
+    '$item:nth-child(3) &': {
+      background: theme.gradients.products[2].linear(),
+    },
   },
 
-  ...getGrid(
-    theme,
-    [
-      {
-        breakpoint: 'mobileXS',
-        count: 1,
-        hPadding: theme.spacing(0),
-        vPadding: theme.spacing(2.5),
-      },
-      {
-        breakpoint: 'tabletXS',
-        count: 3,
-        hPadding: theme.spacing(2.5),
-        vPadding: theme.spacing(2.5),
-      },
-      {
-        breakpoint: 'tabletSM',
-        count: 3,
-        hPadding: theme.spacing(3.75),
-        vPadding: theme.spacing(3.75),
-      },
-      {
-        breakpoint: 'desktopXS',
-        count: 3,
-        hPadding: theme.spacing(4.5),
-        vPadding: theme.spacing(4.5),
-      },
-      {
-        breakpoint: 'desktopSM',
-        count: 3,
-        hPadding: theme.spacing(4.75),
-        vPadding: theme.spacing(4.75),
-      },
-      {
-        breakpoint: 'desktopMD',
-        count: 3,
-        hPadding: theme.spacing(5),
-        vPadding: theme.spacing(5),
-      },
-      {
-        breakpoint: 'desktopLG',
-        count: 3,
-        hPadding: theme.spacing(8),
-        vPadding: theme.spacing(8),
-      },
-      {
-        breakpoint: 'desktopXL',
-        count: 3,
-        hPadding: theme.spacing(12.5),
-        vPadding: theme.spacing(12.5),
-      },
-    ],
-    {
-      container: {
-        justifyContent: 'center',
-      },
-      item: {
-        '&:nth-child(1) $card': {
-          background: theme.gradients.products[0].linear(),
-        },
-        '&:nth-child(2) $card': {
-          background: theme.gradients.products[1].linear(),
-        },
-        '&:nth-child(3) $card': {
-          background: theme.gradients.products[2].linear(),
-        },
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+
+    [theme.breakpoints.up('tabletSM')]: {
+      flexDirection: 'row',
+    },
+  },
+
+  item: {
+    flexBasis: '100%',
+    marginTop: theme.spacing(2.5),
+
+    '&:first-of-type': {
+      [theme.breakpoints.up('tabletSM')]: {
+        marginLeft: 0,
       },
     },
-  ),
+
+    '&:last-of-type': {
+      [theme.breakpoints.up('tabletSM')]: {
+        marginRight: 0,
+      },
+    },
+
+    [theme.breakpoints.up('tabletSM')]: {
+      margin: [[0, theme.spacing(2.5)]],
+    },
+    [theme.breakpoints.up('desktopSM')]: {
+      margin: [[0, theme.spacing(4.5)]],
+    },
+  },
 }));
