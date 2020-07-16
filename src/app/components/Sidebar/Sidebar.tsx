@@ -4,7 +4,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { tKeys } from 'services/i18n';
 import { IconButton } from 'components';
-import { Account, Borrow, History, Lend, Liquidations, Switch } from 'components/icons';
+import * as icons from 'components/icons/navigation';
 
 import { routes } from '../../routes';
 import * as Link from '../Link';
@@ -16,35 +16,35 @@ const upperLinks: Link.models.Link[] = [
     kind: 'internal',
     ref: routes.account.getRoutePath(),
     label: tKeys.modules.navigation.account.getKey(),
-    renderIcon: makeIconRenderer(Account),
+    renderIcon: makeIconRenderer(icons.Account),
   },
 
   {
     kind: 'internal',
     ref: routes.lend.getRoutePath(),
     label: tKeys.modules.navigation.lend.getKey(),
-    renderIcon: makeIconRenderer(Lend),
+    renderIcon: makeIconRenderer(icons.Lend),
   },
 
   {
     kind: 'internal',
     ref: routes.borrow.getRoutePath(),
     label: tKeys.modules.navigation.borrow.getKey(),
-    renderIcon: makeIconRenderer(Borrow),
+    renderIcon: makeIconRenderer(icons.Borrow),
   },
 
   {
     kind: 'internal',
     ref: routes.liquidations.getRoutePath(),
     label: tKeys.modules.navigation.liquidations.getKey(),
-    renderIcon: makeIconRenderer(Liquidations),
+    renderIcon: makeIconRenderer(icons.Liquidations),
   },
 
   {
     kind: 'internal',
     ref: routes.history.getRoutePath(),
     label: tKeys.modules.navigation.history.getKey(),
-    renderIcon: makeIconRenderer(History),
+    renderIcon: makeIconRenderer(icons.History),
   },
 ];
 
@@ -77,7 +77,7 @@ export const Sidebar: React.FC = () => {
         })}
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <Switch fontSize="inherit" />
+        <icons.Switch fontSize="inherit" />
       </IconButton>
     );
   }
@@ -90,5 +90,7 @@ function makeLinkRenderer(shouldRenderLabel: boolean) {
 }
 
 function makeIconRenderer(Icon: typeof SvgIcon) {
-  return (isActive: boolean) => <Icon fontSize="inherit" {...(!isActive && { color: 'inherit' })} />;
+  return (isActive: boolean) => (
+    <Icon fontSize="inherit" {...(!isActive && { color: 'inherit' })} />
+  );
 }
