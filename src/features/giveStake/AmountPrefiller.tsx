@@ -35,7 +35,7 @@ export function AmountPrefiller(props: AmountPrefillerProps) {
           const interestShareDecimals = 2;
 
           return [0, 50, 100].map<PrefillValue>(size => {
-            const value = minValue.add(valueDelta.muln(size).divn(100));
+            const value = minValue.add(valueDelta.mul(size).div(100));
 
             const interestShare = calcInterestShare(
               value.toBN(),

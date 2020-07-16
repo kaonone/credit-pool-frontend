@@ -90,7 +90,7 @@ export class FundsModuleApi {
         ),
       ),
       switchMap(unpaidInterestInPtk =>
-        this.getAvailableBalance$(address, unpaidInterestInPtk.muln(-1).toString()),
+        this.getAvailableBalance$(address, unpaidInterestInPtk.mul(-1).toString()),
       ),
     );
   }

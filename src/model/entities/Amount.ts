@@ -28,20 +28,12 @@ export abstract class Amount<C extends ICurrency> implements IToBN, IToFraction 
     return this.makeAmount(this.value.add(toFraction(value)), this.currency);
   }
 
-  public div(value: BN | IToBN | IToFraction): this {
+  public div(value: number | BN | IToBN | IToFraction): this {
     return this.makeAmount(this.value.div(toFraction(value)), this.currency);
   }
 
-  public divn(value: number): this {
-    return this.makeAmount(this.value.divn(value), this.currency);
-  }
-
-  public mul(value: BN | IToBN | IToFraction): this {
+  public mul(value: number | BN | IToBN | IToFraction): this {
     return this.makeAmount(this.value.mul(toFraction(value)), this.currency);
-  }
-
-  public muln(value: number): this {
-    return this.makeAmount(this.value.muln(value), this.currency);
   }
 
   public isZero(): boolean {
@@ -79,12 +71,12 @@ export abstract class Amount<C extends ICurrency> implements IToBN, IToFraction 
   }
 }
 
-function toFraction(value: string | BN | IToBN | Fraction | IToFraction): Fraction {
+function toFraction(value: number | string | BN | IToBN | Fraction | IToFraction): Fraction {
   if (value instanceof Fraction) {
     return value;
   }
-  if (typeof value === 'string' || BN.isBN(value) || 'toBN' in value) {
-    return new Fraction(value);
+  if (typeof value === 'object' && 'toFraction' in value) {
+    return value.toFraction();
   }
-  return value.toFraction();
+  return new Fraction(value);
 }

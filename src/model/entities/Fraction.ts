@@ -8,7 +8,10 @@ export class Fraction implements IToBN {
   public readonly numerator: BN;
   public readonly denominator: BN;
 
-  constructor(numerator: string | BN | IToBN, denominator: string | BN | IToBN = new BN(1)) {
+  constructor(
+    numerator: string | number | BN | IToBN,
+    denominator: string | number | BN | IToBN = new BN(1),
+  ) {
     this.numerator = bnToBn(numerator);
     this.denominator = bnToBn(denominator);
   }
@@ -46,22 +49,14 @@ export class Fraction implements IToBN {
     );
   }
 
-  div(value: Fraction | BN | IToBN) {
+  div(value: number | Fraction | BN | IToBN) {
     const { denominator, numerator } = toFraction(value);
     return new Fraction(this.numerator.mul(denominator), this.denominator.mul(numerator));
   }
 
-  divn(value: number) {
-    return new Fraction(this.numerator, this.denominator.muln(value));
-  }
-
-  mul(value: Fraction | BN | IToBN) {
+  mul(value: number | Fraction | BN | IToBN) {
     const { denominator, numerator } = toFraction(value);
     return new Fraction(this.numerator.mul(numerator), this.denominator.mul(denominator));
-  }
-
-  muln(value: number) {
-    return new Fraction(this.numerator.muln(value), this.denominator);
   }
 
   gt(value: Fraction | BN | IToBN): boolean {
@@ -78,7 +73,7 @@ export class Fraction implements IToBN {
   }
 }
 
-function toFraction(value: Fraction | BN | IToBN): Fraction {
+function toFraction(value: number | Fraction | BN | IToBN): Fraction {
   if (value instanceof Fraction) {
     return value;
   }

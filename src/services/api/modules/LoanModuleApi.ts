@@ -569,7 +569,7 @@ export class LoanModuleApi {
   // TODO take MIN_COLLATERAL_PERCENT_FOR_BORROWER from contract
   public getMinLoanCollateral$(loanSize: TokenAmount): Observable<LiquidityAmount> {
     return this.fundsModuleApi.toLiquidityAmount$(
-      of(loanSize.muln(MIN_COLLATERAL_PERCENT_FOR_BORROWER).divn(100)),
+      of(loanSize.mul(MIN_COLLATERAL_PERCENT_FOR_BORROWER).div(100)),
     );
   }
 
