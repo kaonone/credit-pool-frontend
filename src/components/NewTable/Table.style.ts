@@ -2,11 +2,11 @@ import { makeStyles } from 'utils/styles';
 
 const cellStyle = {
   padding: '10px 0px',
-}
+};
 
 const firstCellStyle = {
   paddingLeft: '50px',
-}
+};
 
 const lastCellStyle = {
   paddingRight: '50px',
@@ -15,12 +15,11 @@ const lastCellStyle = {
 const headStyle = {
   textAlign: 'left',
   ...cellStyle,
-}
+};
 
 const crossRowBorder = '1px solid rgba(255, 255, 255, 0.1)';
 
 export const useStyles = makeStyles(theme => {
-
   return {
     root: {
       width: '100%',
@@ -91,6 +90,6 @@ export const useStyles = makeStyles(theme => {
         paddingLeft: 0,
         marginLeft: 10,
       },
-    }
+    },
   };
 });

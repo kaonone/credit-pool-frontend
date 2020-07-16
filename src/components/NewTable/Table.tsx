@@ -11,7 +11,7 @@ type Props<T, U> = {
   entries: T[];
   columns: Array<M.Column<T, U>>;
   summary?: M.Summary;
-}
+};
 
 type RowToExpandedState = Record<number, boolean>;
 
@@ -20,15 +20,19 @@ export function Table<T, U = null>(props: Props<T, U>) {
 
   const { columns, entries, summary } = props;
 
-  const [rowToExpanded, setRowToExpanded] = React.useState<RowToExpandedState>(entries.reduce((acc, _, index) => ({
-    ...acc,
-    [index]: false,
-  }), {}));
-
+  const [rowToExpanded, setRowToExpanded] = React.useState<RowToExpandedState>(
+    entries.reduce(
+      (acc, _, index) => ({
+        ...acc,
+        [index]: false,
+      }),
+      {},
+    ),
+  );
 
   const expandedArea: M.ExpandedArea<T, U> | null = (() => {
-    const contentWithRowExpander = columns
-      .find(x => x.cellContent.kind === 'for-row-expander')?.cellContent as M.CellContentForRowExpander<T, U> | undefined
+    const contentWithRowExpander = columns.find(x => x.cellContent.kind === 'for-row-expander')
+      ?.cellContent as M.CellContentForRowExpander<T, U> | undefined;
 
     return contentWithRowExpander?.expandedArea || null;
   })();
@@ -36,15 +40,11 @@ export function Table<T, U = null>(props: Props<T, U>) {
   return (
     <table className={classes.root}>
       <thead>
-        <tr>
-          {columns.map(renderTitle)}
-        </tr>
+        <tr>{columns.map(renderTitle)}</tr>
       </thead>
-      <tbody>
-        {renderEntriesAndSummary()}
-      </tbody>
+      <tbody>{renderEntriesAndSummary()}</tbody>
     </table>
-  )
+  );
 
   function renderEntriesAndSummary() {
     if (summary) {
@@ -57,32 +57,30 @@ export function Table<T, U = null>(props: Props<T, U>) {
           {last && renderEntry(last, entries.length, true)}
           {renderSummary(summary)}
         </>
-      )
+      );
     }
 
-    return entries.map((x, index) => renderEntry(x, index))
+    return entries.map((x, index) => renderEntry(x, index));
   }
 
-  function renderSummary(summary: M.Summary) {
+  function renderSummary(x: M.Summary) {
     return (
       <tr key="summary">
         <td colSpan={columns.length}>
           <div className={classes.summary}>
-            <views.Summary summary={summary} />
+            <views.Summary summary={x} />
           </div>
         </td>
       </tr>
-    )
+    );
   }
 
   function renderTitle(column: M.Column<T, U>, columnIndex: number) {
     return (
       <th key={columnIndex}>
-        <div className={classes.title}>
-          {column.renderTitle()}
-        </div>
+        <div className={classes.title}>{column.renderTitle()}</div>
       </th>
-    )
+    );
   }
 
   function renderEntry(entry: T, rowIndex: number, beforeSummary?: boolean) {
@@ -95,7 +93,7 @@ export function Table<T, U = null>(props: Props<T, U>) {
         {renderEntryRow(entry, rowIndex, beforeSummary)}
         {rowToExpanded[rowIndex] && renderEntryExpandedArea(entry, expandedArea)}
       </React.Fragment>
-    )
+    );
   }
 
   function renderEntryExpandedArea(entry: T, area: M.ExpandedArea<T, U>) {
@@ -116,11 +114,11 @@ export function Table<T, U = null>(props: Props<T, U>) {
           </div>
         </td>
       </tr>
-    )
+    );
   }
 
   function renderAreaWithinSubtable(entry: T, area: M.ExpandedAreaWithinSubtable<T, U>) {
-    const entries = area.getSubtableEntries(entry);
+    const subtableEntries = area.getSubtableEntries(entry);
 
     const adjustedSubtableColumns = (() => {
       const subtableCols = area.subtableColumns;
@@ -129,10 +127,13 @@ export function Table<T, U = null>(props: Props<T, U>) {
       const tableColsNumber = columns.length;
 
       if (subtableColsNumber < tableColsNumber) {
-        const colsToAdd = R.repeat<M.SubtableColumn<U>>({
-          renderCell: () => null,
-          renderTitle: () => null,
-        }, tableColsNumber - subtableColsNumber);
+        const colsToAdd = R.repeat<M.SubtableColumn<U>>(
+          {
+            renderCell: () => null,
+            renderTitle: () => null,
+          },
+          tableColsNumber - subtableColsNumber,
+        );
 
         return subtableCols.concat(colsToAdd);
       }
@@ -147,23 +148,21 @@ export function Table<T, U = null>(props: Props<T, U>) {
     })();
 
     return (
-      <React.Fragment>
+      <>
         <tr key="subtable-header" className={classes.subtableRow}>
           {adjustedSubtableColumns.map(renderSubtableHeader)}
         </tr>
-        {entries.map(makeSubtableEntryRenderer(adjustedSubtableColumns))}
-      </React.Fragment>
+        {subtableEntries.map(makeSubtableEntryRenderer(adjustedSubtableColumns))}
+      </>
     );
   }
 
   function renderSubtableHeader(x: M.SubtableColumn<U>, columnIndex: number) {
     return (
       <th key={columnIndex}>
-        <div className={classes.cellContent}>
-          {x.renderTitle()}
-        </div>
+        <div className={classes.cellContent}>{x.renderTitle()}</div>
       </th>
-    )
+    );
   }
 
   function makeSubtableEntryRenderer(subtableColumns: Array<M.SubtableColumn<U>>) {
@@ -173,30 +172,26 @@ export function Table<T, U = null>(props: Props<T, U>) {
           {subtableColumns.map(makeSubtableCellRenderer(subtableEntry))}
         </tr>
       );
-    }
+    };
   }
 
   function makeSubtableCellRenderer(entry: U) {
     return (column: M.SubtableColumn<U>, columnIndex: number) => {
       return (
         <td key={columnIndex}>
-          <div className={classes.cellContent}>
-            {column.renderCell(entry)}
-          </div>
+          <div className={classes.cellContent}>{column.renderCell(entry)}</div>
         </td>
-      )
-    }
+      );
+    };
   }
 
   function renderEntryRow(entry: T, rowIndex: number, beforeSummary?: boolean) {
-    console.log('>> ', beforeSummary, cn({ [classes.rowBeforeSummary]: beforeSummary }));
     return (
       <tr className={cn({ [classes.rowBeforeSummary]: beforeSummary })}>
         {columns.map(makeCellRenderer(entry, rowIndex))}
       </tr>
     );
   }
-
 
   function makeCellRenderer(entry: T, rowIndex: number) {
     return (column: M.Column<T, U>, columnIndex: number) => {
@@ -207,21 +202,24 @@ export function Table<T, U = null>(props: Props<T, U>) {
         case 'for-row-expander':
           return renderCellWithContentForRowExpander(rowIndex);
       }
-    }
+    };
   }
 
-  function renderCellWithSimpleContent(entry: T, content: M.SimpleCellContent<T>, columnIndex: number) {
+  function renderCellWithSimpleContent(
+    entry: T,
+    content: M.SimpleCellContent<T>,
+    columnIndex: number,
+  ) {
     return (
       <td key={columnIndex}>
-        <div className={classes.cellContent}>
-          {content.render(entry)}
-        </div>
+        <div className={classes.cellContent}>{content.render(entry)}</div>
       </td>
     );
   }
 
   function renderCellWithContentForRowExpander(rowIndex: number) {
-    const handleToggle = (newValue: boolean) => setRowToExpanded({ ...rowToExpanded, [rowIndex]: newValue });
+    const handleToggle = (newValue: boolean) =>
+      setRowToExpanded({ ...rowToExpanded, [rowIndex]: newValue });
 
     return (
       <td key="row-expander">

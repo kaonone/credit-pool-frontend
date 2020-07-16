@@ -8,13 +8,13 @@ type Order = {
   date: string;
   kind: 'sell' | 'buy';
   values: number[];
-}
+};
 
 const entries: Order[] = [
   { date: '2012-01-02', kind: 'buy', values: [1.13] },
   { date: '2013-02-04', kind: 'buy', values: [21.1] },
   { date: '2015-03-01', kind: 'sell', values: [5.52, 1, 2] },
-]
+];
 
 export function MyLoansPage() {
   const columns: Array<NewTable.models.Column<Order>> = [
@@ -49,8 +49,7 @@ export function MyLoansPage() {
         },
       },
     },
-  ]
-
+  ];
 
   const columnsWithSubtable: Array<NewTable.models.Column<Order, number>> = [
     {
@@ -90,7 +89,7 @@ export function MyLoansPage() {
         },
       },
     },
-  ]
+  ];
 
   return (
     <>
@@ -105,6 +104,5 @@ export function MyLoansPage() {
         />
       </div>
     </>
-  )
-
+  );
 }

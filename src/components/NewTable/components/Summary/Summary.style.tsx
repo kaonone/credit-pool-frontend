@@ -9,5 +9,5 @@ export const useStyles = makeStyles(() => {
 
     label: {},
     value: {},
-  }
+  };
 });

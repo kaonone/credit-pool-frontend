@@ -13,5 +13,5 @@ export const useStyles = makeStyles(theme => {
       transform: 'rotate(180deg)',
       backgroundColor: theme.colors.grayishNavy,
     },
-  }
+  };
 });
