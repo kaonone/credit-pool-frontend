@@ -74,8 +74,10 @@ const lightPalette = {
     main: colors.monza,
   },
   background: {
+    hint: colors.charade,
     default: colors.athensGray,
     paper: colors.white,
+    paperSecondary: colors.white,
   },
   type: 'light' as const,
 };
@@ -100,8 +102,10 @@ export const darkPalette = {
     main: colors.monza,
   },
   background: {
-    default: colors.darkBlueMagenta,
+    hint: colors.charade,
+    default: colors.obsidian,
     paper: colors.foggyNight,
+    paperSecondary: colors.darkBlueMagenta,
   },
   type: 'dark' as const,
 };
@@ -375,6 +379,7 @@ declare module '@material-ui/core/styles/createPalette' {
   interface TypeBackground {
     hint: string;
     tableHeader: string;
+    paperSecondary: string;
   }
 }
 

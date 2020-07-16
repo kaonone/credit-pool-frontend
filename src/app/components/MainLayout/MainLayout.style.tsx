@@ -9,7 +9,6 @@ export const useStyles = makeStyles(
 
     headerAndContent: {
       display: 'flex',
-      background: theme.colors.obsidian,
       flex: 1,
       flexDirection: 'column',
       overflow: 'auto',
@@ -21,7 +20,7 @@ export const useStyles = makeStyles(
 
     header: {
       marginTop: 30,
-      backgroundColor: theme.palette.background.default,
+      backgroundColor: theme.palette.background.paperSecondary,
       borderRadius: 6,
       transition: theme.transitions.create('background-color'),
     },
@@ -37,7 +36,7 @@ export const useStyles = makeStyles(
     footer: {
       marginTop: 48,
       marginBottom: 56,
-      backgroundColor: theme.palette.background.default,
+      backgroundColor: theme.palette.background.paperSecondary,
       borderRadius: 6,
       transition: theme.transitions.create('background-color'),
     },

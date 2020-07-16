@@ -16,7 +16,6 @@ export const colors = {
   royalPurple: '#613AAF',
   woodSmoke: '#181b1f',
 
-  charade: '#292835',
   shark: '#191b1f',
   athensGray: '#eff1f5',
   royalBlue: '#544CF2',
@@ -98,6 +97,7 @@ export const colors = {
   lavenderBlue: '#6742f4',
 
   // v2
+  charade: '#2d2d40',
   darkBlueMagenta: '#101016',
   foggyNight: '#13131b',
 };
