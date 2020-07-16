@@ -64,13 +64,13 @@ const generateFontRule = (
   fontWeight: number,
   fontStyle: 'normal' | 'italic' = 'normal',
 ) => ({
-  fontFamily: 'Helvetica Neue',
+  fontFamily: 'HelveticaNeue',
   fontStyle,
   fontWeight,
   src: `
     url('${ttfUrl}') format('truetype'),
-    url('${svgUrl}'#${svgId}) format('svg'),
-    url('${woffUrl}') format('woff')
+    url('${svgUrl}#${svgId}') format('svg'),
+    url('${woffUrl}') format('woff'),
     url('${woff2Url}') format('woff2')
   `,
 });
