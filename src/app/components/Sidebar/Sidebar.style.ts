@@ -14,7 +14,10 @@ export const useStyles = makeStyles(
       transition: 'width 200ms',
     },
 
-    upperPart: {},
+    upperPart: {
+      transition: 'width 200ms',
+      width: '100%',
+    },
 
     lowerPart: {
       display: 'flex',

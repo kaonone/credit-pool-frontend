@@ -4,12 +4,12 @@ import * as Link from '../../../Link';
 import { useStyles } from './Link.style';
 
 type Props = {
-  shouldRenderLabel: boolean;
   link: Link.models.Link;
+  shouldRenderLabel?: boolean;
 };
 
 const LinkWrapper: React.FC<Props> = props => {
-  const { link, shouldRenderLabel } = props;
+  const { link, shouldRenderLabel = true } = props;
   const classes = useStyles();
 
   return (
