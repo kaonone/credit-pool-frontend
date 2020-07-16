@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { FieldRenderProps } from 'react-final-form';
-import { GetProps } from '_helpers';
 
 import { useTranslate } from 'services/i18n';
 import { getFieldWithComponent } from 'utils/react';
 
 import { MaskedInput } from '../inputs';
 
-type IProps = Omit<GetProps<typeof MaskedInput>, 'ref'> & FieldRenderProps<any, HTMLElement>;
+type IProps = Omit<React.ComponentProps<typeof MaskedInput>, 'ref'> &
+  FieldRenderProps<any, HTMLElement>;
 
 function MaskedInputFieldComponent(props: IProps) {
   const { input, meta, ...rest } = props;

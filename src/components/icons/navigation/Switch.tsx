@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 // tslint:disable:max-line-length
-export const Switch: React.FC<GetProps<typeof SvgIcon>> = props => {
+export const Switch: React.FC<React.ComponentProps<typeof SvgIcon>> = props => {
   return (
     <SvgIcon {...props} viewBox="0 0 24 24">
       <path

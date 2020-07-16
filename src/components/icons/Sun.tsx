@@ -1,13 +1,12 @@
 // tslint:disable: max-line-length
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { useTheme } from 'utils/styles';
 
 import { MainSvgGradient } from './MainSvgGradient';
 
-export function Sun(props: GetProps<typeof SvgIcon>) {
+export function Sun(props: React.ComponentProps<typeof SvgIcon>) {
   const theme = useTheme();
   return (
     <SvgIcon {...props} viewBox="0 0 24 24" preserveAspectRatio="none">

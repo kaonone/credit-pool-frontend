@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-export function Fortmatic(props: GetProps<typeof SvgIcon>) {
+export function Fortmatic(props: React.ComponentProps<typeof SvgIcon>) {
   return (
     <SvgIcon {...props} viewBox="0 0 35 35">
       <path d="M6 6h23v5.76H11.75V29H6V6z" fill="#617BFF" />

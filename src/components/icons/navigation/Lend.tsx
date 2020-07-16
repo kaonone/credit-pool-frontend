@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { useTheme } from 'utils/styles';
 
 // tslint:disable:max-line-length
-function Lend(props: GetProps<typeof SvgIcon>) {
+function Lend(props: React.ComponentProps<typeof SvgIcon>) {
   const { color } = props;
   const withGradient = color !== 'inherit';
   const theme = useTheme();

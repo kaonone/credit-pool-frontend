@@ -22,14 +22,6 @@ declare module '_helpers' {
    */
   export type Overwrite<T, U> = (U extends ConsistentWith<U, T> ? T : _Omit<T, keyof U>) & U;
 
-  export type GetProps<T extends React.ComponentType<any>> = T extends React.StatelessComponent<
-    infer SP
-  >
-    ? SP
-    : T extends React.ComponentClass<infer CP>
-    ? CP
-    : never;
-
   export type PromisedReturnType<T extends (...args: any[]) => any> = T extends (
     ...args: any[]
   ) => Promise<infer R>
