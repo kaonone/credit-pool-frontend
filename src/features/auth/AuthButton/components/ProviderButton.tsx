@@ -90,6 +90,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     padding: theme.spacing(1),
     transition: theme.transitions.create(['background-color']),
+
+    '&:hover, &$focusVisible': {
+      backgroundColor:
+        theme.palette.type === 'dark'
+          ? lighten(theme.palette.background.paper, 0.2)
+          : darken(theme.palette.background.paper, 0.2),
+    },
   },
 
   focusVisible: {},
@@ -100,7 +107,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
   actionName: {
     width: '100%',
-    padding: theme.spacing(0.5, 6),
+    padding: theme.spacing(0.5, 4),
     height: theme.spacing(4),
     borderRadius: theme.spacing(2.5),
     display: 'flex',
