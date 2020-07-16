@@ -69,6 +69,8 @@ const en = {
       modalTitle: {
         connected: 'Disconnect or change wallet:',
         disconnected: 'Choose your wallet:',
+        connectedTo: 'Connected to',
+        disconnect: 'Disconnect',
       },
     },
     notifications: {

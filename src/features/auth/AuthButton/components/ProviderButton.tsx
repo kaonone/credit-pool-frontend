@@ -3,8 +3,9 @@ import cn from 'classnames';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { useCommunication } from 'utils/react';
-import { ButtonBase, Loading, Typography, Box, ShortAddress, Grid } from 'components';
+import { ButtonBase, Loading, Typography, Box, ShortAddress, Grid, Button } from 'components';
 import { WalletType } from 'services/api';
+import { tKeys, useTranslate } from 'services/i18n';
 import { makeStyles, Theme, darken, lighten } from 'utils/styles';
 import { zeroAddress } from 'utils/mock';
 import { Bitski, Fortmatic, Metamask, Portis, WalletConnect } from 'components/icons/wallets';
@@ -36,6 +37,8 @@ export function ProviderButton({
   const connecting = useCommunication(connect, [connect]);
   const Icon = iconByWallet[type];
 
+  const { t } = useTranslate();
+
   const handleClick = React.useCallback(
     () => (connectedAddress ? disconnect() : connecting.execute(type)),
     [disconnect, connecting.execute, type, connectedAddress],
@@ -61,11 +64,15 @@ export function ProviderButton({
         {connectedAddress ? (
           <>
             <Grid item>
-              <Typography className={classes.description}>Connected to {type}</Typography>
+              <Typography className={classes.description}>{`${t(
+                tKeys.features.auth.modalTitle.connectedTo.getKey(),
+              )} ${type}`}</Typography>
             </Grid>
             <Box clone alignSelf="stretch">
               <Grid item>
-                <span className={classes.actionName}>Disconnect</span>
+                <Button className={classes.actionName} variant="outlined">
+                  {t(tKeys.features.auth.modalTitle.disconnect.getKey())}
+                </Button>
               </Grid>
             </Box>
           </>
@@ -106,14 +113,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 
   actionName: {
-    width: '100%',
     padding: theme.spacing(0.5, 4),
-    height: theme.spacing(4),
-    borderRadius: theme.spacing(2.5),
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.palette.background.paper,
     border: `1px solid ${
       theme.palette.type === 'dark'
         ? lighten(theme.palette.background.paper, 0.2)
