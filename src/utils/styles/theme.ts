@@ -74,8 +74,10 @@ const lightPalette = {
     main: colors.monza,
   },
   background: {
-    default: colors.white,
-    paper: colors.athensGray,
+    hint: colors.charade,
+    default: colors.athensGray,
+    paper: colors.white,
+    paperSecondary: colors.white,
   },
   type: 'light' as const,
 };
@@ -100,8 +102,10 @@ export const darkPalette = {
     main: colors.monza,
   },
   background: {
-    default: colors.charade,
-    paper: colors.darkBlueMagenta,
+    hint: colors.charade,
+    default: colors.obsidian,
+    paper: colors.foggyNight,
+    paperSecondary: colors.darkBlueMagenta,
   },
   type: 'dark' as const,
 };
@@ -324,6 +328,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
           padding: defaultTheme.spacing(0.2, 1.5),
           textTransform: 'unset',
           fontSize: '1rem',
+          lineHeight: 1.5,
           borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
 
           '&$selected': {
@@ -374,6 +379,7 @@ declare module '@material-ui/core/styles/createPalette' {
   interface TypeBackground {
     hint: string;
     tableHeader: string;
+    paperSecondary: string;
   }
 }
 
