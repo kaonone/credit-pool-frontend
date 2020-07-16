@@ -8,6 +8,7 @@ export const useStyles = makeStyles(theme => {
       borderRadius: '23px',
       backgroundColor: theme.colors.blackRussian,
     },
+
     expanded: {
       transform: 'rotate(180deg)',
       backgroundColor: theme.colors.grayishNavy,

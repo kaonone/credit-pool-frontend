@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import * as R from 'ramda';
+import cn from 'classnames';
 
 import { useStyles } from './Table.style';
 import * as views from './components';
@@ -40,17 +41,35 @@ export function Table<T, U = null>(props: Props<T, U>) {
         </tr>
       </thead>
       <tbody>
-        {entries.map(renderEntry)}
-        {summary && renderSummary(summary)}
+        {renderEntriesAndSummary()}
       </tbody>
     </table>
   )
+
+  function renderEntriesAndSummary() {
+    if (summary) {
+      const last = R.last(entries);
+      const butLast = R.dropLast(1, entries);
+
+      return (
+        <>
+          {butLast.map((x, index) => renderEntry(x, index))}
+          {last && renderEntry(last, entries.length, true)}
+          {renderSummary(summary)}
+        </>
+      )
+    }
+
+    return entries.map((x, index) => renderEntry(x, index))
+  }
 
   function renderSummary(summary: M.Summary) {
     return (
       <tr key="summary">
         <td colSpan={columns.length}>
-          <views.Summary summary={summary} />
+          <div className={classes.summary}>
+            <views.Summary summary={summary} />
+          </div>
         </td>
       </tr>
     )
@@ -66,14 +85,14 @@ export function Table<T, U = null>(props: Props<T, U>) {
     )
   }
 
-  function renderEntry(entry: T, rowIndex: number) {
+  function renderEntry(entry: T, rowIndex: number, beforeSummary?: boolean) {
     if (expandedArea === null) {
-      return renderEntryRow(entry, rowIndex);
+      return renderEntryRow(entry, rowIndex, beforeSummary);
     }
 
     return (
       <React.Fragment key={rowIndex}>
-        {renderEntryRow(entry, rowIndex)}
+        {renderEntryRow(entry, rowIndex, beforeSummary)}
         {rowToExpanded[rowIndex] && renderEntryExpandedArea(entry, expandedArea)}
       </React.Fragment>
     )
@@ -92,7 +111,9 @@ export function Table<T, U = null>(props: Props<T, U>) {
     return (
       <tr>
         <td colSpan={columns.length}>
-          {area.renderContent(entry)}
+          <div className={cn([classes.singleCellExpandedArea, classes.cellContent])}>
+            {area.renderContent(entry)}
+          </div>
         </td>
       </tr>
     )
@@ -138,7 +159,9 @@ export function Table<T, U = null>(props: Props<T, U>) {
   function renderSubtableHeader(x: M.SubtableColumn<U>, columnIndex: number) {
     return (
       <th key={columnIndex}>
-        {x.renderTitle()}
+        <div className={classes.cellContent}>
+          {x.renderTitle()}
+        </div>
       </th>
     )
   }
@@ -156,14 +179,19 @@ export function Table<T, U = null>(props: Props<T, U>) {
   function makeSubtableCellRenderer(entry: U) {
     return (column: M.SubtableColumn<U>, columnIndex: number) => {
       return (
-        <td key={columnIndex}>{column.renderCell(entry)}</td>
+        <td key={columnIndex}>
+          <div className={classes.cellContent}>
+            {column.renderCell(entry)}
+          </div>
+        </td>
       )
     }
   }
 
-  function renderEntryRow(entry: T, rowIndex: number) {
+  function renderEntryRow(entry: T, rowIndex: number, beforeSummary?: boolean) {
+    console.log('>> ', beforeSummary, cn({ [classes.rowBeforeSummary]: beforeSummary }));
     return (
-      <tr>
+      <tr className={cn({ [classes.rowBeforeSummary]: beforeSummary })}>
         {columns.map(makeCellRenderer(entry, rowIndex))}
       </tr>
     );
@@ -185,7 +213,9 @@ export function Table<T, U = null>(props: Props<T, U>) {
   function renderCellWithSimpleContent(entry: T, content: M.SimpleCellContent<T>, columnIndex: number) {
     return (
       <td key={columnIndex}>
-        {content.render(entry)}
+        <div className={classes.cellContent}>
+          {content.render(entry)}
+        </div>
       </td>
     );
   }
@@ -195,7 +225,9 @@ export function Table<T, U = null>(props: Props<T, U>) {
 
     return (
       <td key="row-expander">
-        <views.RowExpander expanded={rowToExpanded[rowIndex]} onToggle={handleToggle} />
+        <div className={classes.cellContent}>
+          <views.RowExpander expanded={rowToExpanded[rowIndex]} onToggle={handleToggle} />
+        </div>
       </td>
     );
   }
