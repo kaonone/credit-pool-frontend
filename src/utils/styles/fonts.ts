@@ -166,7 +166,7 @@ export const helveticaNeueThin = generateFontRule(
   'HelveticaNeue-Thin',
   HelveticaNeueThinWoff,
   HelveticaNeueThinWoff2,
-  100,
+  200,
 );
 
 export const helveticaNeueThinItalic = generateFontRule(
@@ -175,7 +175,7 @@ export const helveticaNeueThinItalic = generateFontRule(
   'HelveticaNeue-ThinItalic',
   HelveticaNeueThinItalicWoff,
   HelveticaNeueThinItalicWoff2,
-  100,
+  200,
   'italic',
 );
 
