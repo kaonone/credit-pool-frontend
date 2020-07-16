@@ -25,6 +25,5 @@ export function Decimal(props: Props) {
 const useStyles = makeStyles(() => ({
   fractional: {
     color: '#494972',
-    opacity: 0.5,
   },
 }));
