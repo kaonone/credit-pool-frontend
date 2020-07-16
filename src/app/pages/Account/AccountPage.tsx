@@ -67,9 +67,7 @@ export function AccountPage() {
 const useStyles = makeStyles(
   () => ({
     root: {
-      backgroundColor: '#13131b',
       padding: '50px 60px',
-      borderRadius: 6,
     },
     tabs: {
       marginBottom: 40,

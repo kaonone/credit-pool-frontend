@@ -74,8 +74,8 @@ const lightPalette = {
     main: colors.monza,
   },
   background: {
-    default: colors.white,
-    paper: colors.athensGray,
+    default: colors.athensGray,
+    paper: colors.white,
   },
   type: 'light' as const,
 };
@@ -100,8 +100,8 @@ export const darkPalette = {
     main: colors.monza,
   },
   background: {
-    default: colors.charade,
-    paper: colors.darkBlueMagenta,
+    default: colors.darkBlueMagenta,
+    paper: colors.foggyNight,
   },
   type: 'dark' as const,
 };

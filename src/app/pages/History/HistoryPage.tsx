@@ -70,7 +70,6 @@ export function HistoryPage() {
 const useStyles = makeStyles(
   () => ({
     root: {
-      backgroundColor: '#13131b',
       padding: '50px 60px',
     },
     tabs: {

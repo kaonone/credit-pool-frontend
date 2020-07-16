@@ -99,4 +99,5 @@ export const colors = {
 
   // v2
   darkBlueMagenta: '#101016',
+  foggyNight: '#13131b',
 };
