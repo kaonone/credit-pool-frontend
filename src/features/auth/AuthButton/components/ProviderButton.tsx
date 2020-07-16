@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'flex-start',
     padding: theme.spacing(1),
     transition: theme.transitions.create(['background-color']),
-    borderRadius: theme.spacing(1.5),
+    borderRadius: 12,
     minHeight: 171,
 
     '&:hover, &$focusVisible': {
@@ -137,16 +137,16 @@ const useStyles = makeStyles((theme: Theme) => ({
 
   description: {
     opacity: 0.5,
-    fontSize: theme.spacing(1.5),
-    marginBottom: theme.spacing(1.2),
+    fontSize: 12,
+    marginBottom: 10,
   },
 
   title: {
     lineHeight: 1,
-    marginTop: theme.spacing(2.5),
+    marginTop: 20,
   },
 
   icon: {
-    fontSize: theme.spacing(7),
+    fontSize: 56,
   },
 }));

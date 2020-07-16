@@ -65,18 +65,18 @@ export function AuthModal(props: AuthModalProps) {
   );
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   root: {
-    padding: theme.spacing(4),
+    padding: 32,
   },
   closeButton: {
     position: 'absolute',
-    top: theme.spacing(3),
-    right: theme.spacing(3),
+    top: 24,
+    right: 24,
     opacity: 0.5,
     cursor: 'pointer',
   },
   content: {
     marginTop: 30,
   },
-}));
+});
