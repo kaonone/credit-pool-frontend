@@ -108,7 +108,7 @@ export class LiquidityModuleApi {
     await this.tokensApi.approve(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, amount);
 
     const promiEvent = txLiquidityModule.methods.deposit(
-      { lAmount: amount.value, pAmountMin: new BN(0) },
+      { lAmount: amount.toBN(), pAmountMin: new BN(0) },
       { from: fromAddress },
     );
 

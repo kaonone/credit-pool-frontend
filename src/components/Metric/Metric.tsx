@@ -1,46 +1,42 @@
 import * as React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 
-import { useStyles } from './Metric.style';
+import { makeStyles } from 'utils/styles';
 
-export interface IMetricProps {
-  title: React.ReactNode;
-  value: React.ReactNode;
+type Props = {
+  title: NonNullable<React.ReactNode>;
+  value: NonNullable<React.ReactNode>;
   subValue?: React.ReactNode;
-  icon?: React.ReactNode;
-}
+};
 
-function Metric(props: IMetricProps) {
-  const { title, value, subValue, icon } = props;
+export function Metric(props: Props) {
+  const { title, value, subValue } = props;
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={1} alignItems="flex-end">
-        <Grid item>
-          <Grid container spacing={1} alignItems="center">
-            {icon && <Grid item>{icon}</Grid>}
-            <Grid item>
-              <Typography variant="subtitle2" component="h6" className={classes.title}>
-                {title}
-              </Typography>
-            </Grid>
-          </Grid>
-          <div className={classes.values}>
-            <Typography variant="h5" component="span" className={classes.value}>
-              {value}
-            </Typography>
-            {subValue && (
-              <Typography variant="subtitle1" component="div" className={classes.subValue}>
-                {subValue}
-              </Typography>
-            )}
-          </div>
-        </Grid>
-      </Grid>
+      <div className={classes.title}>{title}</div>
+      <div className={classes.value}>{value}</div>
+      {subValue && <div className={classes.subValue}>{subValue}</div>}
     </div>
   );
 }
 
-export { Metric };
+const useStyles = makeStyles(
+  () => ({
+    root: {},
+    title: {
+      fontSize: 16,
+    },
+    value: {
+      marginTop: 13,
+      fontSize: 32,
+      fontWeight: 300,
+      lineHeight: 'normal',
+    },
+    subValue: {
+      marginTop: 8,
+      fontSize: 16,
+    },
+  }),
+  { name: 'Metric' },
+);

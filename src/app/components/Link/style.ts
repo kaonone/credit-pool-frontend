@@ -5,7 +5,7 @@ export const useStyles = makeStyles(
     root: {
       display: 'flex',
       alignItems: 'center',
-      color: theme.colors.white,
+      color: theme.palette.text.primary,
       textDecoration: 'none',
       fontSize: 16,
       whiteSpace: 'nowrap',

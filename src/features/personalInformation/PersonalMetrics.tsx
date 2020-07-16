@@ -66,7 +66,7 @@ function PersonalMetrics(props: Props) {
 
   const currentProfit = max(
     new BN(0),
-    lAvailableBalance.add(lIncreasing?.value || new BN(0)).sub(prevLAvailableBalance),
+    lAvailableBalance.add(lIncreasing?.toBN() || new BN(0)).sub(prevLAvailableBalance),
   );
 
   return (
