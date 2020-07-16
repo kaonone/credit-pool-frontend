@@ -10,25 +10,24 @@ export const useStyles = makeStyles(
       padding: '100px 15px 20px',
       background: theme.palette.background.paper,
       justifyContent: 'space-between',
-      width: 208,
-      transition: 'width 200ms',
+      width: theme.spacing(26),
+      transition: theme.transitions.create('width'),
     },
 
     upperPart: {
-      transition: 'width 200ms',
       width: '100%',
     },
 
     lowerPart: {
       display: 'flex',
       flexDirection: 'column',
-      marginLeft: 32,
+      marginLeft: theme.spacing(4),
     },
 
     upperLinks: {},
 
     rootShort: {
-      width: 64,
+      width: theme.spacing(8),
       alignItems: 'center',
 
       '& $lowerPart': {
@@ -41,8 +40,8 @@ export const useStyles = makeStyles(
     switch: {
       border: 0,
       background: 'transparent',
-      marginTop: 16,
-      marginBottom: 20,
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(3),
       padding: 5,
       cursor: 'pointer',
       alignSelf: 'flex-end',
