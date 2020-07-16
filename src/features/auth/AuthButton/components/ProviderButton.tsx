@@ -95,8 +95,11 @@ function Address({ address }: { address: string }) {
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
+    alignItems: 'flex-start',
     padding: theme.spacing(1),
     transition: theme.transitions.create(['background-color']),
+    borderRadius: theme.spacing(1.5),
+    minHeight: 171,
 
     '&:hover, &$focusVisible': {
       backgroundColor:

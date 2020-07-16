@@ -40,10 +40,10 @@ export function AuthModal(props: AuthModalProps) {
         {isLogged ? t(modalTitle.connected.getKey()) : t(modalTitle.disconnected.getKey())}
       </DialogTitle>
       <CloseIcon className={classes.closeButton} onClick={onClose} />
-      <DialogContent>
+      <DialogContent className={classes.content}>
         <Grid container spacing={1} justify="center">
           {wallets.map((type, index) => (
-            <Grid className={classes.wallet} item xs={4} key={index}>
+            <Grid item xs={4} key={index}>
               <ProviderButton
                 fullWidth
                 connect={connect}
@@ -76,7 +76,7 @@ const useStyles = makeStyles(theme => ({
     opacity: 0.5,
     cursor: 'pointer',
   },
-  wallet: {
-    marginTop: theme.spacing(3),
+  content: {
+    marginTop: 30,
   },
 }));
