@@ -14,6 +14,7 @@ export function getDecimal(value: string, baseDecimals: number, precision: numbe
       : precision;
   const decimalsZerosLength = baseDecimals < minPrecision ? baseDecimals : minPrecision;
 
+  // TODO: refactor
   const fractional = `${`${'0'.repeat(padding)}${positiveValue}`.substr(
     mid < 0 ? 0 : mid,
   )}000`.substr(0, decimalsZerosLength);
