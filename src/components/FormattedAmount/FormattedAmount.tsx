@@ -15,11 +15,13 @@ interface IProps {
   className?: string;
 }
 
+const percentPrecision = 5;
+
 function FormattedAmount(props: IProps) {
   const { sum, hideSymbol, precision = 2, className } = props;
   const formattedBalance = sum.toFormattedString(precision);
   const notRoundedBalance = sum.toFormattedString(
-    sum instanceof PercentAmount ? 5 : sum.currency.decimals,
+    sum instanceof PercentAmount ? percentPrecision : sum.currency.decimals,
   );
 
   return (
