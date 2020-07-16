@@ -40,7 +40,12 @@ export function MyLoansPage() {
         kind: 'for-row-expander',
         expandedArea: {
           kind: 'single-cell',
-          renderContent: () => 'hello',
+          renderContent: () => (
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div>left</div>
+              <div>right</div>
+            </div>
+          ),
         },
       },
     },
@@ -91,6 +96,7 @@ export function MyLoansPage() {
     <>
       <WithAccount>{({ account }) => <MyLoans account={account} />}</WithAccount>
       <NewTable.Component columns={columnsWithSubtable} entries={entries} />
+
       <div style={{ marginTop: '30px' }}>
         <NewTable.Component columns={columns} entries={entries} />
       </div>
