@@ -324,6 +324,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
           padding: defaultTheme.spacing(0.2, 1.5),
           textTransform: 'unset',
           fontSize: '1rem',
+          lineHeight: 1.5,
           borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
 
           '&$selected': {
