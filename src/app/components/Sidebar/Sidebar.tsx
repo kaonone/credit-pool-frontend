@@ -60,7 +60,7 @@ export const Sidebar: React.FC = () => {
       })}
     >
       <div className={classes.upperPart}>
-        <nav className={classes.upperLinks}>{upperLinks.map(makeLinkRenderer(isExpanded))}</nav>
+        <nav className={classes.upperLinks}>{upperLinks.map(makeLinkRenderer())}</nav>
       </div>
       <div className={classes.lowerPart}>{renderSwitch()}</div>
     </div>
@@ -82,9 +82,9 @@ export const Sidebar: React.FC = () => {
   }
 };
 
-function makeLinkRenderer(shouldRenderLabel: boolean) {
+function makeLinkRenderer() {
   return (link: Link.models.Link) => {
-    return <components.Link key={link.label} link={link} shouldRenderLabel={shouldRenderLabel} />;
+    return <components.Link key={link.label} link={link} />;
   };
 }
 
