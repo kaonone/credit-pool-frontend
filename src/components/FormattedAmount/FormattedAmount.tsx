@@ -18,7 +18,9 @@ interface IProps {
 function FormattedAmount(props: IProps) {
   const { sum, hideSymbol, precision = 2, className } = props;
   const formattedBalance = sum.toFormattedString(precision);
-  const notRoundedBalance = sum.toFormattedString(sum.currency.decimals);
+  const notRoundedBalance = sum.toFormattedString(
+    sum instanceof PercentAmount ? 5 : sum.currency.decimals,
+  );
 
   return (
     <Tooltip title={notRoundedBalance}>
