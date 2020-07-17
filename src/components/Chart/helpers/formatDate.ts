@@ -7,12 +7,9 @@ export function makeFormatDateByPeriod(period: Period, firstDate: number) {
   return (date: number) => {
     const mDate = moment(date);
     const formatByPeriod: Record<Period, string> = {
-      '24h': `${mDate.format('H')}H`,
-      '3d': `${mDate.format('H')}H`,
-      '1w': mDate.format('ddd'),
-      '2w': mDate.format('DD MMM'),
-      '1m': mDate.format('DD MMM'),
-      '3m': mDate.format('DD MMM'),
+      d: `${mDate.format('H')}H`,
+      w: mDate.format('ddd'),
+      m: mDate.format('DD MMM'),
       '6m': monthAgo < firstDate ? mDate.format('DD MMM') : mDate.format('MMM'),
       all: mDate.format('DD MMM'),
     };
