@@ -5,7 +5,7 @@ const en = {
     connectingWarning: 'You need connect to wallet',
     pages: {
       overview: {
-        poolBalanceTitle: 'Input/Output costs',
+        poolBalanceTitle: 'Pool Deposit/Withdrawal Price Curve',
         distributions: 'Distributions',
         myBalanceTitle: 'My balance',
         poolInfoTitle: 'Pool information',
@@ -389,6 +389,10 @@ const en = {
       balance: 'Balance',
       description: 'Here is a title description',
       loansIssued: 'Loans Issued',
+    },
+    poolBalanceChart: {
+      ptkDepositPrice: 'ASPT Deposit Price',
+      ptkWithdrawalPrice: 'ASPT Withdrawal Price',
     },
   },
 };
