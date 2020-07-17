@@ -2,7 +2,7 @@ import { ReplaySubject } from 'rxjs';
 import ApolloClient from 'apollo-client';
 import gql from 'graphql-tag';
 
-import { getSdk } from 'generated/gql/pool2';
+import { getSdk } from 'generated/gql/subgraphRequests';
 
 import { SubgraphApi } from './SubgraphApi.model';
 

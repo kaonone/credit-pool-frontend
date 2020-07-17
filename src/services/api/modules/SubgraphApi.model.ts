@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-import { getSdk } from 'generated/gql/pool2';
+import { getSdk } from 'generated/gql/subgraphRequests';
 
 export type SubgraphApi = MakeSubgraphApi<ReturnType<typeof getSdk>>;
 

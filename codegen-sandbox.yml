@@ -15,7 +15,7 @@ generates:
         BigInt: string
         BigDecimal: string
         Bytes: string
-  src/generated/gql/pool2.ts:
+  src/generated/gql/subgraphRequests.ts:
     documents: "./src/**/*.pool.graphql"
     schema: "https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os-sandbox"
     plugins:
