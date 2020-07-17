@@ -25,19 +25,16 @@ export const useStyles = makeStyles(
         marginLeft: 5,
         marginRight: 5,
       },
-
-      '&$Selected': {
-        background:
-          theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
-      },
-
-      '&$InCaps': {
-        textTransform: 'uppercase',
-      },
     },
 
-    switchButtonSelected: {},
-    switchButtonInCaps: {},
+    switchButtonSelected: {
+      background:
+          theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+    },
+
+    switchButtonInCaps: {
+      textTransform: 'uppercase',
+    },
   }),
   { name: 'PeriodSwitch' },
 );
