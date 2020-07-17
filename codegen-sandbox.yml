@@ -4,14 +4,25 @@ generates:
     documents: "./src/**/*.pool.graphql"
     schema: "https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os-sandbox"
     plugins:
-      - "typescript"
-      - "typescript-operations"
-      - "typescript-react-apollo"
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
     config:
       withComponent: false
       withHOC: false
       withHooks: true
-      reactApolloVersion: 3
+      scalars:
+        BigInt: string
+        BigDecimal: string
+        Bytes: string
+  src/generated/gql/pool2.ts:
+    documents: "./src/**/*.pool.graphql"
+    schema: "https://api.thegraph.com/subgraphs/name/alekspickle/akropolis-os-sandbox"
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request
+    config:
       scalars:
         BigInt: string
         BigDecimal: string
