@@ -10,6 +10,7 @@ import { routes } from '../../routes';
 import * as Link from '../Link';
 import { useStyles } from './Sidebar.style';
 import * as components from './components';
+import { sidebarStorage } from './sidebarStorage';
 
 const upperLinks: Link.models.Link[] = [
   {
@@ -51,7 +52,12 @@ const upperLinks: Link.models.Link[] = [
 export const Sidebar: React.FC = () => {
   const classes = useStyles();
 
-  const [isExpanded, setIsExpanded] = React.useState(true);
+  const [isExpanded, setCloseSidebar] = React.useState(() => sidebarStorage.getItem('isExpanded'));
+
+  const handleExpanded = () => {
+    sidebarStorage.setItem('isExpanded', !isExpanded);
+    setCloseSidebar(!isExpanded);
+  };
 
   return (
     <div
@@ -75,7 +81,7 @@ export const Sidebar: React.FC = () => {
         className={cn(classes.switch, {
           [classes.switchInverted]: !isExpanded,
         })}
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={handleExpanded}
       >
         <icons.Switch fontSize="inherit" />
       </IconButton>
