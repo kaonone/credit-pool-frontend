@@ -62,7 +62,7 @@ function HeaderComponent(props: IProps) {
               </Button>
             </Grid>
             <Grid item>
-              <AuthButton color="primary" />
+              <AuthButton />
             </Grid>
           </Grid>
         </Grid>

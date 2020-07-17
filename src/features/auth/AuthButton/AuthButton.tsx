@@ -12,10 +12,7 @@ import { Button, Loading, Typography, Grid } from 'components';
 
 import { AuthModal } from './components/AuthModal';
 
-type IProps = Pick<React.ComponentProps<typeof Button>, 'color'> & {};
-
-export function AuthButton(props: IProps) {
-  const { color } = props;
+export function AuthButton() {
   const [isOpened, setIsOpened] = React.useState(false);
   const api = useApi();
   const classes = useStyles();
@@ -45,7 +42,7 @@ export function AuthButton(props: IProps) {
   return (
     <>
       <Button
-        color={color}
+        color={connectedWallet ? 'default' : 'primary'}
         variant={connectedWallet ? 'outlined' : 'contained'}
         onClick={toggleIsOpened}
         disabled={!accountMeta.loaded}
