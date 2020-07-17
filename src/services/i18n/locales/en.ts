@@ -387,6 +387,11 @@ const en = {
       akro: {
         description: 'Here is a title description',
       },
+      poolSize: {
+        poolSize: 'Pool size',
+        established: 'Established',
+      },
+      dayChange: '24h Change',
     },
     portfolioSnapshot: {
       caption: 'Portfolio Snapshot',
