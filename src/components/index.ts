@@ -1,3 +1,6 @@
+import * as NewTable from './NewTable';
+
+export { NewTable };
 export { default as Box } from '@material-ui/core/Box';
 export { default as ButtonBase } from '@material-ui/core/ButtonBase';
 export { default as CircularProgress } from '@material-ui/core/CircularProgress';
@@ -43,10 +46,10 @@ export * from './RowsLayout/RowsLayout';
 export * from './MetricsList/MetricsList';
 export * from './ActivitiesCard/ActivitiesCard';
 export * from './ModalButton/ModalButton';
-export * from './Table/Table';
 export * from './ShortAddress/ShortAddress';
 export * from './Pagination/Pagination';
 export * from './Chart/Chart';
+export * from './Table/Table';
 export * from './BalanceChart/BalanceChart';
 export * from './Metric/Metric';
 export * from './CashMetric/CashMetric';
