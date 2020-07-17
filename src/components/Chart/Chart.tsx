@@ -151,6 +151,7 @@ function PeriodSwitch(props: IPeriodSwitchProps) {
     <div className={classes.periodSwitch}>
       {periods.map(period => (
         <button
+          key={period}
           type="button"
           onClick={selectPeriod(period)}
           className={cn(classes.switchButton, {
