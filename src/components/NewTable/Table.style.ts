@@ -68,6 +68,7 @@ export const useStyles = makeStyles(theme => {
     title: {
       height: 40,
       borderBottom: crossRowBorder,
+      fontWeight: 'normal',
     },
 
     subtableRow: {
@@ -82,6 +83,7 @@ export const useStyles = makeStyles(theme => {
 
     cellContent: {
       display: 'flex',
+      fontWeight: 300,
       flexDirection: 'column',
       justifyContent: 'center',
       padding: '8px',
