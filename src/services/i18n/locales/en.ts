@@ -397,6 +397,9 @@ const en = {
       description: 'Here is a title description',
       loansIssued: 'Loans Issued',
     },
+    yield: {
+      title: 'Yield',
+    },
   },
 };
 
