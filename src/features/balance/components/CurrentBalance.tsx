@@ -19,9 +19,9 @@ export function CurrentBalance({ balanceValues }: Props) {
 
   return (
     <div className={classes.root}>
-      {balanceValues.map(({ sum, token, color, label }) => (
-        <div key={label} className={classes.balance} style={{ color }}>
-          <Typography className={classes.sum}>
+      {balanceValues.map(({ sum, token, color, label }, index) => (
+        <div key={index} className={classes.balance} style={{ color }}>
+          <Typography className={classes.sum} component="div">
             <FormattedBalance sum={sum} token={token} />
           </Typography>
           <div className={classes.label}>

@@ -58,10 +58,10 @@ export function AccountPage() {
           <MySummary />
         </TabPanel>
         <TabPanel value={routes.account.stakes.getElementKey()}>
-          {makeUnimplementedComponent('Stakes')}
+          {makeUnimplementedComponent('Stakes')()}
         </TabPanel>
         <TabPanel value={routes.account.summary.getElementKey()}>
-          {makeUnimplementedComponent('Borrows')}
+          {makeUnimplementedComponent('Borrows')()}
         </TabPanel>
       </TabContext>
     </Grid>
