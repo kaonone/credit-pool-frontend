@@ -1,3 +1,5 @@
+import ApolloClient from 'apollo-client';
+
 import { Web3Manager } from './modules/Web3Manager';
 import { FundsModuleApi } from './modules/FundsModuleApi';
 import { LoanModuleApi } from './modules/LoanModuleApi';
@@ -7,10 +9,12 @@ import { TransactionsApi } from './modules/TransactionsApi';
 import { SwarmApi } from './modules/SwarmApi';
 import { CurveModuleApi } from './modules/CurveModuleApi';
 import { DefiModuleApi } from './modules/DefiModuleApi';
+import { makeSubgraphApi } from './modules/SubgraphApi';
 
 export class Api {
   public web3Manager = new Web3Manager();
   public swarmApi = new SwarmApi();
+  public subgraphApi = makeSubgraphApi(this.apolloClient);
 
   public transactions = new TransactionsApi();
   public tokens = new TokensApi(this.web3Manager, this.transactions);
@@ -35,7 +39,7 @@ export class Api {
     this.curveModule,
   );
 
-  constructor() {
+  constructor(private apolloClient: ApolloClient<any>) {
     this.fundsModule.setTotalLProposalGetter(
       this.loanModule.getTotalLProposals$.bind(this.loanModule), // TODO add autobind to memoize decorator
     );

@@ -16,3 +16,15 @@ generates:
         BigInt: string
         BigDecimal: string
         Bytes: string
+  src/generated/gql/subgraphRequests.ts:
+    documents: "./src/**/*.pool.graphql"
+    schema: "https://api.thegraph.com/subgraphs/name/in19farkt/akropolis-os-rinkeby"
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request
+    config:
+      scalars:
+        BigInt: string
+        BigDecimal: string
+        Bytes: string

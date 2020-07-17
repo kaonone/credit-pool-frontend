@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -41,18 +40,9 @@ function BalanceChart<P extends IPoint>(props: IProps<P>) {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Grid container spacing={5} alignItems="center">
-          <Grid item>
-            <Typography className={classes.title} variant="subtitle2">
-              {title}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.balanceValue} variant="h4">
-              {periodInfo && renderCurrentBalance(periodInfo)}
-            </Typography>
-          </Grid>
-        </Grid>
+        <Typography className={classes.title} variant="subtitle2">
+          {title}
+        </Typography>
         <div className={classes.graphic}>
           <Chart
             points={chartPoints}
@@ -61,6 +51,7 @@ function BalanceChart<P extends IPoint>(props: IProps<P>) {
             onPeriodChange={handleChartPeriodChange}
           />
         </div>
+        <div className={classes.balanceValue}>{periodInfo && renderCurrentBalance(periodInfo)}</div>
       </CardContent>
     </Card>
   );

@@ -3,7 +3,7 @@ import BN from 'bn.js';
 import moment from 'moment';
 import * as R from 'ramda';
 
-import { BalanceChart, Loading, FormattedBalance } from 'components';
+import { BalanceChart, Loading } from 'components';
 import { usePoolBalancesSubscription } from 'generated/gql/pool';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
@@ -13,16 +13,17 @@ import { decimalsToWei } from 'utils/bn';
 import { isEqualHex } from 'utils/hex';
 import { ETH_NETWORK_CONFIG } from 'env';
 
-export const useStyles = makeStyles(theme => ({
-  enterPrice: {
-    color: theme.colors.shamrock,
-  },
-  exitPrice: {
-    color: theme.palette.type === 'dark' ? theme.colors.heliotrope : theme.palette.primary.dark,
+import { CurrentBalance, BalanceValue } from '../components/CurrentBalance';
+
+export const useStyles = makeStyles(() => ({
+  hidden: {
+    opacity: 0,
+    width: 0,
+    height: 0,
   },
 }));
 
-const tKeys = tKeysAll.app.pages.overview;
+const tKeys = tKeysAll;
 
 interface PoolPoint {
   date: number;
@@ -88,27 +89,41 @@ function PoolBalanceChart() {
   const currentLExitPrice =
     (lastPool && convertPtkPriceToDaiPrice(lastPool.pExitPrice, decimals, 'weiBN')) || '0';
 
-  const renderCurrentBalance = React.useCallback(
-    () => (
-      <>
-        <FormattedBalance className={classes.enterPrice} sum={currentLEnterPrice} token="dai" /> /{' '}
-        <FormattedBalance className={classes.exitPrice} sum={currentLExitPrice} token="dai" />
-      </>
-    ),
-    [currentLEnterPrice, currentLExitPrice],
-  );
+  const renderCurrentBalance = React.useCallback(() => {
+    const balanceValues: BalanceValue[] = [
+      {
+        label: t(tKeys.components.poolBalanceChart.ptkDepositPrice.getKey()),
+        color: '#d93cef',
+        sum: currentLEnterPrice,
+        token: 'dai',
+      },
+      {
+        label: t(tKeys.components.poolBalanceChart.ptkWithdrawalPrice.getKey()),
+        color: '#594cf2',
+        sum: currentLExitPrice,
+        token: 'dai',
+      },
+    ];
+
+    return <CurrentBalance balanceValues={balanceValues} />;
+  }, [currentLEnterPrice, currentLExitPrice]);
 
   return (
     <Loading gqlResults={balancesResult} meta={liquidityCurrencyMeta}>
+      <div className={classes.hidden}>
+        <svg>
+          {theme.gradients.poolBalanceChart[0].svgLinear('lEnterPriceGradient')}
+          {theme.gradients.poolBalanceChart[1].svgLinear('lExitPriceGradient')}
+        </svg>
+      </div>
       <BalanceChart
         chartPoints={chartPoints}
         chartLines={['lExitPrice', 'lEnterPrice']}
         chartLineColors={{
-          lEnterPrice: theme.colors.shamrock,
-          lExitPrice:
-            theme.palette.type === 'dark' ? theme.colors.heliotrope : theme.palette.primary.dark,
+          lEnterPrice: 'url(#lEnterPriceGradient)',
+          lExitPrice: 'url(#lExitPriceGradient)',
         }}
-        title={t(tKeys.poolBalanceTitle.getKey())}
+        title={t(tKeys.app.pages.overview.poolBalanceTitle.getKey())}
         renderCurrentBalance={renderCurrentBalance}
       />
     </Loading>
