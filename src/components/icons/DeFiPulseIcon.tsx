@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 // tslint:disable:max-line-length
-function DeFiPulseIcon(props: GetProps<typeof SvgIcon>) {
+function DeFiPulseIcon(props: React.ComponentProps<typeof SvgIcon>) {
   const { classes: _, ...rest } = props;
 
   return (

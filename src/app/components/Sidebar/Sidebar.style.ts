@@ -16,41 +16,33 @@ export const useStyles = makeStyles(
 
     upperPart: {
       width: '100%',
+      paddingLeft: 5,
     },
 
     lowerPart: {
       display: 'flex',
       flexDirection: 'column',
-      marginLeft: theme.spacing(4),
     },
 
     upperLinks: {},
 
     rootShort: {
       width: theme.spacing(8),
-      alignItems: 'center',
-
-      '& $lowerPart': {
-        marginLeft: 0,
-      },
     },
 
     lowerLinks: {},
 
     switch: {
-      border: 0,
-      background: 'transparent',
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(3),
       padding: 5,
-      cursor: 'pointer',
       alignSelf: 'flex-end',
 
       '& path': {
         opacity: 0.5,
       },
 
-      '&:hover path': {
+      '&:hover': {
         opacity: 1,
       },
     },
@@ -59,5 +51,5 @@ export const useStyles = makeStyles(
       transform: 'rotate(180deg)',
     },
   }),
-  { name: 'sidebar' },
+  { name: 'Sidebar' },
 );

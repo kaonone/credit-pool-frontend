@@ -1,6 +1,5 @@
 import * as React from 'react';
 import cn from 'classnames';
-import { GetProps } from '_helpers';
 import Grid from '@material-ui/core/Grid/Grid';
 
 import { makeStyles } from 'utils/styles';
@@ -10,7 +9,7 @@ import { useStyles } from './RowsLayout.style';
 
 interface IProps {
   children?: React.ReactNode;
-  spacing?: GetProps<typeof Grid>['spacing'];
+  spacing?: React.ComponentProps<typeof Grid>['spacing'];
   className?: string;
 }
 

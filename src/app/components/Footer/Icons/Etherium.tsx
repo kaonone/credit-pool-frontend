@@ -1,7 +1,6 @@
 // tslint:disable: max-line-length
 import * as React from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import { GetProps } from '_helpers';
 
 import { makeStyles } from 'utils/styles';
 
@@ -12,7 +11,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Ethereum(props: GetProps<typeof SvgIcon>) {
+function Ethereum(props: React.ComponentProps<typeof SvgIcon>) {
   const classes = useStyles();
 
   return (

@@ -28,5 +28,5 @@ export const useStyles = makeStyles(
       alignItems: 'center',
     },
   },
-  { name: 'header' },
+  { name: 'Header' },
 );

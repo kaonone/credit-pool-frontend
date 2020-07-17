@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import Avatar from '@material-ui/core/Avatar';
-import { GetProps } from '_helpers';
 
 import { NETWORK_ID } from 'env';
 import { useApi } from 'services/api';
@@ -13,7 +12,7 @@ import { Button, Loading, Typography, Grid } from 'components';
 
 import { AuthModal } from './components/AuthModal';
 
-type IProps = Pick<GetProps<typeof Button>, 'color'> & {};
+type IProps = Pick<React.ComponentProps<typeof Button>, 'color'> & {};
 
 export function AuthButton(props: IProps) {
   const { color } = props;

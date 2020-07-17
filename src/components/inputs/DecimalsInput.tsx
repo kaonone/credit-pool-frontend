@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import BN from 'bn.js';
 import Grid from '@material-ui/core/Grid';
 
@@ -16,7 +15,7 @@ interface IOwnProps {
   onChange: (value: string) => void;
 }
 
-type IProps = IOwnProps & Omit<GetProps<typeof TextInput>, 'ref'>;
+type IProps = IOwnProps & Omit<React.ComponentProps<typeof TextInput>, 'ref'>;
 
 function DecimalsInput(props: IProps) {
   const {

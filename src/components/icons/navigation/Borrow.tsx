@@ -3,15 +3,14 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { useTheme } from 'utils/styles';
 
-import { SidebarIconProps } from './models';
-
 // tslint:disable:max-line-length
-function Borrow(props: SidebarIconProps) {
-  const { withGradient = false, ...rest } = props;
+function Borrow(props: React.ComponentProps<typeof SvgIcon>) {
+  const { color } = props;
+  const withGradient = color !== 'inherit';
   const theme = useTheme();
 
   return (
-    <SvgIcon {...rest} viewBox="0 0 24 24">
+    <SvgIcon {...props} viewBox="0 0 24 24">
       {withGradient && theme.gradients.main.svgLinear('BorrowIconGradient')}
       <g fill="none" fillRule="evenodd">
         {withGradient ? (
