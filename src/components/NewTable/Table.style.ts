@@ -1,9 +1,5 @@
 import { makeStyles } from 'utils/styles';
 
-const cellStyle = {
-  padding: '10px 0px',
-};
-
 const firstCellStyle = {
   paddingLeft: '50px',
 };
@@ -14,7 +10,6 @@ const lastCellStyle = {
 
 const headStyle = {
   textAlign: 'left',
-  ...cellStyle,
 };
 
 const crossRowBorder = '1px solid rgba(255, 255, 255, 0.1)';
@@ -33,6 +28,10 @@ export const useStyles = makeStyles(theme => {
 
       '& td:first-child': firstCellStyle,
       '& th:first-child': firstCellStyle,
+
+      '& td:first-child:last-child': {
+        padding: 0,
+      },
 
       '& th:last-child': lastCellStyle,
 
@@ -53,6 +52,11 @@ export const useStyles = makeStyles(theme => {
         marginLeft: 10,
         paddingRight: 10,
       },
+
+      '& tr:not($subtableRow) + $subtableRow $cellContent': {
+        marginTop: 20,
+      },
+
     },
 
     title: {
@@ -60,25 +64,33 @@ export const useStyles = makeStyles(theme => {
       borderBottom: crossRowBorder,
     },
 
-    singleCellExpandedArea: {
+    subtableRow: {
       backgroundColor: theme.colors.jaguar,
     },
 
-    subtableRow: {
-      backgroundColor: theme.colors.jaguar,
+    lastSubtableRow: {
+      '& $cellContent': {
+        marginBottom: 20,
+      }
     },
 
     cellContent: {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      padding: '10px',
-      height: 55,
+      padding: '8px',
+      height: 48,
+    },
+
+    singleCellExpandedArea: {
+      paddingLeft: 58,
+      paddingRight: 58,
+      backgroundColor: theme.colors.jaguar,
     },
 
     summary: {
       marginTop: 30,
-      padding: '0 10px',
+      padding: '10px 58px',
     },
 
     rowBeforeSummary: {

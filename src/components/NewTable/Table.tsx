@@ -147,12 +147,16 @@ export function Table<T, U = null>(props: Props<T, U>) {
       return subtableCols;
     })();
 
+    const lastEntry = R.last(subtableEntries);
+    const entriesButLast = R.dropLast(1, subtableEntries);
+
     return (
       <>
         <tr key="subtable-header" className={classes.subtableRow}>
           {adjustedSubtableColumns.map(renderSubtableHeader)}
         </tr>
-        {subtableEntries.map(makeSubtableEntryRenderer(adjustedSubtableColumns))}
+        {entriesButLast.map(makeSubtableEntryRenderer(adjustedSubtableColumns))}
+        {lastEntry && makeSubtableEntryRenderer(adjustedSubtableColumns, true)(lastEntry, subtableEntries.length)}
       </>
     );
   }
@@ -165,10 +169,10 @@ export function Table<T, U = null>(props: Props<T, U>) {
     );
   }
 
-  function makeSubtableEntryRenderer(subtableColumns: Array<M.SubtableColumn<U>>) {
+  function makeSubtableEntryRenderer(subtableColumns: Array<M.SubtableColumn<U>>, last?: boolean) {
     return (subtableEntry: U, subtableRowIndex: number) => {
       return (
-        <tr className={classes.subtableRow} key={subtableRowIndex}>
+        <tr className={cn([classes.subtableRow, { [classes.lastSubtableRow]: last }])} key={subtableRowIndex}>
           {subtableColumns.map(makeSubtableCellRenderer(subtableEntry))}
         </tr>
       );
