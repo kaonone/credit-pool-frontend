@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import Dialog, { DialogProps } from '@material-ui/core/Dialog';
 import Drawer from '@material-ui/core/Drawer';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -13,7 +12,7 @@ interface IChildrenProps {
 }
 
 type ButtonProps = Pick<
-  GetProps<typeof Button>,
+  React.ComponentProps<typeof Button>,
   'variant' | 'color' | 'disabled' | 'fullWidth' | 'size' | 'startIcon'
 >;
 

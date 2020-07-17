@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-export function Metamask(props: GetProps<typeof SvgIcon>) {
+export function Metamask(props: React.ComponentProps<typeof SvgIcon>) {
   return (
     <SvgIcon {...props} viewBox="0 0 35 35">
       <path d="M29 5l-10 7.5L21 8l8-3z" fill="#E2761B" />

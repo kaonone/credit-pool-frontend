@@ -73,6 +73,13 @@ const en = {
   features: {
     auth: {
       applicationNetwork: 'This application works with the network "%{networkName}"',
+      modalTitle: {
+        connected: 'Disconnect or change wallet:',
+        disconnected: 'Choose your wallet:',
+        connectedTo: 'Connected to',
+        disconnect: 'Disconnect',
+      },
+      connect: 'Connect to wallet',
     },
     notifications: {
       'erc20.approve': {

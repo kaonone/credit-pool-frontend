@@ -1,11 +1,11 @@
 import * as React from 'react';
+import CloseIcon from '@material-ui/icons/Close';
 
 import { CommunicationState } from 'utils/react';
-import { Dialog, DialogTitle, DialogContent, Hint, Typography, Grid, Link } from 'components';
+import { Dialog, DialogTitle, DialogContent, Hint, Grid } from 'components';
 import { WalletType, wallets } from 'services/api';
-import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
-import { ETH_NETWORK_CONFIG } from 'env';
-import { T_AND_C_URL, PRIVACY_POLICY_URL } from 'docs';
+import { makeStyles } from 'utils/styles';
+import { tKeys, useTranslate } from 'services/i18n';
 
 import { ProviderButton } from './ProviderButton';
 
@@ -19,33 +19,28 @@ interface AuthModalProps {
   disconnect(): void;
 }
 
-const tKeys = tKeysAll.features.auth;
-
 export function AuthModal(props: AuthModalProps) {
   const { isOpened, onClose, connecting, connect, account, disconnect, connectedWallet } = props;
-  const { t } = useTranslate();
   const isLogged: boolean = !!account && !!connectedWallet;
+
+  const classes = useStyles();
+
+  const { t } = useTranslate();
+  const { modalTitle } = tKeys.features.auth;
 
   return (
     // tabIndex needed for Fortmatic form. Without tabIndex, form input cannot be taken into focus
-    <Dialog open={isOpened} onClose={onClose} TransitionProps={{ tabIndex: 'unset' } as any}>
+    <Dialog
+      classes={{ paper: classes.root }}
+      open={isOpened}
+      onClose={onClose}
+      TransitionProps={{ tabIndex: 'unset' } as any}
+    >
       <DialogTitle>
-        {isLogged ? 'Choose another wallet or disconnect:' : 'Choose your wallet:'}
+        {isLogged ? t(modalTitle.connected.getKey()) : t(modalTitle.disconnected.getKey())}
       </DialogTitle>
-      <DialogContent>
-        <Typography>
-          By connecting to the wallet you accept{' '}
-          <Link href={PRIVACY_POLICY_URL} target="_blank" rel="noopener noreferrer" color="inherit">
-            Privacy Policy
-          </Link>{' '}
-          and{' '}
-          <Link href={T_AND_C_URL} target="_blank" rel="noopener noreferrer" color="inherit">
-            Terms of Service
-          </Link>
-          .
-        </Typography>
-      </DialogContent>
-      <DialogContent>
+      <CloseIcon className={classes.closeButton} onClick={onClose} />
+      <DialogContent className={classes.content}>
         <Grid container spacing={1} justify="center">
           {wallets.map((type, index) => (
             <Grid item xs={4} key={index}>
@@ -61,11 +56,6 @@ export function AuthModal(props: AuthModalProps) {
           ))}
         </Grid>
       </DialogContent>
-      <DialogContent>
-        <Typography>
-          {t(tKeys.applicationNetwork.getKey(), { networkName: ETH_NETWORK_CONFIG.name })}.
-        </Typography>
-      </DialogContent>
       {connecting.error && (
         <DialogContent>
           <Hint color="error">{connecting.error}</Hint>
@@ -74,3 +64,19 @@ export function AuthModal(props: AuthModalProps) {
     </Dialog>
   );
 }
+
+const useStyles = makeStyles({
+  root: {
+    padding: 32,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 24,
+    right: 24,
+    opacity: 0.5,
+    cursor: 'pointer',
+  },
+  content: {
+    marginTop: 30,
+  },
+});

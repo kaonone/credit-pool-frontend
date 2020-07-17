@@ -1,6 +1,5 @@
 // tslint:disable: max-line-length
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { makeStyles, useTheme } from 'utils/styles';
@@ -17,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 
 let hackForGradientUpdating = 1;
 
-export function CreditPoolIcon(props: GetProps<typeof SvgIcon>) {
+export function CreditPoolIcon(props: React.ComponentProps<typeof SvgIcon>) {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -35,7 +34,7 @@ export function CreditPoolIcon(props: GetProps<typeof SvgIcon>) {
 
   return (
     <SvgIcon {...props} classes={classes} viewBox="0 0 96 66">
-      {/* chome bug: it doesn't rerender gradient inside svg after theme change, but rerenders after defs remount */}
+      {/* chrome bug: it doesn't rerender gradient inside svg after theme change, but rerenders after defs remount */}
       <defs key={hackForGradientUpdating}>
         <linearGradient id="CreditPoolIcon-gradient-a" x1="50%" x2="50%" y1="0%" y2="100%">
           {gradientStops}

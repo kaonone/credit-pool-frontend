@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { FieldRenderProps } from 'react-final-form';
-import { GetProps } from '_helpers';
 
 import { useTranslate } from 'services/i18n';
 import { getFieldWithComponent } from 'utils/react';
 
 import { TextInput } from '../inputs';
 
-type IProps = Omit<GetProps<typeof TextInput>, 'ref'> & FieldRenderProps<any, HTMLElement>;
+type IProps = Omit<React.ComponentProps<typeof TextInput>, 'ref'> &
+  FieldRenderProps<any, HTMLElement>;
 
 function TextInputFieldComponent(props: IProps) {
   const { input, meta, ...rest } = props;

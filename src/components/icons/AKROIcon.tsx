@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { useTheme } from 'utils/styles';
 
-function AKROIcon(props: GetProps<typeof SvgIcon>) {
+function AKROIcon(props: React.ComponentProps<typeof SvgIcon>) {
   const theme = useTheme();
 
   return (

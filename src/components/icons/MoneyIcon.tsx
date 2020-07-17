@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 // tslint:disable:max-line-length
-function MoneyIcon(props: GetProps<typeof SvgIcon>) {
+function MoneyIcon(props: React.ComponentProps<typeof SvgIcon>) {
   return (
     <SvgIcon {...props} viewBox="0 0 18 18">
       <g fill="none" fillRule="evenodd">
