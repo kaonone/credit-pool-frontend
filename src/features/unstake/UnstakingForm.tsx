@@ -60,7 +60,7 @@ export function UnstakingForm({
     () =>
       api.fundsModule
         .getAvailableBalanceIncreasing$(account || zeroAddress, pInitialLocked, lInitialLocked)
-        .pipe(map(item => item.value)),
+        .pipe(map(item => item.toBN())),
     [api, account, pInitialLocked, lInitialLocked],
   );
 
@@ -109,7 +109,7 @@ export function UnstakingForm({
 
               const lAmountForUnstakeByInitial = new BN(lInitialLocked)
                 .mul(amount.toBN())
-                .div(currentFullStakeCost.value);
+                .div(currentFullStakeCost.toBN());
 
               const rawInterestShareDelta = calcInterestShare(
                 lAmountForUnstakeByInitial,

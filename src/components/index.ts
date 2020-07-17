@@ -35,6 +35,9 @@ export { Preview } from './Preview/Preview';
 export { NavInline } from './NavInline/NavInline';
 export { Section } from './Section/Section';
 export { SocialLink } from './SocialLink/SocialLink';
+export { PortfolioSnapshot } from './PortfolioSnapshot/PortfolioSnapshot';
+export { ComingSoon } from './ComingSoon/ComingSoon';
+
 export * from './ErrorBoundary';
 export * from './Hint/Hint';
 export * from './Loading';
@@ -56,3 +59,4 @@ export * from './FormattedAmount/FormattedAmount';
 export * from './Growth/Growth';
 export * from './ConfirmationDialog/ConfirmationDialog';
 export * from './Highlighted/Highlighted';
+export * from './Title/Title';

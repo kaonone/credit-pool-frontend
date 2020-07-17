@@ -1,7 +1,6 @@
 // tslint:disable: max-line-length
 import * as React from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import { GetProps } from '_helpers';
 
 import { makeStyles } from 'utils/styles';
 
@@ -17,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Messari(props: GetProps<typeof SvgIcon>) {
+function Messari(props: React.ComponentProps<typeof SvgIcon>) {
   const classes = useStyles();
 
   return (

@@ -1,14 +1,15 @@
 import React from 'react';
 import cn from 'classnames';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { tKeys } from 'services/i18n';
+import { IconButton } from 'components';
+import * as icons from 'components/icons/navigation';
 
 import { routes } from '../../routes';
 import * as Link from '../Link';
 import { useStyles } from './Sidebar.style';
-import * as icons from './icons';
 import * as components from './components';
-import { SidebarIconProps } from './icons/models';
 
 const upperLinks: Link.models.Link[] = [
   {
@@ -60,34 +61,36 @@ export const Sidebar: React.FC = () => {
       })}
     >
       <div className={classes.upperPart}>
-        <nav className={classes.upperLinks}>{upperLinks.map(makeLinkRenderer(isExpanded))}</nav>
+        <nav className={classes.upperLinks}>{upperLinks.map(makeLinkRenderer())}</nav>
       </div>
-      <div className={classes.lowerPart}>{renderSwitch()}</div>
+      <div className={classes.lowerPart}>
+        <div className={classes.lowerPart}>{renderSwitch()}</div>
+      </div>
     </div>
   );
 
   function renderSwitch() {
     return (
-      <button
-        type="button"
-        className={cn({
-          [classes.switch]: true,
+      <IconButton
+        className={cn(classes.switch, {
           [classes.switchInverted]: !isExpanded,
         })}
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <icons.Switch />
-      </button>
+        <icons.Switch fontSize="inherit" />
+      </IconButton>
     );
   }
 };
 
-function makeLinkRenderer(shouldRenderLabel: boolean) {
+function makeLinkRenderer() {
   return (link: Link.models.Link) => {
-    return <components.Link key={link.label} link={link} shouldRenderLabel={shouldRenderLabel} />;
+    return <components.Link key={link.label} link={link} />;
   };
 }
 
-function makeIconRenderer(Icon: React.ComponentType<SidebarIconProps>) {
-  return (isActive: boolean) => <Icon fontSize="inherit" withGradient={isActive} />;
+function makeIconRenderer(Icon: typeof SvgIcon) {
+  return (isActive: boolean) => (
+    <Icon fontSize="inherit" {...(!isActive && { color: 'inherit' })} />
+  );
 }

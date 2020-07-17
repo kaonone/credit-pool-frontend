@@ -50,7 +50,7 @@ export function MyEarnCell({ supporter, borrower, proposalId }: MyEarnCellProps)
 
   return (
     <Loading gqlResults={pledgeGqlResult} meta={interestCostMeta}>
-      {interestCost?.gtn(0) ? <FormattedAmount sum={interestCost} /> : '—'}
+      {interestCost?.gt(0) ? <FormattedAmount sum={interestCost} /> : '—'}
     </Loading>
   );
 }

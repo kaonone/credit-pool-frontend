@@ -81,7 +81,7 @@ function UserBalanceChart() {
                 new BN(balance.lBalance).muln(100).div(decimalsToWei(decimals)).toNumber() / 100,
             }))
             .concat({
-              value: (currentBalance?.muln(100).div(decimalsToWei(decimals)).toNumber() || 0) / 100,
+              value: (currentBalance?.mul(100).div(decimalsToWei(decimals)).toNumber() || 0) / 100,
               date: Date.now(),
             })
         : mockedPoints,
