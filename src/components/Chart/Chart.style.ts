@@ -45,7 +45,8 @@ export const useStyles = makeStyles(theme => {
     },
 
     switchButtonSelected: {
-      background: 'rgba(255, 255, 255, 0.1)',
+      background:
+        theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
     },
 
     switchButtonInCaps: {

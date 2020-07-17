@@ -47,7 +47,6 @@ function Chart<P extends IPoint>(props: IProps<P>) {
   React.useEffect(() => {
     onPeriodChange && firstTick && lastTick && onPeriodChange(firstTick, lastTick, period);
   }, [...Object.values(firstTick || {}), ...Object.values(lastTick || {}), period, onPeriodChange]);
-
   if (!firstTick) {
     return null;
   }
@@ -79,7 +78,7 @@ function Chart<P extends IPoint>(props: IProps<P>) {
         </g>
       );
     },
-    [formatTick, realPeriod],
+    [formatTick, realPeriod, theme],
   );
 
   return (
