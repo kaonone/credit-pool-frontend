@@ -53,6 +53,7 @@ const useStyles = makeStyles(theme => ({
 
   header: {
     display: 'flex',
+    flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 20,
@@ -118,6 +119,6 @@ const useStyles = makeStyles(theme => ({
       zIndex: -1,
     }
   },
-}));
+}), { name: 'Yield' });
 
 export { Yield };

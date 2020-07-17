@@ -1,8 +1,9 @@
 import { makeStyles } from 'utils/styles';
 
+import { switchButtonsHeight } from './components/PeriodSwitch/PeriodSwitch.style';
+
 export const useStyles = makeStyles(theme => {
   const graphicMarginBottom = 20;
-  const switchButtonsHeight = 20;
   const graphicHeight = `calc(100% - ${graphicMarginBottom}px - ${switchButtonsHeight}px)`;
 
   return {
@@ -21,36 +22,5 @@ export const useStyles = makeStyles(theme => {
       fontWeight: 300,
       opacity: 0.5,
     },
-
-    periodSwitch: {
-      display: 'flex',
-    },
-
-    switchButton: {
-      minWidth: 30,
-      height: switchButtonsHeight,
-      border: 0,
-      borderRadius: 24,
-      fontSize: 12,
-      color: theme.palette.text.primary,
-      textTransform: 'capitalize',
-      background: 'transparent',
-      outline: 'none',
-      cursor: 'pointer',
-
-      '& + &': {
-        marginLeft: 5,
-        marginRight: 5,
-      },
-    },
-
-    switchButtonSelected: {
-      background:
-        theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
-    },
-
-    switchButtonInCaps: {
-      textTransform: 'uppercase',
-    },
   };
-});
+}, { name: 'Chart' });
