@@ -77,7 +77,7 @@ export const useStyles = makeStyles(theme => {
     lastSubtableRow: {
       '& $cellContent': {
         marginBottom: 20,
-      }
+      },
     },
 
     cellContent: {

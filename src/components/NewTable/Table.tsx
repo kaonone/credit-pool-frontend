@@ -11,6 +11,7 @@ type Props<T, U> = {
   entries: T[];
   columns: Array<M.Column<T, U>>;
   withStripes?: boolean;
+  withoutPadding?: boolean;
   summary?: M.Summary;
 };
 
@@ -157,7 +158,11 @@ export function Table<T, U = null>(props: Props<T, U>) {
           {adjustedSubtableColumns.map(renderSubtableHeader)}
         </tr>
         {entriesButLast.map(makeSubtableEntryRenderer(adjustedSubtableColumns))}
-        {lastEntry && makeSubtableEntryRenderer(adjustedSubtableColumns, true)(lastEntry, subtableEntries.length)}
+        {lastEntry &&
+          makeSubtableEntryRenderer(adjustedSubtableColumns, true)(
+            lastEntry,
+            subtableEntries.length,
+          )}
       </>
     );
   }
@@ -173,7 +178,10 @@ export function Table<T, U = null>(props: Props<T, U>) {
   function makeSubtableEntryRenderer(subtableColumns: Array<M.SubtableColumn<U>>, last?: boolean) {
     return (subtableEntry: U, subtableRowIndex: number) => {
       return (
-        <tr className={cn([classes.subtableRow, { [classes.lastSubtableRow]: last }])} key={subtableRowIndex}>
+        <tr
+          className={cn([classes.subtableRow, { [classes.lastSubtableRow]: last }])}
+          key={subtableRowIndex}
+        >
           {subtableColumns.map(makeSubtableCellRenderer(subtableEntry))}
         </tr>
       );
