@@ -22,8 +22,8 @@ export function Table<T, U = null>(props: Props<T, U>) {
 
   const { columns, entries, summary, withStripes } = props;
 
-  const [rowToExpanded, setRowToExpanded] = React.useState<RowToExpandedState>(
-    () => entries.reduce(
+  const [rowToExpanded, setRowToExpanded] = React.useState<RowToExpandedState>(() =>
+    entries.reduce(
       (acc, _, index) => ({
         ...acc,
         [index]: false,
@@ -151,7 +151,13 @@ export function Table<T, U = null>(props: Props<T, U>) {
           {adjustedSubtableColumns.map(renderSubtableHeader)}
         </tr>
         {subtableEntries.map((x, index) =>
-          renderSubtableEntry(adjustedSubtableColumns, x, index, index === subtableEntries.length - 1))}
+          renderSubtableEntry(
+            adjustedSubtableColumns,
+            x,
+            index,
+            index === subtableEntries.length - 1,
+          ),
+        )}
       </>
     );
   }
@@ -164,7 +170,12 @@ export function Table<T, U = null>(props: Props<T, U>) {
     );
   }
 
-  function renderSubtableEntry(subtableColumns: Array<M.SubtableColumn<U>>, subtableEntry: U, subtableRowIndex: number, last: boolean) {
+  function renderSubtableEntry(
+    subtableColumns: Array<M.SubtableColumn<U>>,
+    subtableEntry: U,
+    subtableRowIndex: number,
+    last: boolean,
+  ) {
     return (
       <tr
         className={cn([classes.subtableRow, { [classes.lastSubtableRow]: last }])}
