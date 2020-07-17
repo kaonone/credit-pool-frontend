@@ -2,6 +2,7 @@ import * as React from 'react';
 import cn from 'classnames';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
+import { NETWORK_ID } from 'env';
 import { useCommunication } from 'utils/react';
 import { ButtonBase, Loading, Typography, Box, ShortAddress, Grid, Button } from 'components';
 import { WalletType } from 'services/api';
@@ -66,7 +67,7 @@ export function ProviderButton({
             <Grid item>
               <Typography className={classes.description}>{`${t(
                 tKeys.features.auth.modalTitle.connectedTo.getKey(),
-              )} ${type}`}</Typography>
+              )} ${t(tKeys.features.networkWarning.networkType[NETWORK_ID].getKey())}`}</Typography>
             </Grid>
             <Box clone alignSelf="stretch">
               <Grid item>

@@ -46,7 +46,7 @@ export function AuthButton(props: IProps) {
     <>
       <Button
         color={color}
-        variant="outlined"
+        variant={connectedWallet ? 'outlined' : 'contained'}
         onClick={toggleIsOpened}
         disabled={!accountMeta.loaded}
         className={classes.root}
