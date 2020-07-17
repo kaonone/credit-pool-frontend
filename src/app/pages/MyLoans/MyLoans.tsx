@@ -100,6 +100,15 @@ export function MyLoansPage() {
         <NewTable.Component
           columns={columns}
           entries={entries}
+          withStripes
+        />
+      </div>
+
+      <div style={{ marginTop: '30px' }}>
+        <NewTable.Component
+          columns={columns}
+          entries={entries}
+          withStripes
           summary={{ renderLabel: () => 'Sum', renderValue: () => 13 }}
         />
       </div>

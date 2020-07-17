@@ -10,11 +10,12 @@ const lastCellStyle = {
 
 const headStyle = {
   textAlign: 'left',
+  padding: 0,
 };
 
-const crossRowBorder = '1px solid rgba(255, 255, 255, 0.1)';
-
 export const useStyles = makeStyles(theme => {
+  const crossRowBorder = `1px solid ${theme.colors.jaguar}`;
+
   return {
     root: {
       width: '100%',
@@ -56,7 +57,12 @@ export const useStyles = makeStyles(theme => {
       '& tr:not($subtableRow) + $subtableRow $cellContent': {
         marginTop: 20,
       },
+    },
 
+    withStripes: {
+      '& $cellContent': {
+        borderBottom: crossRowBorder,
+      },
     },
 
     title: {

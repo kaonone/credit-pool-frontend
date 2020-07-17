@@ -10,6 +10,7 @@ import * as M from './models';
 type Props<T, U> = {
   entries: T[];
   columns: Array<M.Column<T, U>>;
+  withStripes?: boolean;
   summary?: M.Summary;
 };
 
@@ -18,7 +19,7 @@ type RowToExpandedState = Record<number, boolean>;
 export function Table<T, U = null>(props: Props<T, U>) {
   const classes = useStyles();
 
-  const { columns, entries, summary } = props;
+  const { columns, entries, summary, withStripes } = props;
 
   const [rowToExpanded, setRowToExpanded] = React.useState<RowToExpandedState>(
     entries.reduce(
@@ -38,7 +39,7 @@ export function Table<T, U = null>(props: Props<T, U>) {
   })();
 
   return (
-    <table className={classes.root}>
+    <table className={cn([classes.root, { [classes.withStripes]: withStripes }])}>
       <thead>
         <tr>{columns.map(renderTitle)}</tr>
       </thead>
