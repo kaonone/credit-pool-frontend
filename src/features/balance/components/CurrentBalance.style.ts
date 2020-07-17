@@ -34,5 +34,5 @@ export const useStyles = makeStyles(
       color: theme.palette.text.primary,
     },
   }),
-  { name: 'BalanceChartLegend' },
+  { name: 'CurrentBalance' },
 );

@@ -8,7 +8,8 @@ import { useTheme } from 'utils/styles';
 import { makeFormatDateByPeriod, getTicks, makeGridGenerator } from './helpers';
 import { useStyles } from './Chart.style';
 
-export type Period = 'd' | 'w' | 'm' | '6m' | 'all';
+const periods = ['d', 'w', 'm', '6m', 'all'] as const;
+export type Period = typeof periods[number];
 
 export interface IPoint {
   date: number;
@@ -40,6 +41,8 @@ function Chart<P extends IPoint>(props: IProps<P>) {
     lines.toString(),
     period,
   ]);
+
+  const gridGenerator = React.useMemo(() => makeGridGenerator(3), []);
 
   const firstTick = R.head(ticks);
   const lastTick = R.last(ticks);
@@ -107,7 +110,7 @@ function Chart<P extends IPoint>(props: IProps<P>) {
               stroke={theme.palette.text.primary}
               strokeOpacity={0.1}
               vertical={false}
-              horizontalCoordinatesGenerator={makeGridGenerator(3)}
+              horizontalCoordinatesGenerator={gridGenerator}
             />
             {lines.map(line => (
               <Line
@@ -132,8 +135,6 @@ interface IPeriodSwitchProps {
   period: Period;
   onSelect(period: Period): void;
 }
-
-const periods: Period[] = ['d', 'w', 'm', '6m', 'all'];
 
 function PeriodSwitch(props: IPeriodSwitchProps) {
   const { period: selectedPeriod, onSelect } = props;
