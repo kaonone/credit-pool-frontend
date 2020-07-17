@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+// loans - [my guarantees issued]
+
 import { AuthButton } from 'features/auth';
 import { Typography, Loading, NewTable } from 'components';
 import { useSubgraphPagination } from 'utils/react';

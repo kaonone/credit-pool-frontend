@@ -23,7 +23,7 @@ export function Table<T, U = null>(props: Props<T, U>) {
   const { columns, entries, summary, withStripes } = props;
 
   const [rowToExpanded, setRowToExpanded] = React.useState<RowToExpandedState>(
-    entries.reduce(
+    () => entries.reduce(
       (acc, _, index) => ({
         ...acc,
         [index]: false,
@@ -50,13 +50,9 @@ export function Table<T, U = null>(props: Props<T, U>) {
 
   function renderEntriesAndSummary() {
     if (summary) {
-      const last = R.last(entries);
-      const butLast = R.dropLast(1, entries);
-
       return (
         <>
-          {butLast.map((x, index) => renderEntry(x, index))}
-          {last && renderEntry(last, entries.length, true)}
+          {entries.map((x, index) => renderEntry(x, index, index === entries.length - 1))}
           {renderSummary(summary)}
         </>
       );
@@ -149,20 +145,13 @@ export function Table<T, U = null>(props: Props<T, U>) {
       return subtableCols;
     })();
 
-    const lastEntry = R.last(subtableEntries);
-    const entriesButLast = R.dropLast(1, subtableEntries);
-
     return (
       <>
         <tr key="subtable-header" className={classes.subtableRow}>
           {adjustedSubtableColumns.map(renderSubtableHeader)}
         </tr>
-        {entriesButLast.map(makeSubtableEntryRenderer(adjustedSubtableColumns))}
-        {lastEntry &&
-          makeSubtableEntryRenderer(adjustedSubtableColumns, true)(
-            lastEntry,
-            subtableEntries.length,
-          )}
+        {subtableEntries.map((x, index) =>
+          renderSubtableEntry(adjustedSubtableColumns, x, index, index === subtableEntries.length - 1))}
       </>
     );
   }
@@ -175,17 +164,15 @@ export function Table<T, U = null>(props: Props<T, U>) {
     );
   }
 
-  function makeSubtableEntryRenderer(subtableColumns: Array<M.SubtableColumn<U>>, last?: boolean) {
-    return (subtableEntry: U, subtableRowIndex: number) => {
-      return (
-        <tr
-          className={cn([classes.subtableRow, { [classes.lastSubtableRow]: last }])}
-          key={subtableRowIndex}
-        >
-          {subtableColumns.map(makeSubtableCellRenderer(subtableEntry))}
-        </tr>
-      );
-    };
+  function renderSubtableEntry(subtableColumns: Array<M.SubtableColumn<U>>, subtableEntry: U, subtableRowIndex: number, last: boolean) {
+    return (
+      <tr
+        className={cn([classes.subtableRow, { [classes.lastSubtableRow]: last }])}
+        key={subtableRowIndex}
+      >
+        {subtableColumns.map(makeSubtableCellRenderer(subtableEntry))}
+      </tr>
+    );
   }
 
   function makeSubtableCellRenderer(entry: U) {
