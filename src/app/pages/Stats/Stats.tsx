@@ -1,9 +1,20 @@
 import * as React from 'react';
+import cn from 'classnames';
 
 import { Grid, Card, CardContent } from 'components';
-// import { PoolBalanceChart } from 'features/balance';
+import { PoolBalanceChart } from 'features/balance';
 import { makeStyles } from 'utils/styles';
-import { PoolSize, PoolSize24h } from 'features/metrics';
+import {
+  PoolSize,
+  PoolSize24h,
+  PoolAPY,
+  AverageLoanAPY,
+  ActiveMembers,
+  ActiveMembers24h,
+  LoanVolumeRequested,
+  LoanVolumeGranted,
+  AverageLoanSize,
+} from 'features/metrics';
 
 export function StatsPage() {
   const classes = useStyles();
@@ -19,16 +30,18 @@ export function StatsPage() {
           </Card>
         </Grid>
         <Grid item xs>
-          <Card className={classes.card}>
+          <Card className={cn(classes.card, classes.withBorder)}>
             <CardContent>
-              <PoolSize />
+              <PoolAPY />
+              <AverageLoanAPY />
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs>
           <Card className={classes.card}>
             <CardContent>
-              <PoolSize />
+              <ActiveMembers />
+              <ActiveMembers24h />
             </CardContent>
           </Card>
         </Grid>
@@ -37,14 +50,16 @@ export function StatsPage() {
         <Grid item xs>
           <Card className={classes.card}>
             <CardContent>
-              <PoolSize />
+              <PoolBalanceChart />
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs>
           <Card className={classes.card}>
             <CardContent>
-              <PoolSize />
+              <LoanVolumeRequested />
+              <LoanVolumeGranted />
+              <AverageLoanSize />
             </CardContent>
           </Card>
         </Grid>
@@ -63,10 +78,17 @@ export function StatsPage() {
 const useStyles = makeStyles(() => ({
   card: {
     height: '100%',
+    boxShadow: 'none',
+  },
+  withBorder: {
+    borderLeft: '1px solid rgba(255,255,255,0.1)',
+    borderRight: '1px solid rgba(255,255,255,0.1)',
+    paddingLeft: 56,
+    paddingRight: 56,
+    marginRight: 50,
+    marginLeft: 50,
   },
   row: {
     padding: 50,
   },
 }));
-
-// <PoolBalanceChart />

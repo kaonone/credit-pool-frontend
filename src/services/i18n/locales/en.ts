@@ -392,6 +392,13 @@ const en = {
         established: 'Established',
       },
       dayChange: '24h Change',
+      poolAPY: 'Pool APY',
+      averageLoanAPY: 'Average Loan APY',
+      activeMembers: 'Active Members',
+      averageLoanSize: 'Average Loan Size',
+      loanVolumeGranted: 'Loan Volume Granted',
+      loanVolumeRequested: 'Loan Volume Requested',
+      loanApprovalRatio: 'Loan Approval Ratio',
     },
     portfolioSnapshot: {
       caption: 'Portfolio Snapshot',

@@ -7,6 +7,8 @@ type Props = {
   value: NonNullable<React.ReactNode>;
   valueSign?: '+' | '-';
   subValue?: React.ReactNode;
+  chart?: React.ReactNode;
+  profit?: React.ReactNode;
 };
 
 export function Metric(props: Props) {
@@ -16,7 +18,10 @@ export function Metric(props: Props) {
   return (
     <div className={classes.root}>
       <div className={classes.title}>{title}</div>
-      <div className={classes.value}>{`${valueSign} ${value}`}</div>
+      <div className={classes.value}>
+        {valueSign && <span className={classes.value}>{valueSign}</span>}
+        {value}
+      </div>
       {subValue && <div className={classes.subValue}>{subValue}</div>}
     </div>
   );
