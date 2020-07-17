@@ -11,7 +11,7 @@ type Props<T, U> = {
   entries: T[];
   columns: Array<M.Column<T, U>>;
   withStripes?: boolean;
-  withoutPadding?: boolean;
+  withOuterPadding?: boolean;
   summary?: M.Summary;
 };
 
@@ -20,7 +20,7 @@ type RowToExpandedState = Record<number, boolean>;
 export function Table<T, U = null>(props: Props<T, U>) {
   const classes = useStyles();
 
-  const { columns, entries, summary, withStripes } = props;
+  const { columns, entries, summary, withStripes, withOuterPadding } = props;
 
   const [rowToExpanded, setRowToExpanded] = React.useState<RowToExpandedState>(() =>
     entries.reduce(
@@ -40,7 +40,10 @@ export function Table<T, U = null>(props: Props<T, U>) {
   })();
 
   return (
-    <table className={cn([classes.root, { [classes.withStripes]: withStripes }])}>
+    <table className={cn([classes.root, {
+      [classes.withStripes]: withStripes,
+      [classes.withOuterPadding]: withOuterPadding,
+    }])}>
       <thead>
         <tr>{columns.map(renderTitle)}</tr>
       </thead>

@@ -27,18 +27,8 @@ export const useStyles = makeStyles(theme => {
         paddingBottom: 0,
       },
 
-      '& td:first-child': firstCellStyle,
-      '& th:first-child': firstCellStyle,
-
       '& td:first-child:last-child': {
         padding: 0,
-      },
-
-      '& th:last-child': lastCellStyle,
-
-      '& td:last-child': {
-        ...lastCellStyle,
-        paddingRight: '50px',
       },
 
       '& tbody td': {
@@ -57,6 +47,14 @@ export const useStyles = makeStyles(theme => {
       '& tr:not($subtableRow) + $subtableRow $cellContent': {
         marginTop: 20,
       },
+    },
+
+    withOuterPadding: {
+      '& td:first-child': firstCellStyle,
+      '& th:first-child': firstCellStyle,
+
+      '& th:last-child': lastCellStyle,
+      '& td:last-child': lastCellStyle,
     },
 
     withStripes: {
@@ -112,4 +110,4 @@ export const useStyles = makeStyles(theme => {
       },
     },
   };
-});
+}, { name: 'Table' });
