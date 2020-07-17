@@ -14,6 +14,32 @@ export const entries: Order[] = [
   { date: '2015-03-01', kind: 'sell', values: [5.52, 1, 2] },
 ];
 
+export const columnsWithoutExpandableRows: Array<NewTable.models.Column<Order>> = [
+  {
+    renderTitle: () => 'Date',
+    cellContent: {
+      kind: 'simple',
+      render: x => x.date,
+    },
+  },
+
+  {
+    renderTitle: () => 'Kind',
+    cellContent: {
+      kind: 'simple',
+      render: x => x.kind,
+    },
+  },
+
+  {
+    renderTitle: () => null,
+    cellContent: {
+      kind: 'simple',
+      render: x => x.values[0],
+    },
+  },
+];
+
 export const columns: Array<NewTable.models.Column<Order>> = [
   {
     renderTitle: () => 'Date',

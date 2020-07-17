@@ -26,9 +26,8 @@ export function DemoPage() {
 
       <div style={{ marginTop: '30px' }}>
         <NewTable.Component
-          columns={tableData.columns}
+          columns={tableData.columnsWithoutExpandableRows}
           entries={tableData.entries}
-          withStripes
           summary={{ renderLabel: () => 'Sum', renderValue: () => 13 }}
         />
       </div>
