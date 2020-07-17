@@ -1,18 +1,22 @@
 import * as React from 'react';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
+import Avatar from '@material-ui/core/Avatar';
 
+import { NETWORK_ID } from 'env';
 import { useApi } from 'services/api';
 import { getShortAddress } from 'utils/format';
 import { useSubscribable, useCommunication, useOnChangeState } from 'utils/react';
-import { Button, Loading } from 'components';
+import { makeStyles } from 'utils/styles';
+import { tKeys, useTranslate } from 'services/i18n';
+import { Button, Loading, Typography, Grid } from 'components';
 
 import { AuthModal } from './components/AuthModal';
 
-type IProps = Pick<React.ComponentProps<typeof Button>, 'color'> & {};
-
-export function AuthButton(props: IProps) {
-  const { color } = props;
+export function AuthButton() {
   const [isOpened, setIsOpened] = React.useState(false);
   const api = useApi();
+  const classes = useStyles();
+  const { t } = useTranslate();
 
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, [], null);
   const [status] = useSubscribable(() => api.web3Manager.status, [], 'pending');
@@ -38,10 +42,11 @@ export function AuthButton(props: IProps) {
   return (
     <>
       <Button
-        color={color}
-        variant="outlined"
+        color={connectedWallet ? 'default' : 'primary'}
+        variant={connectedWallet ? 'outlined' : 'contained'}
         onClick={toggleIsOpened}
         disabled={!accountMeta.loaded}
+        className={classes.root}
         endIcon={
           <Loading
             ignoreError
@@ -55,7 +60,34 @@ export function AuthButton(props: IProps) {
         }
       >
         <Loading meta={accountMeta}>
-          {account ? getShortAddress(account) : 'Connect to wallet'}
+          {account ? (
+            <>
+              <Avatar className={classes.icon}>
+                <Jazzicon diameter={34} seed={jsNumberForAddress(account)} />
+              </Avatar>
+              <Grid
+                container
+                alignItems="flex-start"
+                direction="column"
+                spacing={0}
+                className={classes.container}
+              >
+                <Grid item>
+                  <Typography className={classes.address}>{getShortAddress(account)}</Typography>
+                </Grid>
+                <Grid item>
+                  <Typography className={classes.connected}>
+                    {`${t(tKeys.features.auth.modalTitle.connectedTo.getKey())} 
+                    ${t(tKeys.features.networkWarning.networkType[NETWORK_ID].getKey())}`}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </>
+          ) : (
+            <Typography className={classes.connect}>
+              {t(tKeys.features.auth.connect.getKey())}
+            </Typography>
+          )}
         </Loading>
       </Button>
       <AuthModal
@@ -70,3 +102,29 @@ export function AuthButton(props: IProps) {
     </>
   );
 }
+
+const useStyles = makeStyles({
+  root: {
+    padding: '0 15px 0 0',
+  },
+  address: {
+    fontSize: 12,
+    lineHeight: 1,
+  },
+  connected: {
+    fontSize: 12,
+    lineHeight: 1,
+    opacity: 0.5,
+    marginTop: 3,
+  },
+  connect: {
+    paddingLeft: 10,
+  },
+  container: {
+    marginLeft: 11,
+  },
+  icon: {
+    width: 34,
+    height: 34,
+  },
+});
