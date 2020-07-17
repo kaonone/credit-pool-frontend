@@ -37,7 +37,7 @@ export { Section } from './Section/Section';
 export { SocialLink } from './SocialLink/SocialLink';
 export { PortfolioSnapshot } from './PortfolioSnapshot/PortfolioSnapshot';
 export { ComingSoon } from './ComingSoon/ComingSoon';
-export { Yield } from './Yield/Yield';
+export { YieldSummary } from './YieldSummary/YieldSummary';
 
 export * from './ErrorBoundary';
 export * from './Hint/Hint';

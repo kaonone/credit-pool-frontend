@@ -86,7 +86,7 @@ function renderLoansIssued(
   const { t } = useTranslate();
 
   return (
-    <Grid container xs={12} justify="space-between">
+    <Grid container justify="space-between">
       <Grid item xs>
         {t(tKeys.loansIssued.getKey())}
       </Grid>

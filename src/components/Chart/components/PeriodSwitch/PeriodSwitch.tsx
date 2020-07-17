@@ -24,6 +24,7 @@ function PeriodSwitch(props: IPeriodSwitchProps) {
     <div className={classes.root}>
       {periods.map(period => (
         <button
+          key={period}
           type="button"
           onClick={selectPeriod(period)}
           className={cn(classes.switchButton, {
