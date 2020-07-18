@@ -2,8 +2,9 @@ import { makeStyles } from 'utils/styles';
 
 export const useStyles = makeStyles(() => ({
   root: {},
+  topPart: {},
 
-  issuedLoansTable: {
-    marginTop: 75,
+  bottomPart: {
+    fontSize: 12,
   },
-}), { name: 'Stakes' });
+}), { name: 'double-line-cell' });

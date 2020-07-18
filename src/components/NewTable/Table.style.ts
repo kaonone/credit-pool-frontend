@@ -47,17 +47,29 @@ export const useStyles = makeStyles(theme => {
 
     cell: {},
 
+    title: {
+      textAlign: 'left',
+      fontWeight: 'normal',
+      padding: '10px',
+    },
+
+    cellAlignLeft: {
+      textAlign: 'left',
+    },
+
+    cellAlignRight: {
+      textAlign: 'right',
+    },
+
+    cellAlignCenter: {
+      textAlign: 'center',
+    },
+
     topLevelTitle: {
       borderBottom: crossRowBorder,
 
       '&:first-child': crossRowBorderStyleForFirstCell,
       '&:last-child': crossRowBorderStyleForLastCell,
-    },
-
-    title: {
-      textAlign: 'left',
-      fontWeight: 'normal',
-      padding: '10px',
     },
 
     subtableRow: {

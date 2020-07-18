@@ -25,6 +25,7 @@ export { default as TabPanel } from '@material-ui/lab/TabPanel';
 export { default as TabContext } from '@material-ui/lab/TabContext';
 export { default as Tab } from '@material-ui/core/Tab';
 
+export { InfoTooltip } from './InfoTooltip';
 export { NavMenuItem } from './NavMenuItem/NavMenuItem';
 export { AkropolisSocialLinks } from './AkropolisSocialLinks/AkropolisSocialLinks';
 export { Button, ButtonProps } from './Button/Button';

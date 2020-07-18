@@ -9,6 +9,9 @@ export const Stakes: React.FC = () => {
   return (
     <div className={classes.root}>
       <views.Metrics />
+      <div className={classes.issuedLoansTable}>
+        <views.IssuedLoansTable />
+      </div>
     </div>
   );
 };

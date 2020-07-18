@@ -1,0 +1,1 @@
+export { LabelWithInfoTooltip } from './LabelWithInfoTooltip';

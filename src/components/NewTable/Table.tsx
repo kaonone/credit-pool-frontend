@@ -17,8 +17,15 @@ type Props<T, U> = {
 
 type RowToExpandedState = Record<number, boolean>;
 
+
 export function Table<T, U = null>(props: Props<T, U>) {
   const classes = useStyles();
+
+  const alignPropertyToClass: Record<M.AlignProperty, string> = {
+    center: classes.cellAlignCenter,
+    left: classes.cellAlignLeft,
+    right: classes.cellAlignRight,
+  }
 
   const { columns, entries, summary, withStripes, withOuterPadding } = props;
 
@@ -74,9 +81,13 @@ export function Table<T, U = null>(props: Props<T, U>) {
     );
   }
 
+  function getAlignClass({ align }: M.Column<T, U>) {
+    return align && alignPropertyToClass[align];
+  }
+
   function renderTitle(column: M.Column<T, U>, columnIndex: number) {
     return (
-      <th className={cn(classes.title, classes.cell, classes.topLevelTitle)} key={columnIndex}>
+      <th className={cn(classes.title, classes.cell, classes.topLevelTitle, getAlignClass(column))} key={columnIndex}>
         {column.renderTitle()}
       </th>
     );
@@ -207,10 +218,10 @@ export function Table<T, U = null>(props: Props<T, U>) {
     return (column: M.Column<T, U>, columnIndex: number) => {
       switch (column.cellContent.kind) {
         case 'simple':
-          return renderCellWithSimpleContent(entry, column.cellContent, columnIndex);
+          return renderCellWithSimpleContent(entry, column.cellContent, columnIndex, column);
 
         case 'for-row-expander':
-          return renderCellWithContentForRowExpander(rowIndex);
+          return renderCellWithContentForRowExpander(rowIndex, column);
       }
     };
   }
@@ -219,20 +230,21 @@ export function Table<T, U = null>(props: Props<T, U>) {
     entry: T,
     content: M.SimpleCellContent<T>,
     columnIndex: number,
+    column: M.Column<T, U>,
   ) {
     return (
-      <td className={cn(classes.cell, classes.cellData)} key={columnIndex}>
+      <td className={cn(classes.cell, classes.cellData, getAlignClass(column))} key={columnIndex}>
         {content.render(entry)}
       </td>
     );
   }
 
-  function renderCellWithContentForRowExpander(rowIndex: number) {
+  function renderCellWithContentForRowExpander(rowIndex: number, column: M.Column<T, U>) {
     const handleToggle = (newValue: boolean) =>
       setRowToExpanded({ ...rowToExpanded, [rowIndex]: newValue });
 
     return (
-      <td className={cn(classes.cell, classes.cellData)} key="row-expander">
+      <td className={cn(classes.cell, classes.cellData, getAlignClass(column))} key="row-expander">
         <views.RowExpander expanded={rowToExpanded[rowIndex]} onToggle={handleToggle} />
       </td>
     );
