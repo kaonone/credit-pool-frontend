@@ -1,13 +1,5 @@
 import { makeStyles } from 'utils/styles';
 
-const firstCellStyle = {
-  paddingLeft: '50px',
-};
-
-const lastCellStyle = {
-  paddingRight: '50px',
-};
-
 export const useStyles = makeStyles(theme => {
   const crossRowBorderStyleForFirstCell = {
     borderImage: `linear-gradient(to right, transparent 50px, ${theme.colors.jaguar} 50px) 1 / 0 0 1 0`,
@@ -29,11 +21,27 @@ export const useStyles = makeStyles(theme => {
       '& tr:not($subtableRow) + $subtableRow $cell': {
         paddingTop: 30,
       },
+
+      '& $cell:first-child': {
+        paddingLeft: 0,
+      },
+      '& $cell:last-child': {
+        paddingRight: 0,
+      }
     },
 
     withOuterPadding: {
-      '& $cell:first-child': firstCellStyle,
-      '& $cell:last-child': lastCellStyle,
+      '& $cell:first-child': {
+        paddingLeft: 50,
+      },
+      '& $cell:last-child': {
+        paddingRight: 50,
+      },
+
+      '& $topLevelTitle': {
+        '&:first-child': crossRowBorderStyleForFirstCell,
+        '&:last-child': crossRowBorderStyleForLastCell,
+      },
     },
 
     withStripes: {
@@ -67,9 +75,6 @@ export const useStyles = makeStyles(theme => {
 
     topLevelTitle: {
       borderBottom: crossRowBorder,
-
-      '&:first-child': crossRowBorderStyleForFirstCell,
-      '&:last-child': crossRowBorderStyleForLastCell,
     },
 
     subtableRow: {
