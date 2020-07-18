@@ -8,12 +8,17 @@ const lastCellStyle = {
   paddingRight: '50px',
 };
 
-const headStyle = {
-  textAlign: 'left',
-  padding: 0,
-};
-
 export const useStyles = makeStyles(theme => {
+  const crossRowBorderStyleForFirstCell = {
+    borderImage: `linear-gradient(to right, transparent 50px, ${theme.colors.jaguar} 50px) 1 / 0 0 1 0`,
+    border: '1px solid',
+  };
+
+  const crossRowBorderStyleForLastCell = {
+    borderImage: `linear-gradient(to right, ${theme.colors.jaguar} calc(100% - 50px), transparent calc(100% - 50px)) 1 / 0 0 1 0`,
+    border: '1px solid',
+  }
+
   const crossRowBorder = `1px solid ${theme.colors.jaguar}`;
 
   return {
@@ -21,52 +26,38 @@ export const useStyles = makeStyles(theme => {
       width: '100%',
       borderSpacing: 0,
 
-      '& th': headStyle,
-
-      '& thead th': {
-        paddingBottom: 0,
-      },
-
-      '& td:first-child:last-child': {
-        padding: 0,
-      },
-
-      '& tbody td': {
-        fontWeight: 300,
-      },
-
-      '& td': {
-        padding: 0,
-      },
-
-      '& th:first-child $title': {
-        marginLeft: 10,
-        paddingRight: 10,
-      },
-
-      '& tr:not($subtableRow) + $subtableRow $cellContent': {
-        marginTop: 20,
+      '& tr:not($subtableRow) + $subtableRow $cell': {
+        paddingTop: 30,
       },
     },
 
     withOuterPadding: {
-      '& td:first-child': firstCellStyle,
-      '& th:first-child': firstCellStyle,
-
-      '& th:last-child': lastCellStyle,
-      '& td:last-child': lastCellStyle,
+      '& $cell:first-child': firstCellStyle,
+      '& $cell:last-child': lastCellStyle,
     },
 
     withStripes: {
-      '& $cellContent': {
+      '& $cellData': {
         borderBottom: crossRowBorder,
+
+        '&:first-child': crossRowBorderStyleForFirstCell,
+        '&:last-child': crossRowBorderStyleForLastCell,
       },
     },
 
-    title: {
-      height: 40,
+    cell: {},
+
+    topLevelTitle: {
       borderBottom: crossRowBorder,
+
+      '&:first-child': crossRowBorderStyleForFirstCell,
+      '&:last-child': crossRowBorderStyleForLastCell,
+    },
+
+    title: {
+      textAlign: 'left',
       fontWeight: 'normal',
+      padding: '10px',
     },
 
     subtableRow: {
@@ -74,39 +65,31 @@ export const useStyles = makeStyles(theme => {
     },
 
     lastSubtableRow: {
-      '& $cellContent': {
-        marginBottom: 20,
+      '& $cell': {
+        paddingBottom: 30,
       },
     },
 
-    cellContent: {
-      display: 'flex',
+    cellData: {
       fontWeight: 300,
-      flexDirection: 'column',
-      justifyContent: 'center',
-      padding: '8px',
-      height: 48,
+      padding: '10px',
     },
 
     singleCellExpandedArea: {
-      paddingLeft: 58,
-      paddingRight: 58,
+      padding: '10px 50px',
       backgroundColor: theme.colors.jaguar,
     },
 
-    summary: {
-      marginTop: 30,
-      padding: '10px 58px',
+    summaryCell: {
+      paddingTop: 30,
     },
 
     rowBeforeSummary: {
-      '& $cellContent': {
+      '& $cell': {
         borderBottom: crossRowBorder,
-      },
 
-      '& td:first-child $cellContent': {
-        paddingLeft: 0,
-        marginLeft: 10,
+        '&:first-child': crossRowBorderStyleForFirstCell,
+        '&:last-child': crossRowBorderStyleForLastCell,
       },
     },
   };

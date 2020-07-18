@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-// loans - [my guarantees issued]
-
 import { AuthButton } from 'features/auth';
 import { Typography, Loading, NewTable } from 'components';
 import { useSubgraphPagination } from 'utils/react';
@@ -20,14 +18,15 @@ export function DemoPage() {
       <Typography variant="h4" gutterBottom>
         Tables
       </Typography>
-      <NewTable.Component columns={tableData.columnsWithSubtable} entries={tableData.entries} />
+      <NewTable.Component withOuterPadding columns={tableData.columnsWithSubtable} entries={tableData.entries} />
 
       <div style={{ marginTop: '30px' }}>
-        <NewTable.Component columns={tableData.columns} entries={tableData.entries} withStripes />
+        <NewTable.Component withOuterPadding columns={tableData.columns} entries={tableData.entries} withStripes />
       </div>
 
       <div style={{ marginTop: '30px' }}>
         <NewTable.Component
+          withOuterPadding
           columns={tableData.columnsWithoutExpandableRows}
           entries={tableData.entries}
           summary={{ renderLabel: () => 'Sum', renderValue: () => 13 }}

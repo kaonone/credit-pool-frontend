@@ -67,10 +67,8 @@ export function Table<T, U = null>(props: Props<T, U>) {
   function renderSummary(x: M.Summary) {
     return (
       <tr key="summary">
-        <td colSpan={columns.length}>
-          <div className={classes.summary}>
-            <views.Summary summary={x} />
-          </div>
+        <td colSpan={columns.length} className={cn(classes.cell, classes.summaryCell)}>
+          <views.Summary summary={x} />
         </td>
       </tr>
     );
@@ -78,8 +76,8 @@ export function Table<T, U = null>(props: Props<T, U>) {
 
   function renderTitle(column: M.Column<T, U>, columnIndex: number) {
     return (
-      <th key={columnIndex}>
-        <div className={classes.title}>{column.renderTitle()}</div>
+      <th className={cn(classes.title, classes.cell, classes.topLevelTitle)} key={columnIndex}>
+        {column.renderTitle()}
       </th>
     );
   }
@@ -109,10 +107,8 @@ export function Table<T, U = null>(props: Props<T, U>) {
   function renderAreaWithingSingleCell(entry: T, area: M.ExpandedAreaWithinSingleCell<T>) {
     return (
       <tr>
-        <td colSpan={columns.length}>
-          <div className={cn([classes.singleCellExpandedArea, classes.cellContent])}>
-            {area.renderContent(entry)}
-          </div>
+        <td className={cn(classes.singleCellExpandedArea, classes.cellData, classes.cell)} colSpan={columns.length}>
+          {area.renderContent(entry)}
         </td>
       </tr>
     );
@@ -167,8 +163,8 @@ export function Table<T, U = null>(props: Props<T, U>) {
 
   function renderSubtableHeader(x: M.SubtableColumn<U>, columnIndex: number) {
     return (
-      <th key={columnIndex}>
-        <div className={classes.cellContent}>{x.renderTitle()}</div>
+      <th className={cn(classes.title, classes.cell)} key={columnIndex}>
+        {x.renderTitle()}
       </th>
     );
   }
@@ -192,8 +188,8 @@ export function Table<T, U = null>(props: Props<T, U>) {
   function makeSubtableCellRenderer(entry: U) {
     return (column: M.SubtableColumn<U>, columnIndex: number) => {
       return (
-        <td key={columnIndex}>
-          <div className={classes.cellContent}>{column.renderCell(entry)}</div>
+        <td className={cn(classes.cell, classes.cellData)} key={columnIndex}>
+          <div>{column.renderCell(entry)}</div>
         </td>
       );
     };
@@ -225,8 +221,8 @@ export function Table<T, U = null>(props: Props<T, U>) {
     columnIndex: number,
   ) {
     return (
-      <td key={columnIndex}>
-        <div className={classes.cellContent}>{content.render(entry)}</div>
+      <td className={cn(classes.cell, classes.cellData)} key={columnIndex}>
+        {content.render(entry)}
       </td>
     );
   }
@@ -236,10 +232,8 @@ export function Table<T, U = null>(props: Props<T, U>) {
       setRowToExpanded({ ...rowToExpanded, [rowIndex]: newValue });
 
     return (
-      <td key="row-expander">
-        <div className={classes.cellContent}>
-          <views.RowExpander expanded={rowToExpanded[rowIndex]} onToggle={handleToggle} />
-        </div>
+      <td className={cn(classes.cell, classes.cellData)} key="row-expander">
+        <views.RowExpander expanded={rowToExpanded[rowIndex]} onToggle={handleToggle} />
       </td>
     );
   }

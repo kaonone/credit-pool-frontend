@@ -10,4 +10,4 @@ export const useStyles = makeStyles(() => {
     label: {},
     value: {},
   };
-});
+}, { name: 'Summary' });
