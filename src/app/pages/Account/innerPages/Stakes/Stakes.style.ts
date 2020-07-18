@@ -6,4 +6,12 @@ export const useStyles = makeStyles(() => ({
   issuedLoansTable: {
     marginTop: 75,
   },
+
+  pendingLoansTable: {
+    marginTop: 75,
+  },
+
+  tableTitle: {
+    marginBottom: 20,
+  }
 }), { name: 'Stakes' });

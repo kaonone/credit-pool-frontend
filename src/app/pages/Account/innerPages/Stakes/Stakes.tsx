@@ -10,8 +10,21 @@ export const Stakes: React.FC = () => {
     <div className={classes.root}>
       <views.Metrics />
       <div className={classes.issuedLoansTable}>
-        <views.IssuedLoansTable />
+        {renderTableTitle('Issued loans')}
+        <views.tables.IssuedLoans />
+      </div>
+      <div className={classes.pendingLoansTable}>
+        {renderTableTitle('Pending loans')}
+        <views.tables.PendingLoans />
       </div>
     </div>
   );
+
+  function renderTableTitle(title: string) {
+    return (
+      <div className={classes.tableTitle}>
+        {title}
+      </div>
+    );
+  }
 };

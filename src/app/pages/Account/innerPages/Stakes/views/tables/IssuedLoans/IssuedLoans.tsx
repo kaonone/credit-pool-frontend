@@ -1,10 +1,10 @@
 import React from 'react';
 import { NewTable } from 'components';
 
-import { DoubleLineCell } from '../DoubleLineCell'
-import { LabelWithInfoTooltip } from '../LabelWithInfoTooltip'
+import { DoubleLineCell } from '../../DoubleLineCell'
+import { LabelWithInfoTooltip } from '../../LabelWithInfoTooltip'
 import * as views from './views';
-import { useStyles } from './IssuedLoansTable.style';
+import { useStyles } from './IssuedLoans.style';
 
 const columns: Array<NewTable.models.Column<any>> = [
   {
@@ -83,7 +83,9 @@ const columns: Array<NewTable.models.Column<any>> = [
       render: () => (
         <div>
           <div>1,100.00</div>
-          <views.WithdrawButton />
+          <div style={{ marginTop: 10 }}>
+            <views.WithdrawButton />
+          </div>
         </div>
       )
     },
@@ -92,7 +94,7 @@ const columns: Array<NewTable.models.Column<any>> = [
 
 const entries = [1, 2];
 
-export const IssuedLoansTable: React.FC = () => {
+export const IssuedLoans: React.FC = () => {
   const classes = useStyles();
 
   return (
