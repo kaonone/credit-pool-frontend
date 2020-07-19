@@ -1,18 +1,19 @@
 import * as React from 'react';
 
-import { Metric, Title, FormattedAmount } from 'components';
+import { Metric, Title, Grid, ChartBlock } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
-import { percentAmount } from 'utils/mock';
 
 const tKeys = tKeysAll.components.metrics;
+
+const valueMock = '15.40';
 
 export function AverageLoanAPY() {
   const { t } = useTranslate();
 
   return (
-    <Metric
-      title={<Title>{t(tKeys.averageLoanAPY.getKey())}</Title>}
-      value={<FormattedAmount sum={percentAmount} />}
-    />
+    <Grid container>
+      <Metric title={<Title>{t(tKeys.averageLoanAPY.getKey())}</Title>} value={valueMock} />
+      <ChartBlock value="1234" variant="increase" sign="+" />
+    </Grid>
   );
 }

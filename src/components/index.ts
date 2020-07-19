@@ -60,3 +60,7 @@ export * from './Growth/Growth';
 export * from './ConfirmationDialog/ConfirmationDialog';
 export * from './Highlighted/Highlighted';
 export * from './Title/Title';
+export * from './ChartMock/ChartMock';
+export * from './Profit/Profit';
+export * from './ChartProfit/ChartProfit';
+export * from './ChartBlock/ChartBlock';

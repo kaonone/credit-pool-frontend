@@ -11,3 +11,4 @@ export { ActiveMembers24h } from './ActiveMembers24h';
 export { LoanVolumeRequested } from './LoanVolumeRequested';
 export { LoanVolumeGranted } from './LoanVolumeGranted';
 export { AverageLoanSize } from './AverageLoanSize';
+export { LoanApprovalRatio } from './LoanApprovalRatio';

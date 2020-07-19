@@ -14,49 +14,54 @@ import {
   LoanVolumeRequested,
   LoanVolumeGranted,
   AverageLoanSize,
+  LoanApprovalRatio,
 } from 'features/metrics';
 
 export function StatsPage() {
   const classes = useStyles();
   return (
     <Grid container direction="column">
-      <Grid container className={classes.row}>
-        <Grid item xs>
-          <Card className={classes.card}>
-            <CardContent>
-              <PoolSize />
-              <PoolSize24h />
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs>
-          <Card className={cn(classes.card, classes.withBorder)}>
-            <CardContent>
-              <PoolAPY />
-              <AverageLoanAPY />
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs>
-          <Card className={classes.card}>
-            <CardContent>
-              <ActiveMembers />
-              <ActiveMembers24h />
-            </CardContent>
-          </Card>
+      <Grid item className={cn(classes.row, classes.withHorizontalBorder)}>
+        <Grid container>
+          <Grid item xs>
+            <Card className={classes.card}>
+              <CardContent className={classes.cardContent}>
+                <PoolSize />
+                <div className={classes.metricContainer}>
+                  <PoolSize24h />
+                </div>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs className={cn(classes.withVerticalBorder, classes.centerBlock)}>
+            <Card className={classes.card}>
+              <CardContent className={classes.cardContent}>
+                <PoolAPY />
+                <AverageLoanAPY />
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs>
+            <Card className={classes.card}>
+              <CardContent className={classes.cardContent}>
+                <ActiveMembers />
+                <ActiveMembers24h />
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
       </Grid>
       <Grid container className={classes.row}>
         <Grid item xs>
           <Card className={classes.card}>
-            <CardContent>
+            <CardContent className={classes.cardContent}>
               <PoolBalanceChart />
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs>
+        <Grid item xs className={classes.centerBlock}>
           <Card className={classes.card}>
-            <CardContent>
+            <CardContent className={classes.cardContent}>
               <LoanVolumeRequested />
               <LoanVolumeGranted />
               <AverageLoanSize />
@@ -65,8 +70,8 @@ export function StatsPage() {
         </Grid>
         <Grid item xs>
           <Card className={classes.card}>
-            <CardContent>
-              <PoolSize />
+            <CardContent className={classes.cardContent}>
+              <LoanApprovalRatio />
             </CardContent>
           </Card>
         </Grid>
@@ -80,15 +85,32 @@ const useStyles = makeStyles(() => ({
     height: '100%',
     boxShadow: 'none',
   },
-  withBorder: {
+  withVerticalBorder: {
     borderLeft: '1px solid rgba(255,255,255,0.1)',
     borderRight: '1px solid rgba(255,255,255,0.1)',
+  },
+  centerBlock: {
     paddingLeft: 56,
     paddingRight: 56,
     marginRight: 50,
     marginLeft: 50,
   },
+  withHorizontalBorder: {
+    borderBottom: '1px solid rgba(255,255,255,0.1)',
+  },
   row: {
-    padding: 50,
+    padding: '50px 0',
+    margin: '0 50px',
+    width: 'calc(100% - 100px)',
+  },
+  cardContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    padding: '0 !important',
+    height: '100%',
+  },
+  metricContainer: {
+    marginTop: 30,
   },
 }));

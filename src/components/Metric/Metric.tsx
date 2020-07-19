@@ -7,8 +7,6 @@ type Props = {
   value: NonNullable<React.ReactNode>;
   valueSign?: '+' | '-';
   subValue?: React.ReactNode;
-  chart?: React.ReactNode;
-  profit?: React.ReactNode;
 };
 
 export function Metric(props: Props) {
