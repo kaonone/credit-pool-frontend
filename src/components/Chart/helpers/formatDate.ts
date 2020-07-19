@@ -7,7 +7,7 @@ export function makeFormatDateByPeriod(period: Period, firstDate: number) {
   return (date: number) => {
     const mDate = moment(date);
     const formatByPeriod: Record<Period, string> = {
-      d: `${mDate.format('H')}H`,
+      d: `${mDate.format('hh:00 A')}`,
       w: mDate.format('ddd'),
       m: mDate.format('DD MMM'),
       '6m': monthAgo < firstDate ? mDate.format('DD MMM') : mDate.format('MMM'),
