@@ -70,7 +70,7 @@ function Chart<P extends IPoint>(props: IProps<P>) {
       }
 
       const isFirstTick = index === 0;
-      const isLastTick = index === (visibleTicksCount - 1);
+      const isLastTick = index === visibleTicksCount - 1;
 
       return (
         <g transform={`translate(${x},${y})`}>

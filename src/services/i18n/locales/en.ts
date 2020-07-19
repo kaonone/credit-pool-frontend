@@ -401,6 +401,9 @@ const en = {
       ptkDepositPrice: 'ASPT Deposit Price',
       ptkWithdrawalPrice: 'ASPT Withdrawal Price',
     },
+    poolCompositionChart: {
+      title: 'Pool Composition',
+    },
   },
 };
 

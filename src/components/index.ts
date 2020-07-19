@@ -37,6 +37,8 @@ export { Section } from './Section/Section';
 export { SocialLink } from './SocialLink/SocialLink';
 export { PortfolioSnapshot } from './PortfolioSnapshot/PortfolioSnapshot';
 export { ComingSoon } from './ComingSoon/ComingSoon';
+export { CompositionChart } from './CompositionChart/CompositionChart';
+export { PoolCompositionChart } from './PoolCompositionChart/PoolCompositionChart';
 
 export * from './ErrorBoundary';
 export * from './Hint/Hint';
