@@ -1,10 +1,8 @@
 import * as React from 'react';
 import * as R from 'ramda';
-import { PieChart as RechartsPieChart, Pie, Cell } from 'recharts';
+import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
-import { useTheme } from 'utils/styles';
-
-import { useStyles } from './PieChart.style';
+import { useTheme, makeStyles } from 'utils/styles';
 
 export type Sector = {
   value: number;
@@ -12,39 +10,44 @@ export type Sector = {
 };
 
 export type Props = {
-  sectors: Sector[];
+  chartData: Sector[];
   sectorColors: string[];
-  labelColors?: string[];
-  size: number;
+  withBackground?: boolean;
 };
 
-function PieChart(props: Props) {
-  const classes = useStyles();
+function PieChart(props: Props & Partial<React.ComponentProps<typeof Pie>>) {
   const theme = useTheme();
-  const { sectors, sectorColors, size, labelColors } = props;
+  const classes = useStyles();
 
-  const sortedData = React.useMemo(() => {
-    const sortByValue = R.descend(R.prop('value'));
-    return R.sort(sortByValue, sectors);
-  }, [sectors]);
+  const { chartData, sectorColors, withBackground, innerRadius = '90%', ...rest } = props;
 
   return (
-    <div className={classes.root}>
-      <RechartsPieChart height={size} width={size}>
+    <ResponsiveContainer>
+      <RechartsPieChart className={classes.root}>
+        {withBackground && (
+          <Pie
+            {...rest}
+            className={classes.backgroundPath}
+            data={[{ value: R.sum(R.pluck('value', chartData)) }]}
+            innerRadius={innerRadius}
+            outerRadius="100%"
+            cornerRadius="50%"
+            dataKey="value"
+            isAnimationActive={false}
+            stroke="none"
+          />
+        )}
         <Pie
-          data={sortedData}
-          innerRadius="90%"
+          {...rest}
+          data={chartData}
+          innerRadius={innerRadius}
           outerRadius="100%"
-          startAngle={90}
-          endAngle={-270}
           cornerRadius="50%"
-          paddingAngle={5}
           dataKey="value"
           isAnimationActive={false}
-          stroke="#0a0a0e"
-          legendType="square"
+          stroke="none"
         >
-          {sortedData.map(({ label }, index) => (
+          {chartData.map(({ label }, index) => (
             <Cell
               key={label}
               fill={sectorColors[index] || theme.palette.primary.main}
@@ -53,21 +56,20 @@ function PieChart(props: Props) {
           ))}
         </Pie>
       </RechartsPieChart>
-      <ul className={classes.legend}>
-        {sortedData.map(({ label, value }, index) => (
-          <li
-            className={classes.legendItem}
-            key={label}
-            style={{ color: (labelColors && labelColors[index]) || sectorColors[index] }}
-          >
-            <span className={classes.label}>
-              {`${value}%`}&nbsp;{label}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
+    </ResponsiveContainer>
   );
 }
+
+const useStyles = makeStyles(
+  theme => ({
+    root: {},
+    backgroundPath: {
+      '& path': {
+        fill: theme.palette.background.default,
+      },
+    },
+  }),
+  { name: 'PieChart' },
+);
 
 export { PieChart };

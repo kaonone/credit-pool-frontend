@@ -1,11 +1,13 @@
 import * as React from 'react';
 import * as R from 'ramda';
 
-import { useTranslate, tKeys } from 'services/i18n';
+import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useTheme, makeStyles } from 'utils/styles';
 import { CompositionChart } from 'components/CompositionChart/CompositionChart';
 
 import { mockSectors } from './constants';
+
+const tKeys = tKeysAll.components.poolCompositionChart;
 
 function PoolCompositionChart() {
   const classes = useStyles();
@@ -21,22 +23,25 @@ function PoolCompositionChart() {
     [theme],
   );
 
-  const renderGradients = () => (
-    <svg>
-      {theme.gradients.poolCompositionChart.map((gradient, index) => (
-        <React.Fragment key={index}>
-          {gradient.svgLinear(`poolCompositionSector${index}`)}
-        </React.Fragment>
-      ))}
-    </svg>
+  const renderGradients = React.useCallback(
+    () => (
+      <svg>
+        {theme.gradients.poolCompositionChart.map((gradient, index) => (
+          <React.Fragment key={index}>
+            {gradient.svgLinear(`poolCompositionSector${index}`)}
+          </React.Fragment>
+        ))}
+      </svg>
+    ),
+    [theme],
   );
 
   return (
     <div className={classes.root}>
       <div className={classes.hidden}>{renderGradients()}</div>
       <CompositionChart
-        title={t(tKeys.components.poolCompositionChart.title.getKey())}
-        sectors={mockSectors}
+        title={t(tKeys.poolComposition.getKey())}
+        chartData={mockSectors}
         sectorColors={R.pluck('sector', colors)}
         labelColors={R.pluck('label', colors)}
       />
@@ -51,6 +56,8 @@ const useStyles = makeStyles(
       height: 0,
       visibility: 'hidden',
       width: 0,
+      position: 'absolute',
+      zIndex: -100,
     },
   }),
   { name: 'PoolCompositionChart' },

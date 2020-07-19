@@ -405,7 +405,10 @@ const en = {
       ptkWithdrawalPrice: 'ASPT Withdrawal Price',
     },
     poolCompositionChart: {
-      title: 'Pool Composition',
+      poolComposition: 'Pool Composition',
+    },
+    availableLoansChart: {
+      totalAvailable: 'Total Available for Loans',
     },
   },
 };
