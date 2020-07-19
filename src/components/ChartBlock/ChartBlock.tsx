@@ -34,7 +34,6 @@ const useStyles = makeStyles(
     },
     chart: {
       marginLeft: 20,
-      marginBottom: 10,
     },
   }),
   { name: 'ChartBlock' },
