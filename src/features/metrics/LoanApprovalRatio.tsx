@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Metric, Title, FormattedAmount, Grid, ChartBlock } from 'components';
+import { Metric, Title, FormattedAmount, ChartBlock } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { percentAmount } from 'utils/mock';
 
@@ -10,12 +10,10 @@ export function LoanApprovalRatio() {
   const { t } = useTranslate();
 
   return (
-    <Grid container>
-      <Metric
-        title={<Title>{t(tKeys.loanApprovalRatio.getKey())}</Title>}
-        value={<FormattedAmount sum={percentAmount} />}
-      />
-      <ChartBlock />
-    </Grid>
+    <Metric
+      title={<Title>{t(tKeys.loanApprovalRatio.getKey())}</Title>}
+      value={<FormattedAmount sum={percentAmount} />}
+      chart={<ChartBlock />}
+    />
   );
 }

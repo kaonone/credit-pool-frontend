@@ -1,4 +1,5 @@
 import * as React from 'react';
+import cn from 'classnames';
 
 import { makeStyles } from 'utils/styles';
 
@@ -16,7 +17,7 @@ export function ChartBlock(props: Props) {
 
   return (
     <div className={classes.chartBlock}>
-      <div className={classes.chart}>
+      <div className={cn({ [classes.chart]: props?.variant })}>
         <ChartMock />
       </div>
       {props && <ChartProfit {...props} />}
@@ -30,7 +31,6 @@ const useStyles = makeStyles(
       display: 'flex',
       flexDirection: 'column',
       alignSelf: 'flex-end',
-      marginLeft: 10,
     },
     chart: {
       marginLeft: 20,

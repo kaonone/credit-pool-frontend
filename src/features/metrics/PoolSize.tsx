@@ -12,18 +12,16 @@ export function PoolSize() {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <Metric
-        title={<Title>{t(tKeys.poolSize.getKey())}</Title>}
-        value={<FormattedAmount sum={liquidityAmount} />}
-        subValue={
-          <span className={classes.established}>{`${t(
-            tKeys.established.getKey(),
-          )} 30 June 2020`}</span>
-        }
-      />
-      <ChartBlock value="1234" variant="increase" sign="+" />
-    </div>
+    <Metric
+      title={<Title>{t(tKeys.poolSize.getKey())}</Title>}
+      value={<FormattedAmount sum={liquidityAmount} />}
+      subValue={
+        <span className={classes.established}>{`${t(
+          tKeys.established.getKey(),
+        )} 30 June 2020`}</span>
+      }
+      chart={<ChartBlock value="1234" variant="increase" sign="+" />}
+    />
   );
 }
 
@@ -32,9 +30,6 @@ const useStyles = makeStyles(
     established: {
       fontSize: 12,
       fontWeight: 300,
-    },
-    root: {
-      display: 'flex',
     },
   }),
   { name: 'PoolSize' },

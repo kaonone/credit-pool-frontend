@@ -12,8 +12,11 @@ export function ActiveMembers24h() {
 
   return (
     <Grid container>
-      <Metric title={<Title>{t(tKeys.dayChange.getKey())}</Title>} value={valueMock} />
-      <ChartBlock value="1234" variant="increase" sign="+" />
+      <Metric
+        title={<Title>{t(tKeys.dayChange.getKey())}</Title>}
+        value={valueMock}
+        chart={<ChartBlock value="1234" variant="increase" sign="+" />}
+      />
     </Grid>
   );
 }
