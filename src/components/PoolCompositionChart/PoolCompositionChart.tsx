@@ -23,9 +23,11 @@ function PoolCompositionChart() {
 
   const renderGradients = () => (
     <svg>
-      {theme.gradients.poolCompositionChart.map((gradient, index) =>
-        gradient.svgLinear(`poolCompositionSector${index}`),
-      )}
+      {theme.gradients.poolCompositionChart.map((gradient, index) => (
+        <React.Fragment key={index}>
+          {gradient.svgLinear(`poolCompositionSector${index}`)}
+        </React.Fragment>
+      ))}
     </svg>
   );
 
