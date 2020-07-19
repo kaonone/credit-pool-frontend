@@ -6,8 +6,6 @@ import CardContent from '@material-ui/core/CardContent';
 import { PieChart, Props as PieChartProps } from 'components/PieChart/PieChart';
 import { makeStyles } from 'utils/styles';
 
-import { mockSectors } from '../PoolCompositionChart/constants';
-
 type Props = {
   title: string;
 };
@@ -18,6 +16,7 @@ function CompositionChart({
   title,
   sectorColors,
   labelColors,
+  sectors,
 }: Props & Omit<PieChartProps, 'size'>) {
   const classes = useStyles();
 
@@ -27,7 +26,7 @@ function CompositionChart({
         <Typography variant="subtitle2">{title}</Typography>
         <div className={classes.chart}>
           <PieChart
-            sectors={mockSectors}
+            sectors={sectors}
             sectorColors={sectorColors}
             size={CHART_SIZE}
             labelColors={labelColors}
