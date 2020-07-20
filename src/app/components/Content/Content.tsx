@@ -40,7 +40,6 @@ export const Content: React.FC = () => {
         component={makeUnimplementedComponent('Terms of service')}
       />
       <Route exact path={routes.strategies.getRoutePath()} component={pages.StrategiesPage} />
-      StrategiesPage
       <Redirect to="/" />
     </Switch>
   );
