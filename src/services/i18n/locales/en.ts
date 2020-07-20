@@ -415,6 +415,9 @@ const en = {
       description: 'Here is a title description',
       loansIssued: 'Loans Issued',
     },
+    yield: {
+      title: 'Yield',
+    },
     poolBalanceChart: {
       ptkDepositPrice: 'ASPT Deposit Price',
       ptkWithdrawalPrice: 'ASPT Withdrawal Price',

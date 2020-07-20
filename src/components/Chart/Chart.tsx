@@ -1,19 +1,13 @@
 import * as React from 'react';
 import * as R from 'ramda';
-import cn from 'classnames';
 import { LineChart, XAxis, YAxis, CartesianGrid, Line, ResponsiveContainer } from 'recharts';
 
 import { useTheme } from 'utils/styles';
 
+import { PeriodSwitch } from './components/PeriodSwitch/PeriodSwitch';
 import { makeFormatDateByPeriod, getTicks, makeGridGenerator } from './helpers';
+import { Period, IPoint } from './models';
 import { useStyles } from './Chart.style';
-
-const periods = ['d', 'w', 'm', '6m', 'all'] as const;
-export type Period = typeof periods[number];
-
-export interface IPoint {
-  date: number;
-}
 
 interface IProps<P extends IPoint> {
   points: P[];
@@ -127,41 +121,6 @@ function Chart<P extends IPoint>(props: IProps<P>) {
         </ResponsiveContainer>
       </div>
       <PeriodSwitch period={period} onSelect={setPeriod} />
-    </div>
-  );
-}
-
-interface IPeriodSwitchProps {
-  period: Period;
-  onSelect(period: Period): void;
-}
-
-function PeriodSwitch(props: IPeriodSwitchProps) {
-  const { period: selectedPeriod, onSelect } = props;
-  const classes = useStyles();
-
-  const selectPeriod = React.useCallback(
-    (period: Period) => () => {
-      onSelect(period);
-    },
-    [onSelect],
-  );
-
-  return (
-    <div className={classes.periodSwitch}>
-      {periods.map(period => (
-        <button
-          key={period}
-          type="button"
-          onClick={selectPeriod(period)}
-          className={cn(classes.switchButton, {
-            [classes.switchButtonSelected]: period === selectedPeriod,
-            [classes.switchButtonInCaps]: period.search(/^\d+\w$/) !== -1,
-          })}
-        >
-          {period}
-        </button>
-      ))}
     </div>
   );
 }

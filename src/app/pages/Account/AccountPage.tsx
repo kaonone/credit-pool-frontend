@@ -60,7 +60,7 @@ export function AccountPage() {
         <TabPanel value={routes.account.stakes.getElementKey()}>
           <innerPages.Stakes />
         </TabPanel>
-        <TabPanel value={routes.account.summary.getElementKey()}>
+        <TabPanel value={routes.account.borrows.getElementKey()}>
           {makeUnimplementedComponent('Borrows')()}
         </TabPanel>
       </TabContext>
