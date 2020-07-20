@@ -28,9 +28,13 @@ export const useStyles = makeStyles(
       alignItems: 'center',
     },
     score: {
+      width: '100%',
       fontSize: 32,
       lineHeight: 1.2,
       fontWeight: 300,
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
     },
   }),
   { name: 'DeFiScoreChart' },
