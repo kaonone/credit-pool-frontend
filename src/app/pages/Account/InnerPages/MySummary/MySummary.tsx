@@ -2,7 +2,7 @@ import * as React from 'react';
 import Divider from '@material-ui/core/Divider';
 
 import { MyBalance, MyPoolShare, APY, AKRO } from 'features/metrics';
-import { Grid, PortfolioSnapshot, YieldSummary } from 'components';
+import { Grid, PortfolioSnapshot, YieldSummary, ComingSoon } from 'components';
 import { makeStyles } from 'utils/styles';
 
 export function MySummary() {
@@ -10,24 +10,29 @@ export function MySummary() {
 
   return (
     <div>
-      <Grid item container xs={12}>
-        <Grid item xs className={classes.metric}>
-          <MyBalance />
+      <Grid container>
+        <Grid item xs container spacing={4}>
+          <Grid item xs>
+            <MyBalance />
+          </Grid>
+          <Grid item xs>
+            <MyPoolShare />
+          </Grid>
         </Grid>
-        <Grid item xs className={classes.metric}>
-          <MyPoolShare />
-        </Grid>
-        <Divider orientation="vertical" className={classes.divider} />
-        <Grid item xs className={classes.metric}>
-          <APY />
-        </Grid>
-        <Grid item xs className={classes.metric}>
-          <AKRO />
+        <Divider orientation="vertical" className={classes.divider} flexItem />
+        <Grid item xs container spacing={4}>
+          <Grid item xs>
+            <APY />
+          </Grid>
+          <Grid item xs>
+            <AKRO />
+          </Grid>
         </Grid>
       </Grid>
       <Divider className={classes.contentDivider} />
-      <Grid container justify="space-between">
-        <Grid item xs={5}>
+      <Grid container spacing={6} justify="space-between">
+        <Grid item xs={7} className={classes.snapshot}>
+          <ComingSoon />
           <PortfolioSnapshot
             data={[
               {
@@ -67,14 +72,12 @@ export function MySummary() {
 }
 
 const useStyles = makeStyles(
-  () => ({
-    metric: {
-      height: 200,
-    },
+  theme => ({
     divider: {
-      height: 119,
-      marginLeft: 60,
-      marginRight: 60,
+      margin: theme.spacing(0, 5),
+    },
+    snapshot: {
+      position: 'relative',
     },
     contentDivider: {
       marginTop: 45,

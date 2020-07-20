@@ -1,6 +1,7 @@
 import React from 'react';
 import LinearProgress, { LinearProgressProps } from '@material-ui/core/LinearProgress';
 import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
+import Skeleton, { SkeletonProps } from '@material-ui/lab/Skeleton';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -14,7 +15,7 @@ interface IMeta {
 }
 
 type MaybeArray<T> = T | T[];
-type ProgressType = 'linear' | 'circle';
+type ProgressType = 'linear' | 'circle' | 'skeleton';
 
 interface IProps<V extends ProgressType> {
   children?: React.ReactNode;
@@ -22,10 +23,12 @@ interface IProps<V extends ProgressType> {
   communication?: MaybeArray<CommunicationState<any, any>>;
   gqlResults?: MaybeArray<SubscriptionResult>;
   component?: React.ComponentType;
+  loader?: React.ReactNode;
   progressVariant?: V;
   progressProps?: {
     linear: LinearProgressProps;
     circle: CircularProgressProps;
+    skeleton: SkeletonProps;
   }[V];
   ignoreError?: boolean;
 }
@@ -58,6 +61,7 @@ export function Loading<T extends ProgressType>(props: IProps<T>) {
   const classes = useStyles();
   const {
     children,
+    loader,
     progressVariant,
     progressProps,
     component,
@@ -83,14 +87,17 @@ export function Loading<T extends ProgressType>(props: IProps<T>) {
     <>
       {!loaded && (
         <Wrapper>
-          {progressVariant === 'circle' ? (
-            <CircularProgress {...(progressProps as CircularProgressProps)} />
-          ) : (
-            <LinearProgress
-              className={classes.linearProgress}
-              {...(progressProps as LinearProgressProps)}
-            />
-          )}
+          {loader ||
+            {
+              linear: () => (
+                <LinearProgress
+                  className={classes.linearProgress}
+                  {...(progressProps as LinearProgressProps)}
+                />
+              ),
+              circle: () => <CircularProgress {...(progressProps as CircularProgressProps)} />,
+              skeleton: () => <Skeleton {...(progressProps as SkeletonProps)} />,
+            }[progressVariant || 'skeleton']()}
         </Wrapper>
       )}
       {loaded && needToShowError && (

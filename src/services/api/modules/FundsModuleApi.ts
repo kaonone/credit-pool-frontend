@@ -69,8 +69,7 @@ export class FundsModuleApi {
   // eslint-disable-next-line class-methods-use-this
   public getLiquidityCurrency$(): Observable<Currency> {
     // TODO take decimals from contract
-    // TODO change 'DAI' to '$'
-    return of(new Currency('DAI', 18));
+    return of(new Currency('$', 18));
   }
 
   @memoize(R.identity)
