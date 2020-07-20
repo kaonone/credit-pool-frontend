@@ -8,7 +8,7 @@ import { makeStyles } from 'utils/styles';
 import { TabsList, TabContext, Tab, TabPanel } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 
-import { MySummary } from './InnerPages/MySummary/MySummary';
+import * as innerPages from './innerPages';
 
 const tKeys = tKeysAll.app.pages.account;
 
@@ -55,10 +55,10 @@ export function AccountPage() {
           />
         </TabsList>
         <TabPanel value={routes.account.summary.getElementKey()}>
-          <MySummary />
+          <innerPages.MySummary />
         </TabPanel>
         <TabPanel value={routes.account.stakes.getElementKey()}>
-          {makeUnimplementedComponent('Stakes')()}
+          <innerPages.Stakes />
         </TabPanel>
         <TabPanel value={routes.account.borrows.getElementKey()}>
           {makeUnimplementedComponent('Borrows')()}

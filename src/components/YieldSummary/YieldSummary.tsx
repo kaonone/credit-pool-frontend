@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
-import { Title } from 'components/Title/Title';
+import { Label } from 'components/Label/Label';
 import { ComingSoon } from 'components/ComingSoon/ComingSoon';
 import { PeriodSwitch } from 'components/Chart/components/PeriodSwitch/PeriodSwitch';
 
@@ -14,7 +14,7 @@ function YieldSummary() {
   return (
     <div className={classes.root}>
       <header className={classes.header}>
-        <Title fontSize="large">{t(tKeysAll.components.yield.title.getKey())}</Title>
+        <Label fontSize="large">{t(tKeysAll.components.yield.title.getKey())}</Label>
         <PeriodSwitch period="d" onSelect={() => {}} />
       </header>
       <ComingSoon />
