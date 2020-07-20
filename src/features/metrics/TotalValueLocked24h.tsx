@@ -13,7 +13,7 @@ export function TotalValueLocked24h() {
     <Metric
       title={<Title>{t(tKeys.dayChange.getKey())}</Title>}
       value={<FormattedAmount sum={percentAmount} />}
-      chart={<ChartBlock />}
+      chart={<ChartBlock variant="decrease" />}
     />
   );
 }

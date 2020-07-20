@@ -13,7 +13,7 @@ export function AverageAPY() {
     <Metric
       title={<Title>{t(tKeys.averageAPY.getKey())}</Title>}
       value={<FormattedAmount sum={percentAmount} />}
-      chart={<ChartBlock />}
+      chart={<ChartBlock variant="increase" />}
     />
   );
 }

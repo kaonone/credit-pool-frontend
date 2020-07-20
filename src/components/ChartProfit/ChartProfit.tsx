@@ -11,14 +11,14 @@ interface IProps {
 }
 
 function ChartProfit(props: IProps) {
-  const { value, variant = 'decrease', sign } = props;
+  const { value, variant, sign } = props;
   const classes = useStyles();
 
-  return value ? (
-    <span className={cn(classes.root, classes[variant])}>
-      <ProfitArrow className={cn(classes.icon, classes[variant])} />
+  return value || variant ? (
+    <span className={cn(classes.root, variant && classes[variant])}>
+      {variant && <ProfitArrow className={cn(classes.icon, classes[variant])} />}
       {sign && sign}
-      {`${value}%`}
+      {value && `${value}%`}
     </span>
   ) : null;
 }
