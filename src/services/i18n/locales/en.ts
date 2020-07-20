@@ -28,6 +28,18 @@ const en = {
           liquidations: 'Liquidations',
         },
       },
+      strategies: {
+        liquidityProvisionTitle: 'Liquidity provision',
+        liquidityProvisionHint: 'Liquidity provision',
+        lendingTitle: 'Lending',
+        borrowingTitle: 'Borrowing',
+        liquidityAdvantages: 'Passive Interest, Lower Risks',
+        lendingAdvantages: 'High Interest, High Risk',
+        borrowingAdvantages: 'Only 50% Collateral',
+        liquidityButton: 'Become Liquidity Provider',
+        lendingButton: 'Lend',
+        borrowingButton: 'Borrow',
+      },
     },
     components: {
       header: {

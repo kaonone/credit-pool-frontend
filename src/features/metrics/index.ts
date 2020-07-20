@@ -21,3 +21,5 @@ export { AverageAPY } from './AverageAPY';
 export { Proposals } from './Proposals';
 export { AvailableForBorrowing } from './AvailableForBorrowing';
 export { MinimumAPY } from './MinimumAPY';
+export { TotalBorrowed } from './TotalBorrowed';
+export { LoanTerm } from './LoanTerm';
