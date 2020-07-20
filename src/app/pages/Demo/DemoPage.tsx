@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import { AuthButton } from 'features/auth';
-import { Typography, Loading, NewTable } from 'components';
+import { Typography, Loading, NewTable, Label } from 'components';
+import { SwitchInput } from 'components/inputs';
 import { useSubgraphPagination } from 'utils/react';
 import { useUsersQuery } from 'generated/gql/pool';
 
@@ -39,6 +40,15 @@ export function DemoPage() {
           columns={tableData.columnsWithoutExpandableRows}
           entries={tableData.entries}
           summary={{ renderLabel: () => 'Sum', renderValue: () => 13 }}
+        />
+      </div>
+      <div style={{ margin: 30 }}>
+        <SwitchInput
+          label={
+            <Label inline hint="This is description">
+              Infinite unlock
+            </Label>
+          }
         />
       </div>
       <AuthButton />
