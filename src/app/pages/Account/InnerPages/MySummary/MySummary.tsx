@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Divider from '@material-ui/core/Divider';
 
-import { MyBalance, MyPoolShare, APY, AKRO } from 'features/metrics';
+import { MyBalance, MyPoolShare, AvgPoolAPY, AKRO } from 'features/metrics';
 import { Grid, PortfolioSnapshot, YieldSummary, ComingSoon } from 'components';
 import { makeStyles } from 'utils/styles';
 
@@ -22,7 +22,7 @@ export function MySummary() {
         <Divider orientation="vertical" className={classes.divider} flexItem />
         <Grid item xs container spacing={4}>
           <Grid item xs>
-            <APY />
+            <AvgPoolAPY />
           </Grid>
           <Grid item xs>
             <AKRO />

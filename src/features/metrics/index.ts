@@ -1,4 +1,4 @@
 export { AvailableBalance as MyBalance } from './AvailableBalance';
 export { MyPoolShare } from './MyPoolShare';
-export { APY } from './APY';
+export { AvgPoolAPY } from './AvgPoolAPY';
 export { AKRO } from './AKRO';

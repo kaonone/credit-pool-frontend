@@ -23,7 +23,13 @@ export class Api {
 
   public curveModule = new CurveModuleApi(this.web3Manager);
   public fundsModule = new FundsModuleApi(this.web3Manager, this.curveModule, this.erc20);
-  public defiModule = new DefiModuleApi(this.web3Manager, this.transactions, this.erc20);
+  public defiModule = new DefiModuleApi(
+    this.web3Manager,
+    this.transactions,
+    this.erc20,
+    this.subgraphApi,
+  );
+
   public loanModule = new LoanModuleApi(
     this.web3Manager,
     this.erc20,
