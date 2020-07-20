@@ -1,115 +1,116 @@
 import { makeStyles } from 'utils/styles';
 
-const firstCellStyle = {
-  paddingLeft: '50px',
-};
+export const useStyles = makeStyles(
+  theme => {
+    const crossRowBorderStyleForFirstCell = {
+      borderImage: `linear-gradient(to right, transparent 50px, ${theme.colors.jaguar} 50px) 1 / 0 0 1 0`,
+      border: '1px solid',
+    };
 
-const lastCellStyle = {
-  paddingRight: '50px',
-};
+    const crossRowBorderStyleForLastCell = {
+      borderImage: `linear-gradient(to right, ${theme.colors.jaguar} calc(100% - 50px), transparent calc(100% - 50px)) 1 / 0 0 1 0`,
+      border: '1px solid',
+    };
 
-const headStyle = {
-  textAlign: 'left',
-  padding: 0,
-};
+    const crossRowBorder = `1px solid ${theme.colors.jaguar}`;
 
-export const useStyles = makeStyles(theme => {
-  const crossRowBorder = `1px solid ${theme.colors.jaguar}`;
+    return {
+      root: {
+        width: '100%',
+        borderSpacing: 0,
 
-  return {
-    root: {
-      width: '100%',
-      borderSpacing: 0,
+        '& tr:not($subtableRow) + $subtableRow $cell': {
+          paddingTop: 30,
+        },
 
-      '& th': headStyle,
-
-      '& thead th': {
-        paddingBottom: 0,
+        '& $cell:first-child': {
+          paddingLeft: 0,
+        },
+        '& $cell:last-child': {
+          paddingRight: 0,
+        },
       },
 
-      '& td:first-child': firstCellStyle,
-      '& th:first-child': firstCellStyle,
+      withOuterPadding: {
+        '& $cell:first-child': {
+          paddingLeft: 50,
+        },
+        '& $cell:last-child': {
+          paddingRight: 50,
+        },
 
-      '& td:first-child:last-child': {
-        padding: 0,
+        '& $topLevelTitle': {
+          '&:first-child': crossRowBorderStyleForFirstCell,
+          '&:last-child': crossRowBorderStyleForLastCell,
+        },
       },
 
-      '& th:last-child': lastCellStyle,
+      withStripes: {
+        '& $cellData': {
+          borderBottom: crossRowBorder,
 
-      '& td:last-child': {
-        ...lastCellStyle,
-        paddingRight: '50px',
+          '&:first-child': crossRowBorderStyleForFirstCell,
+          '&:last-child': crossRowBorderStyleForLastCell,
+        },
       },
 
-      '& tbody td': {
+      cell: {},
+
+      title: {
+        textAlign: 'left',
+        fontWeight: 'normal',
+        padding: '10px',
+      },
+
+      cellAlignLeft: {
+        textAlign: 'left',
+      },
+
+      cellAlignRight: {
+        textAlign: 'right',
+      },
+
+      cellAlignCenter: {
+        textAlign: 'center',
+      },
+
+      topLevelTitle: {
+        borderBottom: crossRowBorder,
+      },
+
+      subtableRow: {
+        backgroundColor: theme.colors.jaguar,
+      },
+
+      lastSubtableRow: {
+        '& $cell': {
+          paddingBottom: 30,
+        },
+      },
+
+      cellData: {
         fontWeight: 300,
+        padding: '10px',
       },
 
-      '& td': {
-        padding: 0,
+      singleCellExpandedArea: {
+        padding: '10px 50px',
+        backgroundColor: theme.colors.jaguar,
       },
 
-      '& th:first-child $title': {
-        marginLeft: 10,
-        paddingRight: 10,
+      summaryCell: {
+        paddingTop: 30,
       },
 
-      '& tr:not($subtableRow) + $subtableRow $cellContent': {
-        marginTop: 20,
+      rowBeforeSummary: {
+        '& $cell': {
+          borderBottom: crossRowBorder,
+
+          '&:first-child': crossRowBorderStyleForFirstCell,
+          '&:last-child': crossRowBorderStyleForLastCell,
+        },
       },
-    },
-
-    withStripes: {
-      '& $cellContent': {
-        borderBottom: crossRowBorder,
-      },
-    },
-
-    title: {
-      height: 40,
-      borderBottom: crossRowBorder,
-      fontWeight: 'normal',
-    },
-
-    subtableRow: {
-      backgroundColor: theme.colors.jaguar,
-    },
-
-    lastSubtableRow: {
-      '& $cellContent': {
-        marginBottom: 20,
-      },
-    },
-
-    cellContent: {
-      display: 'flex',
-      fontWeight: 300,
-      flexDirection: 'column',
-      justifyContent: 'center',
-      padding: '8px',
-      height: 48,
-    },
-
-    singleCellExpandedArea: {
-      paddingLeft: 58,
-      paddingRight: 58,
-      backgroundColor: theme.colors.jaguar,
-    },
-
-    summary: {
-      marginTop: 30,
-      padding: '10px 58px',
-    },
-
-    rowBeforeSummary: {
-      '& $cellContent': {
-        borderBottom: crossRowBorder,
-      },
-
-      '& td:first-child $cellContent': {
-        paddingLeft: 0,
-        marginLeft: 10,
-      },
-    },
-  };
-});
+    };
+  },
+  { name: 'Table' },
+);

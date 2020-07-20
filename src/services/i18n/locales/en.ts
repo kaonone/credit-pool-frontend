@@ -370,6 +370,9 @@ const en = {
       expansionPanelTitle: 'Reason',
     },
     metrics: {
+      akro: {
+        description: 'Here is a title description',
+      },
       myBalance: {
         myBalance: 'My balance (USD)',
         deposit: 'Deposit',
@@ -384,8 +387,23 @@ const en = {
         description: 'Here is a title description',
         withdraw: 'Withdraw',
       },
-      akro: {
-        description: 'Here is a title description',
+      allMyIssuedLoans: {
+        label: 'Overall loans issued by me',
+      },
+      overallAPY: {
+        label: 'Overall APY',
+      },
+      risk: {
+        label: 'Risk',
+        description: 'Risk description',
+      },
+      outstandingLoans: {
+        label: 'Outstanding loans',
+        description: 'Outstanding loans description',
+      },
+      activeAPYFromOutstandingLoans: {
+        label: 'Active APY from outstanding loans',
+        description: 'Outstanding loans description',
       },
       poolSize: {
         poolSize: 'Pool size',

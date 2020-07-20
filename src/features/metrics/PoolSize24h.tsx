@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Metric, Title, FormattedAmount, ChartBlock } from 'components';
+import { Metric, Label, FormattedAmount, ChartBlock } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { liquidityAmount } from 'utils/mock';
 
@@ -11,7 +11,7 @@ export function PoolSize24h() {
 
   return (
     <Metric
-      title={<Title>{t(tKeys.dayChange.getKey())}</Title>}
+      title={<Label>{t(tKeys.dayChange.getKey())}</Label>}
       value={<FormattedAmount hasSign sum={liquidityAmount} />}
       chart={<ChartBlock value="1234" variant="decrease" sign="+" />}
     />
