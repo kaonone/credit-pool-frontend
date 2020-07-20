@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Metric, Title, FormattedAmount } from 'components';
+import { Metric, Label, FormattedAmount } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { liquidityAmount } from 'utils/mock';
 
@@ -11,7 +11,7 @@ export function MyBalance() {
 
   return (
     <Metric
-      title={<Title hint={t(tKeys.description.getKey())}>{t(tKeys.myBalance.getKey())}</Title>}
+      title={<Label hint={t(tKeys.description.getKey())}>{t(tKeys.myBalance.getKey())}</Label>}
       value={<FormattedAmount sum={liquidityAmount} />}
     />
   );

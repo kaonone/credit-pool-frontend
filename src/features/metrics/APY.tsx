@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Title, FormattedAmount, Metric } from 'components';
+import { Label, FormattedAmount, Metric } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { percentAmount } from 'utils/mock';
 
@@ -11,7 +11,7 @@ export function APY() {
 
   return (
     <Metric
-      title={<Title hint={t(tKeys.description.getKey())}>APY</Title>}
+      title={<Label hint={t(tKeys.description.getKey())}>APY</Label>}
       value={<FormattedAmount sum={percentAmount} />}
     />
   );

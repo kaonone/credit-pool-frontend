@@ -10,14 +10,15 @@ type Props = {
   hint?: React.ReactNode;
   fontSize?: 'inherit' | 'medium' | 'large';
   icon?: React.ReactNode;
+  inline?: boolean;
 };
 
-export const Title: React.FC<Props> = props => {
-  const { hint, icon, children, fontSize = 'inherit' } = props;
+export const Label: React.FC<Props> = props => {
+  const { hint, inline, icon, children, fontSize = 'inherit' } = props;
   const classes = useStyles(props);
 
   return (
-    <Typography variant="h6" component="h6" className={cn(classes.title, classes[fontSize])}>
+    <Typography variant="h6" component="h6" className={cn(classes.title, classes[fontSize], { [classes.inline]: inline })}>
       {icon && <>{icon}&nbsp;</>}
       {children}
       {hint ? (
@@ -37,7 +38,6 @@ export const Title: React.FC<Props> = props => {
 const useStyles = makeStyles(
   () => ({
     title: {
-      marginBottom: 13,
       display: 'flex',
       alignItems: 'center',
       lineHeight: 'normal',
@@ -55,6 +55,11 @@ const useStyles = makeStyles(
         fontWeight: 300,
       },
     },
+
+    inline: {
+      display: 'inline-flex',
+    },
+
     content: {
       marginBottom: 8,
     },
@@ -63,5 +68,5 @@ const useStyles = makeStyles(
     medium: {},
     large: {},
   }),
-  { name: 'Title' },
+  { name: 'Label' },
 );

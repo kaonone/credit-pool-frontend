@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { NewTable } from 'components';
+import { NewTable, Label } from 'components';
 
 import { DoubleLineCell } from '../../DoubleLineCell';
-import { LabelWithInfoTooltip } from '../../LabelWithInfoTooltip';
 import * as views from './views';
 import { useStyles } from './PendingLoans.style';
 
@@ -57,18 +56,14 @@ const columns: Array<NewTable.models.Column<any>> = [
   },
 
   {
-    renderTitle: () => (
-      <LabelWithInfoTooltip renderLabel={() => 'My collateral'} tooltipText="My collateral info" />
-    ),
+    renderTitle: () => <Label inline hint="My collateral info">My collateral</Label>,
     align: 'right',
     cellContent: {
       kind: 'simple',
       render: () => (
         <DoubleLineCell
           renderTopPart={() => '5 days'}
-          renderBottomPart={() => (
-            <LabelWithInfoTooltip renderLabel={() => '50%'} tooltipText="50% info" />
-          )}
+          renderBottomPart={() => <Label inline hint="50% info">50%</Label>}
         />
       ),
     },
