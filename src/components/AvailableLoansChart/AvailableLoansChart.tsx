@@ -3,7 +3,7 @@ import * as React from 'react';
 import { liquidityAmount } from 'utils/mock';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { ProgressChart } from 'components/ProgressChart/ProgressChart';
-import { Title } from 'components/Title/Title';
+import { Label } from 'components/Label/Label';
 import { FormattedAmount } from 'components/FormattedAmount/FormattedAmount';
 
 import { useStyles, CHART_WIDTH } from './AvailableLoansChart.style';
@@ -17,7 +17,7 @@ function AvailableLoansChart() {
   const renderTitle = () => (
     <div className={classes.label}>
       <div className={classes.title}>
-        <Title>{t(tKeys.totalAvailable.getKey())}</Title>
+        <Label>{t(tKeys.totalAvailable.getKey())}</Label>
       </div>
       <div className={classes.sum}>
         <FormattedAmount sum={liquidityAmount} />
