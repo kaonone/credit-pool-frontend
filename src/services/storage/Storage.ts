@@ -23,7 +23,7 @@ class Storage<States extends IData[]> {
     private migrations: StatesToMigrations<States>,
   ) {
     if (Storage.namespaces.includes(currentNamespace)) {
-      throw new Error(`Namespace '${currentNamespace}' is already exist`);
+      console.error(`Namespace '${currentNamespace}' is already exist`);
     }
 
     if (!this.adapter.checkAvailability()) {
