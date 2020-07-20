@@ -3,9 +3,8 @@ import * as R from 'ramda';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useTheme, makeStyles } from 'utils/styles';
-import { CompositionChart } from 'components/CompositionChart/CompositionChart';
-
-import { mockSectors } from './constants';
+import { mockSectors } from 'utils/mock';
+import { CompositionChart, ComingSoon } from 'components';
 
 const tKeys = tKeysAll.components.poolCompositionChart;
 
@@ -45,13 +44,17 @@ function PoolCompositionChart() {
         sectorColors={R.pluck('sector', colors)}
         labelColors={R.pluck('label', colors)}
       />
+      <ComingSoon />
     </div>
   );
 }
 
 const useStyles = makeStyles(
   () => ({
-    root: {},
+    root: {
+      position: 'relative',
+      padding: 10,
+    },
     hidden: {
       height: 0,
       visibility: 'hidden',

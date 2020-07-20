@@ -1,9 +1,7 @@
 import * as React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 
 import { Chart, IPoint } from 'components/Chart';
+import { Label } from 'components/Label/Label';
 
 import { useStyles } from './BalanceChart.style';
 
@@ -38,22 +36,18 @@ function BalanceChart<P extends IPoint>(props: IProps<P>) {
   );
 
   return (
-    <Card className={classes.root}>
-      <CardContent className={classes.cardContent}>
-        <Typography className={classes.title} variant="subtitle2">
-          {title}
-        </Typography>
-        <div className={classes.graphic}>
-          <Chart
-            points={chartPoints}
-            lines={chartLines}
-            lineColors={chartLineColors}
-            onPeriodChange={handleChartPeriodChange}
-          />
-        </div>
-        <div className={classes.balanceValue}>{periodInfo && renderCurrentBalance(periodInfo)}</div>
-      </CardContent>
-    </Card>
+    <div className={classes.root}>
+      <Label>{title}</Label>
+      <div className={classes.graphic}>
+        <Chart
+          points={chartPoints}
+          lines={chartLines}
+          lineColors={chartLineColors}
+          onPeriodChange={handleChartPeriodChange}
+        />
+      </div>
+      <div className={classes.balanceValue}>{periodInfo && renderCurrentBalance(periodInfo)}</div>
+    </div>
   );
 }
 

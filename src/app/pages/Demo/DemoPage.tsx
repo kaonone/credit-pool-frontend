@@ -6,7 +6,6 @@ import {
   Loading,
   NewTable,
   Grid,
-  PoolCompositionChart,
   AvailableLoansChart,
   DeFiScoreChart,
 } from 'components';
@@ -42,13 +41,10 @@ export function DemoPage() {
       </div>
 
       <Grid container>
-        <Grid item xs={4}>
-          <PoolCompositionChart />
-        </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <AvailableLoansChart />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <DeFiScoreChart />
         </Grid>
       </Grid>

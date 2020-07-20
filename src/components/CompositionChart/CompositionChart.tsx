@@ -1,9 +1,7 @@
 import * as React from 'react';
 import * as R from 'ramda';
-import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 
+import { Label } from 'components/Label/Label';
 import { PieChart, Props as PieChartProps } from 'components/PieChart/PieChart';
 
 import { useStyles } from './CompositionChart.style';
@@ -46,23 +44,21 @@ function CompositionChart({
   );
 
   return (
-    <Card className={classes.root}>
-      <CardContent>
-        <Typography variant="subtitle2">{title}</Typography>
-        <div className={classes.chartContainer}>
-          <div className={classes.chart}>
-            <PieChart
-              chartData={chartData}
-              sectorColors={sectorColors}
-              startAngle={90}
-              endAngle={-270}
-              paddingAngle={5}
-            />
-          </div>
-          {renderLegend()}
+    <div className={classes.root}>
+      <Label>{title}</Label>
+      <div className={classes.chartContainer}>
+        <div className={classes.chart}>
+          <PieChart
+            chartData={chartData}
+            sectorColors={sectorColors}
+            startAngle={90}
+            endAngle={-270}
+            paddingAngle={5}
+          />
         </div>
-      </CardContent>
-    </Card>
+        {renderLegend()}
+      </div>
+    </div>
   );
 }
 

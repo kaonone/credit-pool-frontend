@@ -3,6 +3,7 @@ import cn from 'classnames';
 
 import { Grid, Card, CardContent } from 'components';
 import { PoolBalanceChart } from 'features/balance';
+import { PoolCompositionChart } from 'features/poolInfo';
 import { makeStyles } from 'utils/styles';
 import {
   PoolSize,
@@ -53,11 +54,7 @@ export function StatsPage() {
       </Grid>
       <Grid container className={classes.row}>
         <Grid item xs>
-          <Card className={classes.card}>
-            <CardContent className={classes.cardContent}>
-              <PoolBalanceChart />
-            </CardContent>
-          </Card>
+          <PoolBalanceChart />
         </Grid>
         <Grid item xs className={classes.centerBlock}>
           <Card className={classes.card}>
@@ -71,6 +68,7 @@ export function StatsPage() {
         <Grid item xs>
           <Card className={classes.card}>
             <CardContent className={classes.cardContent}>
+              <PoolCompositionChart />
               <LoanApprovalRatio />
             </CardContent>
           </Card>

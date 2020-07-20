@@ -11,3 +11,26 @@ export const tokenAmount = new TokenAmount(
 export const liquidityAmount = new LiquidityAmount('1123123123123123123123', new Currency('$', 18));
 
 export const percentAmount = new PercentAmount(new Fraction('15555', '100000'));
+
+export const mockSectors = [
+  {
+    value: 10,
+    label: 'RSV',
+  },
+  {
+    value: 30,
+    label: 'DAI',
+  },
+  {
+    value: 20,
+    label: 'USDT',
+  },
+  {
+    value: 10,
+    label: 'TUSD',
+  },
+  {
+    value: 30,
+    label: 'USDC',
+  },
+];

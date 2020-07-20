@@ -38,7 +38,6 @@ export { SocialLink } from './SocialLink/SocialLink';
 export { PortfolioSnapshot } from './PortfolioSnapshot/PortfolioSnapshot';
 export { ComingSoon } from './ComingSoon/ComingSoon';
 export { CompositionChart } from './CompositionChart/CompositionChart';
-export { PoolCompositionChart } from './PoolCompositionChart/PoolCompositionChart';
 export { YieldSummary } from './YieldSummary/YieldSummary';
 export { AvailableLoansChart } from './AvailableLoansChart/AvailableLoansChart';
 export { DeFiScoreChart } from './DeFiScoreChart/DeFiScoreChart';
