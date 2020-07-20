@@ -2,17 +2,38 @@ import { NewTable } from 'components';
 
 type Order = {
   date: string;
-  kind: 'sell' | 'buy';
-  values: number[];
+  profit: string;
+  claimed: Deal[];
+};
+
+type Deal = {
+  currency: number;
+  address: string;
+  date: string;
 };
 
 export const entries: Order[] = [
-  { date: '2012-01-02', kind: 'buy', values: [1.13] },
-  { date: '2013-02-04', kind: 'buy', values: [21.1] },
-  { date: '2015-03-01', kind: 'sell', values: [5.52, 1, 2] },
+  {
+    date: '2012-01-02',
+    profit: '$20000',
+    claimed: [
+      { currency: 10, address: '0xz230a0sd0z0xc0wa20', date: '2012-01-02' },
+      { currency: 20, address: '0xz230a0sd0z0xc0wa20', date: '2012-01-02' },
+      { currency: 70, address: '0xz230a0sd0z0xc0wa20', date: '2012-01-02' },
+    ],
+  },
+  {
+    date: '2013-02-04',
+    profit: '$10000',
+    claimed: [
+      { currency: 200, address: '0xz230a0sd0z0xc0wa20', date: '2012-01-02' },
+      { currency: 500, address: '0xz230a0sd0z0xc0wa20', date: '2012-01-02' },
+      { currency: 300, address: '0xz230a0sd0z0xc0wa20', date: '2012-01-02' },
+    ],
+  },
 ];
 
-export const columnsWithSubtable: Array<NewTable.models.Column<Order, number>> = [
+export const columnsWithSubtable: Array<NewTable.models.Column<Order, Deal>> = [
   {
     renderTitle: () => 'Date',
     cellContent: {
@@ -22,10 +43,26 @@ export const columnsWithSubtable: Array<NewTable.models.Column<Order, number>> =
   },
 
   {
-    renderTitle: () => 'Kind',
+    renderTitle: () => 'LPs Profit',
     cellContent: {
       kind: 'simple',
-      render: x => x.kind,
+      render: x => x.profit,
+    },
+  },
+
+  {
+    renderTitle: () => 'Claimed',
+    cellContent: {
+      kind: 'simple',
+      render: x => `$${x.claimed.map(deal => deal.currency).reduce((sum, cash) => sum + cash)}`,
+    },
+  },
+
+  {
+    renderTitle: () => 'Members',
+    cellContent: {
+      kind: 'simple',
+      render: x => x.claimed.length,
     },
   },
 
@@ -35,16 +72,21 @@ export const columnsWithSubtable: Array<NewTable.models.Column<Order, number>> =
       kind: 'for-row-expander',
       expandedArea: {
         kind: 'subtable',
-        getSubtableEntries: x => x.values,
+        getSubtableEntries: x => x.claimed,
         subtableColumns: [
           {
-            renderTitle: () => 'num',
-            renderCell: x => x,
+            renderTitle: () => 'Date',
+            renderCell: x => x.date,
           },
 
           {
-            renderTitle: () => 'const',
-            renderCell: () => 'hm',
+            renderTitle: () => 'Address',
+            renderCell: x => x.address,
+          },
+
+          {
+            renderTitle: () => 'Claimed',
+            renderCell: x => `$${x.currency}`,
           },
         ],
       },
