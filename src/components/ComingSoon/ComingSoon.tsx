@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { Hint } from '../Hint/Hint';
 
 type Props = {
-  position?: 'overlay' | 'default',
+  position?: 'overlay' | 'default';
 };
 
 export function ComingSoon({ position }: Props) {

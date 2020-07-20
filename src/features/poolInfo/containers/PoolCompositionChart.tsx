@@ -44,7 +44,7 @@ function PoolCompositionChart() {
         sectorColors={R.pluck('sector', colors)}
         labelColors={R.pluck('label', colors)}
       />
-      <ComingSoon position="overlay"/>
+      <ComingSoon position="overlay" />
     </div>
   );
 }
