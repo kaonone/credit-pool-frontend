@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { Period } from '../Chart';
+import { Period } from '../models';
 
 export function makeFormatDateByPeriod(period: Period, firstDate: number) {
   const monthAgo = moment(Date.now()).subtract(1, 'months').endOf('day').valueOf();
