@@ -5,7 +5,7 @@ import * as R from 'ramda';
 
 import { BalanceChart, Loading } from 'components';
 import { usePoolBalancesSubscription } from 'generated/gql/pool';
-import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
+import { useTranslate, tKeys } from 'services/i18n';
 import { useApi } from 'services/api';
 import { makeStyles, useTheme } from 'utils/styles';
 import { useSubscribable } from 'utils/react';
@@ -22,8 +22,6 @@ export const useStyles = makeStyles(() => ({
     height: 0,
   },
 }));
-
-const tKeys = tKeysAll;
 
 interface PoolPoint {
   date: number;

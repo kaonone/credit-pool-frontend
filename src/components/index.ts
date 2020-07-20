@@ -37,7 +37,10 @@ export { Section } from './Section/Section';
 export { SocialLink } from './SocialLink/SocialLink';
 export { PortfolioSnapshot } from './PortfolioSnapshot/PortfolioSnapshot';
 export { ComingSoon } from './ComingSoon/ComingSoon';
+export { CompositionChart } from './CompositionChart/CompositionChart';
 export { YieldSummary } from './YieldSummary/YieldSummary';
+export { AvailableLoansChart } from './AvailableLoansChart/AvailableLoansChart';
+export { DeFiScoreChart } from './DeFiScoreChart/DeFiScoreChart';
 
 export * from './ErrorBoundary';
 export * from './Hint/Hint';
@@ -61,3 +64,7 @@ export * from './Growth/Growth';
 export * from './ConfirmationDialog/ConfirmationDialog';
 export * from './Highlighted/Highlighted';
 export * from './Label/Label';
+export * from './ChartMock/ChartMock';
+export * from './Profit/Profit';
+export * from './ChartProfit/ChartProfit';
+export * from './ChartBlock/ChartBlock';

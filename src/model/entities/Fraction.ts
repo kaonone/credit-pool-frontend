@@ -67,6 +67,10 @@ export class Fraction implements IToBN {
   isZero() {
     return this.numerator.isZero();
   }
+
+  isNeg() {
+    return this.numerator.isNeg();
+  }
 }
 
 function toFraction(value: number | Fraction | BN | IToBN): Fraction {
