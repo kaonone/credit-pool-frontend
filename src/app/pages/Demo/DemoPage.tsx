@@ -8,11 +8,14 @@ import {
   Grid,
   AvailableLoansChart,
   DeFiScoreChart,
+  FormControlLabel,
+  Radio,
 } from 'components';
 import { useSubgraphPagination } from 'utils/react';
 import { useUsersQuery } from 'generated/gql/pool';
 
 import * as tableData from './tableData';
+import { RadioGroupInput } from 'components/inputs';
 
 export function DemoPage() {
   const { result, paginationView } = useSubgraphPagination(useUsersQuery, {});
@@ -57,11 +60,30 @@ export function DemoPage() {
           summary={{ renderLabel: () => 'Sum', renderValue: () => 13 }}
         />
       </div>
+      <div style={{ margin: 30 }}>
+        <DemoRadioButtons />
+      </div>
       <AuthButton />
       <Loading gqlResults={result}>
         {result.data && <pre>{JSON.stringify(result.data.users, null, 2)}</pre>}
       </Loading>
       {paginationView}
     </div>
+  );
+}
+
+function DemoRadioButtons() {
+  const [value, setValue] = React.useState('slow');
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value);
+  };
+
+  return (
+    <RadioGroupInput onChange={handleChange} value={value} row>
+      <FormControlLabel value="slow" control={<Radio />} label="Slow" />
+      <FormControlLabel value="standard" control={<Radio />} label="Standard" />
+      <FormControlLabel value="fast" control={<Radio />} label="Fast" />
+    </RadioGroupInput>
   );
 }
