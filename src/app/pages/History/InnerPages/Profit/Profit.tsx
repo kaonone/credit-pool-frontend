@@ -10,7 +10,11 @@ export function Profit() {
 
   return (
     <div className={classes.root}>
-      <NewTable.Component columns={tableData.columnsWithSubtable} entries={tableData.entries} />
+      <NewTable.Component
+        withOuterPadding
+        columns={tableData.columnsWithSubtable}
+        entries={tableData.entries}
+      />
     </div>
   );
 }
