@@ -5,20 +5,18 @@ import { makeStyles } from 'utils/styles';
 type Props = {
   title: NonNullable<React.ReactNode>;
   value: NonNullable<React.ReactNode>;
-  valueSign?: '+' | '-';
   subValue?: React.ReactNode;
   chart?: React.ReactNode;
 };
 
 export function Metric(props: Props) {
-  const { title, value, subValue, valueSign, chart } = props;
+  const { title, value, subValue, chart } = props;
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <div className={classes.title}>{title}</div>
       <div className={classes.value}>
-        {valueSign && <span className={classes.value}>{valueSign}</span>}
         {value}
         {chart && <div className={classes.chart}>{chart}</div>}
       </div>

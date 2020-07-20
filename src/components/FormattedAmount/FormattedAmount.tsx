@@ -13,12 +13,13 @@ interface IProps {
   precision?: number;
   hideSymbol?: boolean;
   className?: string;
+  sign?: boolean;
 }
 
 const percentPrecision = 5;
 
 function FormattedAmount(props: IProps) {
-  const { sum, hideSymbol, precision = 2, className } = props;
+  const { sum, hideSymbol, precision = 2, className, sign = false } = props;
   const formattedBalance = sum.toFormattedString(precision);
   const notRoundedBalance = sum.toFormattedString(
     sum instanceof PercentAmount ? percentPrecision : sum.currency.decimals,
@@ -27,7 +28,8 @@ function FormattedAmount(props: IProps) {
   return (
     <Tooltip title={notRoundedBalance}>
       <span className={className}>
-        {(sum instanceof LiquidityAmount && renderLiquidityAmount(sum, precision, hideSymbol)) ||
+        {(sum instanceof LiquidityAmount &&
+          renderLiquidityAmount(sum, precision, hideSymbol, sign)) ||
           (sum instanceof TokenAmount && renderTokenAmount(sum, precision, hideSymbol)) ||
           (sum instanceof PercentAmount && renderPercentAmount(sum, precision)) ||
           formattedBalance}
@@ -40,11 +42,13 @@ function renderLiquidityAmount(
   sum: LiquidityAmount,
   precision: number,
   hideSymbol: boolean | undefined,
+  sign: boolean,
 ) {
   const decimal = getDecimal(sum.toString(), sum.currency.decimals, precision);
 
   return (
     <>
+      {(sum.toString()[0].startsWith('-') && '-') || (sign && '+')}
       {!hideSymbol && sum.currency.symbol}
       <Decimal decimal={decimal} />
     </>

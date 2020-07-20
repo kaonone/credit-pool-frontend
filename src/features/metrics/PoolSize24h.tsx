@@ -5,7 +5,6 @@ import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { liquidityAmount } from 'utils/mock';
 
 const tKeys = tKeysAll.components.metrics;
-const profitSign: '+' | '-' = '+';
 
 export function PoolSize24h() {
   const { t } = useTranslate();
@@ -13,8 +12,7 @@ export function PoolSize24h() {
   return (
     <Metric
       title={<Title>{t(tKeys.dayChange.getKey())}</Title>}
-      value={<FormattedAmount sum={liquidityAmount} />}
-      valueSign={profitSign}
+      value={<FormattedAmount sign sum={liquidityAmount} />}
       chart={<ChartBlock value="1234" variant="decrease" sign="+" />}
     />
   );
