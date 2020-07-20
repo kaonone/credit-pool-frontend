@@ -38,7 +38,7 @@ export class DefiModuleApi {
       .subscribe(this.txContract);
   }
 
-  @memoize(R.identity)
+  @memoize()
   public getAvgPoolAPY$(): Observable<PercentAmount> {
     const reloadDelay = 60 * 60 * 1000;
 
