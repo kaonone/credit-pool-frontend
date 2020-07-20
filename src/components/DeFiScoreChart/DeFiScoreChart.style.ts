@@ -1,16 +1,25 @@
 import { makeStyles } from 'utils/styles';
 
-export const CHART_WIDTH = 255;
-const CHART_HEIGHT = 155;
+export const CHART_WIDTH = 180;
+const CHART_HEIGHT = 138;
 
 export const useStyles = makeStyles(
   () => ({
     root: {
+      display: 'flex',
+      alignItems: 'flex-end',
+    },
+    label: {
+      fontSize: 12,
+      lineHeight: 1,
+      opacity: 0.5,
+    },
+    chart: {
       width: CHART_WIDTH,
       height: CHART_HEIGHT,
       overflow: 'hidden',
     },
-    label: {
+    title: {
       lineHeight: 1.15,
       textAlign: 'center',
       display: 'flex',
@@ -18,18 +27,11 @@ export const useStyles = makeStyles(
       justifyContent: 'flex-end',
       alignItems: 'center',
     },
-    title: {
-      maxWidth: 120,
-    },
-    sum: {
+    score: {
       fontSize: 32,
       lineHeight: 1.2,
       fontWeight: 300,
     },
-    percentage: {
-      marginTop: 2,
-      fontWeight: 300,
-    },
   }),
-  { name: 'AvailableLoansChart' },
+  { name: 'DeFiScoreChart' },
 );

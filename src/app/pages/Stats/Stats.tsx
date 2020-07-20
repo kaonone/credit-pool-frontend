@@ -1,10 +1,16 @@
 import * as React from 'react';
 
-import { Grid, Card, CardContent, PoolCompositionChart } from 'components';
+import {
+  Grid,
+  Card,
+  CardContent,
+  PoolCompositionChart,
+  DeFiScoreChart,
+  AvailableLoansChart,
+} from 'components';
 import { PoolBalanceChart } from 'features/balance';
 import { makeStyles } from 'utils/styles';
 import { PoolMetrics } from 'features/poolInfo';
-import { AvailableLoansChart } from 'components/AvailableLoansChart/AvailableLoansChart';
 
 export function StatsPage() {
   const classes = useStyles();
@@ -19,7 +25,10 @@ export function StatsPage() {
       <Grid item xs={4}>
         <AvailableLoansChart />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={4}>
+        <DeFiScoreChart />
+      </Grid>
+      <Grid item xs={4}>
         <Card className={classes.card}>
           <CardContent>
             <PoolMetrics
@@ -29,7 +38,7 @@ export function StatsPage() {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={4}>
         <Card className={classes.card}>
           <CardContent>
             <PoolMetrics

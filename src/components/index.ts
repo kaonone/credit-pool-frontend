@@ -40,6 +40,8 @@ export { ComingSoon } from './ComingSoon/ComingSoon';
 export { CompositionChart } from './CompositionChart/CompositionChart';
 export { PoolCompositionChart } from './PoolCompositionChart/PoolCompositionChart';
 export { YieldSummary } from './YieldSummary/YieldSummary';
+export { AvailableLoansChart } from './AvailableLoansChart/AvailableLoansChart';
+export { DeFiScoreChart } from './DeFiScoreChart/DeFiScoreChart';
 
 export * from './ErrorBoundary';
 export * from './Hint/Hint';

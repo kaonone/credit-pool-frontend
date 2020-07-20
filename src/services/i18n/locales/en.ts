@@ -410,6 +410,9 @@ const en = {
     availableLoansChart: {
       totalAvailable: 'Total Available for Loans',
     },
+    deFiScoreChart: {
+      deFiScore: 'DeFi Score',
+    },
   },
 };
 

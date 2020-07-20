@@ -1,9 +1,10 @@
 import * as React from 'react';
 
+import { liquidityAmount } from 'utils/mock';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { ProgressChart } from 'components/ProgressChart/ProgressChart';
-import { Title, FormattedAmount } from 'components';
-import { liquidityAmount } from 'utils/mock';
+import { Title } from 'components/Title/Title';
+import { FormattedAmount } from 'components/FormattedAmount/FormattedAmount';
 
 import { useStyles, CHART_WIDTH } from './AvailableLoansChart.style';
 
