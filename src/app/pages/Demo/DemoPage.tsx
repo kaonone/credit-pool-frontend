@@ -8,6 +8,7 @@ import {
   Grid,
   AvailableLoansChart,
   DeFiScoreChart,
+  Label,
 } from 'components';
 import { SwitchInput } from 'components/inputs';
 import { useSubgraphPagination } from 'utils/react';

@@ -3,9 +3,13 @@ import Typography from '@material-ui/core/Typography';
 
 import { Hint } from '../Hint/Hint';
 
-export function ComingSoon() {
+type Props = {
+  position?: 'overlay' | 'default',
+};
+
+export function ComingSoon({ position }: Props) {
   return (
-    <Hint position="overlay">
+    <Hint position={position}>
       <Typography variant="h4" component="span">
         Coming soon
       </Typography>
