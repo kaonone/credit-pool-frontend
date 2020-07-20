@@ -19,13 +19,13 @@ export const Metrics: React.FC = () => {
 
   return <div className={classes.root}>{columns.map(renderColumn)}</div>;
 
-  function renderColumn(column: MetricColumn) {
-    return <div className={classes.column}>{column.metrics.map(renderMetric)}</div>;
+  function renderColumn(column: MetricColumn, index: number) {
+    return <div key={index} className={classes.column}>{column.metrics.map(renderMetric)}</div>;
   }
 
-  function renderMetric(Metric: React.FC) {
+  function renderMetric(Metric: React.FC, index: number) {
     return (
-      <div className={classes.columnElement}>
+      <div key={index} className={classes.columnElement}>
         <Metric />
       </div>
     );
