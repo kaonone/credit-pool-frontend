@@ -28,6 +28,18 @@ const en = {
           liquidations: 'Liquidations',
         },
       },
+      strategies: {
+        liquidityProvisionTitle: 'Liquidity provision',
+        liquidityProvisionHint: 'Liquidity provision',
+        lendingTitle: 'Lending',
+        borrowingTitle: 'Borrowing',
+        liquidityAdvantages: 'Passive Interest, Lower Risks',
+        lendingAdvantages: 'High Interest, High Risk',
+        borrowingAdvantages: 'Only 50% Collateral',
+        liquidityButton: 'Become Liquidity Provider',
+        lendingButton: 'Lend',
+        borrowingButton: 'Borrow',
+      },
     },
     components: {
       header: {
@@ -417,6 +429,16 @@ const en = {
       loanVolumeGranted: 'Loan Volume Granted',
       loanVolumeRequested: 'Loan Volume Requested',
       loanApprovalRatio: 'Loan Approval Ratio',
+      totalValueLocked: 'Total Value Locked',
+      totalAKROEarned: 'Total AKRO Earned',
+      averagePassiveAPY: 'Average passive APY',
+      averageAPY: 'Average APY',
+      proposals: 'Proposals',
+      averageLoanTerm: 'AverageLoanTerm',
+      availableForBorrowing: 'Maximum Available for Borrowing',
+      totalBorrowed: 'Total Borrowed',
+      minimumAPY: 'Minimum APY',
+      loanTerm: 'Loan Term',
     },
     portfolioSnapshot: {
       caption: 'Portfolio Snapshot',
@@ -433,6 +455,15 @@ const en = {
     poolBalanceChart: {
       ptkDepositPrice: 'ASPT Deposit Price',
       ptkWithdrawalPrice: 'ASPT Withdrawal Price',
+    },
+    poolCompositionChart: {
+      poolComposition: 'Pool Composition',
+    },
+    availableLoansChart: {
+      totalAvailable: 'Total Available for Loans',
+    },
+    deFiScoreChart: {
+      deFiScore: 'DeFi Score',
     },
   },
 };

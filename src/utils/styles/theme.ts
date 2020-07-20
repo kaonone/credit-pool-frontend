@@ -55,6 +55,14 @@ function getGradients(type: 'dark' | 'light') {
       makeGradient(['#fc87e2', '#f24cb6']),
       makeGradient(['#63afdd', '#574cf2']),
     ] as const,
+    poolCompositionChart: [
+      makeGradient(['#63f8b3', '#dcff9c']),
+      makeGradient(['#e323ff', '#7517f8']),
+      makeGradient(['#639ff8', '#85f9e1']),
+      makeGradient(['#7d40ff', '#02a4ff']),
+      makeGradient(['#f985f5', '#f863dd']),
+    ] as const,
+    progressChart: makeGradient(['#7d40ff', '#02a4ff']),
   };
 }
 

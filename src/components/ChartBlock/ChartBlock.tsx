@@ -13,11 +13,17 @@ type Props = {
 };
 
 export function ChartBlock(props: Props) {
+  const { variant, value } = props;
   const classes = useStyles();
 
   return (
-    <div className={classes.chartBlock}>
-      <div className={cn({ [classes.chart]: props?.variant })}>
+    <div className={cn(classes.chartBlock, variant && !value && classes.withoutValue)}>
+      <div
+        className={cn(
+          { [classes.chart]: props?.variant },
+          variant && !value && classes.withoutValue,
+        )}
+      >
         <ChartMock />
       </div>
       {props && <ChartProfit {...props} />}
@@ -31,9 +37,18 @@ const useStyles = makeStyles(
       display: 'flex',
       flexDirection: 'column',
       alignSelf: 'flex-end',
+
+      '&$withoutValue': {
+        flexDirection: 'row-reverse',
+      },
     },
+    withoutValue: {},
     chart: {
       marginLeft: 20,
+
+      '&$withoutValue': {
+        marginLeft: 0,
+      },
     },
   }),
   { name: 'ChartBlock' },

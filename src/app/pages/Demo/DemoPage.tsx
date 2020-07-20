@@ -1,7 +1,14 @@
 import * as React from 'react';
 
 import { AuthButton } from 'features/auth';
-import { Typography, Loading, NewTable } from 'components';
+import {
+  Typography,
+  Loading,
+  NewTable,
+  Grid,
+  AvailableLoansChart,
+  DeFiScoreChart,
+} from 'components';
 import { useSubgraphPagination } from 'utils/react';
 import { useUsersQuery } from 'generated/gql/pool';
 
@@ -32,6 +39,15 @@ export function DemoPage() {
           withStripes
         />
       </div>
+
+      <Grid container>
+        <Grid item xs={6}>
+          <AvailableLoansChart />
+        </Grid>
+        <Grid item xs={6}>
+          <DeFiScoreChart />
+        </Grid>
+      </Grid>
 
       <div style={{ marginTop: '30px' }}>
         <NewTable.Component
