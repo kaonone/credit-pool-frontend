@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Metric, Title, FormattedAmount } from 'components';
+import { Metric, Label, FormattedAmount } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { liquidityAmount } from 'utils/mock';
 
@@ -11,7 +11,7 @@ export function AverageLoanSize() {
 
   return (
     <Metric
-      title={<Title>{t(tKeys.averageLoanSize.getKey())}</Title>}
+      title={<Label>{t(tKeys.averageLoanSize.getKey())}</Label>}
       value={<FormattedAmount sum={liquidityAmount} />}
     />
   );

@@ -1,5 +1,6 @@
 import React from 'react';
 import Tooltip from '@material-ui/core/Tooltip/Tooltip';
+import BN from 'bn.js';
 
 import { Amount, LiquidityAmount, TokenAmount, PercentAmount } from 'model/entities';
 import { ICurrency } from 'model/types';
@@ -46,11 +47,15 @@ function renderLiquidityAmount(
   hideSymbol: boolean | undefined,
   needToRenderPlus: boolean,
 ) {
-  const decimal = getDecimal(sum.toString(), sum.currency.decimals, precision);
+  const decimal = getDecimal(
+    (sum.isNeg() ? sum.mul(new BN(-1)) : sum).toString(),
+    sum.currency.decimals,
+    precision,
+  );
 
   return (
     <>
-      {(sum.toString()[0].startsWith('-') && '-') || (needToRenderPlus && '+')}
+      {(sum.isNeg() && '-') || (needToRenderPlus && '+')}
       {!hideSymbol && sum.currency.symbol}
       <Decimal decimal={decimal} />
     </>
@@ -63,11 +68,15 @@ function renderTokenAmount(
   hideSymbol: boolean | undefined,
   needToRenderPlus: boolean,
 ) {
-  const decimal = getDecimal(sum.toString(), sum.currency.decimals, precision);
+  const decimal = getDecimal(
+    (sum.isNeg() ? sum.mul(new BN(-1)) : sum).toString(),
+    sum.currency.decimals,
+    precision,
+  );
 
   return (
     <>
-      {(sum.toString()[0].startsWith('-') && '-') || (needToRenderPlus && '+')}
+      {(sum.isNeg() && '-') || (needToRenderPlus && '+')}
       <Decimal decimal={decimal} />
       {!hideSymbol && <>&nbsp;{sum.currency.symbol}</>}
     </>
@@ -79,8 +88,8 @@ function renderPercentAmount(sum: PercentAmount, precision: number, needToRender
 
   return (
     <span className={classes.percentRoot}>
-      {(sum.toString()[0].startsWith('-') && '-') || (needToRenderPlus && '+')}
-      {sum.toFormattedString(precision, false)}
+      {(sum.isNeg() && '-') || (needToRenderPlus && '+')}
+      {(sum.isNeg() ? sum.mul(new BN(-1)) : sum).toFormattedString(precision, false)}
       <span className={classes.percentSymbol}>{sum.currency.symbol}</span>
     </span>
   );

@@ -1,8 +1,11 @@
 import * as React from 'react';
 
+export type AlignProperty = 'left' | 'right' | 'center';
+
 export type Column<T, U = null> = {
-  renderTitle(): React.ReactNode;
   cellContent: CellContent<T, U>;
+  align?: AlignProperty;
+  renderTitle(): React.ReactNode;
 };
 
 export type CellContent<T, U> = SimpleCellContent<T> | CellContentForRowExpander<T, U>;

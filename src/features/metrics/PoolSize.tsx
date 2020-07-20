@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Metric, Title, FormattedAmount, ChartBlock } from 'components';
+import { Metric, Label, FormattedAmount, ChartBlock } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { liquidityAmount } from 'utils/mock';
 import { makeStyles } from 'utils/styles';
@@ -13,7 +13,7 @@ export function PoolSize() {
 
   return (
     <Metric
-      title={<Title>{t(tKeys.poolSize.getKey())}</Title>}
+      title={<Label>{t(tKeys.poolSize.getKey())}</Label>}
       value={<FormattedAmount sum={liquidityAmount} />}
       subValue={
         <span className={classes.established}>{`${t(

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Metric, Title, Grid, ChartBlock } from 'components';
+import { Metric, Label, Grid, ChartBlock } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 
 const tKeys = tKeysAll.components.metrics;
@@ -13,7 +13,7 @@ export function ActiveMembers24h() {
   return (
     <Grid container>
       <Metric
-        title={<Title>{t(tKeys.dayChange.getKey())}</Title>}
+        title={<Label>{t(tKeys.dayChange.getKey())}</Label>}
         value={valueMock}
         chart={<ChartBlock value="1234" variant="increase" sign="+" />}
       />
