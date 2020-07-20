@@ -12,7 +12,7 @@ export function PoolSize24h() {
   return (
     <Metric
       title={<Title>{t(tKeys.dayChange.getKey())}</Title>}
-      value={<FormattedAmount sign sum={liquidityAmount} />}
+      value={<FormattedAmount hasSign sum={liquidityAmount} />}
       chart={<ChartBlock value="1234" variant="decrease" sign="+" />}
     />
   );
