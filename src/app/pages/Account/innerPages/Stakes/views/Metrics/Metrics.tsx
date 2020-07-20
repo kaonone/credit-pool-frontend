@@ -20,7 +20,11 @@ export const Metrics: React.FC = () => {
   return <div className={classes.root}>{columns.map(renderColumn)}</div>;
 
   function renderColumn(column: MetricColumn, index: number) {
-    return <div key={index} className={classes.column}>{column.metrics.map(renderMetric)}</div>;
+    return (
+      <div key={index} className={classes.column}>
+        {column.metrics.map(renderMetric)}
+      </div>
+    );
   }
 
   function renderMetric(Metric: React.FC, index: number) {

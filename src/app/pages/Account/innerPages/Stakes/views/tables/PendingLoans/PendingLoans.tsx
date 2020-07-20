@@ -56,14 +56,22 @@ const columns: Array<NewTable.models.Column<any>> = [
   },
 
   {
-    renderTitle: () => <Label inline hint="My collateral info">My collateral</Label>,
+    renderTitle: () => (
+      <Label inline hint="My collateral info">
+        My collateral
+      </Label>
+    ),
     align: 'right',
     cellContent: {
       kind: 'simple',
       render: () => (
         <DoubleLineCell
           renderTopPart={() => '5 days'}
-          renderBottomPart={() => <Label inline hint="50% info">50%</Label>}
+          renderBottomPart={() => (
+            <Label inline hint="50% info">
+              50%
+            </Label>
+          )}
         />
       ),
     },

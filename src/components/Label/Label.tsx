@@ -18,7 +18,11 @@ export const Label: React.FC<Props> = props => {
   const classes = useStyles(props);
 
   return (
-    <Typography variant="h6" component="h6" className={cn(classes.title, classes[fontSize], { [classes.inline]: inline })}>
+    <Typography
+      variant="h6"
+      component="h6"
+      className={cn(classes.title, classes[fontSize], { [classes.inline]: inline })}
+    >
       {icon && <>{icon}&nbsp;</>}
       {children}
       {hint ? (
