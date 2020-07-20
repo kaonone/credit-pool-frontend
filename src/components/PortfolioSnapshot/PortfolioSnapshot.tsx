@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { makeStyles, rgba, colors } from 'utils/styles';
-import { Title } from 'components/Title/Title';
+import { Label } from 'components/Label/Label';
 
 import { DAIIcon, USDTIcon, USDCIcon, TUSDIcon } from '../icons';
 
@@ -43,9 +43,9 @@ export function PortfolioSnapshot(props: Props) {
     <div>
       <table className={classes.table}>
         <caption className={classes.caption}>
-          <Title fontSize="large" hint={t(tKeys.description.getKey())}>
+          <Label fontSize="large" hint={t(tKeys.description.getKey())}>
             {t(tKeys.caption.getKey())}
-          </Title>
+          </Label>
         </caption>
         <thead>
           <tr>

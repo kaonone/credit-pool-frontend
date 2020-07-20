@@ -2,3 +2,8 @@ export { MyBalance } from './MyBalance';
 export { MyPoolShare } from './MyPoolShare';
 export { APY } from './APY';
 export { AKRO } from './AKRO';
+export { AllMyIssuedLoans } from './AllMyIssuedLoans';
+export { OverallAPY } from './OverallAPY';
+export { Risk } from './Risk';
+export { OutstandingLoans } from './OutstandingLoans';
+export { ActiveAPYFromOutstandingLoans } from './ActiveAPYFromOutstandingLoans';
