@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { makeStyles } from 'utils/styles';
-import { Metric, Title, FormattedAmount } from 'components';
+import { Metric, Label, FormattedAmount } from 'components';
 import { percentAmount, liquidityAmount } from 'utils/mock';
 
 const tKeys = tKeysAll.components.metrics.myPoolShare;
@@ -14,7 +14,7 @@ export function MyPoolShare() {
 
   return (
     <Metric
-      title={<Title hint={t(tKeys.description.getKey())}>{t(tKeys.myPoolShare.getKey())}</Title>}
+      title={<Label hint={t(tKeys.description.getKey())}>{t(tKeys.myPoolShare.getKey())}</Label>}
       value={<FormattedAmount sum={percentAmount} />}
       subValue={
         <>

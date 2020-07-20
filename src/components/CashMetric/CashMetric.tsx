@@ -5,7 +5,7 @@ import { Metric } from 'components/Metric/Metric';
 import { FormattedBalance } from 'components/FormattedBalance/FormattedBalance';
 import { TokenType } from 'model/types';
 import { Growth } from 'components/Growth/Growth';
-import { Title } from 'components/Title/Title';
+import { Label } from 'components/Label/Label';
 
 export interface ICashMetricProps {
   title: React.ReactNode;
@@ -27,7 +27,7 @@ function CashMetric(props: ICashMetricProps) {
 
   return (
     <Metric
-      title={<Title icon={icon}>{title}</Title>}
+      title={<Label icon={icon}>{title}</Label>}
       value={<FormattedBalance sum={primary[primaryValue]} token={token} />}
       subValue={
         (previousValue && <Growth current={new BN(value)} previous={new BN(previousValue)} />) ||
