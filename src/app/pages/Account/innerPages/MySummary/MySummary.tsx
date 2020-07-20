@@ -2,7 +2,7 @@ import * as React from 'react';
 import Divider from '@material-ui/core/Divider';
 
 import { MyBalance, MyPoolShare, AvgPoolAPY, AKRO } from 'features/metrics';
-import { Grid, PortfolioSnapshot, YieldSummary, ComingSoon } from 'components';
+import { Grid, PortfolioSnapshot, YieldSummary } from 'components';
 import { makeStyles } from 'utils/styles';
 
 export function MySummary() {
@@ -31,8 +31,7 @@ export function MySummary() {
       </Grid>
       <Divider className={classes.contentDivider} />
       <Grid container spacing={6} justify="space-between">
-        <Grid item xs={7} className={classes.snapshot}>
-          <ComingSoon />
+        <Grid item xs={7}>
           <PortfolioSnapshot
             data={[
               {
@@ -75,9 +74,6 @@ const useStyles = makeStyles(
   theme => ({
     divider: {
       margin: theme.spacing(0, 5),
-    },
-    snapshot: {
-      position: 'relative',
     },
     contentDivider: {
       marginTop: 45,
