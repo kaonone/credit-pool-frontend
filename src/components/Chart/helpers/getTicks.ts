@@ -2,7 +2,7 @@ import moment from 'moment';
 import * as R from 'ramda';
 import * as d3Scale from 'd3-scale';
 
-import { Period, IPoint } from '../Chart';
+import { Period, IPoint } from '../models';
 
 const POINTS_LENGTH = 21;
 

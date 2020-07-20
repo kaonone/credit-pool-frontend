@@ -1,56 +1,29 @@
 import { makeStyles } from 'utils/styles';
 
-export const useStyles = makeStyles(theme => {
-  const graphicMarginBottom = 20;
-  const switchButtonsHeight = 20;
-  const graphicHeight = `calc(100% - ${graphicMarginBottom}px - ${switchButtonsHeight}px)`;
+import { switchButtonsHeight } from './components/PeriodSwitch/PeriodSwitch.style';
 
-  return {
-    root: {
-      height: '100%',
-    },
+export const useStyles = makeStyles(
+  theme => {
+    const graphicMarginBottom = 20;
+    const graphicHeight = `calc(100% - ${graphicMarginBottom}px - ${switchButtonsHeight}px)`;
 
-    graphic: {
-      height: graphicHeight,
-      marginBottom: 14,
-    },
-
-    tick: {
-      fill: theme.palette.text.primary,
-      fontSize: 10,
-      fontWeight: 300,
-      opacity: 0.5,
-    },
-
-    periodSwitch: {
-      display: 'flex',
-    },
-
-    switchButton: {
-      minWidth: 30,
-      height: switchButtonsHeight,
-      border: 0,
-      borderRadius: 24,
-      fontSize: 12,
-      color: theme.palette.text.primary,
-      textTransform: 'capitalize',
-      background: 'transparent',
-      outline: 'none',
-      cursor: 'pointer',
-
-      '& + &': {
-        marginLeft: 5,
-        marginRight: 5,
+    return {
+      root: {
+        height: '100%',
       },
-    },
 
-    switchButtonSelected: {
-      background:
-        theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
-    },
+      graphic: {
+        height: graphicHeight,
+        marginBottom: 14,
+      },
 
-    switchButtonInCaps: {
-      textTransform: 'uppercase',
-    },
-  };
-});
+      tick: {
+        fill: theme.palette.text.primary,
+        fontSize: 10,
+        fontWeight: 300,
+        opacity: 0.5,
+      },
+    };
+  },
+  { name: 'Chart' },
+);

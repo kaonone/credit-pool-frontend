@@ -6,10 +6,11 @@ import { useStyles } from './Hint.style';
 type Props = React.PropsWithChildren<{
   size?: 'small' | 'medium';
   color?: 'error' | 'default';
+  position?: 'overlay' | 'default';
 }>;
 
 function Hint(props: Props) {
-  const { children, size = 'medium', color = 'default' } = props;
+  const { children, size = 'medium', color = 'default', position = 'default' } = props;
   const classes = useStyles();
 
   const className = cn(
@@ -21,6 +22,9 @@ function Hint(props: Props) {
     {
       [classes.colorDefault]: color === 'default',
       [classes.colorError]: color === 'error',
+    },
+    {
+      [classes.withOverlay]: position === 'overlay',
     },
   );
 
