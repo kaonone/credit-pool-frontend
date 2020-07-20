@@ -21,10 +21,6 @@ export const Stakes: React.FC = () => {
   );
 
   function renderTableTitle(title: string) {
-    return (
-      <div className={classes.tableTitle}>
-        {title}
-      </div>
-    );
+    return <div className={classes.tableTitle}>{title}</div>;
   }
 };

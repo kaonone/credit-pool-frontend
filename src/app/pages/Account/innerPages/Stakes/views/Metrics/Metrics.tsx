@@ -6,29 +6,21 @@ import { useStyles } from './Metrics.style';
 
 export type MetricColumn = {
   metrics: React.FC[];
-}
+};
 
 const columns: MetricColumn[] = [
   { metrics: [metrics.AllMyIssuedLoans, metrics.OutstandingLoans] },
   { metrics: [metrics.OverallAPY, metrics.ActiveAPYFromOutstandingLoans] },
   { metrics: [metrics.Risk] },
-]
+];
 
 export const Metrics: React.FC = () => {
   const classes = useStyles();
 
-  return (
-    <div className={classes.root}>
-      {columns.map(renderColumn)}
-    </div>
-  );
+  return <div className={classes.root}>{columns.map(renderColumn)}</div>;
 
   function renderColumn(column: MetricColumn) {
-    return (
-      <div className={classes.column}>
-        {column.metrics.map(renderMetric)}
-      </div>
-    )
+    return <div className={classes.column}>{column.metrics.map(renderMetric)}</div>;
   }
 
   function renderMetric(Metric: React.FC) {
@@ -36,6 +28,6 @@ export const Metrics: React.FC = () => {
       <div className={classes.columnElement}>
         <Metric />
       </div>
-    )
+    );
   }
 };

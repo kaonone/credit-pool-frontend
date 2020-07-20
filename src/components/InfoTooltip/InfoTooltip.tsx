@@ -12,6 +12,5 @@ export const InfoTooltip: React.FC<Props> = props => {
         <InfoIconV2 fontSize="small" />
       </span>
     </Tooltip>
-
   );
 };

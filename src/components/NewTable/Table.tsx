@@ -17,7 +17,6 @@ type Props<T, U> = {
 
 type RowToExpandedState = Record<number, boolean>;
 
-
 export function Table<T, U = null>(props: Props<T, U>) {
   const classes = useStyles();
 
@@ -25,7 +24,7 @@ export function Table<T, U = null>(props: Props<T, U>) {
     center: classes.cellAlignCenter,
     left: classes.cellAlignLeft,
     right: classes.cellAlignRight,
-  }
+  };
 
   const { columns, entries, summary, withStripes, withOuterPadding } = props;
 
@@ -47,10 +46,15 @@ export function Table<T, U = null>(props: Props<T, U>) {
   })();
 
   return (
-    <table className={cn([classes.root, {
-      [classes.withStripes]: withStripes,
-      [classes.withOuterPadding]: withOuterPadding,
-    }])}>
+    <table
+      className={cn([
+        classes.root,
+        {
+          [classes.withStripes]: withStripes,
+          [classes.withOuterPadding]: withOuterPadding,
+        },
+      ])}
+    >
       <thead>
         <tr>{columns.map(renderTitle)}</tr>
       </thead>
@@ -87,7 +91,10 @@ export function Table<T, U = null>(props: Props<T, U>) {
 
   function renderTitle(column: M.Column<T, U>, columnIndex: number) {
     return (
-      <th className={cn(classes.title, classes.cell, classes.topLevelTitle, getAlignClass(column))} key={columnIndex}>
+      <th
+        className={cn(classes.title, classes.cell, classes.topLevelTitle, getAlignClass(column))}
+        key={columnIndex}
+      >
         {column.renderTitle()}
       </th>
     );
@@ -118,7 +125,10 @@ export function Table<T, U = null>(props: Props<T, U>) {
   function renderAreaWithingSingleCell(entry: T, area: M.ExpandedAreaWithinSingleCell<T>) {
     return (
       <tr>
-        <td className={cn(classes.singleCellExpandedArea, classes.cellData, classes.cell)} colSpan={columns.length}>
+        <td
+          className={cn(classes.singleCellExpandedArea, classes.cellData, classes.cell)}
+          colSpan={columns.length}
+        >
           {area.renderContent(entry)}
         </td>
       </tr>

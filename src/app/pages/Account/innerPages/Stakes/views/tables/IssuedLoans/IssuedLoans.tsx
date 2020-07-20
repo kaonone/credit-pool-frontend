@@ -1,8 +1,9 @@
 import React from 'react';
+
 import { NewTable } from 'components';
 
-import { DoubleLineCell } from '../../DoubleLineCell'
-import { LabelWithInfoTooltip } from '../../LabelWithInfoTooltip'
+import { DoubleLineCell } from '../../DoubleLineCell';
+import { LabelWithInfoTooltip } from '../../LabelWithInfoTooltip';
 import * as views from './views';
 import { useStyles } from './IssuedLoans.style';
 
@@ -39,10 +40,7 @@ const columns: Array<NewTable.models.Column<any>> = [
     cellContent: {
       kind: 'simple',
       render: () => (
-        <DoubleLineCell
-          renderTopPart={() => '5 days'}
-          renderBottomPart={() => '07/22/2020'}
-        />
+        <DoubleLineCell renderTopPart={() => '5 days'} renderBottomPart={() => '07/22/2020'} />
       ),
     },
   },
@@ -53,23 +51,24 @@ const columns: Array<NewTable.models.Column<any>> = [
     cellContent: {
       kind: 'simple',
       render: () => (
-        <DoubleLineCell
-          renderTopPart={() => '5 days'}
-          renderBottomPart={() => '07/22/2020'}
-        />
+        <DoubleLineCell renderTopPart={() => '5 days'} renderBottomPart={() => '07/22/2020'} />
       ),
     },
   },
 
   {
-    renderTitle: () => <LabelWithInfoTooltip renderLabel={() => 'My collateral'} tooltipText="My collateral info" />,
+    renderTitle: () => (
+      <LabelWithInfoTooltip renderLabel={() => 'My collateral'} tooltipText="My collateral info" />
+    ),
     align: 'right',
     cellContent: {
       kind: 'simple',
       render: () => (
         <DoubleLineCell
           renderTopPart={() => '5 days'}
-          renderBottomPart={() => <LabelWithInfoTooltip renderLabel={() => '50%'} tooltipText="50% info" />}
+          renderBottomPart={() => (
+            <LabelWithInfoTooltip renderLabel={() => '50%'} tooltipText="50% info" />
+          )}
         />
       ),
     },
@@ -87,10 +86,10 @@ const columns: Array<NewTable.models.Column<any>> = [
             <views.WithdrawButton />
           </div>
         </div>
-      )
+      ),
     },
   },
-]
+];
 
 const entries = [1, 2];
 
@@ -99,10 +98,7 @@ export const IssuedLoans: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <NewTable.Component
-        columns={columns}
-        entries={entries}
-      />
+      <NewTable.Component columns={columns} entries={entries} />
     </div>
   );
 };

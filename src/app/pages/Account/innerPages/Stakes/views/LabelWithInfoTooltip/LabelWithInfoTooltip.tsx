@@ -1,12 +1,13 @@
 import React from 'react';
 
 import { InfoTooltip } from 'components';
+
 import { useStyles } from './LabelWithInfoTooltip.style';
 
 type Props = {
   renderLabel(): React.ReactNode;
   tooltipText: string;
-}
+};
 
 export const LabelWithInfoTooltip: React.FC<Props> = props => {
   const classes = useStyles();

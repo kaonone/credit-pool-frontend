@@ -1,1 +1,1 @@
-export { IssuedLoans } from './IssuedLoans'
+export { IssuedLoans } from './IssuedLoans';

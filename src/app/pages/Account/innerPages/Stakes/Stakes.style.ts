@@ -1,17 +1,20 @@
 import { makeStyles } from 'utils/styles';
 
-export const useStyles = makeStyles(() => ({
-  root: {},
+export const useStyles = makeStyles(
+  () => ({
+    root: {},
 
-  issuedLoansTable: {
-    marginTop: 75,
-  },
+    issuedLoansTable: {
+      marginTop: 75,
+    },
 
-  pendingLoansTable: {
-    marginTop: 75,
-  },
+    pendingLoansTable: {
+      marginTop: 75,
+    },
 
-  tableTitle: {
-    marginBottom: 20,
-  }
-}), { name: 'Stakes' });
+    tableTitle: {
+      marginBottom: 20,
+    },
+  }),
+  { name: 'Stakes' },
+);

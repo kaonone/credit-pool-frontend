@@ -1,1 +1,1 @@
-export { MySummary } from './MySummary'
+export { MySummary } from './MySummary';
