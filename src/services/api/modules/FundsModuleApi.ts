@@ -232,15 +232,17 @@ export class FundsModuleApi {
   }
 
   @memoize()
-  public getCurrentLiquidity$(): Observable<BN> {
+  public getCurrentLiquidity$(): Observable<LiquidityAmount> {
     if (!this.getTotalLProposals$) {
       throw new Error('Getter for totalLProposals is not found');
     }
 
-    return combineLatest([
-      this.readonlyContract.methods.lBalance(undefined, this.readonlyContract.events.Status()),
-      this.getTotalLProposals$(),
-    ]).pipe(map(([liquidity, totalLProposals]) => liquidity.sub(totalLProposals)));
+    return this.toLiquidityAmount$(
+      combineLatest([
+        this.readonlyContract.methods.lBalance(undefined, this.readonlyContract.events.Status()),
+        this.getTotalLProposals$(),
+      ]).pipe(map(([liquidity, totalLProposals]) => liquidity.sub(totalLProposals))),
+    );
   }
 
   @memoize()

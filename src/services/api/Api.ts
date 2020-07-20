@@ -19,7 +19,7 @@ export class Api {
 
   public transactions = new TransactionsApi();
   public erc20 = new Erc20Api(this.web3Manager, this.transactions);
-  public pToken = new PTokenApi(this.web3Manager, this.transactions);
+  public pToken = new PTokenApi(this.web3Manager, this.transactions, this.erc20);
 
   public curveModule = new CurveModuleApi(this.web3Manager);
   public fundsModule = new FundsModuleApi(this.web3Manager, this.curveModule, this.erc20);

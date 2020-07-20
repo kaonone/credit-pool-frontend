@@ -9,16 +9,22 @@ import { memoize } from 'utils/decorators';
 import { createPToken } from 'generated/contracts';
 import { ETH_NETWORK_CONFIG } from 'env';
 import { getCurrentValueOrThrow } from 'utils/rxjs';
+import { PercentAmount } from 'model/entities';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
+import { Erc20Api } from './Erc20Api';
 
 export class PTokenApi {
   private readonlyContract: Contracts['ptk'];
   private txContract = new BehaviorSubject<null | Contracts['ptk']>(null);
   private events: { forReloadPtkDistributionBalance: EventEmitter[] } | null = null;
 
-  constructor(private web3Manager: Web3ManagerModule, private transactionsApi: TransactionsApi) {
+  constructor(
+    private web3Manager: Web3ManagerModule,
+    private transactionsApi: TransactionsApi,
+    private erc20Api: Erc20Api,
+  ) {
     this.readonlyContract = createPToken(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.ptk);
 
     this.web3Manager.txWeb3
@@ -87,6 +93,18 @@ export class PTokenApi {
       this.readonlyContract.events.DistributionAccumulatorIncreased(),
       this.readonlyContract.events.DistributionCreated(),
     ]);
+  }
+
+  @memoize(R.identity)
+  public getUserShare$(account: string): Observable<PercentAmount> {
+    return combineLatest([
+      this.getDistributionBalanceOf$(account),
+      this.erc20Api.getTotalSupply$(ETH_NETWORK_CONFIG.contracts.ptk),
+    ]).pipe(
+      map(([distributionBalance, totalSupply]) =>
+        new PercentAmount(distributionBalance).div(totalSupply).mul(100),
+      ),
+    );
   }
 
   @memoize(R.identity)
