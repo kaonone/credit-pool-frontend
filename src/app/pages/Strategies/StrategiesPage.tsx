@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Grid, Title, Button } from 'components';
+import { Grid, Label, Button } from 'components';
 import {
   TotalValueLocked,
   AverageAPY,
@@ -29,21 +29,21 @@ export function StrategiesPage() {
       <Grid container justify="space-between">
         <Grid item className={classes.metricContainer}>
           <div className={classes.title}>
-            <Title fontSize="large" hint={t(tKeys.liquidityProvisionHint.getKey())}>
+            <Label fontSize="large" hint={t(tKeys.liquidityProvisionHint.getKey())}>
               {t(tKeys.liquidityProvisionTitle.getKey())}
-            </Title>
+            </Label>
           </div>
           <TotalValueLocked />
         </Grid>
         <Grid item className={classes.metricContainer}>
           <div className={classes.title}>
-            <Title fontSize="large">{t(tKeys.lendingTitle.getKey())}</Title>
+            <Label fontSize="large">{t(tKeys.lendingTitle.getKey())}</Label>
           </div>
           <AverageAPY />
         </Grid>
         <Grid item className={classes.metricContainer}>
           <div className={classes.title}>
-            <Title fontSize="large">{t(tKeys.borrowingTitle.getKey())}</Title>
+            <Label fontSize="large">{t(tKeys.borrowingTitle.getKey())}</Label>
           </div>
           <AvailableForBorrowing />
         </Grid>
@@ -84,7 +84,7 @@ export function StrategiesPage() {
       <Grid container justify="space-between">
         <Grid item className={classes.metricContainer}>
           <div className={classes.advantages}>
-            <Title>{t(tKeys.liquidityAdvantages.getKey())}</Title>
+            <Label>{t(tKeys.liquidityAdvantages.getKey())}</Label>
           </div>
           <Button fullWidth color="primary" variant="contained">
             {t(tKeys.liquidityButton.getKey())}
@@ -92,7 +92,7 @@ export function StrategiesPage() {
         </Grid>
         <Grid item className={classes.metricContainer}>
           <div className={classes.advantages}>
-            <Title>{t(tKeys.lendingAdvantages.getKey())}</Title>
+            <Label>{t(tKeys.lendingAdvantages.getKey())}</Label>
           </div>
           <Button fullWidth color="primary" variant="contained">
             {t(tKeys.lendingButton.getKey())}
@@ -100,7 +100,7 @@ export function StrategiesPage() {
         </Grid>
         <Grid item className={classes.metricContainer}>
           <div className={classes.advantages}>
-            <Title>{t(tKeys.borrowingAdvantages.getKey())}</Title>
+            <Label>{t(tKeys.borrowingAdvantages.getKey())}</Label>
           </div>
           <Button fullWidth color="primary" variant="contained">
             {t(tKeys.borrowingButton.getKey())}

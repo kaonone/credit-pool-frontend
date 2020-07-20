@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Metric, Title, FormattedAmount, ChartBlock } from 'components';
+import { Metric, Label, FormattedAmount, ChartBlock } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { percentAmount } from 'utils/mock';
 
@@ -11,7 +11,7 @@ export function AveragePassiveAPY() {
 
   return (
     <Metric
-      title={<Title>{t(tKeys.averagePassiveAPY.getKey())}</Title>}
+      title={<Label>{t(tKeys.averagePassiveAPY.getKey())}</Label>}
       value={<FormattedAmount sum={percentAmount} />}
       chart={<ChartBlock variant="increase" />}
     />
