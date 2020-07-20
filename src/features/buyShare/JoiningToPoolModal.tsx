@@ -22,7 +22,7 @@ export function JoiningToPoolModal() {
   const [balance] = useSubscribable(
     () =>
       api.web3Manager.account.pipe(
-        switchMap(account => (account ? api.tokens.getPtkBalance$(account) : of(null))),
+        switchMap(account => (account ? api.erc20.getPtkBalance$(account) : of(null))),
       ),
     [api],
     null,

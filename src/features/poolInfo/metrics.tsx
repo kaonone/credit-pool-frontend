@@ -154,7 +154,7 @@ export function TotalPtkSupply() {
   const api = useApi();
 
   const [totalSupply, totalSupplyMeta] = useSubscribable(
-    () => api.tokens.getTotalSupply$(ETH_NETWORK_CONFIG.contracts.ptk),
+    () => api.erc20.getTotalSupply$(ETH_NETWORK_CONFIG.contracts.ptk),
     [api],
     new BN(0),
   );

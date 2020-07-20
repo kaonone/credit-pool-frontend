@@ -9,22 +9,13 @@ import { createLiquidityModule } from 'generated/contracts';
 import { memoize } from 'utils/decorators';
 import { calcWithdrawAmountBeforeFee } from 'model';
 import { TokenAmount } from 'model/entities';
+import { getCurrentValueOrThrow } from 'utils/rxjs';
 
 import { Contracts, Web3ManagerModule } from '../types';
-import { TokensApi } from './TokensApi';
+import { Erc20Api } from './Erc20Api';
 import { TransactionsApi } from './TransactionsApi';
 import { FundsModuleApi } from './FundsModuleApi';
 import { CurveModuleApi } from './CurveModuleApi';
-
-function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNullable<T> {
-  const value = subject.getValue();
-
-  if (value === null || value === undefined) {
-    throw new Error('Subject is not contain non nullable value');
-  }
-
-  return value as NonNullable<T>;
-}
 
 function first<T>(input: Observable<T>): Promise<T> {
   return input.pipe(firstOperator()).toPromise();
@@ -36,7 +27,7 @@ export class LiquidityModuleApi {
 
   constructor(
     private web3Manager: Web3ManagerModule,
-    private tokensApi: TokensApi,
+    private erc20Api: Erc20Api,
     private transactionsApi: TransactionsApi,
     private fundsModuleApi: FundsModuleApi,
     private curveModuleApi: CurveModuleApi,
@@ -86,7 +77,7 @@ export class LiquidityModuleApi {
     const pAmountWithFee = await first(
       this.fundsModuleApi.convertLiquidityToPtkExit$(lAmountBeforeFee),
     );
-    const pBalance = await first(this.tokensApi.getPtkBalance$(fromAddress));
+    const pBalance = await first(this.erc20Api.getPtkBalance$(fromAddress));
 
     const promiEvent = txLiquidityModule.methods.withdraw(
       { lAmountMin: new BN(0), pAmount: min(pAmountWithFee.toBN(), pBalance) },
@@ -105,7 +96,7 @@ export class LiquidityModuleApi {
   public async buyPtk(fromAddress: string, amount: TokenAmount): Promise<void> {
     const txLiquidityModule = getCurrentValueOrThrow(this.txContract);
 
-    await this.tokensApi.approve(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, amount);
+    await this.erc20Api.approve(fromAddress, ETH_NETWORK_CONFIG.contracts.fundsModule, amount);
 
     const promiEvent = txLiquidityModule.methods.deposit(
       { lAmount: amount.toBN(), pAmountMin: new BN(0) },

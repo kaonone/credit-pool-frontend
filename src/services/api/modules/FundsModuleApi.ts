@@ -12,7 +12,7 @@ import { calcWithdrawAmountBeforeFee } from 'model';
 import { TokenAmount, Token, Currency, LiquidityAmount } from 'model/entities';
 import { IToBN } from 'model/types';
 
-import { TokensApi } from './TokensApi';
+import { Erc20Api } from './Erc20Api';
 import { CurveModuleApi } from './CurveModuleApi';
 import { Contracts, Web3ManagerModule } from '../types';
 
@@ -25,7 +25,7 @@ export class FundsModuleApi {
   constructor(
     private web3Manager: Web3ManagerModule,
     private curveModuleApi: CurveModuleApi,
-    private tokensApi: TokensApi,
+    private erc20Api: Erc20Api,
   ) {
     this.readonlyContract = createFundsModule(
       this.web3Manager.web3,
@@ -100,7 +100,7 @@ export class FundsModuleApi {
     // TODO take from contract
     return of([ETH_NETWORK_CONFIG.contracts.dai]).pipe(
       switchMap(addresses =>
-        combineLatest(addresses.map(address => this.tokensApi.getToken$(address))),
+        combineLatest(addresses.map(address => this.erc20Api.getToken$(address))),
       ),
     );
   }
@@ -116,7 +116,7 @@ export class FundsModuleApi {
 
   @memoize(R.identity)
   public getPtkBalanceInDaiWithoutFee$(address: string): Observable<BN> {
-    return this.tokensApi.getPtkBalance$(address).pipe(
+    return this.erc20Api.getPtkBalance$(address).pipe(
       switchMap(balance => this.getPtkToDaiExitInfo$(balance.toString())),
       map(item => item.total),
     );
@@ -124,7 +124,7 @@ export class FundsModuleApi {
 
   @memoize(R.identity)
   public getPtkBalanceInDaiWithFee$(address: string): Observable<BN> {
-    return this.tokensApi.getPtkBalance$(address).pipe(
+    return this.erc20Api.getPtkBalance$(address).pipe(
       switchMap(balance => this.getPtkToDaiExitInfo$(balance.toString())),
       map(item => item.user),
     );
@@ -146,7 +146,7 @@ export class FundsModuleApi {
   public convertLiquidityToPtkExit$(value: LiquidityAmount): Observable<TokenAmount> {
     const lAmount = value.toBN();
 
-    return this.tokensApi.toTokenAmount(
+    return this.erc20Api.toTokenAmount(
       ETH_NETWORK_CONFIG.contracts.ptk,
       lAmount.isZero()
         ? of(lAmount)
@@ -187,7 +187,7 @@ export class FundsModuleApi {
     additionalLiquidity: string = '0',
   ): Observable<LiquidityAmount> {
     return this.toLiquidityAmount$(
-      combineLatest([this.tokensApi.getPtkBalance$(address), this.getCurrentLiquidity$()]).pipe(
+      combineLatest([this.erc20Api.getPtkBalance$(address), this.getCurrentLiquidity$()]).pipe(
         switchMap(([ptkBalance, currentLiquidity]) =>
           this.curveModuleApi
             .calculateExitInverse$(
@@ -212,9 +212,9 @@ export class FundsModuleApi {
     additionalPtkBalance: string,
     additionalLiquidity: string,
   ): Observable<TokenAmount> {
-    return this.tokensApi.toTokenAmount(
+    return this.erc20Api.toTokenAmount(
       ETH_NETWORK_CONFIG.contracts.dai,
-      combineLatest([this.tokensApi.getPtkBalance$(address), this.getCurrentLiquidity$()]).pipe(
+      combineLatest([this.erc20Api.getPtkBalance$(address), this.getCurrentLiquidity$()]).pipe(
         switchMap(([ptkBalance, currentLiquidity]) =>
           combineLatest([
             this.curveModuleApi.calculateExitInverse$(

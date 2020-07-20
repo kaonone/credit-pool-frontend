@@ -18,7 +18,7 @@ function DistributionMetrics(props: Props) {
   const api = useApi();
   const [account] = useSubscribable(() => api.web3Manager.account, []);
   const [accumulated, accumulatedMeta] = useSubscribable(
-    () => (account ? api.tokens.getAccumulatedUserDistributions$(account) : of(new BN(0))),
+    () => (account ? api.pToken.getAccumulatedUserDistributions$(account) : of(new BN(0))),
     [api, account],
     new BN(0),
   );
@@ -30,7 +30,7 @@ function DistributionMetrics(props: Props) {
   const accumulatedInDai = accumulatedInDaiInfo?.total;
 
   const [nextDistributionTimestamp, nextDistributionTimestampMeta] = useSubscribable(
-    () => api.tokens.getNextDistributionTimestamp$(),
+    () => api.pToken.getNextDistributionTimestamp$(),
     [api],
   );
 
