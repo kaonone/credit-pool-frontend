@@ -54,11 +54,17 @@ function Chart<P extends IPoint>(props: IProps<P>) {
   ]);
 
   const renderTick = React.useCallback(
-    ({ x, y, payload, index, visibleTicksCount }) => {
-      const display =
-        visibleTicksCount > 12 && (realPeriod === 'd' || realPeriod === 'm') && index % 2 !== 0
-          ? 'none'
-          : 'block';
+    ({ x, y, payload, index, visibleTicksCount, width }) => {
+      const minTickSpace = realPeriod === 'd' || realPeriod === 'm' ? 110 : 70;
+      const maxTicksCount = Math.floor(width / minTickSpace);
+      const step = Math.ceil(visibleTicksCount / maxTicksCount) - 1;
+
+      if (index % step !== 0) {
+        return null;
+      }
+
+      const isFirstTick = index === 0;
+      const isLastTick = index === visibleTicksCount - 1;
 
       return (
         <g transform={`translate(${x},${y})`}>
@@ -66,9 +72,8 @@ function Chart<P extends IPoint>(props: IProps<P>) {
             x={0}
             y={0}
             dy={12}
-            textAnchor="middle"
+            textAnchor={(isFirstTick && 'start') || (isLastTick && 'end') || 'middle'}
             className={classes.tick}
-            style={{ display }}
           >
             {formatTick(payload.value)}
           </text>
@@ -83,7 +88,7 @@ function Chart<P extends IPoint>(props: IProps<P>) {
       <div className={classes.graphic}>
         <ResponsiveContainer>
           {/* TODO: Fix blank space on left */}
-          <LineChart data={ticks} margin={{ left: -50, right: 10, bottom: 0, top: 0 }}>
+          <LineChart data={ticks} margin={{ left: -55, right: 0, bottom: 0, top: 0 }}>
             <XAxis
               dataKey="date"
               type="number"

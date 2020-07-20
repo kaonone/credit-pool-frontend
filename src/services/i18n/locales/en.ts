@@ -456,6 +456,15 @@ const en = {
       ptkDepositPrice: 'ASPT Deposit Price',
       ptkWithdrawalPrice: 'ASPT Withdrawal Price',
     },
+    poolCompositionChart: {
+      poolComposition: 'Pool Composition',
+    },
+    availableLoansChart: {
+      totalAvailable: 'Total Available for Loans',
+    },
+    deFiScoreChart: {
+      deFiScore: 'DeFi Score',
+    },
   },
 };
 
