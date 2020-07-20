@@ -5,6 +5,8 @@ import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 
+import { progressProps } from './common';
+
 const tKeys = tKeysAll.components.metrics.apy;
 
 export function AvgPoolAPY() {
@@ -19,7 +21,7 @@ export function AvgPoolAPY() {
     <Metric
       title={<Label hint={t(tKeys.description.getKey())}>APY</Label>}
       value={
-        <Loading meta={avgPoolAPYMeta}>
+        <Loading meta={avgPoolAPYMeta} progressProps={progressProps}>
           {avgPoolAPY && <FormattedAmount sum={avgPoolAPY} />}
         </Loading>
       }

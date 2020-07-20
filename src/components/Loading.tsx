@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { SubscriptionResult } from '@apollo/react-common';
+import { SubSet } from '_helpers';
 
 import { CommunicationState } from 'utils/react';
 
@@ -15,9 +16,12 @@ interface IMeta {
 }
 
 type MaybeArray<T> = T | T[];
-type ProgressType = 'linear' | 'circle' | 'skeleton';
+type ProgressVariant = 'linear' | 'circle' | 'skeleton';
 
-interface IProps<V extends ProgressType> {
+type DefaultProgressVariant = SubSet<ProgressVariant, 'skeleton'>;
+const defaultProgressVariant: DefaultProgressVariant = 'skeleton';
+
+interface IProps<V extends ProgressVariant> {
   children?: React.ReactNode;
   meta?: MaybeArray<IMeta>;
   communication?: MaybeArray<CommunicationState<any, any>>;
@@ -57,12 +61,12 @@ function gqlResultsToMetas(values: MaybeArray<SubscriptionResult>): IMeta[] {
   }));
 }
 
-export function Loading<T extends ProgressType>(props: IProps<T>) {
+export function Loading<T extends ProgressVariant = DefaultProgressVariant>(props: IProps<T>) {
   const classes = useStyles();
   const {
     children,
     loader,
-    progressVariant,
+    progressVariant = defaultProgressVariant,
     progressProps,
     component,
     ignoreError,
@@ -97,7 +101,7 @@ export function Loading<T extends ProgressType>(props: IProps<T>) {
               ),
               circle: () => <CircularProgress {...(progressProps as CircularProgressProps)} />,
               skeleton: () => <Skeleton {...(progressProps as SkeletonProps)} />,
-            }[progressVariant || 'skeleton']()}
+            }[progressVariant]()}
         </Wrapper>
       )}
       {loaded && needToShowError && (

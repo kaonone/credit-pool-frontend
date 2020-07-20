@@ -8,6 +8,8 @@ import { Metric, Label, FormattedAmount, Loading } from 'components';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 
+import { progressProps } from './common';
+
 const tKeys = tKeysAll.components.metrics.myPoolShare;
 
 export function MyPoolShare() {
@@ -29,11 +31,13 @@ export function MyPoolShare() {
     <Metric
       title={<Label hint={t(tKeys.description.getKey())}>{t(tKeys.myPoolShare.getKey())}</Label>}
       value={
-        <Loading meta={userShareMeta}>{userShare && <FormattedAmount sum={userShare} />}</Loading>
+        <Loading meta={userShareMeta} progressProps={progressProps}>
+          {userShare && <FormattedAmount sum={userShare} />}
+        </Loading>
       }
       subValue={
         <>
-          <Loading meta={currentLiquidityMeta}>
+          <Loading meta={currentLiquidityMeta} progressProps={progressProps}>
             {currentLiquidity && <FormattedAmount sum={currentLiquidity} />}
           </Loading>
           <Typography className={classes.totalLiquidity}>
