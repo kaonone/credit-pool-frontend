@@ -6,16 +6,20 @@ type Props = {
   title: NonNullable<React.ReactNode>;
   value: NonNullable<React.ReactNode>;
   subValue?: React.ReactNode;
+  chart?: React.ReactNode;
 };
 
 export function Metric(props: Props) {
-  const { title, value, subValue } = props;
+  const { title, value, subValue, chart } = props;
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <div className={classes.title}>{title}</div>
-      <div className={classes.value}>{value}</div>
+      <div className={classes.value}>
+        {value}
+        {chart && <div className={classes.chart}>{chart}</div>}
+      </div>
       {subValue && <div className={classes.subValue}>{subValue}</div>}
     </div>
   );
@@ -28,7 +32,8 @@ const useStyles = makeStyles(
       fontSize: 16,
     },
     value: {
-      marginTop: 13,
+      display: 'flex',
+      alignItems: 'center',
       fontSize: 32,
       fontWeight: 300,
       lineHeight: 'normal',
@@ -36,6 +41,11 @@ const useStyles = makeStyles(
     subValue: {
       marginTop: 8,
       fontSize: 16,
+    },
+    chart: {
+      marginBottom: 5,
+      marginLeft: 10,
+      alignSelf: 'flex-end',
     },
   }),
   { name: 'Metric' },

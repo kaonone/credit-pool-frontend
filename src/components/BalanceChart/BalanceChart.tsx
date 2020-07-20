@@ -39,7 +39,7 @@ function BalanceChart<P extends IPoint>(props: IProps<P>) {
 
   return (
     <Card className={classes.root}>
-      <CardContent>
+      <CardContent className={classes.cardContent}>
         <Typography className={classes.title} variant="subtitle2">
           {title}
         </Typography>
