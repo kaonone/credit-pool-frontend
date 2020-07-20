@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Title, FormattedAmount, Metric, Loading } from 'components';
+import { Label, FormattedAmount, Metric, Loading } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
@@ -17,7 +17,7 @@ export function AvgPoolAPY() {
 
   return (
     <Metric
-      title={<Title hint={t(tKeys.description.getKey())}>APY</Title>}
+      title={<Label hint={t(tKeys.description.getKey())}>APY</Label>}
       value={
         <Loading meta={avgPoolAPYMeta}>
           {avgPoolAPY && <FormattedAmount sum={avgPoolAPY} />}

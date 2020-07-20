@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { empty } from 'rxjs';
 
-import { Metric, Title, FormattedAmount, Loading } from 'components';
+import { Metric, Label, FormattedAmount, Loading } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
@@ -20,7 +20,7 @@ export function AvailableBalance() {
 
   return (
     <Metric
-      title={<Title hint={t(tKeys.description.getKey())}>{t(tKeys.myBalance.getKey())}</Title>}
+      title={<Label hint={t(tKeys.description.getKey())}>{t(tKeys.myBalance.getKey())}</Label>}
       value={
         <Loading meta={[accountMeta, availableBalanceMeta]}>
           {availableBalance && <FormattedAmount sum={availableBalance} />}

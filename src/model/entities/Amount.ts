@@ -41,6 +41,10 @@ export abstract class Amount<C extends ICurrency> implements IToBN, IToFraction 
     return this.value.isZero();
   }
 
+  public isNeg(): boolean {
+    return this.value.isNeg();
+  }
+
   // TODO make allowance for currency.decimals
   public gt(value: Value): boolean {
     return this.value.gt(toFraction(value));

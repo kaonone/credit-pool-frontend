@@ -28,6 +28,18 @@ const en = {
           liquidations: 'Liquidations',
         },
       },
+      strategies: {
+        liquidityProvisionTitle: 'Liquidity provision',
+        liquidityProvisionHint: 'Liquidity provision',
+        lendingTitle: 'Lending',
+        borrowingTitle: 'Borrowing',
+        liquidityAdvantages: 'Passive Interest, Lower Risks',
+        lendingAdvantages: 'High Interest, High Risk',
+        borrowingAdvantages: 'Only 50% Collateral',
+        liquidityButton: 'Become Liquidity Provider',
+        lendingButton: 'Lend',
+        borrowingButton: 'Borrow',
+      },
     },
     components: {
       header: {
@@ -370,6 +382,9 @@ const en = {
       expansionPanelTitle: 'Reason',
     },
     metrics: {
+      akro: {
+        description: 'Here is a title description',
+      },
       myBalance: {
         myBalance: 'My balance (USD)',
         deposit: 'Deposit',
@@ -384,9 +399,46 @@ const en = {
         description: 'Here is a title description',
         withdraw: 'Withdraw',
       },
-      akro: {
-        description: 'Here is a title description',
+      allMyIssuedLoans: {
+        label: 'Overall loans issued by me',
       },
+      overallAPY: {
+        label: 'Overall APY',
+      },
+      risk: {
+        label: 'Risk',
+        description: 'Risk description',
+      },
+      outstandingLoans: {
+        label: 'Outstanding loans',
+        description: 'Outstanding loans description',
+      },
+      activeAPYFromOutstandingLoans: {
+        label: 'Active APY from outstanding loans',
+        description: 'Outstanding loans description',
+      },
+      poolSize: {
+        poolSize: 'Pool size',
+        established: 'Established',
+      },
+      dayChange: '24h Change',
+      poolAPY: 'Pool APY',
+      averageLoanAPY: 'Average Loan APY',
+      activeMembers: 'Active Members',
+      averageLoanSize: 'Average Loan Size',
+      loanVolumeGranted: 'Loan Volume Granted',
+      loanVolumeRequested: 'Loan Volume Requested',
+      loanApprovalRatio: 'Loan Approval Ratio',
+      totalValueLocked: 'Total Value Locked',
+      totalAKROEarned: 'Total AKRO Earned',
+      averagePassiveAPY: 'Average passive APY',
+      averageAPY: 'Average APY',
+      proposals: 'Proposals',
+      averageLoanTerm: 'AverageLoanTerm',
+      availableForBorrowing: 'Maximum Available for Borrowing',
+      totalBorrowed: 'Total Borrowed',
+      minimumAPY: 'Minimum APY',
+      loanTerm: 'Loan Term',
     },
     portfolioSnapshot: {
       caption: 'Portfolio Snapshot',
@@ -403,6 +455,15 @@ const en = {
     poolBalanceChart: {
       ptkDepositPrice: 'ASPT Deposit Price',
       ptkWithdrawalPrice: 'ASPT Withdrawal Price',
+    },
+    poolCompositionChart: {
+      poolComposition: 'Pool Composition',
+    },
+    availableLoansChart: {
+      totalAvailable: 'Total Available for Loans',
+    },
+    deFiScoreChart: {
+      deFiScore: 'DeFi Score',
     },
   },
 };

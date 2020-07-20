@@ -4,7 +4,7 @@ import { empty } from 'rxjs';
 
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { makeStyles } from 'utils/styles';
-import { Metric, Title, FormattedAmount, Loading } from 'components';
+import { Metric, Label, FormattedAmount, Loading } from 'components';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 
@@ -27,7 +27,7 @@ export function MyPoolShare() {
 
   return (
     <Metric
-      title={<Title hint={t(tKeys.description.getKey())}>{t(tKeys.myPoolShare.getKey())}</Title>}
+      title={<Label hint={t(tKeys.description.getKey())}>{t(tKeys.myPoolShare.getKey())}</Label>}
       value={
         <Loading meta={userShareMeta}>{userShare && <FormattedAmount sum={userShare} />}</Loading>
       }
