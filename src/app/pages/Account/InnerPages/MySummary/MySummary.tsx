@@ -2,7 +2,7 @@ import * as React from 'react';
 import Divider from '@material-ui/core/Divider';
 
 import { MyBalance, MyPoolShare, APY, AKRO } from 'features/metrics';
-import { Grid, PortfolioSnapshot, ComingSoon } from 'components';
+import { Grid, PortfolioSnapshot, YieldSummary } from 'components';
 import { makeStyles } from 'utils/styles';
 
 export function MySummary() {
@@ -59,7 +59,7 @@ export function MySummary() {
           />
         </Grid>
         <Grid item xs={5}>
-          <ComingSoon />
+          <YieldSummary />
         </Grid>
       </Grid>
     </div>
