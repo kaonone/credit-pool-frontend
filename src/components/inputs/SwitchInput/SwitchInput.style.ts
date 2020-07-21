@@ -3,18 +3,21 @@ import { makeStyles } from 'utils/styles';
 const thumbSize = 14;
 const borderOffset = 3;
 const controlWidth = 34;
+const controlPadding = 9;
 const borderRadius = 24;
 
 export const useStyles = makeStyles(
   theme => ({
     root: {
-      width: controlWidth,
-      height: thumbSize + 2 * borderOffset,
-      padding: 0,
-      marginRight: 10,
+      width: controlWidth + 2 * controlPadding,
+      height: thumbSize + 2 * (borderOffset + controlPadding),
+      padding: 9,
     },
+
     switchBase: {
-      padding: borderOffset,
+      top: borderOffset,
+      bottom: borderOffset,
+      left: borderOffset,
       '&$checked': {
         transform: 'translateX(14px)',
 
@@ -23,11 +26,13 @@ export const useStyles = makeStyles(
         },
       },
     },
+
     thumb: {
       position: 'relative',
       width: thumbSize,
       height: thumbSize,
       background: theme.colors.independence,
+      boxShadow: 'none',
 
       '&:after': {
         display: 'block',
@@ -43,6 +48,7 @@ export const useStyles = makeStyles(
         transition: theme.transitions.create(['opacity']),
       },
     },
+
     track: {
       borderRadius,
       border: 'none',
@@ -78,6 +84,7 @@ export const useStyles = makeStyles(
         transition: theme.transitions.create(['opacity']),
       },
     },
+
     checked: {},
   }),
   { name: 'SwitchInput' },
