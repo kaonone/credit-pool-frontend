@@ -1,29 +1,28 @@
 import React from 'react';
-import BN from 'bn.js';
-import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 
-import { NewTable, FormattedBalance, ShortAddress, Grid } from 'components';
+import { NewTable, FormattedAmount, AccountAddress } from 'components';
+import { TokenAmount } from 'model/entities';
 
 export type Order = {
   date: number;
-  profit: number;
-  claimed: number;
+  profit: TokenAmount;
+  claimed: TokenAmount;
   usersLength: number;
-  deals: Deal[];
+  claims: Claim[];
 };
 
-export type Deal = {
-  currency: number;
+export type Claim = {
+  amount: TokenAmount;
   address: string;
   date: number;
 };
 
-export const columnsWithSubtable: Array<NewTable.models.Column<Order, Deal>> = [
+export const columnsWithSubtable: Array<NewTable.models.Column<Order, Claim>> = [
   {
     renderTitle: () => 'Date',
     cellContent: {
       kind: 'simple',
-      render: x => new Date(new BN(x.date).toNumber() * 1000).toLocaleString(),
+      render: x => new Date(x.date).toLocaleString(),
     },
   },
 
@@ -31,7 +30,7 @@ export const columnsWithSubtable: Array<NewTable.models.Column<Order, Deal>> = [
     renderTitle: () => 'LPs Profit',
     cellContent: {
       kind: 'simple',
-      render: x => <FormattedBalance sum={new BN(x.profit)} token="ptk" />,
+      render: x => <FormattedAmount sum={x.profit} />,
     },
   },
 
@@ -39,7 +38,7 @@ export const columnsWithSubtable: Array<NewTable.models.Column<Order, Deal>> = [
     renderTitle: () => 'Claimed',
     cellContent: {
       kind: 'simple',
-      render: x => <FormattedBalance sum={new BN(x.claimed)} token="ptk" />,
+      render: x => <FormattedAmount sum={x.claimed} />,
     },
   },
 
@@ -57,26 +56,21 @@ export const columnsWithSubtable: Array<NewTable.models.Column<Order, Deal>> = [
       kind: 'for-row-expander',
       expandedArea: {
         kind: 'subtable',
-        getSubtableEntries: x => x.deals,
+        getSubtableEntries: x => x.claims,
         subtableColumns: [
           {
             renderTitle: () => 'Date',
-            renderCell: x => new Date(new BN(x.date).toNumber() * 1000).toLocaleString(),
+            renderCell: x => new Date(x.date).toLocaleString(),
           },
 
           {
             renderTitle: () => 'Address',
-            renderCell: x => (
-              <Grid container>
-                <Jazzicon diameter={20} seed={jsNumberForAddress(x.address)} />
-                <ShortAddress address={x.address} disableCopy />
-              </Grid>
-            ),
+            renderCell: x => <AccountAddress address={x.address} size="small" />,
           },
 
           {
             renderTitle: () => 'Claimed',
-            renderCell: x => <FormattedBalance sum={new BN(x.currency)} token="ptk" />,
+            renderCell: x => <FormattedAmount sum={x.amount} />,
           },
         ],
       },

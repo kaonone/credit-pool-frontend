@@ -4,9 +4,15 @@ query DistributionEvents($first: Int!, $skip: Int!) {
     date
     amount
     claimed
-    totalSupply
     poolState {
       usersLength
+    }
+    claims(first: 10, orderBy: date, orderDirection: asc) {
+      date
+      pAmount
+      user {
+        id
+      }
     }
   }
 }
