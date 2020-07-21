@@ -36,7 +36,7 @@ export function FormTemplate<FormValues extends AnyObject>(props: FormTemplatePr
     >
       {({ handleSubmit, submitError, submitting, dirtySinceLastSubmit }) => (
         <form onSubmit={handleSubmit}>
-          <Grid container justify="center" spacing={2}>
+          <Grid container justify="center" spacing={4}>
             <Grid item xs={12}>
               <Typography variant="h5" gutterBottom>
                 {title}
@@ -48,7 +48,9 @@ export function FormTemplate<FormValues extends AnyObject>(props: FormTemplatePr
                 item
                 xs={12}
                 className={cn(classes.formElement, {
-                  [classes.withoutBorder]: index === children.length - 1,
+                  // TODO uncomment after forms redesign
+                  // [classes.withoutBorder]: index === children.length - 1,
+                  [classes.withoutBorder]: true,
                 })}
               >
                 {item}
@@ -86,11 +88,11 @@ export function FormTemplate<FormValues extends AnyObject>(props: FormTemplatePr
 
 const useStyles = makeStyles(() => ({
   formElement: {
-    padding: '30px 0 !important',
-    margin: '0 9px',
     borderBottom: '1px solid rgba(255,255,255,0.1)',
+    marginBottom: 24,
   },
   withoutBorder: {
     border: 'none',
+    marginBottom: 0,
   },
 }));

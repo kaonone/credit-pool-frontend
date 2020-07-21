@@ -14,6 +14,7 @@ import { SwitchInput } from 'components/inputs';
 import { useSubgraphPagination } from 'utils/react';
 import { useUsersQuery } from 'generated/gql/pool';
 import { BuyingShareButton } from 'features/buyShare';
+import { CreatingLoanProposalButton } from 'features/createLoanProposal';
 
 import * as tableData from './tableData';
 
@@ -52,7 +53,14 @@ export function DemoPage() {
         </Grid>
       </Grid>
 
-      <BuyingShareButton />
+      <Grid container spacing={2}>
+        <Grid item xs>
+          <CreatingLoanProposalButton variant="contained" color="primary" />
+        </Grid>
+        <Grid item xs>
+          <BuyingShareButton variant="contained" color="primary" />
+        </Grid>
+      </Grid>
 
       <div style={{ marginTop: '30px' }}>
         <NewTable.Component
