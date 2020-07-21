@@ -13,6 +13,7 @@ import {
 import { SwitchInput } from 'components/inputs';
 import { useSubgraphPagination } from 'utils/react';
 import { useUsersQuery } from 'generated/gql/pool';
+import { BuyingShareButton } from 'features/buyShare';
 
 import * as tableData from './tableData';
 
@@ -50,6 +51,8 @@ export function DemoPage() {
           <DeFiScoreChart />
         </Grid>
       </Grid>
+
+      <BuyingShareButton />
 
       <div style={{ marginTop: '30px' }}>
         <NewTable.Component
