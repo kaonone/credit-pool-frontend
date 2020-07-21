@@ -1,6 +1,9 @@
 import * as React from 'react';
+import { useHistory } from 'react-router';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import Avatar from '@material-ui/core/Avatar';
+import BN from 'bn.js';
+import { of } from 'rxjs';
 
 import { NETWORK_ID } from 'env';
 import { useApi } from 'services/api';
@@ -26,17 +29,34 @@ export function AuthButton() {
 
   const toggleIsOpened = React.useCallback(() => setIsOpened(!isOpened), [isOpened]);
 
+  const history = useHistory();
+
   const handleDisconnectClick = React.useCallback(() => {
     api.web3Manager.disconnect();
     connectCommunication.reset();
     setIsOpened(false);
   }, [connectCommunication.reset]);
 
+  const [distributionBalance] = useSubscribable(
+    () => (account ? api.pToken.getDistributionBalanceOf$(account) : of(new BN(0))),
+    [api, account],
+    new BN(0),
+  );
+
   useOnChangeState(
     { isOpened, connectedWallet },
     (prev, cur) =>
       cur.isOpened && !!cur.connectedWallet && prev.connectedWallet !== cur.connectedWallet,
-    () => setIsOpened(false),
+    () => {
+      // eslint-disable-next-line no-console
+      console.log(distributionBalance);
+      if (account) {
+        history.push('/account');
+      } else {
+        history.push('/strategies');
+      }
+      setIsOpened(false);
+    },
   );
 
   return (

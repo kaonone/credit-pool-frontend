@@ -1,7 +1,11 @@
 import React from 'react';
 import cn from 'classnames';
 import SvgIcon from '@material-ui/core/SvgIcon';
+import BN from 'bn.js';
+import { of } from 'rxjs';
 
+import { useSubscribable, useOnChangeState } from 'utils/react';
+import { useApi } from 'services/api';
 import { tKeys } from 'services/i18n';
 import { IconButton } from 'components';
 import * as icons from 'components/icons/navigation';
@@ -49,15 +53,43 @@ const upperLinks: Link.models.Link[] = [
   },
 ];
 
+const requeredLinks = [
+  tKeys.modules.navigation.account.getKey(),
+  tKeys.modules.navigation.lend.getKey(),
+  tKeys.modules.navigation.borrow.getKey(),
+];
+
 export const Sidebar: React.FC = () => {
   const classes = useStyles();
 
   const [isExpanded, setCloseSidebar] = React.useState(() => sidebarStorage.getItem('isExpanded'));
+  const [links, setLinks] = React.useState(upperLinks);
 
   const handleExpanded = () => {
     sidebarStorage.setItem('isExpanded', !isExpanded);
     setCloseSidebar(!isExpanded);
   };
+
+  const api = useApi();
+  const [account] = useSubscribable(() => api.web3Manager.account, [], null);
+  const [connectedWallet] = useSubscribable(() => api.web3Manager.connectedWallet, [], null);
+
+  const [distributionBalance] = useSubscribable(
+    () => (account ? api.pToken.getDistributionBalanceOf$(account) : of(new BN(0))),
+    [api, account],
+    new BN(0),
+  );
+
+  useOnChangeState(
+    { connectedWallet },
+    (prev, cur) => !!cur.connectedWallet && prev.connectedWallet !== cur.connectedWallet,
+    () =>
+      setLinks(
+        account && distributionBalance
+          ? upperLinks
+          : upperLinks.filter(link => requeredLinks.find(reqLink => reqLink === link.label)),
+      ),
+  );
 
   return (
     <div
@@ -67,7 +99,7 @@ export const Sidebar: React.FC = () => {
       })}
     >
       <div className={classes.upperPart}>
-        <nav className={classes.upperLinks}>{upperLinks.map(makeLinkRenderer())}</nav>
+        <nav className={classes.upperLinks}>{links.map(makeLinkRenderer())}</nav>
       </div>
       <div className={classes.lowerPart}>
         <div className={classes.lowerPart}>{renderSwitch()}</div>
