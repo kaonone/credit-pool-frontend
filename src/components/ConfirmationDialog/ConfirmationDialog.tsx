@@ -5,11 +5,12 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Drawer from '@material-ui/core/Drawer';
+import CloseIcon from '@material-ui/icons/Close';
 
 import { useCommunication, ISubscriptionMeta } from 'utils/react';
 import { Loading } from 'components/Loading';
 import { Hint } from 'components/Hint/Hint';
-import { WithDarkTheme } from 'utils/styles';
+import { WithDarkTheme, makeStyles } from 'utils/styles';
 
 import { Button } from '../Button/Button';
 
@@ -43,6 +44,8 @@ function ConfirmationDialog(props: IProps) {
   const communication = useCommunication(onConfirm, []);
   const { status, error } = communication;
 
+  const classes = useStyles();
+
   const handleCancel = useCallback(() => {
     onCancel && onCancel();
     communication.reset();
@@ -55,7 +58,7 @@ function ConfirmationDialog(props: IProps) {
       ({
         dialog: ({ children }: { children: React.ReactNode }) => (
           <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={handleCancel}>
-            <DialogContent>{children}</DialogContent>
+            <DialogContent className={classes.content}>{children}</DialogContent>
           </Dialog>
         ),
         drawer: ({ children }: { children: React.ReactNode }) => (
@@ -72,6 +75,7 @@ function ConfirmationDialog(props: IProps) {
   return (
     <Wrapper>
       <Grid container justify="center" spacing={2}>
+        <CloseIcon className={classes.closeButton} onClick={handleCancel} />
         {title && (
           <Grid item xs={12}>
             <Typography variant="h5" gutterBottom>
@@ -79,7 +83,7 @@ function ConfirmationDialog(props: IProps) {
             </Typography>
           </Grid>
         )}
-        <Grid item xs={12}>
+        <Grid item xs={12} className={classes.message}>
           {typeof message === 'string' ? (
             <Typography>{message}</Typography>
           ) : (
@@ -125,5 +129,21 @@ function ConfirmationDialog(props: IProps) {
     </Wrapper>
   );
 }
+
+const useStyles = makeStyles({
+  closeButton: {
+    position: 'absolute',
+    top: 24,
+    right: 24,
+    opacity: 0.5,
+    cursor: 'pointer',
+  },
+  content: {
+    padding: '50px !important',
+  },
+  message: {
+    marginBottom: 30,
+  },
+});
 
 export { ConfirmationDialog };
