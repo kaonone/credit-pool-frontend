@@ -3,8 +3,10 @@ import { Form, FormProps } from 'react-final-form';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import cn from 'classnames';
 
 import { Hint } from 'components/Hint/Hint';
+import { makeStyles } from 'utils/styles';
 
 import { Button } from '../Button/Button';
 
@@ -25,6 +27,8 @@ export function FormTemplate<FormValues extends AnyObject>(props: FormTemplatePr
 
   const children = React.Children.toArray(restProps.children);
 
+  const classes = useStyles();
+
   return (
     <Form
       {...restProps}
@@ -37,15 +41,19 @@ export function FormTemplate<FormValues extends AnyObject>(props: FormTemplatePr
               <Typography variant="h5" gutterBottom>
                 {title}
               </Typography>
-
-              {children[0]}
             </Grid>
-            {children.length > 1 &&
-              children.slice(1).map((item, index) => (
-                <Grid key={index} item xs={12}>
-                  {item}
-                </Grid>
-              ))}
+            {children.map((item, index) => (
+              <Grid
+                key={index}
+                item
+                xs={12}
+                className={cn(classes.formElement, {
+                  [classes.withoutBorder]: index === children.length - 1,
+                })}
+              >
+                {item}
+              </Grid>
+            ))}
             {!dirtySinceLastSubmit && !!submitError && (
               <Grid item xs={12}>
                 <Hint>
@@ -75,3 +83,14 @@ export function FormTemplate<FormValues extends AnyObject>(props: FormTemplatePr
     </Form>
   );
 }
+
+const useStyles = makeStyles(() => ({
+  formElement: {
+    padding: '30px 0 !important',
+    margin: '0 9px',
+    borderBottom: '1px solid rgba(255,255,255,0.1)',
+  },
+  withoutBorder: {
+    border: 'none',
+  },
+}));

@@ -45,9 +45,9 @@ function ModalButton(props: IProps) {
   );
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   dialogContent: {
-    padding: theme.spacing(2.5),
+    padding: '50px !important',
   },
   closeButton: {
     position: 'absolute',
