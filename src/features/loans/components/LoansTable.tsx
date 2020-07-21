@@ -12,13 +12,14 @@ import {
   Table as GeneralTable,
   MakeTableType,
   FormattedBalance,
+  AccountAddress,
 } from 'components';
 import { Status } from 'generated/gql/pool';
 import { formatBalance } from 'utils/format';
 import { useSubscribable } from 'utils/react';
 import { getLoanDuePaymentDate } from 'model';
 
-import { AddressCell, MyEarnCell, StatusCell } from './LoansTableCells';
+import { MyEarnCell, StatusCell } from './LoansTableCells';
 import { ActionsCell } from './ActionsCell';
 import { PartialDebt } from './types';
 
@@ -69,7 +70,7 @@ export function LoansTable({ list, hideColumns = [], paginationView }: Props) {
                   <Table.Column>
                     <Table.Head>{t(tKeys.address.getKey())}</Table.Head>
                     <Table.Cell>
-                      {({ data }) => <AddressCell address={data.borrower.id} />}
+                      {({ data }) => <AccountAddress address={data.borrower.id} />}
                     </Table.Cell>
                   </Table.Column>
                 )}

@@ -1,29 +1,11 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import Avatar from '@material-ui/core/Avatar';
-import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 
-import { ShortAddress, Loading, FormattedAmount } from 'components';
+import { Loading, FormattedAmount } from 'components';
 import { getPledgeId } from 'model/getPledgeId';
 import { usePledgeSubscription, Status } from 'generated/gql/pool';
 import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
 import { useTranslate } from 'services/i18n';
-
-export function AddressCell({ address }: { address: string }) {
-  return (
-    <Grid container alignItems="center" spacing={1}>
-      <Grid item>
-        <Avatar>
-          <Jazzicon diameter={40} seed={jsNumberForAddress(address)} />
-        </Avatar>
-      </Grid>
-      <Grid item>
-        <ShortAddress address={address} />
-      </Grid>
-    </Grid>
-  );
-}
 
 interface MyEarnCellProps {
   supporter: string;

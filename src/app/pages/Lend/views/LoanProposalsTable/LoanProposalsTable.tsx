@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { NewTable, Label, Button } from 'components';
+import { NewTable, Label, Button, AccountAddress } from 'components';
 import { DAIIcon } from 'components/icons';
 import { makeStyles } from 'utils/styles';
 
@@ -12,7 +12,13 @@ const columns: Array<NewTable.models.Column<any>> = [
     renderTitle: () => 'Borrower',
     cellContent: {
       kind: 'simple',
-      render: () => '0x5d50...218b',
+      render: () => (
+        <>
+          <div style={{ display: 'inline-flex' }}>
+            <AccountAddress address="0x5d50...218b" size="small" />
+          </div>
+        </>
+      ),
     },
   },
 
