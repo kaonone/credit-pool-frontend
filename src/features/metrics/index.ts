@@ -1,6 +1,6 @@
-export { MyBalance } from './MyBalance';
+export { AvailableBalance as MyBalance } from './AvailableBalance';
 export { MyPoolShare } from './MyPoolShare';
-export { APY } from './APY';
+export { AvgPoolAPY } from './AvgPoolAPY';
 export { AKRO } from './AKRO';
 export { AllMyIssuedLoans } from './AllMyIssuedLoans';
 export { OverallAPY } from './OverallAPY';

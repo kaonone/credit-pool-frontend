@@ -20,10 +20,12 @@ export { default as CardContent } from '@material-ui/core/CardContent';
 export { default as FormControlLabel } from '@material-ui/core/FormControlLabel';
 export { default as Radio } from '@material-ui/core/Radio';
 export { default as Link, LinkProps } from '@material-ui/core/Link';
+export { default as Tab } from '@material-ui/core/Tab';
+
+export { default as Skeleton } from '@material-ui/lab/Skeleton';
 export { default as TabsList } from '@material-ui/lab/TabList';
 export { default as TabPanel } from '@material-ui/lab/TabPanel';
 export { default as TabContext } from '@material-ui/lab/TabContext';
-export { default as Tab } from '@material-ui/core/Tab';
 
 export { NavMenuItem } from './NavMenuItem/NavMenuItem';
 export { AkropolisSocialLinks } from './AkropolisSocialLinks/AkropolisSocialLinks';

@@ -24,7 +24,7 @@ export function WithdrawDistributionsButton(props: IProps) {
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
   const [unclaimedDistributions, unclaimedDistributionsMeta] = useSubscribable(
-    () => api.tokens.getUnclaimedDistributions$(account || zeroAddress),
+    () => api.pToken.getUnclaimedDistributions$(account || zeroAddress),
     [account],
     new BN(0),
   );
@@ -45,7 +45,7 @@ export function WithdrawDistributionsButton(props: IProps) {
   });
 
   const handleActivate = useCallback(async (): Promise<void> => {
-    account && (await api.tokens.withdrawUnclaimedDistributions(account));
+    account && (await api.pToken.withdrawUnclaimedDistributions(account));
     close();
   }, [account]);
 
