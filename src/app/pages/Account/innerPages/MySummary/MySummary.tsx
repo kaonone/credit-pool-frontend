@@ -2,6 +2,8 @@ import * as React from 'react';
 import Divider from '@material-ui/core/Divider';
 
 import { MyBalance, MyPoolShare, AvgPoolAPY, AKRO } from 'features/metrics';
+import { BuyingShareButton } from 'features/buyShare';
+import { SellingShareButton } from 'features/sellShare';
 import { Grid, PortfolioSnapshot, YieldSummary } from 'components';
 import { makeStyles } from 'utils/styles';
 
@@ -10,22 +12,28 @@ export function MySummary() {
 
   return (
     <div>
-      <Grid container>
-        <Grid item xs container spacing={4}>
-          <Grid item xs>
-            <MyBalance />
-          </Grid>
-          <Grid item xs>
-            <MyPoolShare />
-          </Grid>
+      <Grid container spacing={4}>
+        <Grid item xs>
+          <MyBalance />
+        </Grid>
+        <Grid item xs>
+          <MyPoolShare />
         </Grid>
         <Divider orientation="vertical" className={classes.divider} flexItem />
-        <Grid item xs container spacing={4}>
-          <Grid item xs>
-            <AvgPoolAPY />
-          </Grid>
-          <Grid item xs>
-            <AKRO />
+        <Grid item xs>
+          <AvgPoolAPY />
+        </Grid>
+        <Grid item xs>
+          <AKRO />
+        </Grid>
+        <Grid item xs={12}>
+          <Grid container spacing={8}>
+            <Grid item xs>
+              <BuyingShareButton variant="contained" color="primary" />
+            </Grid>
+            <Grid item xs>
+              <SellingShareButton variant="contained" color="primary" />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
@@ -73,7 +81,7 @@ export function MySummary() {
 const useStyles = makeStyles(
   theme => ({
     divider: {
-      margin: theme.spacing(0, 5),
+      margin: theme.spacing(0, 2),
     },
     contentDivider: {
       marginTop: 45,

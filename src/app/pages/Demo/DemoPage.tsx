@@ -13,6 +13,8 @@ import {
 import { SwitchInput, RadioGroupInput, RadioButton } from 'components/inputs';
 import { useSubgraphPagination } from 'utils/react';
 import { useUsersQuery } from 'generated/gql/pool';
+import { BuyingShareButton } from 'features/buyShare';
+import { CreatingLoanProposalButton } from 'features/createLoanProposal';
 
 import * as tableData from './tableData';
 
@@ -48,6 +50,15 @@ export function DemoPage() {
         </Grid>
         <Grid item xs={6}>
           <DeFiScoreChart />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2}>
+        <Grid item xs>
+          <CreatingLoanProposalButton variant="contained" color="primary" />
+        </Grid>
+        <Grid item xs>
+          <BuyingShareButton variant="contained" color="primary" />
         </Grid>
       </Grid>
 
