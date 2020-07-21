@@ -85,9 +85,9 @@ export const Sidebar: React.FC = () => {
     (prev, cur) => !!cur.connectedWallet && prev.connectedWallet !== cur.connectedWallet,
     () =>
       setLinks(
-        account && distributionBalance
-          ? upperLinks
-          : upperLinks.filter(link => requeredLinks.find(reqLink => reqLink === link.label)),
+        distributionBalance.isZero()
+          ? upperLinks.filter(link => requeredLinks.find(reqLink => reqLink === link.label))
+          : upperLinks,
       ),
   );
 

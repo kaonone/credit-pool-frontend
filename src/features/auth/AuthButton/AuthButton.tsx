@@ -48,12 +48,10 @@ export function AuthButton() {
     (prev, cur) =>
       cur.isOpened && !!cur.connectedWallet && prev.connectedWallet !== cur.connectedWallet,
     () => {
-      // eslint-disable-next-line no-console
-      console.log(distributionBalance);
-      if (account) {
-        history.push('/account');
-      } else {
+      if (distributionBalance.isZero()) {
         history.push('/strategies');
+      } else {
+        history.push('/account');
       }
       setIsOpened(false);
     },
