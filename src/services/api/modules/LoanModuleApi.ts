@@ -20,23 +20,14 @@ import {
 import { RepaymentMethod } from 'model/types';
 import { calcWithdrawAmountBeforeFee } from 'model';
 import { TokenAmount, LiquidityAmount } from 'model/entities';
+import { getCurrentValueOrThrow } from 'utils/rxjs';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
-import { TokensApi } from './TokensApi';
+import { Erc20Api } from './Erc20Api';
 import { FundsModuleApi } from './FundsModuleApi';
 import { SwarmApi } from './SwarmApi';
 import { CurveModuleApi } from './CurveModuleApi';
-
-function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNullable<T> {
-  const value = subject.getValue();
-
-  if (value === null || value === undefined) {
-    throw new Error('Subject is not contain non nullable value');
-  }
-
-  return value as NonNullable<T>;
-}
 
 function first<T>(input: Observable<T>): Promise<T> {
   return input.pipe(firstOperator()).toPromise();
@@ -57,7 +48,7 @@ export class LoanModuleApi {
 
   constructor(
     private web3Manager: Web3ManagerModule,
-    private tokensApi: TokensApi,
+    private erc20Api: Erc20Api,
     private transactionsApi: TransactionsApi,
     private fundsModuleApi: FundsModuleApi,
     private swarmApi: SwarmApi,
@@ -233,7 +224,7 @@ export class LoanModuleApi {
     const pAmount = await first(
       this.fundsModuleApi.convertLiquidityToPtkExit$(sourceAmount.add(pledgeMargin)),
     );
-    const pBalance = await first(this.tokensApi.getPtkBalance$(fromAddress));
+    const pBalance = await first(this.erc20Api.getPtkBalance$(fromAddress));
 
     const promiEvent = txLoanModule.methods.addPledge(
       {
@@ -335,7 +326,7 @@ export class LoanModuleApi {
 
     const minLCollateral = await first(this.getMinLoanCollateral$(sourceAmount));
     const pAmount = await first(this.fundsModuleApi.convertLiquidityToPtkExit$(minLCollateral));
-    const pBalance = await first(this.tokensApi.getPtkBalance$(fromAddress));
+    const pBalance = await first(this.erc20Api.getPtkBalance$(fromAddress));
 
     const promiEvent = txLoanModule.methods.createDebtProposal(
       {
@@ -447,7 +438,7 @@ export class LoanModuleApi {
       const pAmount = await first(
         this.fundsModuleApi.convertLiquidityToPtkExit$(totalWithdrawAmount),
       );
-      const pBalance = await first(this.tokensApi.getPtkBalance$(fromAddress));
+      const pBalance = await first(this.erc20Api.getPtkBalance$(fromAddress));
 
       promiEvent = txLoanModule.methods.repayPTK(
         {
@@ -458,7 +449,7 @@ export class LoanModuleApi {
         { from: fromAddress },
       );
     } else {
-      await this.tokensApi.approve(
+      await this.erc20Api.approve(
         fromAddress,
         ETH_NETWORK_CONFIG.contracts.fundsModule,
         tokenAmountAfterFee,
@@ -481,7 +472,7 @@ export class LoanModuleApi {
 
   @memoize(R.identity)
   public getMaxAvailableLoanSizeInDai$(address: string): Observable<BN> {
-    return this.tokensApi.getPtkBalance$(address).pipe(
+    return this.erc20Api.getPtkBalance$(address).pipe(
       switchMap(balance => {
         return this.fundsModuleApi.getPtkToDaiExitInfo$(balance.toString());
       }),

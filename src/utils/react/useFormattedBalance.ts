@@ -25,10 +25,9 @@ export function useFormattedBalance(
   variant: 'short' | 'long' = 'long',
 ): [FormattedBalance, ISubscriptionMeta] {
   const api = useApi();
-  const [token, tokenMeta] = useSubscribable(
-    () => api.tokens.getToken$(addressByToken[tokenType]),
-    [tokenType],
-  );
+  const [token, tokenMeta] = useSubscribable(() => api.erc20.getToken$(addressByToken[tokenType]), [
+    tokenType,
+  ]);
 
   return [
     (token && {

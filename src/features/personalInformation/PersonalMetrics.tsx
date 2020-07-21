@@ -49,7 +49,7 @@ function PersonalMetrics(props: Props) {
   );
 
   const [unclaimedDistributions, unclaimedDistributionsMeta] = useSubscribable(
-    () => api.tokens.getUnclaimedDistributions$(account || zeroAddress),
+    () => api.pToken.getUnclaimedDistributions$(account || zeroAddress),
     [account],
     new BN(0),
   );

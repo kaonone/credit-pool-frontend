@@ -13,7 +13,7 @@ export function makeSubgraphApi(apolloClient: ApolloClient<any>): SubgraphApi {
       if (query.startsWith('subscription')) {
         const observable = apolloClient.subscribe({ query: gql(query), variables });
         observable.subscribe(
-          (value: any) => subject.next(value),
+          (value: any) => subject.next(value?.data),
           (value: any) => subject.error(value),
           () => subject.complete(),
         );
@@ -21,7 +21,7 @@ export function makeSubgraphApi(apolloClient: ApolloClient<any>): SubgraphApi {
         const promise = apolloClient.query({ query: gql(query), variables });
         promise
           .then((value: any) => {
-            subject.next(value);
+            subject.next(value?.data);
             subject.complete();
           })
           .catch((value: any) => subject.error(value));

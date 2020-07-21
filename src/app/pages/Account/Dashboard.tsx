@@ -63,7 +63,7 @@ function Balance() {
   const api = useApi();
   const [account] = useSubscribable(() => api.web3Manager.account, []);
   const [ptkBalance, ptkBalanceMeta] = useSubscribable(
-    () => (account ? api.tokens.getPtkBalance$(account) : of(new BN(0))),
+    () => (account ? api.erc20.getPtkBalance$(account) : of(new BN(0))),
     [api, account],
     new BN(0),
   );
@@ -97,7 +97,7 @@ function Distribution() {
   const api = useApi();
   const [account] = useSubscribable(() => api.web3Manager.account, []);
   const [accumulated, accumulatedMeta] = useSubscribable(
-    () => (account ? api.tokens.getAccumulatedUserDistributions$(account) : of(new BN(0))),
+    () => (account ? api.pToken.getAccumulatedUserDistributions$(account) : of(new BN(0))),
     [api, account],
     new BN(0),
   );

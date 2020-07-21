@@ -77,7 +77,7 @@ export function LoanRepayingForm({
     new BN(0),
   );
   const [availableDaiBalance, availableDaiBalanceMeta] = useSubscribable(
-    () => api.tokens.getDaiBalance$(account || zeroAddress),
+    () => api.erc20.getDaiBalance$(account || zeroAddress),
     [api, account],
     new BN(0),
   );

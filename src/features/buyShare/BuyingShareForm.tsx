@@ -42,7 +42,7 @@ export function BuyingShareForm({ onCancel, account }: BuyingShareFormProps) {
   );
 
   const maxValue$ = useMemo(
-    () => (currentToken ? api.tokens.getBalance$(currentToken.address, account) : empty()),
+    () => (currentToken ? api.erc20.getBalance$(currentToken.address, account) : empty()),
     [api, account, currentToken],
   );
   const minValue$ = useMemo(
