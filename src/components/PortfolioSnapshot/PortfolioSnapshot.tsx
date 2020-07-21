@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { makeStyles, rgba, colors } from 'utils/styles';
 import { Label } from 'components/Label/Label';
+import { ComingSoon } from 'components/ComingSoon/ComingSoon';
 
 import { DAIIcon, USDTIcon, USDCIcon, TUSDIcon } from '../icons';
 
@@ -40,7 +41,8 @@ export function PortfolioSnapshot(props: Props) {
   const { t } = useTranslate();
 
   return (
-    <div>
+    <div className={classes.root}>
+      <ComingSoon />
       <table className={classes.table}>
         <caption className={classes.caption}>
           <Label fontSize="large" hint={t(tKeys.description.getKey())}>
@@ -100,6 +102,11 @@ function renderLoansIssued(
 
 const useStyles = makeStyles(
   () => ({
+    // TODO remove after integration
+    root: {
+      position: 'relative',
+    },
+
     table: {
       borderCollapse: 'collapse',
       fontWeight: 300,

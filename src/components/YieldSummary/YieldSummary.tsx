@@ -17,7 +17,7 @@ function YieldSummary() {
         <Label fontSize="large">{t(tKeysAll.components.yield.title.getKey())}</Label>
         <PeriodSwitch period="d" onSelect={() => {}} />
       </header>
-      <ComingSoon />
+      <ComingSoon position="overlay" />
       <div className={classes.chart} />
     </div>
   );

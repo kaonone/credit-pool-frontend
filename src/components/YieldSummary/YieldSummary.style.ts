@@ -9,7 +9,6 @@ export const useStyles = makeStyles(
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
-      padding: 10,
     },
 
     header: {

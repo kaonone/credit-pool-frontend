@@ -1,6 +1,10 @@
 import { Decimal } from 'model/types';
 
 export function getDecimal(value: string, baseDecimals: number, precision: number): Decimal {
+  if (value.length === 0 || value === '0') {
+    return { fractional: '', integer: '0' };
+  }
+
   const isNegative = value[0].startsWith('-');
   const positiveValue = isNegative ? value.substr(1) : value;
 

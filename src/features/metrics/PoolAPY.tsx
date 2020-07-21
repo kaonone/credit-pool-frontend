@@ -1,18 +1,19 @@
 import * as React from 'react';
 
-import { Label, FormattedAmount, Metric } from 'components';
+import { Metric, Label, FormattedAmount, ChartBlock } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { percentAmount } from 'utils/mock';
 
-const tKeys = tKeysAll.components.metrics.apy;
+const tKeys = tKeysAll.components.metrics;
 
-export function APY() {
+export function PoolAPY() {
   const { t } = useTranslate();
 
   return (
     <Metric
-      title={<Label hint={t(tKeys.description.getKey())}>APY</Label>}
+      title={<Label>{t(tKeys.poolAPY.getKey())}</Label>}
       value={<FormattedAmount sum={percentAmount} />}
+      chart={<ChartBlock />}
     />
   );
 }

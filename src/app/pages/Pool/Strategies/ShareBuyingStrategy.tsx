@@ -17,7 +17,7 @@ export function ShareBuyingStrategy() {
   const [account] = useSubscribable(() => api.web3Manager.account, []);
 
   const [daiBalance, daiBalanceMeta] = useSubscribable(
-    () => (account ? api.tokens.getDaiBalance$(account) : of(new BN(0))),
+    () => (account ? api.erc20.getDaiBalance$(account) : of(new BN(0))),
     [api, account],
     new BN(0),
   );
@@ -29,13 +29,13 @@ export function ShareBuyingStrategy() {
   );
 
   const [ptkDistributionBalance, ptkDistributionBalanceMeta] = useSubscribable(
-    () => (account ? api.tokens.getPtkDistributionBalance$(account) : of(new BN(0))),
+    () => (account ? api.pToken.getPtkDistributionBalance$(account) : of(new BN(0))),
     [api, account],
     new BN(0),
   );
 
   const [ptkTotalSupply, ptkTotalSupplyMeta] = useSubscribable(
-    () => (account ? api.tokens.getTotalSupply$(ETH_NETWORK_CONFIG.contracts.ptk) : of(new BN(0))),
+    () => (account ? api.erc20.getTotalSupply$(ETH_NETWORK_CONFIG.contracts.ptk) : of(new BN(0))),
     [api, account],
     new BN(0),
   );

@@ -39,6 +39,7 @@ export const Content: React.FC = () => {
         path={routes['terms-of-service'].getRoutePath()}
         component={makeUnimplementedComponent('Terms of service')}
       />
+      <Route exact path={routes.strategies.getRoutePath()} component={pages.StrategiesPage} />
       <Redirect to="/" />
     </Switch>
   );

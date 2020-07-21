@@ -1,38 +1,39 @@
 import BN from 'bn.js';
 
 import { ICurrency, IToBN, IToFraction, Decimal } from 'model/types';
-import { bnToBn } from 'utils/bn';
 
 import { Fraction } from './Fraction';
+
+export type Value = number | string | BN | IToBN | Fraction | IToFraction;
 
 export abstract class Amount<C extends ICurrency> implements IToBN, IToFraction {
   public abstract _type: symbol;
   private value: Fraction;
 
-  constructor(amount: string | BN | IToBN | Fraction | IToFraction, public readonly currency: C) {
+  constructor(amount: Value, public readonly currency: C) {
     this.value = toFraction(amount);
   }
 
-  public abstract makeAmount(amount: string | BN | IToBN | IToFraction, currency: C): this;
+  public abstract makeAmount(amount: Value, currency: C): this;
   public abstract toFormattedString(precision?: number, withSymbol?: boolean): string;
 
-  public withValue(newValue: string | BN | IToBN): this {
-    return this.makeAmount(bnToBn(newValue), this.currency);
+  public withValue(newValue: Value): this {
+    return this.makeAmount(toFraction(newValue), this.currency);
   }
 
-  public sub(value: BN | IToBN | IToFraction): this {
+  public sub(value: Value): this {
     return this.makeAmount(this.value.sub(toFraction(value)), this.currency);
   }
 
-  public add(value: BN | IToBN | IToFraction): this {
+  public add(value: Value): this {
     return this.makeAmount(this.value.add(toFraction(value)), this.currency);
   }
 
-  public div(value: number | BN | IToBN | IToFraction): this {
+  public div(value: Value): this {
     return this.makeAmount(this.value.div(toFraction(value)), this.currency);
   }
 
-  public mul(value: number | BN | IToBN | IToFraction): this {
+  public mul(value: Value): this {
     return this.makeAmount(this.value.mul(toFraction(value)), this.currency);
   }
 
@@ -40,8 +41,12 @@ export abstract class Amount<C extends ICurrency> implements IToBN, IToFraction 
     return this.value.isZero();
   }
 
+  public isNeg(): boolean {
+    return this.value.isNeg();
+  }
+
   // TODO make allowance for currency.decimals
-  public gt(value: number | BN | IToBN | IToFraction): boolean {
+  public gt(value: Value): boolean {
     return this.value.gt(toFraction(value));
   }
 
@@ -66,7 +71,7 @@ export abstract class Amount<C extends ICurrency> implements IToBN, IToFraction 
   }
 }
 
-function toFraction(value: number | string | BN | IToBN | Fraction | IToFraction): Fraction {
+function toFraction(value: Value): Fraction {
   if (value instanceof Fraction) {
     return value;
   }

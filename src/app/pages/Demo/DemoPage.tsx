@@ -1,7 +1,16 @@
 import * as React from 'react';
 
 import { AuthButton } from 'features/auth';
-import { Typography, Loading, NewTable } from 'components';
+import {
+  Typography,
+  Loading,
+  NewTable,
+  Grid,
+  AvailableLoansChart,
+  DeFiScoreChart,
+  Label,
+} from 'components';
+import { SwitchInput } from 'components/inputs';
 import { useSubgraphPagination } from 'utils/react';
 import { useUsersQuery } from 'generated/gql/pool';
 
@@ -33,12 +42,30 @@ export function DemoPage() {
         />
       </div>
 
+      <Grid container>
+        <Grid item xs={6}>
+          <AvailableLoansChart />
+        </Grid>
+        <Grid item xs={6}>
+          <DeFiScoreChart />
+        </Grid>
+      </Grid>
+
       <div style={{ marginTop: '30px' }}>
         <NewTable.Component
           withOuterPadding
           columns={tableData.columnsWithoutExpandableRows}
           entries={tableData.entries}
           summary={{ renderLabel: () => 'Sum', renderValue: () => 13 }}
+        />
+      </div>
+      <div style={{ margin: 30 }}>
+        <SwitchInput
+          label={
+            <Label inline hint="This is description">
+              Infinite unlock
+            </Label>
+          }
         />
       </div>
       <AuthButton />
