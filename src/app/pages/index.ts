@@ -1,3 +1,4 @@
+export { Lend } from './Lend';
 export { AccountPage } from './Account/AccountPage';
 export { ActivitiesPage } from './Activities/ActivitiesPage';
 export { BalancesPage } from './Balances/Balances';
