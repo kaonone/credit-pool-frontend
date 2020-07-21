@@ -1,7 +1,8 @@
 import React from 'react';
 import BN from 'bn.js';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 
-import { NewTable, FormattedBalance, ShortAddress } from 'components';
+import { NewTable, FormattedBalance, ShortAddress, Grid } from 'components';
 
 export type Order = {
   date: number;
@@ -11,7 +12,7 @@ export type Order = {
   deals: Deal[];
 };
 
-type Deal = {
+export type Deal = {
   currency: number;
   address: string;
   date: number;
@@ -65,7 +66,12 @@ export const columnsWithSubtable: Array<NewTable.models.Column<Order, Deal>> = [
 
           {
             renderTitle: () => 'Address',
-            renderCell: x => <ShortAddress address={x.address} />,
+            renderCell: x => (
+              <Grid container>
+                <Jazzicon diameter={20} seed={jsNumberForAddress(x.address)} />
+                <ShortAddress address={x.address} disableCopy />
+              </Grid>
+            ),
           },
 
           {

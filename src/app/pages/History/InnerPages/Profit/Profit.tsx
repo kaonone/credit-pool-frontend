@@ -2,33 +2,35 @@ import * as React from 'react';
 
 import { makeStyles } from 'utils/styles';
 import { NewTable, Loading, Typography, Hint } from 'components';
-import { useDistributionEventsQuery, useDistributionClaimsByEventQuery } from 'generated/gql/pool';
+import { useDistributionEventsQuery } from 'generated/gql/pool';
 import { useSubgraphPagination } from 'utils/react';
 
 import * as tableData from './tableData';
 
 function convertDistibutions(list: any, dealsList: any): tableData.Order[] {
   return list.map((order: any) => {
-    const deals = dealsList.map((deal: any) => {
-      if (order.id === deal.eventId) {
-        return {
-          date: deal.date,
-          address: deal.user.id,
-          currency: deal.pAmount,
-        };
-      }
-      return {};
-    });
-
     return {
       date: order.date,
       profit: order.amount,
       claimed: order.claimed,
       usersLength: order.poolState.usersLength,
-      deals,
+      deals: dealsList,
     };
   });
 }
+
+const dealsListMock = [
+  {
+    date: 1321321321321,
+    address: '1351cz3x51c65z4c6',
+    currency: 321651651,
+  },
+  {
+    date: 1321321321321,
+    address: '1351cz3x51c65z4c6',
+    currency: 321651651,
+  },
+];
 
 export function Profit() {
   const classes = useStyles();
@@ -36,10 +38,7 @@ export function Profit() {
   const { result } = useSubgraphPagination(useDistributionEventsQuery, {});
   const list = result.data?.distributionEvents || [];
 
-  const resultDeals = useSubgraphPagination(useDistributionClaimsByEventQuery, {}).result;
-  const dealsList = resultDeals.data?.earnings || [];
-
-  const entries = convertDistibutions(list, dealsList);
+  const entries = convertDistibutions(list, dealsListMock);
 
   return (
     <div className={classes.root}>
