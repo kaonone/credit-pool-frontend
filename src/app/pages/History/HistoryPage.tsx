@@ -8,6 +8,8 @@ import { TabsList, TabContext, Tab, TabPanel, ComingSoon } from 'components';
 import { routes } from 'app/routes';
 import { makeStyles } from 'utils/styles';
 
+import { Profit } from './InnerPages/Profit/Profit';
+
 const tKeys = tKeysAll.app.pages.history;
 
 export function HistoryPage() {
@@ -57,7 +59,7 @@ export function HistoryPage() {
           <ComingSoon />
         </TabPanel>
         <TabPanel value={routes.history.profit.getElementKey()}>
-          <ComingSoon />
+          <Profit />
         </TabPanel>
         <TabPanel value={routes.history.liquidations.getElementKey()}>
           <ComingSoon />
