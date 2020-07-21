@@ -2,6 +2,7 @@ import React from 'react';
 
 import * as views from './views';
 import { useStyles } from './Stakes.style';
+import { MyLoansTable } from 'features/loans/components/MyLoansTable';
 
 export const Stakes: React.FC = () => {
   const classes = useStyles();
@@ -11,11 +12,11 @@ export const Stakes: React.FC = () => {
       <views.Metrics />
       <div className={classes.issuedLoansTable}>
         {renderTableTitle('Issued loans')}
-        <views.tables.IssuedLoans />
+        <MyLoansTable type="issued" />
       </div>
       <div className={classes.pendingLoansTable}>
         {renderTableTitle('Pending loans')}
-        <views.tables.PendingLoans />
+        <MyLoansTable type="pending" />
       </div>
     </div>
   );

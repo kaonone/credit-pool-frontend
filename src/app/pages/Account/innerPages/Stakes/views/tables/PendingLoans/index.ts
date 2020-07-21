@@ -1,1 +1,0 @@
-export { PendingLoans } from './PendingLoans';

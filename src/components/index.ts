@@ -62,6 +62,7 @@ export * from './Metric/Metric';
 export * from './CashMetric/CashMetric';
 export * from './ExpansionPanel/ExpansionPanel';
 export * from './FormattedBalance/FormattedBalance';
+export * from './FormattedTokenAmount/FormattedTokenAmount';
 export * from './FormattedAmount/FormattedAmount';
 export * from './Growth/Growth';
 export * from './ConfirmationDialog/ConfirmationDialog';
@@ -71,3 +72,5 @@ export * from './ChartMock/ChartMock';
 export * from './Profit/Profit';
 export * from './ChartProfit/ChartProfit';
 export * from './ChartBlock/ChartBlock';
+export * from './DoubleLineCell/DoubleLineCell';
+
