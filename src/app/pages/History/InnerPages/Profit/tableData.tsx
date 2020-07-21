@@ -1,15 +1,20 @@
-import { NewTable } from 'components';
+import React from 'react';
+import BN from 'bn.js';
+
+import { NewTable, FormattedBalance, ShortAddress } from 'components';
 
 export type Order = {
-  date: string;
-  profit: string;
-  claimed: Deal[];
+  date: number;
+  profit: number;
+  claimed: number;
+  usersLength: number;
+  deals: Deal[];
 };
 
 type Deal = {
   currency: number;
   address: string;
-  date: string;
+  date: number;
 };
 
 export const columnsWithSubtable: Array<NewTable.models.Column<Order, Deal>> = [
@@ -17,7 +22,7 @@ export const columnsWithSubtable: Array<NewTable.models.Column<Order, Deal>> = [
     renderTitle: () => 'Date',
     cellContent: {
       kind: 'simple',
-      render: x => x.date,
+      render: x => new Date(new BN(x.date).toNumber() * 1000).toLocaleString(),
     },
   },
 
@@ -25,7 +30,7 @@ export const columnsWithSubtable: Array<NewTable.models.Column<Order, Deal>> = [
     renderTitle: () => 'LPs Profit',
     cellContent: {
       kind: 'simple',
-      render: x => x.profit,
+      render: x => <FormattedBalance sum={new BN(x.profit)} token="ptk" />,
     },
   },
 
@@ -33,7 +38,7 @@ export const columnsWithSubtable: Array<NewTable.models.Column<Order, Deal>> = [
     renderTitle: () => 'Claimed',
     cellContent: {
       kind: 'simple',
-      render: x => `$${x.claimed.map(deal => deal.currency).reduce((sum, cash) => sum + cash)}`,
+      render: x => <FormattedBalance sum={new BN(x.claimed)} token="ptk" />,
     },
   },
 
@@ -41,7 +46,7 @@ export const columnsWithSubtable: Array<NewTable.models.Column<Order, Deal>> = [
     renderTitle: () => 'Members',
     cellContent: {
       kind: 'simple',
-      render: x => x.claimed.length,
+      render: x => x.usersLength,
     },
   },
 
@@ -51,21 +56,21 @@ export const columnsWithSubtable: Array<NewTable.models.Column<Order, Deal>> = [
       kind: 'for-row-expander',
       expandedArea: {
         kind: 'subtable',
-        getSubtableEntries: x => x.claimed,
+        getSubtableEntries: x => x.deals,
         subtableColumns: [
           {
             renderTitle: () => 'Date',
-            renderCell: x => x.date,
+            renderCell: x => new Date(new BN(x.date).toNumber() * 1000).toLocaleString(),
           },
 
           {
             renderTitle: () => 'Address',
-            renderCell: x => x.address,
+            renderCell: x => <ShortAddress address={x.address} />,
           },
 
           {
             renderTitle: () => 'Claimed',
-            renderCell: x => x.currency,
+            renderCell: x => <FormattedBalance sum={new BN(x.currency)} token="ptk" />,
           },
         ],
       },

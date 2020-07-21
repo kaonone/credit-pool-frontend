@@ -1,46 +1,61 @@
 import * as React from 'react';
 
 import { makeStyles } from 'utils/styles';
-import { NewTable } from 'components';
-// import { useDistributionEventsQuery } from 'generated/gql/pool';
-// import { useSubgraphPagination } from 'utils/react';
+import { NewTable, Loading, Typography, Hint } from 'components';
+import { useDistributionEventsQuery, useDistributionClaimsByEventQuery } from 'generated/gql/pool';
+import { useSubgraphPagination } from 'utils/react';
 
 import * as tableData from './tableData';
 
-const entries: tableData.Order[] = [
-  {
-    date: '2012-01-02',
-    profit: '$20000',
-    claimed: [
-      { currency: 10, address: '0xz230a0sd0z0xc0wa20', date: '2012-01-02' },
-      { currency: 20, address: '0xz230a0sd0z0xc0wa20', date: '2012-01-02' },
-      { currency: 70, address: '0xz230a0sd0z0xc0wa20', date: '2012-01-02' },
-    ],
-  },
-  {
-    date: '2013-02-04',
-    profit: '$10000',
-    claimed: [
-      { currency: 200, address: '0xz230a0sd0z0xc0wa20', date: '2012-01-02' },
-      { currency: 500, address: '0xz230a0sd0z0xc0wa20', date: '2012-01-02' },
-      { currency: 300, address: '0xz230a0sd0z0xc0wa20', date: '2012-01-02' },
-    ],
-  },
-];
+function convertDistibutions(list: any, dealsList: any): tableData.Order[] {
+  return list.map((order: any) => {
+    const deals = dealsList.map((deal: any) => {
+      if (order.id === deal.eventId) {
+        return {
+          date: deal.date,
+          address: deal.user.id,
+          currency: deal.pAmount,
+        };
+      }
+      return {};
+    });
 
-// const { result } = useSubgraphPagination(useDistributionEventsQuery, {});
-// const list = result.data?.distributionEvents || [];
+    return {
+      date: order.date,
+      profit: order.amount,
+      claimed: order.claimed,
+      usersLength: order.poolState.usersLength,
+      deals,
+    };
+  });
+}
 
 export function Profit() {
   const classes = useStyles();
 
+  const { result } = useSubgraphPagination(useDistributionEventsQuery, {});
+  const list = result.data?.distributionEvents || [];
+
+  const resultDeals = useSubgraphPagination(useDistributionClaimsByEventQuery, {}).result;
+  const dealsList = resultDeals.data?.earnings || [];
+
+  const entries = convertDistibutions(list, dealsList);
+
   return (
     <div className={classes.root}>
-      <NewTable.Component
-        withOuterPadding
-        columns={tableData.columnsWithSubtable}
-        entries={entries}
-      />
+      <Loading gqlResults={result}>
+        {!list.length ? (
+          <Hint>
+            <Typography>Not found</Typography>
+          </Hint>
+        ) : (
+          <NewTable.Component
+            withOuterPadding
+            columns={tableData.columnsWithSubtable}
+            entries={entries}
+          />
+        )}
+      </Loading>
     </div>
   );
 }
