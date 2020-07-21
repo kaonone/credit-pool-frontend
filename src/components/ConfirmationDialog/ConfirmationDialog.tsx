@@ -4,20 +4,18 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Drawer from '@material-ui/core/Drawer';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { useCommunication, ISubscriptionMeta } from 'utils/react';
 import { Loading } from 'components/Loading';
 import { Hint } from 'components/Hint/Hint';
-import { WithDarkTheme, makeStyles } from 'utils/styles';
+import { makeStyles } from 'utils/styles';
 
 import { Button } from '../Button/Button';
 
 type AsyncMessage = [string, ISubscriptionMeta];
 
 interface IProps {
-  modalType?: 'dialog' | 'drawer';
   isOpen: boolean;
   title?: string;
   message: string | AsyncMessage;
@@ -29,17 +27,7 @@ interface IProps {
 }
 
 function ConfirmationDialog(props: IProps) {
-  const {
-    onCancel,
-    onConfirm,
-    isOpen,
-    title,
-    message,
-    noText,
-    yesText,
-    yesButton,
-    modalType = 'drawer',
-  } = props;
+  const { onCancel, onConfirm, isOpen, title, message, noText, yesText, yesButton } = props;
 
   const communication = useCommunication(onConfirm, []);
   const { status, error } = communication;
@@ -53,80 +41,61 @@ function ConfirmationDialog(props: IProps) {
 
   const messageLoaded = typeof message === 'string' || message[1].loaded;
 
-  const Wrapper = React.useMemo(
-    () =>
-      ({
-        dialog: ({ children }: { children: React.ReactNode }) => (
-          <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={handleCancel}>
-            <DialogContent className={classes.content}>{children}</DialogContent>
-          </Dialog>
-        ),
-        drawer: ({ children }: { children: React.ReactNode }) => (
-          <WithDarkTheme>
-            <Drawer open={isOpen} anchor="right" onClose={handleCancel}>
-              {children}
-            </Drawer>
-          </WithDarkTheme>
-        ),
-      }[modalType]),
-    [modalType, isOpen, handleCancel],
-  );
-
   return (
-    <Wrapper>
-      <Grid container justify="center" spacing={2}>
-        <CloseIcon className={classes.closeButton} onClick={handleCancel} />
-        {title && (
-          <Grid item xs={12}>
-            <Typography variant="h5" gutterBottom>
-              {title}
-            </Typography>
-          </Grid>
-        )}
-        <Grid item xs={12} className={classes.message}>
-          {typeof message === 'string' ? (
-            <Typography>{message}</Typography>
-          ) : (
-            <Loading meta={message[1]}>
-              <Typography>{message[0]}</Typography>
-            </Loading>
+    <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={handleCancel}>
+      <DialogContent className={classes.content}>
+        <Grid container justify="center" spacing={4}>
+          <CloseIcon className={classes.closeButton} onClick={handleCancel} />
+          {title && (
+            <Grid item xs={12}>
+              <Typography variant="h5">{title}</Typography>
+            </Grid>
           )}
-        </Grid>
-        {communication.status === 'error' && error && (
           <Grid item xs={12}>
-            <Hint>
-              <Typography color="error">{error}</Typography>
-            </Hint>
+            {typeof message === 'string' ? (
+              <Typography>{message}</Typography>
+            ) : (
+              <Loading meta={message[1]}>
+                <Typography>{message[0]}</Typography>
+              </Loading>
+            )}
           </Grid>
-        )}
-        {onCancel && (
+          {communication.status === 'error' && error && (
+            <Grid item xs={12}>
+              <Hint>
+                <Typography color="error">{error}</Typography>
+              </Hint>
+            </Grid>
+          )}
+          {onCancel && (
+            <Grid item xs={6}>
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={handleCancel}
+                disabled={status === 'pending'}
+              >
+                {noText || 'Cancel'}
+              </Button>
+            </Grid>
+          )}
           <Grid item xs={6}>
-            <Button
-              variant="outlined"
-              fullWidth
-              onClick={handleCancel}
-              disabled={status === 'pending'}
-            >
-              {noText || 'Cancel'}
-            </Button>
+            {yesButton || (
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                fullWidth
+                onClick={communication.execute}
+                disabled={status === 'pending' || !messageLoaded}
+              >
+                {status === 'pending' ? <CircularProgress size={24} /> : yesText}
+              </Button>
+            )}
           </Grid>
-        )}
-        <Grid item xs={6}>
-          {yesButton || (
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              fullWidth
-              onClick={communication.execute}
-              disabled={status === 'pending' || !messageLoaded}
-            >
-              {status === 'pending' ? <CircularProgress size={24} /> : yesText}
-            </Button>
-          )}
         </Grid>
-      </Grid>
-    </Wrapper>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -140,9 +109,6 @@ const useStyles = makeStyles({
   },
   content: {
     padding: '50px !important',
-  },
-  message: {
-    marginBottom: 30,
   },
 });
 

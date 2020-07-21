@@ -114,7 +114,6 @@ export const IssuedLoans: React.FC = () => {
         noText="Cancel"
         yesText="Liquidate"
         title="Confirm Liquidation"
-        modalType="dialog"
         onConfirm={handleConfirmationClick}
         onCancel={toggleIsOpened}
       />
