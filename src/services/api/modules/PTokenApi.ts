@@ -25,10 +25,10 @@ export class PTokenApi {
     private transactionsApi: TransactionsApi,
     private erc20Api: Erc20Api,
   ) {
-    this.readonlyContract = createPToken(this.web3Manager.web3, ETH_NETWORK_CONFIG.tokens.ptk);
+    this.readonlyContract = createPToken(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.ptk);
 
     this.web3Manager.txWeb3
-      .pipe(map(txWeb3 => txWeb3 && createPToken(txWeb3, ETH_NETWORK_CONFIG.tokens.ptk)))
+      .pipe(map(txWeb3 => txWeb3 && createPToken(txWeb3, ETH_NETWORK_CONFIG.contracts.ptk)))
       .subscribe(this.txContract);
   }
 
@@ -99,7 +99,7 @@ export class PTokenApi {
   public getUserShare$(account: string): Observable<PercentAmount> {
     return combineLatest([
       this.getDistributionBalanceOf$(account),
-      this.erc20Api.getTotalSupply$(ETH_NETWORK_CONFIG.tokens.ptk),
+      this.erc20Api.getTotalSupply$(ETH_NETWORK_CONFIG.contracts.ptk),
     ]).pipe(
       map(([distributionBalance, totalSupply]) =>
         new PercentAmount(distributionBalance).div(totalSupply).mul(100),
