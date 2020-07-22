@@ -1,6 +1,6 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import { useRouteMatch, useHistory } from 'react-router';
+import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { routes } from 'app/routes';
@@ -28,8 +28,6 @@ export function AccountPage() {
   }, [page]);
 
   const classes = useStyles();
-
-  const history = useHistory();
 
   return (
     <Grid className={classes.root}>
@@ -77,14 +75,14 @@ export function AccountPage() {
     switch (selectedPage) {
       case 'stakes':
         return (
-          <Button variant="contained" onClick={() => history.push(routes.lend.getRedirectPath())}>
+          <Button component={Link} variant="contained" to={routes.lend.getRedirectPath()}>
             Lend
           </Button>
         );
 
       case 'borrows':
         return (
-          <Button variant="contained" onClick={() => history.push(routes.borrow.getRedirectPath())}>
+          <Button component={Link} variant="contained" to={routes.borrow.getRedirectPath()}>
             Borrow
           </Button>
         );
