@@ -15,7 +15,6 @@ const rawTree = {
   lend: null,
   borrow: null,
   sell: null,
-  strategies: null,
   history: {
     transaction: null,
     profit: null,

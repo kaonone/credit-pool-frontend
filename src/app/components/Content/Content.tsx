@@ -12,11 +12,7 @@ export const Content: React.FC = () => {
       )}
       <Route path={routes.account.getRoutePath()} component={pages.AccountPage} />
       <Route exact path={routes.lend.getRoutePath()} component={pages.Lend} />
-      <Route
-        exact
-        path={routes.borrow.getRoutePath()}
-        component={makeUnimplementedComponent('Borrow')}
-      />
+      <Route exact path={routes.borrow.getRoutePath()} component={pages.Borrow} />
       <Route
         exact
         path={routes.liquidations.getRoutePath()}
@@ -39,7 +35,6 @@ export const Content: React.FC = () => {
         path={routes['terms-of-service'].getRoutePath()}
         component={makeUnimplementedComponent('Terms of service')}
       />
-      <Route exact path={routes.strategies.getRoutePath()} component={pages.StrategiesPage} />
       <Redirect to="/" />
     </Switch>
   );

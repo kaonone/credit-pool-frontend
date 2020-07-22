@@ -1,8 +1,7 @@
 import * as React from 'react';
 import BN from 'bn.js';
 
-import { NewTable, Label, Button, AccountAddress } from 'components';
-import { DAIIcon } from 'components/icons';
+import { NewTable, Label, Button, AccountAddress, FormattedAmount } from 'components';
 import { makeStyles } from 'utils/styles';
 import { useApi } from 'services/api';
 import { LiquidityAmount, PercentAmount } from 'model/entities';
@@ -14,10 +13,12 @@ import { LoanProposalAdditionalInfo } from '../LoanProposalAdditionalInfo/LoanPr
 
 export type LoanProposal = {
   borrower: string;
-  loanRequested: string;
+  loanRequested: LiquidityAmount | undefined;
+  rawLoanRequested: string;
   loanAPY: string;
   loanDuration: string;
   lStaked: string;
+  descriptionHash: string;
 };
 
 type Props = {
@@ -26,20 +27,7 @@ type Props = {
 
 function LoanRequested(props: Pick<LoanProposal, 'loanRequested'>) {
   const { loanRequested } = props;
-  const api = useApi();
-
-  const [liquidityCurrency] = useSubscribable(() => api.fundsModule.getLiquidityCurrency$(), [api]);
-
-  return (
-    <div style={{ display: 'inline-flex' }}>
-      <span style={{ marginRight: 6 }}>
-        {liquidityCurrency
-          ? new LiquidityAmount(loanRequested, liquidityCurrency).toFormattedString()
-          : '⏳'}
-      </span>
-      <DAIIcon />
-    </div>
-  );
+  return <div>{loanRequested ? <FormattedAmount sum={loanRequested} /> : '⏳'}</div>;
 }
 
 function useCollateral(loanRequested: string, lStaked: string) {
@@ -61,15 +49,29 @@ function useCollateral(loanRequested: string, lStaked: string) {
   };
 }
 
-function CollateralContent(props: Pick<LoanProposal, 'loanRequested' | 'lStaked'>) {
-  const { loanRequested, lStaked } = props;
-  const { userProvided, poolProvided } = useCollateral(loanRequested, lStaked);
+function CollateralContent(props: Pick<LoanProposal, 'rawLoanRequested' | 'lStaked'>) {
+  const { rawLoanRequested, lStaked } = props;
+  const { userProvided, poolProvided } = useCollateral(rawLoanRequested, lStaked);
   return (
     <Collateral
       userProvided={userProvided} // FIXME: rename Collateral -> CollateralDistributionBar
       poolProvided={poolProvided}
     />
   );
+}
+
+function AdditionalInfoContent(props: Pick<LoanProposal, 'descriptionHash'>) {
+  const { descriptionHash } = props;
+  const api = useApi();
+  const [description, descriptionMeta] = useSubscribable(
+    () => api.swarmApi.read<string>(descriptionHash),
+    [descriptionHash],
+  );
+
+  const reason =
+    (descriptionMeta.error || descriptionMeta.loaded) && description ? description : '⏳';
+
+  return <LoanProposalAdditionalInfo reason={reason} riskScore={null} />;
 }
 
 const columns: Array<NewTable.models.Column<LoanProposal>> = [
@@ -123,7 +125,7 @@ const columns: Array<NewTable.models.Column<LoanProposal>> = [
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: x => <CollateralContent lStaked={x.lStaked} loanRequested={x.loanRequested} />,
+      render: x => <CollateralContent lStaked={x.lStaked} rawLoanRequested={x.rawLoanRequested} />,
     },
   },
   {
@@ -145,9 +147,7 @@ const columns: Array<NewTable.models.Column<LoanProposal>> = [
       kind: 'for-row-expander',
       expandedArea: {
         kind: 'single-cell',
-        renderContent: () => (
-          <LoanProposalAdditionalInfo reason="To make even more" riskScore="7.4" />
-        ),
+        renderContent: x => <AdditionalInfoContent descriptionHash={x.descriptionHash} />,
       },
     },
   },

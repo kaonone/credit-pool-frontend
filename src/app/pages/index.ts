@@ -1,3 +1,4 @@
+export { Borrow } from './Borrow/Borrow';
 export { Lend } from './Lend';
 export { AccountPage } from './Account/AccountPage';
 export { ActivitiesPage } from './Activities/ActivitiesPage';
@@ -11,4 +12,3 @@ export { PoolPage } from './Pool/PoolPage';
 export { StatsPage } from './Stats/Stats';
 export { CreditPool } from './CreditPool/CreditPool';
 export { HistoryPage } from './History/HistoryPage';
-export { StrategiesPage } from './Strategies/StrategiesPage';

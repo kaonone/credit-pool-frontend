@@ -59,7 +59,7 @@ export class Erc20Api {
   // TODO remove this
   @memoize(R.identity)
   public getDaiBalance$(account: string): Observable<BN> {
-    return this.getBalance$(ETH_NETWORK_CONFIG.contracts.dai, account);
+    return this.getBalance$(ETH_NETWORK_CONFIG.tokens.dai, account);
   }
 
   @memoize((...args: string[]) => args.join())

@@ -2,11 +2,14 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
+import { empty } from 'rxjs';
 
 import { routes } from 'app/routes';
 import { makeStyles } from 'utils/styles';
-import { TabsList, TabContext, Tab, TabPanel } from 'components';
+import { TabsList, TabContext, Tab, TabPanel, Loading, Button } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
+import { useApi } from 'services/api';
+import { useSubscribable } from 'utils/react';
 
 import * as innerPages from './innerPages';
 
@@ -19,6 +22,13 @@ export function AccountPage() {
 
   const page = match ? match.params.page : routes.account.summary.getElementKey();
 
+  const api = useApi();
+  const [account] = useSubscribable(() => api.web3Manager.account, [], null);
+  const [distributionBalance, distributionBalanceMeta] = useSubscribable(
+    () => (account ? api.pToken.getDistributionBalanceOf$(account) : empty()),
+    [api, account],
+  );
+
   const handleTabChange = (_: React.ChangeEvent<{}>, tab: string) => {
     setSelectedPage(tab);
   };
@@ -28,44 +38,74 @@ export function AccountPage() {
   }, [page]);
 
   const classes = useStyles();
+
   return (
     <Grid className={classes.root}>
-      <TabContext value={selectedPage}>
-        <TabsList value={selectedPage} className={classes.tabs} onChange={handleTabChange}>
-          <Tab
-            label={t(tKeys.tabs.summary.getKey())}
-            className={classes.tab}
-            component={Link}
-            value={routes.account.summary.getElementKey()}
-            to={routes.account.summary.getRedirectPath()}
-          />
-          <Tab
-            label={t(tKeys.tabs.stakes.getKey())}
-            className={classes.tab}
-            component={Link}
-            value={routes.account.stakes.getElementKey()}
-            to={routes.account.stakes.getRedirectPath()}
-          />
-          <Tab
-            label={t(tKeys.tabs.borrows.getKey())}
-            className={classes.tab}
-            component={Link}
-            value={routes.account.borrows.getElementKey()}
-            to={routes.account.borrows.getRedirectPath()}
-          />
-        </TabsList>
-        <TabPanel value={routes.account.summary.getElementKey()}>
-          <innerPages.MySummary />
-        </TabPanel>
-        <TabPanel value={routes.account.stakes.getElementKey()}>
-          <innerPages.Stakes />
-        </TabPanel>
-        <TabPanel value={routes.account.borrows.getElementKey()}>
-          {makeUnimplementedComponent('Borrows')()}
-        </TabPanel>
-      </TabContext>
+      <Loading meta={distributionBalanceMeta}>
+        {distributionBalance && !distributionBalance.isZero() ? (
+          <TabContext value={selectedPage}>
+            <div className={classes.navigationBar}>
+              <TabsList value={selectedPage} className={classes.tabs} onChange={handleTabChange}>
+                <Tab
+                  label={t(tKeys.tabs.summary.getKey())}
+                  className={classes.tab}
+                  component={Link}
+                  value={routes.account.summary.getElementKey()}
+                  to={routes.account.summary.getRedirectPath()}
+                />
+                <Tab
+                  label={t(tKeys.tabs.stakes.getKey())}
+                  className={classes.tab}
+                  component={Link}
+                  value={routes.account.stakes.getElementKey()}
+                  to={routes.account.stakes.getRedirectPath()}
+                />
+                <Tab
+                  label={t(tKeys.tabs.borrows.getKey())}
+                  className={classes.tab}
+                  component={Link}
+                  value={routes.account.borrows.getElementKey()}
+                  to={routes.account.borrows.getRedirectPath()}
+                />
+              </TabsList>
+              {renderNavigationButton()}
+            </div>
+            <TabPanel value={routes.account.summary.getElementKey()}>
+              <innerPages.MySummary />
+            </TabPanel>
+            <TabPanel value={routes.account.stakes.getElementKey()}>
+              <innerPages.Stakes />
+            </TabPanel>
+            <TabPanel value={routes.account.borrows.getElementKey()}>
+              <innerPages.Borrows />
+            </TabPanel>
+          </TabContext>
+        ) : (
+          <innerPages.Strategies />
+        )}
+      </Loading>
     </Grid>
   );
+
+  function renderNavigationButton() {
+    switch (selectedPage) {
+      case 'stakes':
+        return (
+          <Button component={Link} variant="contained" to={routes.lend.getRedirectPath()}>
+            Lend
+          </Button>
+        );
+
+      case 'borrows':
+        return (
+          <Button component={Link} variant="contained" to={routes.borrow.getRedirectPath()}>
+            Borrow
+          </Button>
+        );
+    }
+
+    return null;
+  }
 }
 
 const useStyles = makeStyles(
@@ -79,10 +119,11 @@ const useStyles = makeStyles(
     tab: {
       minWidth: 112,
     },
+    navigationBar: {
+      display: 'flex',
+      alignItems: 'flex-start',
+      justifyContent: 'space-between',
+    },
   }),
   { name: 'AccountPage' },
 );
-
-function makeUnimplementedComponent(componentLabel: string) {
-  return () => <div style={{ fontSize: 45 }}>{`${componentLabel} not implemented`}</div>;
-}
