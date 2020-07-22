@@ -2,20 +2,23 @@ import * as React from 'react';
 
 import { Metric, Label, Grid, ChartBlock } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
+import { usePoolMetricsSubscription } from 'generated/gql/pool';
 
 const tKeys = tKeysAll.components.metrics;
 
-const valueMock = '200';
-
 export function Proposals() {
   const { t } = useTranslate();
+
+  const poolMetricsResult = usePoolMetricsSubscription();
+
+  const proposalsCount = poolMetricsResult.data?.pools[0]?.proposalsCount || '0';
 
   return (
     <Grid container>
       <Metric
         title={<Label>{t(tKeys.proposals.getKey())}</Label>}
-        value={valueMock}
-        chart={<ChartBlock value="1234" variant="increase" sign="+" />}
+        value={proposalsCount}
+        chart={<ChartBlock />}
       />
     </Grid>
   );

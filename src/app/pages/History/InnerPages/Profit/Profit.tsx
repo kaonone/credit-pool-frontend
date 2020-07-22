@@ -67,5 +67,5 @@ const useStyles = makeStyles(
   () => ({
     root: {},
   }),
-  { name: 'MySummary' },
+  { name: 'Profit' },
 );

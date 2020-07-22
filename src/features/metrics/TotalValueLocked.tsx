@@ -1,18 +1,30 @@
 import * as React from 'react';
+import BN from 'bn.js';
 
 import { Metric, Label, FormattedAmount } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
-import { liquidityAmount } from 'utils/mock';
+import { useSubscribable } from 'utils/react';
+import { useApi } from 'services/api';
+import { ETH_NETWORK_CONFIG } from 'env';
+import { TokenAmount } from 'model/entities';
 
 const tKeys = tKeysAll.components.metrics;
 
 export function TotalValueLocked() {
   const { t } = useTranslate();
 
+  const api = useApi();
+
+  const [totalFunds] = useSubscribable(() => api.fundsModule.getFundsLBalance$(), [api], new BN(0));
+
+  const [pToken] = useSubscribable(() => api.erc20.getToken$(ETH_NETWORK_CONFIG.contracts.dai), [
+    api,
+  ]);
+
   return (
     <Metric
       title={<Label>{t(tKeys.totalValueLocked.getKey())}</Label>}
-      value={<FormattedAmount sum={liquidityAmount} />}
+      value={pToken ? <FormattedAmount sum={new TokenAmount(totalFunds, pToken)} /> : 'Not found'}
     />
   );
 }
