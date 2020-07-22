@@ -65,7 +65,7 @@ const columns: Array<NewTable.models.Column<any>> = [
 
   {
     renderTitle: () => null,
-    align: 'center',
+    align: 'right',
     cellContent: {
       kind: 'simple',
       render: () => <views.RepayButton />,
