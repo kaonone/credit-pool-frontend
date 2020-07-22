@@ -1,4 +1,4 @@
-import { Debt, User } from 'generated/gql/pool';
+import { User, Debt } from 'generated/gql/pool';
 
 export type PartialDebt = Pick<
   Debt,
@@ -13,3 +13,5 @@ export type PartialDebt = Pick<
 > & {
   borrower: Pick<User, 'id'>;
 };
+
+export type TableType = 'issued' | 'pending';

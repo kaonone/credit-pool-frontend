@@ -64,10 +64,10 @@ export function ActionsCell({ debt, account }: IProps) {
   const isAvailableForUnlock = pInterest.gtn(0);
 
   const commonProps = {
-    variant: 'contained',
+    variant: 'outlined',
     color: 'primary',
     size: 'small',
-    fullWidth: true,
+    fullWidth: false,
   } as const;
 
   const actions = [

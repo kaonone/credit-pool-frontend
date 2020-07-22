@@ -1,4 +1,4 @@
-query MyPendingGuarantees($first: Int!, $skip: Int!, $supporters: [String!]!) {
+query MyIssuedLoans($first: Int!, $skip: Int!, $supporters: [String!]!) {
   debts(first: $first, skip: $skip, where: {supporters_contains: $supporters, status_not: PROPOSED}) {
     debt_id
     proposal_id

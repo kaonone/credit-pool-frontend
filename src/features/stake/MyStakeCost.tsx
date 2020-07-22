@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import BN from 'bn.js';
 
 import { useApi } from 'services/api';
-import { Loading, Highlighted, FormattedAmount } from 'components';
+import { Loading, FormattedAmount, DoubleLineCell, Label } from 'components';
 import { calcInterestShare, getPledgeId } from 'model';
 import { useSubscribable } from 'utils/react';
 import { formatBalance } from 'utils/format';
@@ -52,23 +52,34 @@ export function MyStakeCost({
   const interestShare =
     fullLoanStake && calcInterestShare(lInitialLocked, fullLoanStake, interestShareDecimals);
 
+  const renderTopPart = useCallback(
+    () => <>{myStakeCost && <FormattedAmount sum={myStakeCost} />}</>,
+    [myStakeCost],
+  );
+
+  const renderBottomPart = useCallback(
+    () => (
+      <>
+        {interestShare && (
+          <Label hint="My collateral percent info" inline>
+            {formatBalance({
+              amountInBaseUnits: interestShare,
+              baseDecimals: interestShareDecimals,
+            })}
+            %
+          </Label>
+        )}
+      </>
+    ),
+    [interestShare, interestShareDecimals],
+  );
+
   return (
     <Loading gqlResults={pledgeGqlResult} meta={[myStakeCostMeta, fullLoanStakeMeta]}>
       {new BN(pLocked).gtn(0) ? (
-        <>
-          {myStakeCost && <FormattedAmount sum={myStakeCost} />}{' '}
-          {interestShare && (
-            <Highlighted color="positive">
-              {formatBalance({
-                amountInBaseUnits: interestShare,
-                baseDecimals: interestShareDecimals,
-              })}
-              %
-            </Highlighted>
-          )}
-        </>
+        <DoubleLineCell renderTopPart={renderTopPart} renderBottomPart={renderBottomPart} />
       ) : (
-        '—'
+        '_'
       )}
     </Loading>
   );
