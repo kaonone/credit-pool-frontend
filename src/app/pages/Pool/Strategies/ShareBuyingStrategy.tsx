@@ -35,7 +35,7 @@ export function ShareBuyingStrategy() {
   );
 
   const [ptkTotalSupply, ptkTotalSupplyMeta] = useSubscribable(
-    () => (account ? api.erc20.getTotalSupply$(ETH_NETWORK_CONFIG.contracts.ptk) : of(new BN(0))),
+    () => (account ? api.erc20.getTotalSupply$(ETH_NETWORK_CONFIG.tokens.ptk) : of(new BN(0))),
     [api, account],
     new BN(0),
   );

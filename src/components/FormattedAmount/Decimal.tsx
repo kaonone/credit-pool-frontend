@@ -7,20 +7,20 @@ import { formatInteger } from 'utils/format';
 
 type Props = {
   decimal: DecimalType;
-  theme?: 'plain' | 'default';
+  variant?: 'plain' | 'default';
 };
 
 export function Decimal(props: Props) {
   const {
     decimal: { integer, fractional },
-    theme,
+    variant,
   } = props;
   const classes = useStyles(props);
 
   return (
     <>
       {formatInteger(integer)}
-      <span className={cn({ [classes.fractional]: theme === 'plain' })}>.{fractional}</span>
+      <span className={cn({ [classes.fractional]: variant === 'plain' })}>.{fractional}</span>
     </>
   );
 }
