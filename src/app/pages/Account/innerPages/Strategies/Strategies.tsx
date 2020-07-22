@@ -20,7 +20,7 @@ import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 
 const tKeys = tKeysAll.app.pages.strategies;
 
-export function StrategiesPage() {
+export function Strategies() {
   const classes = useStyles();
   const { t } = useTranslate();
 

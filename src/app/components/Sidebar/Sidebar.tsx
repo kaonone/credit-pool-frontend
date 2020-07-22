@@ -78,8 +78,8 @@ export const Sidebar: React.FC = () => {
   );
 
   useOnChangeState(
-    { distributionBalance },
-    (prev, cur) => !prev.distributionBalance && cur.distributionBalance?.isZero() !== undefined,
+    distributionBalance,
+    (prev, cur) => prev !== cur,
     () =>
       setLinks(
         distributionBalance?.isZero()

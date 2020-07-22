@@ -29,7 +29,7 @@ export function AuthButton() {
 
   const toggleIsOpened = React.useCallback(() => {
     setIsOpened(!isOpened);
-    setNeedToRedirect(true);
+    !isOpened && setNeedToRedirect(true);
   }, [isOpened]);
 
   const history = useHistory();
@@ -38,7 +38,6 @@ export function AuthButton() {
     api.web3Manager.disconnect();
     connectCommunication.reset();
     setIsOpened(false);
-    setNeedToRedirect(false);
   }, [connectCommunication.reset]);
 
   const [distributionBalance] = useSubscribable(
@@ -47,25 +46,21 @@ export function AuthButton() {
   );
 
   useOnChangeState(
-    { connectedWallet },
-    (prev, cur) => !cur.connectedWallet && !!prev.connectedWallet,
-    () => {
-      setNeedToRedirect(false);
+    connectedWallet,
+    (prev, cur) => prev !== cur,
+    (_, cur) => {
+      if (!cur) {
+        setNeedToRedirect(false);
+        history.push('/stats');
+      }
     },
   );
 
   useOnChangeState(
     { needToRedirect, distributionBalance },
-    (prev, cur) =>
-      cur.needToRedirect &&
-      !prev.distributionBalance &&
-      cur.distributionBalance?.isZero() !== undefined,
+    (prev, cur) => cur.needToRedirect && !prev.distributionBalance && !!cur.distributionBalance,
     () => {
-      if (distributionBalance?.isZero()) {
-        history.push('/strategies');
-      } else {
-        history.push('/account');
-      }
+      history.push('/account');
       setIsOpened(false);
     },
   );
