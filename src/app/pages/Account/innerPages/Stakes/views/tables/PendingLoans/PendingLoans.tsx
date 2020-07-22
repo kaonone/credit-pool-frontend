@@ -2,7 +2,7 @@ import React from 'react';
 
 import { NewTable, Label } from 'components';
 
-import { DoubleLineCell } from '../../DoubleLineCell';
+import { DoubleLineCell } from '../../../../private/DoubleLineCell';
 import * as views from './views';
 import { useStyles } from './PendingLoans.style';
 

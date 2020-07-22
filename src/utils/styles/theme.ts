@@ -308,6 +308,14 @@ function getTheme(type: 'light' | 'dark'): Theme {
         },
       },
 
+      MuiFormGroup: {
+        row: {
+          '& .MuiFormControlLabel-root': {
+            marginRight: 20,
+          },
+        },
+      },
+
       MuiTabs: {
         root: {
           display: 'inline-flex',

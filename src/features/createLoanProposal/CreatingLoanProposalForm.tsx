@@ -37,7 +37,7 @@ interface FormData {
 
 interface CreatingLoanProposalFormProps {
   account: string;
-  onCancel(): void;
+  onCancel?(): void;
 }
 
 const fieldNames: FieldNames<FormData> = {

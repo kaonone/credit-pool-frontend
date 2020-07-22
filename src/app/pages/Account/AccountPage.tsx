@@ -6,7 +6,7 @@ import { empty } from 'rxjs';
 
 import { routes } from 'app/routes';
 import { makeStyles } from 'utils/styles';
-import { TabsList, TabContext, Tab, TabPanel, Loading } from 'components';
+import { TabsList, TabContext, Tab, TabPanel, Loading, Button } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
@@ -38,34 +38,38 @@ export function AccountPage() {
   }, [page]);
 
   const classes = useStyles();
+
   return (
     <Grid className={classes.root}>
       <Loading meta={distributionBalanceMeta}>
         {distributionBalance && !distributionBalance.isZero() ? (
           <TabContext value={selectedPage}>
-            <TabsList value={selectedPage} className={classes.tabs} onChange={handleTabChange}>
-              <Tab
-                label={t(tKeys.tabs.summary.getKey())}
-                className={classes.tab}
-                component={Link}
-                value={routes.account.summary.getElementKey()}
-                to={routes.account.summary.getRedirectPath()}
-              />
-              <Tab
-                label={t(tKeys.tabs.stakes.getKey())}
-                className={classes.tab}
-                component={Link}
-                value={routes.account.stakes.getElementKey()}
-                to={routes.account.stakes.getRedirectPath()}
-              />
-              <Tab
-                label={t(tKeys.tabs.borrows.getKey())}
-                className={classes.tab}
-                component={Link}
-                value={routes.account.borrows.getElementKey()}
-                to={routes.account.borrows.getRedirectPath()}
-              />
-            </TabsList>
+            <div className={classes.navigationBar}>
+              <TabsList value={selectedPage} className={classes.tabs} onChange={handleTabChange}>
+                <Tab
+                  label={t(tKeys.tabs.summary.getKey())}
+                  className={classes.tab}
+                  component={Link}
+                  value={routes.account.summary.getElementKey()}
+                  to={routes.account.summary.getRedirectPath()}
+                />
+                <Tab
+                  label={t(tKeys.tabs.stakes.getKey())}
+                  className={classes.tab}
+                  component={Link}
+                  value={routes.account.stakes.getElementKey()}
+                  to={routes.account.stakes.getRedirectPath()}
+                />
+                <Tab
+                  label={t(tKeys.tabs.borrows.getKey())}
+                  className={classes.tab}
+                  component={Link}
+                  value={routes.account.borrows.getElementKey()}
+                  to={routes.account.borrows.getRedirectPath()}
+                />
+              </TabsList>
+              {renderNavigationButton()}
+            </div>
             <TabPanel value={routes.account.summary.getElementKey()}>
               <innerPages.MySummary />
             </TabPanel>
@@ -73,7 +77,7 @@ export function AccountPage() {
               <innerPages.Stakes />
             </TabPanel>
             <TabPanel value={routes.account.borrows.getElementKey()}>
-              {makeUnimplementedComponent('Borrows')()}
+              <innerPages.Borrows />
             </TabPanel>
           </TabContext>
         ) : (
@@ -82,6 +86,26 @@ export function AccountPage() {
       </Loading>
     </Grid>
   );
+
+  function renderNavigationButton() {
+    switch (selectedPage) {
+      case 'stakes':
+        return (
+          <Button component={Link} variant="contained" to={routes.lend.getRedirectPath()}>
+            Lend
+          </Button>
+        );
+
+      case 'borrows':
+        return (
+          <Button component={Link} variant="contained" to={routes.borrow.getRedirectPath()}>
+            Borrow
+          </Button>
+        );
+    }
+
+    return null;
+  }
 }
 
 const useStyles = makeStyles(
@@ -95,10 +119,11 @@ const useStyles = makeStyles(
     tab: {
       minWidth: 112,
     },
+    navigationBar: {
+      display: 'flex',
+      alignItems: 'flex-start',
+      justifyContent: 'space-between',
+    },
   }),
   { name: 'AccountPage' },
 );
-
-function makeUnimplementedComponent(componentLabel: string) {
-  return () => <div style={{ fontSize: 45 }}>{`${componentLabel} not implemented`}</div>;
-}

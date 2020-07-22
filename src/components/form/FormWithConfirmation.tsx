@@ -35,7 +35,7 @@ export function FormWithConfirmation<FormData extends AnyObject>(
     await onSubmit(...submittingArgs);
 
     setArgs(null);
-    onCancel();
+    onCancel && onCancel();
   }, [onCancel, submittingArgs]);
 
   const handlePTokenExchangingConfirmationCancel = useCallback(() => {
