@@ -15,7 +15,7 @@ export const Content: React.FC = () => {
       <Route
         exact
         path={routes.borrow.getRoutePath()}
-        component={makeUnimplementedComponent('Borrow')}
+        component={pages.Borrow}
       />
       <Route
         exact
