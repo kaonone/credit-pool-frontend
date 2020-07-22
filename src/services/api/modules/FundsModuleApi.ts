@@ -98,7 +98,7 @@ export class FundsModuleApi {
   // eslint-disable-next-line class-methods-use-this
   public getSupportedTokens$(): Observable<Token[]> {
     // TODO take from contract
-    return of([ETH_NETWORK_CONFIG.contracts.dai]).pipe(
+    return of([ETH_NETWORK_CONFIG.tokens.dai]).pipe(
       switchMap(addresses =>
         combineLatest(addresses.map(address => this.erc20Api.getToken$(address))),
       ),
@@ -213,7 +213,7 @@ export class FundsModuleApi {
     additionalLiquidity: string,
   ): Observable<TokenAmount> {
     return this.erc20Api.toTokenAmount(
-      ETH_NETWORK_CONFIG.contracts.dai,
+      ETH_NETWORK_CONFIG.tokens.dai,
       combineLatest([this.erc20Api.getPtkBalance$(address), this.getCurrentLiquidity$()]).pipe(
         switchMap(([ptkBalance, currentLiquidity]) =>
           combineLatest([
