@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { AuthButton } from 'features/auth';
 import { ThemeButton } from 'services/theme';
+import { routes } from 'app/routes';
 
 import { useStyles } from './NewHeader.style';
 import { Logo } from './icons';
@@ -24,7 +25,10 @@ export const NewHeader: React.FC = () => {
       </div>
       <div className={classes.rightPart}>
         <div className={classes.authButton}>
-          <AuthButton />
+          <AuthButton
+            connectRedirectPath={routes.account.getRedirectPath()}
+            disconnectRedirectPath={routes.stats.getRedirectPath()}
+          />
         </div>
         <ThemeButton />
       </div>
