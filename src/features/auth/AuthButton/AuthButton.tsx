@@ -2,8 +2,7 @@ import * as React from 'react';
 import { useHistory } from 'react-router';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import Avatar from '@material-ui/core/Avatar';
-import BN from 'bn.js';
-import { of } from 'rxjs';
+import { empty } from 'rxjs';
 
 import { NETWORK_ID } from 'env';
 import { useApi } from 'services/api';
@@ -17,6 +16,7 @@ import { AuthModal } from './components/AuthModal';
 
 export function AuthButton() {
   const [isOpened, setIsOpened] = React.useState(false);
+  const [needToRedirect, setNeedToRedirect] = React.useState(false);
   const api = useApi();
   const classes = useStyles();
   const { t } = useTranslate();
@@ -27,7 +27,10 @@ export function AuthButton() {
 
   const connectCommunication = useCommunication(api.web3Manager.connect, []);
 
-  const toggleIsOpened = React.useCallback(() => setIsOpened(!isOpened), [isOpened]);
+  const toggleIsOpened = React.useCallback(() => {
+    setIsOpened(!isOpened);
+    setNeedToRedirect(true);
+  }, [isOpened]);
 
   const history = useHistory();
 
@@ -35,20 +38,30 @@ export function AuthButton() {
     api.web3Manager.disconnect();
     connectCommunication.reset();
     setIsOpened(false);
+    setNeedToRedirect(false);
   }, [connectCommunication.reset]);
 
   const [distributionBalance] = useSubscribable(
-    () => (account ? api.pToken.getDistributionBalanceOf$(account) : of(new BN(0))),
+    () => (account ? api.pToken.getDistributionBalanceOf$(account) : empty()),
     [api, account],
-    new BN(0),
   );
 
   useOnChangeState(
-    { isOpened, connectedWallet },
-    (prev, cur) =>
-      cur.isOpened && !!cur.connectedWallet && prev.connectedWallet !== cur.connectedWallet,
+    { connectedWallet },
+    (prev, cur) => !cur.connectedWallet && !!prev.connectedWallet,
     () => {
-      if (distributionBalance.isZero()) {
+      setNeedToRedirect(false);
+    },
+  );
+
+  useOnChangeState(
+    { needToRedirect, distributionBalance },
+    (prev, cur) =>
+      cur.needToRedirect &&
+      !prev.distributionBalance &&
+      cur.distributionBalance?.isZero() !== undefined,
+    () => {
+      if (distributionBalance?.isZero()) {
         history.push('/strategies');
       } else {
         history.push('/account');

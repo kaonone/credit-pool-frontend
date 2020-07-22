@@ -1,8 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import BN from 'bn.js';
-import { of } from 'rxjs';
+import { empty } from 'rxjs';
 
 import { useSubscribable, useOnChangeState } from 'utils/react';
 import { useApi } from 'services/api';
@@ -72,20 +71,18 @@ export const Sidebar: React.FC = () => {
 
   const api = useApi();
   const [account] = useSubscribable(() => api.web3Manager.account, [], null);
-  const [connectedWallet] = useSubscribable(() => api.web3Manager.connectedWallet, [], null);
 
   const [distributionBalance] = useSubscribable(
-    () => (account ? api.pToken.getDistributionBalanceOf$(account) : of(new BN(0))),
+    () => (account ? api.pToken.getDistributionBalanceOf$(account) : empty()),
     [api, account],
-    new BN(0),
   );
 
   useOnChangeState(
-    { connectedWallet },
-    (prev, cur) => !!cur.connectedWallet && prev.connectedWallet !== cur.connectedWallet,
+    { distributionBalance },
+    (prev, cur) => !prev.distributionBalance && cur.distributionBalance?.isZero() !== undefined,
     () =>
       setLinks(
-        distributionBalance.isZero()
+        distributionBalance?.isZero()
           ? upperLinks.filter(link => requeredLinks.find(reqLink => reqLink === link.label))
           : upperLinks,
       ),
