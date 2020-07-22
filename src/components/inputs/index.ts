@@ -7,3 +7,4 @@ export { RadioGroupInput } from './RadioGroupInput';
 export { TokenAmountInput, TokenAmountInputProps } from './TokenAmountInput';
 export { LiquidityAmountInput, LiquidityAmountInputProps } from './LiquidityAmountInput';
 export { SwitchInput } from './SwitchInput/SwitchInput';
+export { RadioButton } from './RadioButton/RadioButton';

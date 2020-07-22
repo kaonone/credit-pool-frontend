@@ -28,3 +28,4 @@ export { AvailableForBorrowing } from './AvailableForBorrowing';
 export { MinimumAPY } from './MinimumAPY';
 export { TotalBorrowed } from './TotalBorrowed';
 export { LoanTerm } from './LoanTerm';
+export { YourMaxAvailableCredit } from './YourMaxAvailableCredit';

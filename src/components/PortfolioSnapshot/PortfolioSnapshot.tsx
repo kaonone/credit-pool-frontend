@@ -42,7 +42,7 @@ export function PortfolioSnapshot(props: Props) {
 
   return (
     <div className={classes.root}>
-      <ComingSoon />
+      <ComingSoon position="overlay" />
       <table className={classes.table}>
         <caption className={classes.caption}>
           <Label fontSize="large" hint={t(tKeys.description.getKey())}>
