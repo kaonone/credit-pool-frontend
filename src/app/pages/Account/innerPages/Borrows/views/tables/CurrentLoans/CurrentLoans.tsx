@@ -1,8 +1,7 @@
 import React from 'react';
 
-import { NewTable, Label } from 'components';
+import { NewTable, Label, DoubleLineCell } from 'components';
 
-import { DoubleLineCell } from '../../../../private/DoubleLineCell';
 import * as views from './views';
 import { useStyles } from './CurrentLoans.style';
 

@@ -52,7 +52,7 @@ const columns: Array<NewTable.models.Column<any>> = [
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: x => <FormattedAmount sum={x.apr} theme="plain" />,
+      render: x => <FormattedAmount sum={x.apr} variant="plain" />,
     },
   },
 
@@ -149,7 +149,7 @@ export function MyLoansTable({ type }: Props) {
 
   // Add multitoken support
   const [dai, daiMeta] = useSubscribable(
-    () => api.erc20.getToken$(ETH_NETWORK_CONFIG.contracts.dai),
+    () => api.erc20.getToken$(ETH_NETWORK_CONFIG.tokens.dai),
     [api],
   );
 
