@@ -12,11 +12,7 @@ export const Content: React.FC = () => {
       )}
       <Route path={routes.account.getRoutePath()} component={pages.AccountPage} />
       <Route exact path={routes.lend.getRoutePath()} component={pages.Lend} />
-      <Route
-        exact
-        path={routes.borrow.getRoutePath()}
-        component={pages.Borrow}
-      />
+      <Route exact path={routes.borrow.getRoutePath()} component={pages.Borrow} />
       <Route
         exact
         path={routes.liquidations.getRoutePath()}
