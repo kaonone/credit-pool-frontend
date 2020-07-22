@@ -65,7 +65,6 @@ export function DistributionEvents() {
                       <ModalButton
                         variant="contained"
                         color="primary"
-                        modalType="dialog"
                         content={t(tKeys.showClaimsButton.getKey())}
                       >
                         <DistributionClaimsByEvent eventId={data.id} />

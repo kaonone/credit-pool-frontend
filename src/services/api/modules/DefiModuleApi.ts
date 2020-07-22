@@ -72,7 +72,7 @@ export class DefiModuleApi {
   @memoize(R.identity)
   public getAvailableInterest$(account: string): Observable<TokenAmount> {
     return this.erc20Api.toTokenAmount(
-      ETH_NETWORK_CONFIG.contracts.dai,
+      ETH_NETWORK_CONFIG.tokens.dai,
       this.readonlyContract.methods.availableInterest({ account }, [
         this.readonlyContract.events.InvestmentDistributionCreated(),
         this.readonlyContract.events.WithdrawInterest({ filter: { account } }),

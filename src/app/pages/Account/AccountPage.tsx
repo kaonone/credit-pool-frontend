@@ -28,6 +28,7 @@ export function AccountPage() {
   }, [page]);
 
   const classes = useStyles();
+
   return (
     <Grid className={classes.root}>
       <TabContext value={selectedPage}>
@@ -61,7 +62,7 @@ export function AccountPage() {
           <innerPages.Stakes />
         </TabPanel>
         <TabPanel value={routes.account.borrows.getElementKey()}>
-          {makeUnimplementedComponent('Borrows')()}
+          <innerPages.Borrows />
         </TabPanel>
       </TabContext>
     </Grid>
@@ -82,7 +83,3 @@ const useStyles = makeStyles(
   }),
   { name: 'AccountPage' },
 );
-
-function makeUnimplementedComponent(componentLabel: string) {
-  return () => <div style={{ fontSize: 45 }}>{`${componentLabel} not implemented`}</div>;
-}

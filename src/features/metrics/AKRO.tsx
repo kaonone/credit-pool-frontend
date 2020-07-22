@@ -12,7 +12,7 @@ export function AKRO() {
 
   return (
     <Box position="relative">
-      <ComingSoon />
+      <ComingSoon position="overlay" />
       <Metric
         title={
           <Label hint={t(tKeys.description.getKey())} icon={<AKROIcon />}>

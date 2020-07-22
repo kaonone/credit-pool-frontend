@@ -14,8 +14,8 @@ type FormattedBalance = {
 };
 
 const addressByToken: Record<TokenType, string> = {
-  dai: ETH_NETWORK_CONFIG.contracts.dai,
-  ptk: ETH_NETWORK_CONFIG.contracts.ptk,
+  dai: ETH_NETWORK_CONFIG.tokens.dai,
+  ptk: ETH_NETWORK_CONFIG.tokens.ptk,
 };
 
 export function useFormattedBalance(

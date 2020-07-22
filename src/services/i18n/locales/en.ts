@@ -161,16 +161,16 @@ const en = {
       },
     },
     sellShare: {
-      buttonTitle: 'Sell',
-      formTitle: 'Sell share',
+      buttonTitle: 'Withdraw',
+      formTitle: 'Withdraw',
       placeholder: 'Enter sum starting from %{amount}',
       confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
       interestConfirmation:
         ' Additional ~%{interestAmount} will be deducted from your available balance as a payment for the the accumulated interest on your outstanding loans. Full amount to be written off from your available balance will be ~%{fullAmount}.',
     },
     buyShare: {
-      buttonTitle: 'Buy',
-      formTitle: 'Buy share',
+      buttonTitle: 'Deposit',
+      formTitle: 'Deposit',
       placeholder: 'Enter sum starting from %{amount}',
       confirmMessage: 'Are you sure you want deposit %{sourceAmount}?',
     },
