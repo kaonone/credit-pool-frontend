@@ -7,6 +7,7 @@ interface INetworkConfig {
   id: NetworkID;
   name: 'mainnet' | 'rinkeby';
   contracts: {
+    ptk: string;
     pool: string;
     curveModule: string;
     fundsModule: string;
@@ -18,7 +19,6 @@ interface INetworkConfig {
   };
   tokens: {
     dai: string;
-    ptk: string;
     usdc: string;
     usdt: string;
     tusd: string;
@@ -30,6 +30,7 @@ const ethNetworkConfigTestnet: INetworkConfig = {
   id: 4,
   name: 'rinkeby',
   contracts: {
+    ptk: '0x6553789Cb23a656f2CcbC312AeBFC8C3d697dB1b',
     pool: '0x113462A2c643dFEb47E9Cc3938FCBab04a058dF9',
     curveModule: '0xB49c4b7996E36654436F5a8F3C5d97018379971B',
     liquidityModule: '0xE45dD10Bb723b13Dd6A226718D1A40cad9518C24',
@@ -41,7 +42,6 @@ const ethNetworkConfigTestnet: INetworkConfig = {
   },
   tokens: {
     dai: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
-    ptk: '0x6553789Cb23a656f2CcbC312AeBFC8C3d697dB1b',
     usdc: '0x7d66cde53cc0a169cae32712fc48934e610aef14',
     usdt: '0xfb1d709cb959ac0ea14cad0927eabc7832e65058',
     tusd: '0x6f7454cba97fffe10e053187f23925a86f5c20c4',
@@ -53,6 +53,7 @@ const ethNetworkConfigsForSandbox: INetworkConfig = {
   id: 4,
   name: 'rinkeby',
   contracts: {
+    ptk: '0x6553789Cb23a656f2CcbC312AeBFC8C3d697dB1b',
     pool: '0x113462A2c643dFEb47E9Cc3938FCBab04a058dF9',
     curveModule: '0xB49c4b7996E36654436F5a8F3C5d97018379971B',
     liquidityModule: '0xE45dD10Bb723b13Dd6A226718D1A40cad9518C24',
@@ -64,7 +65,6 @@ const ethNetworkConfigsForSandbox: INetworkConfig = {
   },
   tokens: {
     dai: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
-    ptk: '0x6553789Cb23a656f2CcbC312AeBFC8C3d697dB1b',
     usdc: '0x7d66cde53cc0a169cae32712fc48934e610aef14',
     usdt: '0xfb1d709cb959ac0ea14cad0927eabc7832e65058',
     tusd: '0x6f7454cba97fffe10e053187f23925a86f5c20c4',
@@ -76,6 +76,8 @@ const ethNetworkConfigsForMainnet: INetworkConfig = {
   id: 1,
   name: 'mainnet',
   contracts: {
+    ptk: '0xAA2edc0E5CDE4Da80628972c501e79326741dB17',
+
     pool: '0x73067fdd366Cb678E9b539788F4C0f34C5700246',
     curveModule: '0xFb6b0103063CDf701b733db3Fa3F1c0686F19668',
     fundsModule: '0xc88F54A79CaE4C125D7A8c2Cf811daaE78b07D64',
@@ -87,7 +89,6 @@ const ethNetworkConfigsForMainnet: INetworkConfig = {
   },
   tokens: {
     dai: '0x6b175474e89094c44da98b954eedeac495271d0f',
-    ptk: '0xAA2edc0E5CDE4Da80628972c501e79326741dB17',
     usdc: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     usdt: '0xdac17f958d2ee523a2206206994597c13d831ec7',
     tusd: '0x0000000000085d4780B73119b644AE5ecd22b376',

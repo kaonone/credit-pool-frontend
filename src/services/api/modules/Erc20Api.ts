@@ -53,7 +53,7 @@ export class Erc20Api {
   @memoize(R.identity)
   // TODO return TokenAmount
   public getPtkBalance$(account: string): Observable<BN> {
-    return this.getBalance$(ETH_NETWORK_CONFIG.tokens.ptk, account);
+    return this.getBalance$(ETH_NETWORK_CONFIG.contracts.ptk, account);
   }
 
   // TODO remove this

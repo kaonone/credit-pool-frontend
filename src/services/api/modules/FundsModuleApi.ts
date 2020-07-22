@@ -147,7 +147,7 @@ export class FundsModuleApi {
     const lAmount = value.toBN();
 
     return this.erc20Api.toTokenAmount(
-      ETH_NETWORK_CONFIG.tokens.ptk,
+      ETH_NETWORK_CONFIG.contracts.ptk,
       lAmount.isZero()
         ? of(lAmount)
         : this.readonlyContract.methods.calculatePoolExit(

@@ -36,7 +36,7 @@ export function Profit() {
 
   const api = useApi();
   const [pToken, pTokenMeta] = useSubscribable(
-    () => api.erc20.getToken$(ETH_NETWORK_CONFIG.tokens.ptk),
+    () => api.erc20.getToken$(ETH_NETWORK_CONFIG.contracts.ptk),
     [api],
   );
 
