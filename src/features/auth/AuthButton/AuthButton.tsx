@@ -14,7 +14,12 @@ import { Button, Loading, Typography, Grid } from 'components';
 
 import { AuthModal } from './components/AuthModal';
 
-export function AuthButton() {
+interface Props {
+  connectRedirectPath: string;
+  disconnectRedirectPath: string;
+}
+
+export function AuthButton({ connectRedirectPath, disconnectRedirectPath }: Props) {
   const [isOpened, setIsOpened] = React.useState(false);
   const [needToRedirect, setNeedToRedirect] = React.useState(false);
   const api = useApi();
@@ -51,7 +56,7 @@ export function AuthButton() {
     (_, cur) => {
       if (!cur) {
         setNeedToRedirect(false);
-        history.push('/stats');
+        history.push(disconnectRedirectPath);
       }
     },
   );
@@ -60,7 +65,7 @@ export function AuthButton() {
     { needToRedirect, distributionBalance },
     (prev, cur) => cur.needToRedirect && !prev.distributionBalance && !!cur.distributionBalance,
     () => {
-      history.push('/account');
+      history.push(connectRedirectPath);
       setIsOpened(false);
     },
   );

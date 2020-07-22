@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { AuthButton } from 'features/auth';
 import {
   Typography,
   Loading,
@@ -68,7 +67,6 @@ export function DemoPage() {
           }
         />
       </div>
-      <AuthButton />
       <Loading gqlResults={result}>
         {result.data && <pre>{JSON.stringify(result.data.users, null, 2)}</pre>}
       </Loading>
