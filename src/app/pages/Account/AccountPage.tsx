@@ -1,11 +1,11 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import { useRouteMatch } from 'react-router';
+import { useRouteMatch, useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { routes } from 'app/routes';
 import { makeStyles } from 'utils/styles';
-import { TabsList, TabContext, Tab, TabPanel } from 'components';
+import { TabsList, TabContext, Tab, TabPanel, Button } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 
 import * as innerPages from './innerPages';
@@ -29,32 +29,37 @@ export function AccountPage() {
 
   const classes = useStyles();
 
+  const history = useHistory();
+
   return (
     <Grid className={classes.root}>
       <TabContext value={selectedPage}>
-        <TabsList value={selectedPage} className={classes.tabs} onChange={handleTabChange}>
-          <Tab
-            label={t(tKeys.tabs.summary.getKey())}
-            className={classes.tab}
-            component={Link}
-            value={routes.account.summary.getElementKey()}
-            to={routes.account.summary.getRedirectPath()}
-          />
-          <Tab
-            label={t(tKeys.tabs.stakes.getKey())}
-            className={classes.tab}
-            component={Link}
-            value={routes.account.stakes.getElementKey()}
-            to={routes.account.stakes.getRedirectPath()}
-          />
-          <Tab
-            label={t(tKeys.tabs.borrows.getKey())}
-            className={classes.tab}
-            component={Link}
-            value={routes.account.borrows.getElementKey()}
-            to={routes.account.borrows.getRedirectPath()}
-          />
-        </TabsList>
+        <div className={classes.navigationBar}>
+          <TabsList value={selectedPage} className={classes.tabs} onChange={handleTabChange}>
+            <Tab
+              label={t(tKeys.tabs.summary.getKey())}
+              className={classes.tab}
+              component={Link}
+              value={routes.account.summary.getElementKey()}
+              to={routes.account.summary.getRedirectPath()}
+            />
+            <Tab
+              label={t(tKeys.tabs.stakes.getKey())}
+              className={classes.tab}
+              component={Link}
+              value={routes.account.stakes.getElementKey()}
+              to={routes.account.stakes.getRedirectPath()}
+            />
+            <Tab
+              label={t(tKeys.tabs.borrows.getKey())}
+              className={classes.tab}
+              component={Link}
+              value={routes.account.borrows.getElementKey()}
+              to={routes.account.borrows.getRedirectPath()}
+            />
+          </TabsList>
+          {renderNavigationButton()}
+        </div>
         <TabPanel value={routes.account.summary.getElementKey()}>
           <innerPages.MySummary />
         </TabPanel>
@@ -67,6 +72,26 @@ export function AccountPage() {
       </TabContext>
     </Grid>
   );
+
+  function renderNavigationButton() {
+    switch (selectedPage) {
+      case 'stakes':
+        return (
+          <Button variant="contained" onClick={() => history.push(routes.lend.getRedirectPath())}>
+            Lend
+          </Button>
+        );
+
+      case 'borrows':
+        return (
+          <Button variant="contained" onClick={() => history.push(routes.borrow.getRedirectPath())}>
+            Borrow
+          </Button>
+        );
+    }
+
+    return null;
+  }
 }
 
 const useStyles = makeStyles(
@@ -79,6 +104,11 @@ const useStyles = makeStyles(
     },
     tab: {
       minWidth: 112,
+    },
+    navigationBar: {
+      display: 'flex',
+      alignItems: 'flex-start',
+      justifyContent: 'space-between',
     },
   }),
   { name: 'AccountPage' },
