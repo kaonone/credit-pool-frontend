@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { useHistory } from 'react-router';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import Avatar from '@material-ui/core/Avatar';
+import { empty } from 'rxjs';
 
 import { NETWORK_ID } from 'env';
 import { useApi } from 'services/api';
@@ -12,8 +14,14 @@ import { Button, Loading, Typography, Grid } from 'components';
 
 import { AuthModal } from './components/AuthModal';
 
-export function AuthButton() {
+interface Props {
+  connectRedirectPath: string;
+  disconnectRedirectPath: string;
+}
+
+export function AuthButton({ connectRedirectPath, disconnectRedirectPath }: Props) {
   const [isOpened, setIsOpened] = React.useState(false);
+  const [needToRedirect, setNeedToRedirect] = React.useState(false);
   const api = useApi();
   const classes = useStyles();
   const { t } = useTranslate();
@@ -24,7 +32,12 @@ export function AuthButton() {
 
   const connectCommunication = useCommunication(api.web3Manager.connect, []);
 
-  const toggleIsOpened = React.useCallback(() => setIsOpened(!isOpened), [isOpened]);
+  const toggleIsOpened = React.useCallback(() => {
+    setIsOpened(!isOpened);
+    !isOpened && setNeedToRedirect(true);
+  }, [isOpened]);
+
+  const history = useHistory();
 
   const handleDisconnectClick = React.useCallback(() => {
     api.web3Manager.disconnect();
@@ -32,11 +45,29 @@ export function AuthButton() {
     setIsOpened(false);
   }, [connectCommunication.reset]);
 
+  const [distributionBalance] = useSubscribable(
+    () => (account ? api.pToken.getDistributionBalanceOf$(account) : empty()),
+    [api, account],
+  );
+
   useOnChangeState(
-    { isOpened, connectedWallet },
-    (prev, cur) =>
-      cur.isOpened && !!cur.connectedWallet && prev.connectedWallet !== cur.connectedWallet,
-    () => setIsOpened(false),
+    connectedWallet,
+    (prev, cur) => prev !== cur,
+    (_, cur) => {
+      if (!cur) {
+        setNeedToRedirect(false);
+        history.push(disconnectRedirectPath);
+      }
+    },
+  );
+
+  useOnChangeState(
+    { needToRedirect, distributionBalance },
+    (prev, cur) => cur.needToRedirect && !prev.distributionBalance && !!cur.distributionBalance,
+    () => {
+      history.push(connectRedirectPath);
+      setIsOpened(false);
+    },
   );
 
   return (

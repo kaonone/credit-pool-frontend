@@ -16,7 +16,7 @@ export const tokenIcons: Record<string, React.ReactNode> = {
 };
 
 export function TokenIcon({ tokenAddress }: Props) {
-  const tokenIcon = tokenIcons[tokenAddress];
+  const tokenIcon = tokenIcons[tokenAddress.toLowerCase()];
   const hasIcon = tokenIcon !== undefined;
 
   return hasIcon ? (

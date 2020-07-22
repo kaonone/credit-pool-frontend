@@ -12,7 +12,7 @@ interface Props {
 export function FormattedTokenAmount({ sum }: Props) {
   const classes = useStyles();
   const tokenAddress = sum.currency.address;
-  const hasIcon = tokenIcons[tokenAddress] !== undefined;
+  const hasIcon = tokenIcons[tokenAddress.toLowerCase()] !== undefined;
 
   return (
     <span className={classes.root}>
