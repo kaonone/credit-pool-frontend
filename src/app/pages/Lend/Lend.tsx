@@ -1,16 +1,32 @@
 import * as React from 'react';
 
 import { Loading } from 'components';
-import { useLoanProposalsQuery } from 'generated/gql/pool';
+import { useLoanProposalsQuery, LoanProposalsQueryResult } from 'generated/gql/pool';
 import { useSubgraphPagination, useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
-import { LiquidityAmount } from 'model/entities';
+import { LiquidityAmount, PercentAmount, Currency } from 'model/entities';
 
 import { LoanProposalsTable, LoanProposal } from './views/LoanProposalsTable/LoanProposalsTable';
 
+function convertLoanProposals(
+  result: LoanProposalsQueryResult,
+  liquidityCurrency: Currency | undefined,
+) {
+  const debts = result.data?.debts;
+  return liquidityCurrency
+    ? debts?.map<LoanProposal>(debt => ({
+        borrower: debt.borrower.id,
+        loanRequested: new LiquidityAmount(debt.total, liquidityCurrency),
+        loanAPY: new PercentAmount(debt.apr),
+        loanDuration: '90 days',
+        lStaked: debt.lStaked,
+        descriptionHash: debt.description,
+      })) || []
+    : [];
+}
+
 export function Lend() {
   const { result, paginationView } = useSubgraphPagination(useLoanProposalsQuery, {});
-  const debts = result.data?.debts;
 
   const api = useApi();
   const [liquidityCurrency, liquidityTokenMeta] = useSubscribable(
@@ -18,19 +34,8 @@ export function Lend() {
     [api],
   );
   const loanProposals: LoanProposal[] = React.useMemo(
-    () =>
-      debts?.map<LoanProposal>(debt => ({
-        borrower: debt.borrower.id,
-        loanRequested: liquidityCurrency
-          ? new LiquidityAmount(debt.total, liquidityCurrency)
-          : undefined,
-        rawLoanRequested: debt.total,
-        loanAPY: debt.apr,
-        loanDuration: '90 days',
-        lStaked: debt.lStaked,
-        descriptionHash: debt.description,
-      })) || [],
-    [debts],
+    () => convertLoanProposals(result, liquidityCurrency),
+    [result, liquidityCurrency],
   );
   return (
     <>

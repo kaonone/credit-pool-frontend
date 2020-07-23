@@ -14,9 +14,8 @@ import { LoanProposalAdditionalInfo } from '../LoanProposalAdditionalInfo/LoanPr
 
 export type LoanProposal = {
   borrower: string;
-  loanRequested: LiquidityAmount | undefined;
-  rawLoanRequested: string;
-  loanAPY: string;
+  loanRequested: LiquidityAmount;
+  loanAPY: PercentAmount;
   loanDuration: string;
   lStaked: string;
   descriptionHash: string;
@@ -28,7 +27,7 @@ type Props = {
 
 function LoanRequested(props: Pick<LoanProposal, 'loanRequested'>) {
   const { loanRequested } = props;
-  return <div>{loanRequested ? <FormattedAmount sum={loanRequested} /> : '⏳'}</div>;
+  return <FormattedAmount sum={loanRequested} />;
 }
 
 function useCollateral(loanRequested: string, lStaked: string) {
@@ -50,9 +49,9 @@ function useCollateral(loanRequested: string, lStaked: string) {
   };
 }
 
-function CollateralContent(props: Pick<LoanProposal, 'rawLoanRequested' | 'lStaked'>) {
-  const { rawLoanRequested, lStaked } = props;
-  const { userProvided, poolProvided } = useCollateral(rawLoanRequested, lStaked);
+function CollateralContent(props: Pick<LoanProposal, 'loanRequested' | 'lStaked'>) {
+  const { loanRequested, lStaked } = props;
+  const { userProvided, poolProvided } = useCollateral(loanRequested.toString(), lStaked);
   return <CollateralDistributionBar userProvided={userProvided} poolProvided={poolProvided} />;
 }
 
@@ -99,7 +98,7 @@ const columns: Array<NewTable.models.Column<LoanProposal>> = [
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: x => <>{new PercentAmount(x.loanAPY).div(10).toFormattedString()}</>, // TODO: use value from the api after combining api & subgraph
+      render: x => <>{x.loanAPY.div(10).toFormattedString()}</>, // TODO: use value from the api after combining api & subgraph
     },
   },
 
@@ -121,7 +120,7 @@ const columns: Array<NewTable.models.Column<LoanProposal>> = [
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: x => <CollateralContent lStaked={x.lStaked} rawLoanRequested={x.rawLoanRequested} />,
+      render: x => <CollateralContent lStaked={x.lStaked} loanRequested={x.loanRequested} />,
     },
   },
   {
