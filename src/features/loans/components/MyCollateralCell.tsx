@@ -25,17 +25,16 @@ export function MyCollateralCell({
 
   return (
     <MyStakeCost
-      supporter={account!}
+      supporter={account}
       borrower={debt.borrower.id}
       proposalId={debt.proposal_id}
       status={debt.status}
       initialLoanSize={debt.total}
       loanBody={new BN(debt.total).sub(new BN(debt.repayed)).toString()}
-      children={
-        debt.status === Status.Proposed && (
-          <CollateralContent lStaked={lStaked} loanRequested={loanRequested} hideLabel />
-        )
-      }
-    />
+    >
+      {debt.status === Status.Proposed && (
+        <CollateralContent lStaked={lStaked} loanRequested={loanRequested} hideLabel />
+      )}
+    </MyStakeCost>
   );
 }

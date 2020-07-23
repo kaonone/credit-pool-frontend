@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { NewTable, Label, DoubleLineCell, AccountAddress, FormattedAmount } from 'components';
 import { LiquidityAmount, PercentAmount } from 'model/entities';
+
 import { DueDateCell } from './DueDateCell';
 import { ActionsCell } from './ActionsCell';
 import { MyCollateralCell } from './MyCollateralCell';

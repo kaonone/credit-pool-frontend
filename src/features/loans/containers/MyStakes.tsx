@@ -70,6 +70,7 @@ export const MyStakes: React.FC<Props> = ({ title, filter, account }) => {
     account,
     filter,
   ]);
+
   return (
     <div className={classes.root}>
       <div className={classes.tableTitle}>{title}</div>

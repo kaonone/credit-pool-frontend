@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { MyStakes } from 'features/loans';
-
 import { WithAccount } from 'app/components/WithAccount/WithAccount';
 
 import * as views from './views';
