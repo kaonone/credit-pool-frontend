@@ -49,7 +49,7 @@ function useCollateral(loanRequested: string, lStaked: string) {
   const lBorrowerStake = fullLoanStake?.divn(3); // TODO: add this value in subgraph to be able to calc collateral
 
   return {
-    poolProvided: new PercentAmount(calcCollateral(fullLoanStake, lStaked)).toNumber(),
+    poolProvided: calcCollateral(fullLoanStake, lStaked).toNumber(),
     userProvided:
       lBorrowerStake && fullLoanStake
         ? lBorrowerStake.div(fullLoanStake).mul(new BN(100)).toNumber()

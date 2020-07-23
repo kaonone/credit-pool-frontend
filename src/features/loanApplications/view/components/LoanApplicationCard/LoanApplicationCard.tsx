@@ -118,7 +118,7 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
     ],
   );
 
-  const progressInPercents = calcCollateral(fullLoanStake, stakedValue);
+  const progressInPercents = calcCollateral(fullLoanStake, stakedValue).toNumber();
   const isMyProposal = !!account && account.toLowerCase() === borrower.toLowerCase();
   const asideContent = React.useMemo(
     () => (
