@@ -2,7 +2,15 @@ import * as React from 'react';
 import BN from 'bn.js';
 import Typography from '@material-ui/core/Typography';
 
-import { NewTable, Label, Button, AccountAddress, FormattedAmount, Hint } from 'components';
+import {
+  NewTable,
+  Label,
+  Button,
+  AccountAddress,
+  FormattedAmount,
+  Hint,
+  Loading,
+} from 'components';
 import { makeStyles } from 'utils/styles';
 import { useApi } from 'services/api';
 import { LiquidityAmount, PercentAmount } from 'model/entities';
@@ -63,10 +71,11 @@ function AdditionalInfoContent(props: Pick<LoanProposal, 'descriptionHash'>) {
     [descriptionHash],
   );
 
-  const reason =
-    (descriptionMeta.error || descriptionMeta.loaded) && description ? description : '⏳';
-
-  return <LoanProposalAdditionalInfo reason={reason} riskScore={null} />;
+  return (
+    <Loading meta={descriptionMeta}>
+      <LoanProposalAdditionalInfo reason={description as string} riskScore={null} />
+    </Loading>
+  );
 }
 
 const columns: Array<NewTable.models.Column<LoanProposal>> = [
