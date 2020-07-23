@@ -1,6 +1,7 @@
 import BN from 'bn.js';
 
 import { ICurrency, IToBN, IToFraction, Decimal } from 'model/types';
+import { decimalsToWei } from 'utils/bn';
 
 import { Fraction } from './Fraction';
 
@@ -63,7 +64,7 @@ export abstract class Amount<C extends ICurrency> implements IToBN, IToFraction 
   }
 
   public toNumber(): number {
-    return this.toBN().toNumber();
+    return this.value.div(decimalsToWei(this.currency.decimals)).toNumber();
   }
 
   public toString(base?: number | 'hex' | undefined, length?: number | undefined): string {
