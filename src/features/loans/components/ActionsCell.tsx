@@ -4,8 +4,9 @@ import BN from 'bn.js';
 import { Status, usePledgeSubscription } from 'generated/gql/pool';
 import { isEqualHex } from 'utils/hex';
 import { bnToBn } from 'utils/bn';
-import { Grid, Loading } from 'components';
+import { makeStyles } from 'utils/styles';
 import { useSubscribable } from 'utils/react';
+import { Grid, Loading } from 'components';
 import { useApi } from 'services/api';
 import { getLoanDuePaymentDate, getPledgeId } from 'model';
 import {
@@ -16,6 +17,7 @@ import {
 } from 'features/cashExchange';
 import { UnstakingButton } from 'features/unstake';
 import { LoanRepayingButton } from 'features/repayLoan';
+import { AvailableForUnlock } from 'features/metrics';
 
 import { PartialDebt } from './types';
 
@@ -34,6 +36,7 @@ export function ActionsCell({ debt, account }: IProps) {
     stakeProgress,
     proposal_id: proposalId,
   } = debt;
+  const classes = useStyles();
   const api = useApi();
   const [config, configMeta] = useSubscribable(() => api.loanModule.getConfig$(), []);
 
@@ -98,12 +101,17 @@ export function ActionsCell({ debt, account }: IProps) {
       />
     ) : null,
     isAvailableForUnlock && debtId ? (
-      <UnlockButton
-        borrower={borrower.id}
-        proposalId={proposalId}
-        debtId={debtId}
-        {...commonProps}
-      />
+      <>
+        <div className={classes.sum}>
+          <AvailableForUnlock borrower={borrower.id} debtId={debtId} />
+        </div>
+        <UnlockButton
+          borrower={borrower.id}
+          proposalId={proposalId}
+          debtId={debtId}
+          {...commonProps}
+        />
+      </>
     ) : null,
     isAvailableForLiquidation && debtId ? (
       <LiquidateLoanButton borrower={borrower.id} debtId={debtId} {...commonProps}>
@@ -126,3 +134,9 @@ export function ActionsCell({ debt, account }: IProps) {
     </Loading>
   );
 }
+
+const useStyles = makeStyles(() => ({
+  sum: {
+    marginBottom: 10,
+  },
+}));

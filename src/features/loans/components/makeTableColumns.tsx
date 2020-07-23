@@ -1,23 +1,30 @@
 import * as React from 'react';
 
-import { NewTable, Label, DoubleLineCell, AccountAddress } from 'components';
+import { NewTable, Label, DoubleLineCell, AccountAddress, FormattedAmount } from 'components';
+import { LiquidityAmount, PercentAmount } from 'model/entities';
 
 import { DueDateCell } from './DueDateCell';
 import { ActionsCell } from './ActionsCell';
-import { TotalSumCell } from './TotalSumCell';
-import { InterestRateCell } from './InterestRateCell';
-import { Props as LoansTableProps } from './LoansTable';
 import { MyCollateralCell } from './MyCollateralCell';
+import { PartialDebt } from './types';
 
-export const makeTableColumns = ({
-  account,
-  type,
-}: Pick<LoansTableProps, 'account' | 'type'>): Array<NewTable.models.Column<any>> => [
+export type UserDebt = {
+  borrower: string;
+  total: LiquidityAmount;
+  apr: PercentAmount;
+  dueDate: Date | null;
+  rawDebt: PartialDebt;
+};
+
+export const makeTableColumns = (
+  account: string,
+  filter: 'issued' | 'pending',
+): Array<NewTable.models.Column<UserDebt>> => [
   {
     renderTitle: () => 'Lend to',
     cellContent: {
       kind: 'simple',
-      render: debt => <AccountAddress address={debt.borrower.id} size="small" />,
+      render: debt => <AccountAddress address={debt.borrower} size="small" />,
     },
   },
 
@@ -26,7 +33,7 @@ export const makeTableColumns = ({
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: debt => <TotalSumCell amount={debt.total} />,
+      render: debt => <FormattedAmount sum={debt.total} variant="plain" />,
     },
   },
 
@@ -39,7 +46,7 @@ export const makeTableColumns = ({
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: debt => <InterestRateCell amount={debt.apr} />,
+      render: debt => <FormattedAmount sum={debt.apr} variant="plain" />,
     },
   },
 
@@ -48,7 +55,7 @@ export const makeTableColumns = ({
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: debt => <DueDateCell lastUpdate={debt.last_update} />,
+      render: debt => <DueDateCell dueDate={debt.dueDate} />,
     },
   },
 
@@ -73,16 +80,16 @@ export const makeTableColumns = ({
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: debt => <MyCollateralCell debt={debt} account={account} />,
+      render: debt => <MyCollateralCell debt={debt.rawDebt} account={account} />,
     },
   },
 
   {
-    renderTitle: () => <>{type === 'issued' && 'Available For Withdrawal'}</>,
+    renderTitle: () => <>{filter === 'issued' && 'Available For Withdrawal'}</>,
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: debt => <>{!!account && <ActionsCell debt={debt} account={account} />}</>,
+      render: debt => <ActionsCell debt={debt.rawDebt} account={account} />,
     },
   },
 ];

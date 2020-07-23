@@ -4,14 +4,14 @@ import BN from 'bn.js';
 import { MyStakeCost } from 'features/stake';
 
 import { EmptyCell } from './EmptyCell';
-import { Props as LoansTableProps } from './LoansTable';
 import { PartialDebt } from './types';
 
 type Props = {
+  account: string;
   debt: PartialDebt;
 };
 
-export function MyCollateralCell({ account, debt }: Props & Pick<LoansTableProps, 'account'>) {
+export function MyCollateralCell({ account, debt }: Props) {
   if (!account) {
     return <EmptyCell />;
   }

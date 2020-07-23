@@ -5,7 +5,6 @@ import { useApi } from 'services/api';
 import { Loading, FormattedAmount, DoubleLineCell, Label } from 'components';
 import { calcInterestShare, getPledgeId } from 'model';
 import { useSubscribable } from 'utils/react';
-import { formatBalance } from 'utils/format';
 import { usePledgeSubscription, Status } from 'generated/gql/pool';
 
 interface Props {
@@ -53,7 +52,7 @@ export function MyStakeCost({
     fullLoanStake && calcInterestShare(lInitialLocked, fullLoanStake, interestShareDecimals);
 
   const renderTopPart = useCallback(
-    () => <>{myStakeCost && <FormattedAmount sum={myStakeCost} />}</>,
+    () => <>{myStakeCost && <FormattedAmount sum={myStakeCost} variant="plain" />}</>,
     [myStakeCost],
   );
 
@@ -62,11 +61,7 @@ export function MyStakeCost({
       <>
         {interestShare && (
           <Label hint="My collateral percent info" inline>
-            {formatBalance({
-              amountInBaseUnits: interestShare,
-              baseDecimals: interestShareDecimals,
-            })}
-            %
+            <FormattedAmount sum={interestShare} variant="plain" />
           </Label>
         )}
       </>

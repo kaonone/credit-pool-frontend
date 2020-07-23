@@ -13,5 +13,3 @@ export type PartialDebt = Pick<
 > & {
   borrower: Pick<User, 'id'>;
 };
-
-export type TableType = 'issued' | 'pending';

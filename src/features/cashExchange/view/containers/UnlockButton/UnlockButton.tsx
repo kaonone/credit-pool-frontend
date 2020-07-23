@@ -3,14 +3,11 @@ import BN from 'bn.js';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { ConfirmationDialog, Loading, FormattedBalance, Button, ButtonProps } from 'components';
+import { ConfirmationDialog, Loading, Button, ButtonProps } from 'components';
 import { useSubscribable } from 'utils/react';
 import { usePledgeSubscription } from 'generated/gql/pool';
 import { getPledgeId } from 'model';
 import { zeroAddress } from 'utils/mock';
-import { ETH_NETWORK_CONFIG } from 'env';
-import { TokenAmount } from 'model/entities';
-import { makeStyles } from 'utils/styles';
 
 type IProps = ButtonProps & {
   proposalId: string;
@@ -22,7 +19,6 @@ const tKeysConfirmation = tKeysAll.features.cashExchange.exchangingConfirmation;
 const tKeys = tKeysAll.features.cashExchange.unlockButton;
 
 export function UnlockButton(props: IProps) {
-  const classes = useStyles();
   const { borrower, proposalId, debtId, ...restProps } = props;
   const { t } = useTranslate();
   const api = useApi();
@@ -63,11 +59,6 @@ export function UnlockButton(props: IProps) {
     [account, pAvailableForUnlock.toString()],
   );
 
-  // TODO: Add multitoken support
-  const [dai, daiMeta] = useSubscribable(() => api.erc20.getToken$(ETH_NETWORK_CONFIG.tokens.dai), [
-    api,
-  ]);
-
   const confirmMessage = t(tKeys.confirmMessage.getKey(), {
     pledgeForUnlock:
       (availableForUnlockCost &&
@@ -82,24 +73,12 @@ export function UnlockButton(props: IProps) {
     close();
   }, [account, borrower, debtId]);
 
-  const tokenAmount =
-    availableForUnlockCost && dai && new TokenAmount(availableForUnlockCost.toString(), dai);
-
   return (
     <>
       <Loading
-        meta={[
-          accountMeta,
-          pAvailableForUnlockMeta,
-          interestCostMeta,
-          availableForUnlockCostMeta,
-          daiMeta,
-        ]}
+        meta={[accountMeta, pAvailableForUnlockMeta, interestCostMeta, availableForUnlockCostMeta]}
         gqlResults={pledgeGqlResult}
       >
-        <div className={classes.sum}>
-          {tokenAmount && <FormattedBalance sum={tokenAmount} token="dai" />}
-        </div>
         <Button {...restProps} onClick={open}>
           Withdraw
         </Button>
@@ -116,9 +95,3 @@ export function UnlockButton(props: IProps) {
     </>
   );
 }
-
-const useStyles = makeStyles(() => ({
-  sum: {
-    marginBottom: 10,
-  },
-}));
