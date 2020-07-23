@@ -16,7 +16,10 @@ import { LiquidityAmount, PercentAmount } from 'model/entities';
 import { useSubscribable } from 'utils/react';
 import { calcShare } from 'domainLogic';
 
-import { CollateralDistributionBar } from '../CollateralDistributionBar/CollateralDistributionBar';
+import {
+  CollateralDistributionBar,
+  Props as CollateralDistributionBarProps,
+} from '../CollateralDistributionBar/CollateralDistributionBar';
 import { LoanProposalAdditionalInfo } from '../LoanProposalAdditionalInfo/LoanProposalAdditionalInfo';
 
 export type LoanProposal = {
@@ -34,7 +37,7 @@ type Props = {
 
 function LoanRequested(props: Pick<LoanProposal, 'loanRequested'>) {
   const { loanRequested } = props;
-  return <FormattedAmount sum={loanRequested} />;
+  return <FormattedAmount sum={loanRequested} variant="plain" />;
 }
 
 function useCollateral(loanRequested: string, lStaked: LiquidityAmount) {
@@ -59,10 +62,19 @@ function useCollateral(loanRequested: string, lStaked: LiquidityAmount) {
   };
 }
 
-function CollateralContent(props: Pick<LoanProposal, 'loanRequested' | 'lStaked'>) {
-  const { loanRequested, lStaked } = props;
+export function CollateralContent(
+  props: Pick<LoanProposal, 'loanRequested' | 'lStaked'> &
+    Pick<CollateralDistributionBarProps, 'hideLabel'>,
+) {
+  const { loanRequested, lStaked, hideLabel } = props;
   const { userProvided, poolProvided } = useCollateral(loanRequested.toString(), lStaked);
-  return <CollateralDistributionBar userProvided={userProvided} poolProvided={poolProvided} />;
+  return (
+    <CollateralDistributionBar
+      userProvided={userProvided}
+      poolProvided={poolProvided}
+      hideLabel={hideLabel}
+    />
+  );
 }
 
 function AdditionalInfoContent(props: Pick<LoanProposal, 'descriptionHash'>) {
@@ -140,7 +152,7 @@ const columns: Array<NewTable.models.Column<LoanProposal>> = [
     cellContent: {
       kind: 'simple',
       render: () => (
-        <Button variant="outlined" color="primary" onClick={() => undefined}>
+        <Button variant="outlined" color="secondary" onClick={() => undefined}>
           Stake
         </Button>
       ),

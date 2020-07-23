@@ -106,6 +106,52 @@ export const useStyles = makeStyles(theme => ({
     },
   },
 
+  outlinedSecondary: {
+    borderWidth: 0,
+    zIndex: 1,
+    position: 'relative',
+    backgroundImage: theme.gradients.main.linear('to right'),
+    color: theme.palette.text.primary,
+
+    '&:before': {
+      zIndex: -1,
+      display: 'block',
+      // tslint:disable-next-line: quotemark
+      content: "''",
+      position: 'absolute',
+      top: 1,
+      right: 1,
+      bottom: 1,
+      left: 1,
+      backgroundColor: theme.palette.background.paper,
+      transition: theme.transitions.create(['opacity', 'background-color']),
+
+      borderRadius: theme.spacing(height / 2) - 1,
+      [theme.breakpoints.up('tabletXS')]: {
+        borderRadius: theme.spacing(heightTabletXS / 2) - 1,
+      },
+
+      '$sizeSmall&': {
+        borderRadius: theme.spacing(smallHeight / 2) - 1,
+        [theme.breakpoints.up('tabletXS')]: {
+          borderRadius: theme.spacing(smallHeightTabletXS / 2) - 1,
+        },
+      },
+
+      '$sizeLarge&': {
+        borderRadius: theme.spacing(largeHeight / 2) - 1,
+        [theme.breakpoints.up('tabletXS')]: {
+          borderRadius: theme.spacing(largeHeightTabletXS / 2) - 1,
+        },
+      },
+    },
+
+    '&:hover, &$focusVisible': {
+      border: 'none',
+      color: theme.colors.royalBlue2,
+    },
+  },
+
   containedPrimary: {
     boxShadow: 'none',
     color: theme.colors.white,

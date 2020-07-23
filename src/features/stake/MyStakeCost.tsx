@@ -14,6 +14,7 @@ interface Props {
   status: Status;
   loanBody: string;
   initialLoanSize: string;
+  children?: React.ReactNode;
 }
 
 export function MyStakeCost({
@@ -23,14 +24,15 @@ export function MyStakeCost({
   loanBody,
   status,
   initialLoanSize,
+  children,
 }: Props) {
   const pledgeHash = React.useMemo(() => getPledgeId(supporter, borrower, proposalId), [
     supporter,
     borrower,
     proposalId,
   ]);
-
   const api = useApi();
+
   const pledgeGqlResult = usePledgeSubscription({ variables: { pledgeHash } });
 
   const pLocked = pledgeGqlResult.data?.pledge?.pLocked || '0';
@@ -59,6 +61,7 @@ export function MyStakeCost({
   const renderBottomPart = useCallback(
     () => (
       <>
+        {children}
         {interestShare && (
           <Label hint="My collateral percent info" inline>
             <FormattedAmount sum={interestShare} variant="plain" />

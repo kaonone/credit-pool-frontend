@@ -8,7 +8,7 @@ import {
   useMyPendingLoansQuery,
   MyIssuedLoansQuery,
 } from 'generated/gql/pool';
-import { Loading, NewTable } from 'components';
+import { Loading, NewTable, Typography, Hint } from 'components';
 import { useApi } from 'services/api';
 import { getLoanDuePaymentDate } from 'model';
 import { Currency, LiquidityAmount, PercentAmount } from 'model/entities';
@@ -18,6 +18,7 @@ import { makeTableColumns, UserDebt } from '../components/makeTableColumns';
 type Props = {
   title: string;
   filter: 'issued' | 'pending';
+  account: string;
 };
 
 function convertDebts(
@@ -26,23 +27,26 @@ function convertDebts(
   repayDeadlinePeriod: BN,
 ): UserDebt[] {
   return debts.map<UserDebt>(debt => ({
-    total: new LiquidityAmount(debt.total, liquidityCurrency),
     borrower: debt.borrower.id,
+    total: new LiquidityAmount(debt.total, liquidityCurrency),
+    lStaked: new LiquidityAmount(debt.lStaked, liquidityCurrency),
     apr: new PercentAmount(debt.apr).div(10),
     dueDate: getLoanDuePaymentDate(debt.last_update, repayDeadlinePeriod),
     rawDebt: debt,
   }));
 }
 
-export const MyStakes: React.FC<Props> = ({ title, filter }) => {
+export const MyStakes: React.FC<Props> = ({ title, filter, account }) => {
   const classes = useStyles();
   const api = useApi();
 
-  const [account] = useSubscribable(() => api.web3Manager.account, []);
+  const useQuery = useMemo(
+    () => (filter === 'issued' ? useMyIssuedLoansQuery : useMyPendingLoansQuery),
+    [filter],
+  );
 
-  const useQuery = filter === 'issued' ? useMyIssuedLoansQuery : useMyPendingLoansQuery;
-  const { result } = useSubgraphPagination(useQuery, {
-    supporters: [account?.toLowerCase() || ''],
+  const { result, paginationView } = useSubgraphPagination(useQuery, {
+    supporters: [account.toLowerCase() || ''],
   });
   const debts = result.data?.debts || [];
 
@@ -61,20 +65,25 @@ export const MyStakes: React.FC<Props> = ({ title, filter }) => {
         : [],
     [debts, liquidityCurrency, repayDeadlinePeriod],
   );
-  const columns = useMemo(() => (account ? makeTableColumns(account!, filter) : []), [
+  const columns = useMemo(() => (account ? makeTableColumns(account, filter) : []), [
+    debts,
     account,
     filter,
   ]);
-
   return (
     <div className={classes.root}>
       <div className={classes.tableTitle}>{title}</div>
-      <Loading
-        gqlResults={result}
-        progressVariant="circle"
-        meta={[liquidityCurrencyMeta, loansConfigMeta]}
-      >
-        <NewTable.Component columns={columns} entries={entries} />
+      <Loading gqlResults={result} meta={[liquidityCurrencyMeta, loansConfigMeta]}>
+        {!entries.length ? (
+          <Hint>
+            <Typography>Not found</Typography>
+          </Hint>
+        ) : (
+          <>
+            <NewTable.Component columns={columns} entries={entries} />
+            {paginationView}
+          </>
+        )}
       </Loading>
     </div>
   );
@@ -83,7 +92,6 @@ export const MyStakes: React.FC<Props> = ({ title, filter }) => {
 export const useStyles = makeStyles(
   () => ({
     root: {},
-
     tableTitle: {
       marginBottom: 20,
     },

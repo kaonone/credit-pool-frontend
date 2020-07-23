@@ -8,6 +8,7 @@ query MyIssuedLoans($first: Int!, $skip: Int!, $supporters: [String!]!) {
     last_update
     status
     stakeProgress
+    lStaked
     borrower {
       id
     }

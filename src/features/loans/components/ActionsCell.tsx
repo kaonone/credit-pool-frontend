@@ -68,7 +68,7 @@ export function ActionsCell({ debt, account }: IProps) {
 
   const commonProps = {
     variant: 'outlined',
-    color: 'primary',
+    color: 'secondary',
     size: 'small',
     fullWidth: false,
   } as const;
@@ -121,22 +121,30 @@ export function ActionsCell({ debt, account }: IProps) {
   ].filter(Boolean);
 
   return (
-    <Loading meta={configMeta} gqlResults={pledgeGqlResult}>
-      {actions.length ? (
-        <Grid container spacing={1}>
-          {actions.map((action, index) => (
-            <Grid xs item key={index}>
-              {action}
-            </Grid>
-          ))}
-        </Grid>
-      ) : null}
-    </Loading>
+    <div className={classes.root}>
+      <Loading meta={configMeta} gqlResults={pledgeGqlResult}>
+        {actions.length ? (
+          <Grid container spacing={1}>
+            {actions.map((action, index) => (
+              <Grid xs item key={index}>
+                {action}
+              </Grid>
+            ))}
+          </Grid>
+        ) : null}
+      </Loading>
+    </div>
   );
 }
 
-const useStyles = makeStyles(() => ({
-  sum: {
-    marginBottom: 10,
-  },
-}));
+const useStyles = makeStyles(
+  () => ({
+    root: {
+      minWidth: 210,
+    },
+    sum: {
+      marginBottom: 10,
+    },
+  }),
+  { name: 'ActionCells' },
+);

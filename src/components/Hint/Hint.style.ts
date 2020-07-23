@@ -1,4 +1,4 @@
-import { Theme, makeStyles, lighten } from 'utils/styles';
+import { Theme, makeStyles, lighten, rgba } from 'utils/styles';
 
 export const useStyles = makeStyles((theme: Theme) => {
   return {
@@ -21,7 +21,8 @@ export const useStyles = makeStyles((theme: Theme) => {
       },
 
       '&$colorDefault': {
-        backgroundColor: theme.palette.background.hint,
+        color: theme.palette.text.secondary,
+        backgroundColor: rgba(theme.palette.background.hint, 0.5),
       },
 
       '&$colorError': {
@@ -31,28 +32,12 @@ export const useStyles = makeStyles((theme: Theme) => {
 
       '&$withOverlay': {
         position: 'absolute',
-        borderRadius: 6,
         top: -8,
         bottom: -8,
         left: -8,
         right: -8,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
         zIndex: 1,
         overflow: 'hidden',
-        color: theme.palette.text.secondary,
-        background: 'transparent',
-
-        '&:before': {
-          content: "''",
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          background: theme.palette.background.hint,
-          opacity: 0.5,
-          zIndex: -1,
-        },
       },
     },
 

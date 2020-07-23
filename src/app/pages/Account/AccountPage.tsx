@@ -91,14 +91,14 @@ export function AccountPage() {
     switch (selectedPage) {
       case 'stakes':
         return (
-          <Button component={Link} variant="contained" to={routes.lend.getRedirectPath()}>
+          <Button component={Link} variant="contained" color="primary" to={routes.lend.getRedirectPath()}>
             Lend
           </Button>
         );
 
       case 'borrows':
         return (
-          <Button component={Link} variant="contained" to={routes.borrow.getRedirectPath()}>
+          <Button component={Link} variant="contained" color="primary" to={routes.borrow.getRedirectPath()}>
             Borrow
           </Button>
         );
