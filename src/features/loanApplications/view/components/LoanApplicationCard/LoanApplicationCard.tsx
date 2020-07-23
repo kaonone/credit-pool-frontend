@@ -13,6 +13,7 @@ import { getPledgeId } from 'model';
 import { useSubscribable } from 'utils/react';
 import { formatBalance } from 'utils/format';
 import { Status, usePledgeSubscription } from 'generated/gql/pool';
+import { calcShare } from 'domainLogic';
 
 import { useStyles } from './LoanApplicationCard.style';
 import { Progress } from '../Progress/Progress';
@@ -117,12 +118,8 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
     ],
   );
 
-  const rawProgressInPercents = fullLoanStake
-    ? new BN(stakedValue).muln(10000).div(fullLoanStake)
-    : new BN(0);
-  const progressInPercents = Math.min(100, rawProgressInPercents.toNumber() / 100);
+  const progressInPercents = fullLoanStake ? calcShare(fullLoanStake, stakedValue).toNumber() : 0;
   const isMyProposal = !!account && account.toLowerCase() === borrower.toLowerCase();
-
   const asideContent = React.useMemo(
     () => (
       <Grid container spacing={2} justify="center" direction="column">
