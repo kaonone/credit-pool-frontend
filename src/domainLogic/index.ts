@@ -1,10 +1,12 @@
 import BN from 'bn.js';
 
 import { PercentAmount } from 'model/entities';
+import { IToBN } from 'model/types';
+import { bnToBn } from 'utils/bn';
 
-export function calcCollateral(fullLoanStake: BN | undefined, stakedValue: string): PercentAmount {
-  const rawProgressInPercents = fullLoanStake
-    ? new BN(stakedValue).muln(10000).div(fullLoanStake)
-    : new BN(0);
-  return new PercentAmount(Math.min(100, rawProgressInPercents.toNumber() / 100));
+export function calcShare(
+  fullValue: BN | IToBN | string,
+  currentValue: BN | IToBN | string,
+): PercentAmount {
+  return new PercentAmount(bnToBn(currentValue)).div(bnToBn(fullValue)).mul(100);
 }

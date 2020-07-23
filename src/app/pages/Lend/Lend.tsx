@@ -19,7 +19,7 @@ function convertLoanProposals(
         loanRequested: new LiquidityAmount(debt.total, liquidityCurrency),
         loanAPY: new PercentAmount(debt.apr),
         loanDuration: '90 days',
-        lStaked: debt.lStaked,
+        lStaked: new LiquidityAmount(debt.lStaked, liquidityCurrency),
         descriptionHash: debt.description,
       })) || []
     : [];

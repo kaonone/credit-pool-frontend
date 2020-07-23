@@ -1,5 +1,4 @@
 import * as React from 'react';
-import BN from 'bn.js';
 import Typography from '@material-ui/core/Typography';
 
 import {
@@ -15,7 +14,7 @@ import { makeStyles } from 'utils/styles';
 import { useApi } from 'services/api';
 import { LiquidityAmount, PercentAmount } from 'model/entities';
 import { useSubscribable } from 'utils/react';
-import { calcCollateral } from 'domainLogic';
+import { calcShare } from 'domainLogic';
 
 import { CollateralDistributionBar } from '../CollateralDistributionBar/CollateralDistributionBar';
 import { LoanProposalAdditionalInfo } from '../LoanProposalAdditionalInfo/LoanProposalAdditionalInfo';
@@ -25,7 +24,7 @@ export type LoanProposal = {
   loanRequested: LiquidityAmount;
   loanAPY: PercentAmount;
   loanDuration: string;
-  lStaked: string;
+  lStaked: LiquidityAmount;
   descriptionHash: string;
 };
 
@@ -38,7 +37,7 @@ function LoanRequested(props: Pick<LoanProposal, 'loanRequested'>) {
   return <FormattedAmount sum={loanRequested} />;
 }
 
-function useCollateral(loanRequested: string, lStaked: string) {
+function useCollateral(loanRequested: string, lStaked: LiquidityAmount) {
   const api = useApi();
 
   const [fullLoanStake] = useSubscribable(
@@ -49,11 +48,14 @@ function useCollateral(loanRequested: string, lStaked: string) {
   const lBorrowerStake = fullLoanStake?.divn(3); // TODO: add this value in subgraph to be able to calc collateral
 
   return {
-    poolProvided: calcCollateral(fullLoanStake, lStaked).toNumber(),
+    poolProvided:
+      fullLoanStake && lBorrowerStake
+        ? calcShare(fullLoanStake, lStaked.sub(lBorrowerStake))
+        : new PercentAmount(0),
     userProvided:
       lBorrowerStake && fullLoanStake
-        ? lBorrowerStake.div(fullLoanStake).mul(new BN(100)).toNumber()
-        : 0,
+        ? calcShare(fullLoanStake, lBorrowerStake)
+        : new PercentAmount(0),
   };
 }
 

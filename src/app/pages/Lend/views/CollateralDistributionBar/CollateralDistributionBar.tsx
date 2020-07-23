@@ -1,21 +1,38 @@
 import * as React from 'react';
+import cn from 'classnames';
 
 import { makeStyles } from 'utils/styles';
+import { PercentAmount } from 'model/entities';
 
 type Props = {
-  userProvided: number;
-  poolProvided: number;
+  userProvided: PercentAmount;
+  poolProvided: PercentAmount;
 };
 
 export function CollateralDistributionBar(props: Props) {
-  const { poolProvided } = props;
+  const { poolProvided, userProvided } = props;
   const classes = useStyles(props);
 
   function renderPledgeDistribution() {
     return (
       <div className={classes.pledgeDistribution}>
-        <div className={classes.userProvidedPart} />
-        <div className={classes.poolProvidedPart} />
+        {!userProvided.isZero() && (
+          <div
+            className={cn(classes.barPart, classes.userProvided)}
+            style={{
+              width: `${userProvided.toNumber()}%`,
+            }}
+          />
+        )}
+        {!poolProvided.isZero() && (
+          <div
+            className={cn(classes.barPart, classes.poolProvided)}
+            style={{
+              left: `${userProvided.toNumber()}%`,
+              width: `${poolProvided.toNumber()}%`,
+            }}
+          />
+        )}
       </div>
     );
   }
@@ -23,7 +40,7 @@ export function CollateralDistributionBar(props: Props) {
   return (
     <div className={classes.root}>
       {renderPledgeDistribution()}
-      <span>{`${poolProvided}%`}</span>
+      <span>{poolProvided.add(userProvided).toFormattedString()}</span>
     </div>
   );
 }
@@ -43,22 +60,30 @@ const useStyles = makeStyles(
       borderRadius: 23,
       marginRight: 10,
     },
-    userProvidedPart: {
-      position: 'absolute',
-      background: 'linear-gradient(to top, #33a455, #6bff97)',
+    barPart: {
+      minWidth: 2,
       height: '100%',
-      zIndex: 1,
-      borderRadius: 23,
-      width: ({ userProvided }) => `${userProvided + 5}%`, // 5 is for visual overlap
-    },
-    poolProvidedPart: {
       position: 'absolute',
-      background: 'linear-gradient(to bottom, #c6b0ff, #9360ff)',
-      borderRadius: 23,
-      height: '100%',
-      left: ({ userProvided }: Props) => `${userProvided}%`,
-      width: ({ poolProvided }: Props) => `${poolProvided}%`,
+
+      '&:first-child': {
+        borderRadius: [[23, 0, 0, 23]],
+      },
+
+      '&:last-child': {
+        borderRadius: [[0, 23, 23, 0]],
+      },
+
+      '&$userProvided': {
+        background: 'linear-gradient(to top, #33a455, #6bff97)',
+      },
+
+      '&$poolProvided': {
+        background: 'linear-gradient(to bottom, #c6b0ff, #9360ff)',
+      },
     },
+
+    userProvided: {},
+    poolProvided: {},
   }),
   { name: 'CollateralDistributionBar' },
 );
