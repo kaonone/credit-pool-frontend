@@ -1,21 +1,94 @@
 import * as React from 'react';
+import Typography from '@material-ui/core/Typography';
 
-import { NewTable, Label, Button, AccountAddress } from 'components';
-import { DAIIcon } from 'components/icons';
+import {
+  NewTable,
+  Label,
+  Button,
+  AccountAddress,
+  FormattedAmount,
+  Hint,
+  Loading,
+} from 'components';
 import { makeStyles } from 'utils/styles';
+import { useApi } from 'services/api';
+import { LiquidityAmount, PercentAmount } from 'model/entities';
+import { useSubscribable } from 'utils/react';
+import { calcShare } from 'domainLogic';
 
-import { Collateral } from '../Collateral/Collateral';
+import { CollateralDistributionBar } from '../CollateralDistributionBar/CollateralDistributionBar';
 import { LoanProposalAdditionalInfo } from '../LoanProposalAdditionalInfo/LoanProposalAdditionalInfo';
 
-const columns: Array<NewTable.models.Column<any>> = [
+export type LoanProposal = {
+  borrower: string;
+  loanRequested: LiquidityAmount;
+  loanAPY: PercentAmount;
+  loanDuration: string;
+  lStaked: LiquidityAmount;
+  descriptionHash: string;
+};
+
+type Props = {
+  loanProposals: LoanProposal[];
+};
+
+function LoanRequested(props: Pick<LoanProposal, 'loanRequested'>) {
+  const { loanRequested } = props;
+  return <FormattedAmount sum={loanRequested} />;
+}
+
+function useCollateral(loanRequested: string, lStaked: LiquidityAmount) {
+  const api = useApi();
+
+  const [fullLoanStake] = useSubscribable(
+    () => api.loanModule.calculateFullLoanStake$(loanRequested),
+    [loanRequested],
+  );
+
+  const lBorrowerStake = fullLoanStake?.divn(3); // TODO: add this value in subgraph to be able to calc collateral
+
+  return {
+    poolProvided:
+      fullLoanStake && lBorrowerStake
+        ? calcShare(fullLoanStake, lStaked.sub(lBorrowerStake))
+        : new PercentAmount(0),
+    userProvided:
+      lBorrowerStake && fullLoanStake
+        ? calcShare(fullLoanStake, lBorrowerStake)
+        : new PercentAmount(0),
+  };
+}
+
+function CollateralContent(props: Pick<LoanProposal, 'loanRequested' | 'lStaked'>) {
+  const { loanRequested, lStaked } = props;
+  const { userProvided, poolProvided } = useCollateral(loanRequested.toString(), lStaked);
+  return <CollateralDistributionBar userProvided={userProvided} poolProvided={poolProvided} />;
+}
+
+function AdditionalInfoContent(props: Pick<LoanProposal, 'descriptionHash'>) {
+  const { descriptionHash } = props;
+  const api = useApi();
+  const [description, descriptionMeta] = useSubscribable(
+    () => api.swarmApi.read<string>(descriptionHash),
+    [descriptionHash],
+  );
+
+  return (
+    <Loading meta={descriptionMeta}>
+      <LoanProposalAdditionalInfo reason={description as string} riskScore={null} />
+    </Loading>
+  );
+}
+
+const columns: Array<NewTable.models.Column<LoanProposal>> = [
   {
     renderTitle: () => 'Borrower',
     cellContent: {
       kind: 'simple',
-      render: () => (
+      render: x => (
         <>
           <div style={{ display: 'inline-flex' }}>
-            <AccountAddress address="0x5d50...218b" size="small" />
+            <AccountAddress address={x.borrower} size="small" />
           </div>
         </>
       ),
@@ -27,12 +100,7 @@ const columns: Array<NewTable.models.Column<any>> = [
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: () => (
-        <div style={{ display: 'inline-flex' }}>
-          <span style={{ marginRight: 6 }}>1,900,200.00</span>
-          <DAIIcon />
-        </div>
-      ),
+      render: x => <LoanRequested loanRequested={x.loanRequested} />,
     },
   },
 
@@ -41,7 +109,7 @@ const columns: Array<NewTable.models.Column<any>> = [
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: () => '15.40%',
+      render: x => <>{x.loanAPY.div(10).toFormattedString()}</>, // TODO: use value from the api after combining api & subgraph
     },
   },
 
@@ -50,7 +118,7 @@ const columns: Array<NewTable.models.Column<any>> = [
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: () => '7 days',
+      render: x => <>{x.loanDuration}</>,
     },
   },
 
@@ -63,7 +131,7 @@ const columns: Array<NewTable.models.Column<any>> = [
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: () => <Collateral userProvided={33} poolProvided={55} />,
+      render: x => <CollateralContent lStaked={x.lStaked} loanRequested={x.loanRequested} />,
     },
   },
   {
@@ -85,17 +153,14 @@ const columns: Array<NewTable.models.Column<any>> = [
       kind: 'for-row-expander',
       expandedArea: {
         kind: 'single-cell',
-        renderContent: () => (
-          <LoanProposalAdditionalInfo reason="To make even more" riskScore="7.4" />
-        ),
+        renderContent: x => <AdditionalInfoContent descriptionHash={x.descriptionHash} />,
       },
     },
   },
 ];
 
-const entries = [1, 2, 3];
-
-export function LoanProposalsTable() {
+export function LoanProposalsTable(props: Props) {
+  const { loanProposals } = props;
   const classes = useStyles();
 
   function renderTableHeader() {
@@ -112,7 +177,18 @@ export function LoanProposalsTable() {
   return (
     <div className={classes.root}>
       {renderTableHeader()}
-      <NewTable.Component withStripes withOuterPadding columns={columns} entries={entries} />
+      {!loanProposals.length ? (
+        <Hint>
+          <Typography>No data</Typography>
+        </Hint>
+      ) : (
+        <NewTable.Component
+          withStripes
+          withOuterPadding
+          columns={columns}
+          entries={loanProposals}
+        />
+      )}
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { makeStyles } from 'utils/styles';
 import { TokenIcon, tokenIcons } from 'components/TokenIcon/TokenIcon';
 
 interface Props {
-  sum: TokenAmount;
+  sum: TokenAmount; // TODO: rename sum -> amount + do the same in FormattedAmount
 }
 
 export function FormattedTokenAmount({ sum }: Props) {

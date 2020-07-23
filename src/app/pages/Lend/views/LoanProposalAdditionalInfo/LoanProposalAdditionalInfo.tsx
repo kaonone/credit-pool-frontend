@@ -4,7 +4,7 @@ import { makeStyles } from 'utils/styles';
 
 type Props = {
   reason: string;
-  riskScore: string;
+  riskScore: string | null;
 };
 
 export function LoanProposalAdditionalInfo(props: Props) {
@@ -17,7 +17,12 @@ export function LoanProposalAdditionalInfo(props: Props) {
         Reason: <em className={classes.reason}>{reason}</em>
       </div>
       <div>
-        Risk Score: <span className={classes.riskScoreValue}>{riskScore}</span>
+        Risk Score:
+        {riskScore === null ? (
+          <> Not available yet</>
+        ) : (
+          <span className={classes.riskScoreValue}>{riskScore}</span>
+        )}
       </div>
     </div>
   );
