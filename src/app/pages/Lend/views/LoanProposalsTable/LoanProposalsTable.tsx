@@ -1,7 +1,8 @@
 import * as React from 'react';
 import BN from 'bn.js';
+import Typography from '@material-ui/core/Typography';
 
-import { NewTable, Label, Button, AccountAddress, FormattedAmount } from 'components';
+import { NewTable, Label, Button, AccountAddress, FormattedAmount, Hint } from 'components';
 import { makeStyles } from 'utils/styles';
 import { useApi } from 'services/api';
 import { LiquidityAmount, PercentAmount } from 'model/entities';
@@ -166,7 +167,18 @@ export function LoanProposalsTable(props: Props) {
   return (
     <div className={classes.root}>
       {renderTableHeader()}
-      <NewTable.Component withStripes withOuterPadding columns={columns} entries={loanProposals} />
+      {!loanProposals.length ? (
+        <Hint>
+          <Typography>No data</Typography>
+        </Hint>
+      ) : (
+        <NewTable.Component
+          withStripes
+          withOuterPadding
+          columns={columns}
+          entries={loanProposals}
+        />
+      )}
     </div>
   );
 }
