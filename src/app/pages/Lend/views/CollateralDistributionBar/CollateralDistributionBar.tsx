@@ -7,7 +7,7 @@ type Props = {
   poolProvided: number;
 };
 
-export function Collateral(props: Props) {
+export function CollateralDistributionBar(props: Props) {
   const { poolProvided } = props;
   const classes = useStyles(props);
 
@@ -60,5 +60,5 @@ const useStyles = makeStyles(
       width: ({ poolProvided }: Props) => `${poolProvided}%`,
     },
   }),
-  { name: 'Collateral' },
+  { name: 'CollateralDistributionBar' },
 );

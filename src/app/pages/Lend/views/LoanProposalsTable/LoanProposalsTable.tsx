@@ -8,7 +8,7 @@ import { LiquidityAmount, PercentAmount } from 'model/entities';
 import { useSubscribable } from 'utils/react';
 import { calcCollateral } from 'domainLogic';
 
-import { Collateral } from '../Collateral/Collateral';
+import { CollateralDistributionBar } from '../CollateralDistributionBar/CollateralDistributionBar';
 import { LoanProposalAdditionalInfo } from '../LoanProposalAdditionalInfo/LoanProposalAdditionalInfo';
 
 export type LoanProposal = {
@@ -52,12 +52,7 @@ function useCollateral(loanRequested: string, lStaked: string) {
 function CollateralContent(props: Pick<LoanProposal, 'rawLoanRequested' | 'lStaked'>) {
   const { rawLoanRequested, lStaked } = props;
   const { userProvided, poolProvided } = useCollateral(rawLoanRequested, lStaked);
-  return (
-    <Collateral
-      userProvided={userProvided} // FIXME: rename Collateral -> CollateralDistributionBar
-      poolProvided={poolProvided}
-    />
-  );
+  return <CollateralDistributionBar userProvided={userProvided} poolProvided={poolProvided} />;
 }
 
 function AdditionalInfoContent(props: Pick<LoanProposal, 'descriptionHash'>) {
