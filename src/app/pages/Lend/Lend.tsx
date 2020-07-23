@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { Loading } from 'components';
 import { useLoanProposalsQuery } from 'generated/gql/pool';
 import { useSubgraphPagination, useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
@@ -12,7 +13,10 @@ export function Lend() {
   const debts = result.data?.debts;
 
   const api = useApi();
-  const [liquidityCurrency] = useSubscribable(() => api.fundsModule.getLiquidityCurrency$(), [api]);
+  const [liquidityCurrency, liquidityTokenMeta] = useSubscribable(
+    () => api.fundsModule.getLiquidityCurrency$(),
+    [api],
+  );
   const loanProposals: LoanProposal[] = React.useMemo(
     () =>
       debts?.map<LoanProposal>(debt => ({
@@ -30,8 +34,10 @@ export function Lend() {
   );
   return (
     <>
-      <LoanProposalsTable loanProposals={loanProposals} />
-      {paginationView}
+      <Loading gqlResults={result} meta={liquidityTokenMeta}>
+        <LoanProposalsTable loanProposals={loanProposals} />
+        {paginationView}
+      </Loading>
     </>
   );
 }
