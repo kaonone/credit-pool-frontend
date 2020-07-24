@@ -18,7 +18,6 @@ export function useMyInterestShare({
 }: InterestShareData & PledgeHashData): [PercentAmount | null, ISubscriptionMeta] {
   const api = useApi();
 
-  const interestShareDecimals = 2;
   const pledgeHash = getPledgeId(supporter, borrower, proposalId);
   const pledgeGqlResult = usePledgeSubscription({ variables: { pledgeHash } });
   const lInitialLocked = pledgeGqlResult.data?.pledge?.lInitialLocked || '0';
@@ -29,7 +28,7 @@ export function useMyInterestShare({
   );
 
   const interestShare =
-    fullLoanStake && calcInterestShare(lInitialLocked, fullLoanStake, interestShareDecimals);
+    fullLoanStake && calcInterestShare(lInitialLocked, fullLoanStake);
 
   return [interestShare || null, fullLoanStakeMeta];
 }
