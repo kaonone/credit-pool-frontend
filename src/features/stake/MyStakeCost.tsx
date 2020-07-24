@@ -1,20 +1,15 @@
 import React, { useCallback } from 'react';
 
 import { FormattedAmount, DoubleLineCell, Label, Loading } from 'components';
-import { Status } from 'generated/gql/pool';
 
-import { useMyInterestShare } from './useMyInterestShare';
-import { useMyStakeCost } from './useMyStakeCost';
+import { useMyInterestShare, InterestShareData } from './useMyInterestShare';
+import { useMyStakeCost, StakeCostData, PledgeHashData } from './useMyStakeCost';
 
-interface Props {
-  supporter: string;
-  borrower: string;
-  proposalId: string;
-  status: Status;
-  loanBody: string;
-  initialLoanSize: string;
+interface OwnProps {
   children?: React.ReactNode;
 }
+
+type Props = InterestShareData & StakeCostData & PledgeHashData & OwnProps;
 
 export function MyStakeCost({
   supporter,

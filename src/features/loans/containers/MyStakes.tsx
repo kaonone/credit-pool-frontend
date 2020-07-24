@@ -32,6 +32,7 @@ function convertDebts(
     lStaked: new LiquidityAmount(debt.lStaked, liquidityCurrency),
     apr: new PercentAmount(debt.apr).div(10),
     dueDate: getLoanDuePaymentDate(debt.last_update, repayDeadlinePeriod),
+    proposalId: debt.proposal_id,
     rawDebt: debt,
   }));
 }
