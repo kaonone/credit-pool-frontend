@@ -2,9 +2,9 @@ import React from 'react';
 import BN from 'bn.js';
 
 import { MyStakeCost } from 'features/stake';
-import { CollateralContent } from 'app/pages/Lend/views/LoanProposalsTable/LoanProposalsTable';
 import { Status } from 'generated/gql/pool';
 
+import { CollateralContent } from '../containers/CollateralContent';
 import { EmptyCell } from './EmptyCell';
 import { PartialDebt } from './types';
 

@@ -4,7 +4,7 @@ import BN from 'bn.js';
 import { Status, usePledgeSubscription } from 'generated/gql/pool';
 import { isEqualHex } from 'utils/hex';
 import { bnToBn } from 'utils/bn';
-import { makeStyles } from 'utils/styles';
+import { makeStyles, useTheme } from 'utils/styles';
 import { useSubscribable } from 'utils/react';
 import { Grid, Loading } from 'components';
 import { useApi } from 'services/api';
@@ -37,6 +37,7 @@ export function ActionsCell({ debt, account }: IProps) {
     proposal_id: proposalId,
   } = debt;
   const classes = useStyles();
+  const theme = useTheme();
   const api = useApi();
   const [config, configMeta] = useSubscribable(() => api.loanModule.getConfig$(), []);
 
@@ -68,8 +69,9 @@ export function ActionsCell({ debt, account }: IProps) {
 
   const commonProps = {
     variant: 'outlined',
-    color: 'secondary',
+    color: 'primary',
     size: 'small',
+    backgroundColor: theme.palette.background.paper,
     fullWidth: false,
   } as const;
 
