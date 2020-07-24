@@ -25,7 +25,6 @@ export function MyStakeCost({
   initialLoanSize,
   children,
 }: Props) {
-  const lInitialLocked = pledgeGqlResult.data?.pledge?.lInitialLocked || '0';
   const pledgeHashData = { supporter, borrower, proposalId };
   const [interestShare, interestShareMeta] = useMyInterestShare({
     initialLoanSize,

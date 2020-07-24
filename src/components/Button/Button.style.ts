@@ -1,5 +1,7 @@
 import { makeStyles } from 'utils/styles';
 
+import type { OwnProps } from './Button';
+
 const shadowOffset = 3;
 const largeShadowOffset = 3;
 const backgroundGradientSize = '300%';
@@ -76,7 +78,7 @@ export const useStyles = makeStyles(theme => ({
       right: 1,
       bottom: 1,
       left: 1,
-      backgroundColor: ({ backgroundColor }: any) =>
+      backgroundColor: ({ backgroundColor }: OwnProps) =>
         backgroundColor || theme.palette.background.default,
       transition: theme.transitions.create(['opacity', 'background-color']),
 

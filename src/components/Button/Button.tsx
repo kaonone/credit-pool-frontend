@@ -8,7 +8,7 @@ import { useStyles } from './Button.style';
 type ButtonClassKey = keyof ReturnType<typeof useStyles>;
 
 // hint to support gradient borders
-type OwnProps = {
+export type OwnProps = {
   backgroundColor?: string;
 };
 
