@@ -49,9 +49,7 @@ export function MyStakeCost({
     () => api.loanModule.calculateFullLoanStake$(initialLoanSize),
     [initialLoanSize],
   );
-  const interestShareDecimals = 2;
-  const interestShare =
-    fullLoanStake && calcInterestShare(lInitialLocked, fullLoanStake, interestShareDecimals);
+  const interestShare = fullLoanStake && calcInterestShare(lInitialLocked, fullLoanStake);
 
   const renderTopPart = useCallback(
     () => <>{myStakeCost && <FormattedAmount sum={myStakeCost} variant="plain" />}</>,
@@ -69,7 +67,7 @@ export function MyStakeCost({
         )}
       </>
     ),
-    [interestShare, interestShareDecimals],
+    [interestShare],
   );
 
   return (

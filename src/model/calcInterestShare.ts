@@ -1,14 +1,13 @@
 import BN from 'bn.js';
 
-import { decimalsToWei } from 'utils/bn';
+import { bnToBn } from 'utils/bn';
 
 import { PercentAmount } from './entities';
+import { IToBN } from './types';
 
 export function calcInterestShare(
-  userStake: string | BN,
-  fullLoanStake: string | BN,
-  outputDecimals: number = 0,
+  userStake: string | BN | IToBN,
+  fullLoanStake: string | BN | IToBN,
 ): PercentAmount {
-  const weiDecimals = decimalsToWei(outputDecimals);
-  return new PercentAmount(userStake).mul(weiDecimals).div(new BN(fullLoanStake));
+  return new PercentAmount(bnToBn(userStake)).mul(100).div(bnToBn(fullLoanStake));
 }
