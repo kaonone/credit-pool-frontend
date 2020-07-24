@@ -28,7 +28,7 @@ const Button: OverridableComponent<ButtonTypeMap> = function ButtonFunc<
   D extends React.ElementType = 'button'
 >(props: ButtonProps<D, P>) {
   const classes = useStyles(props);
-  const { classes: muiClasses = {}, ...rest } = props;
+  const { classes: muiClasses = {}, backgroundColor, ...rest } = props;
 
   return (
     <MuiButton
