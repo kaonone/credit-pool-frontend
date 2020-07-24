@@ -211,9 +211,8 @@ export class FundsModuleApi {
     address: string,
     additionalPtkBalance: string,
     additionalLiquidity: string,
-  ): Observable<TokenAmount> {
-    return this.erc20Api.toTokenAmount(
-      ETH_NETWORK_CONFIG.tokens.dai,
+  ): Observable<LiquidityAmount> {
+    return this.toLiquidityAmount$(
       combineLatest([this.erc20Api.getPtkBalance$(address), this.getCurrentLiquidity$()]).pipe(
         switchMap(([ptkBalance, currentLiquidity]) =>
           combineLatest([

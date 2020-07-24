@@ -317,7 +317,6 @@ const en = {
     loans: {
       loansList: {
         myLoans: 'My loans',
-        myGuarantees: 'My guarantees',
         others: 'Others',
       },
       loansPanel: {

@@ -1,12 +1,10 @@
-import React from 'react';
-import BN from 'bn.js';
+import React, { useCallback } from 'react';
 
-import { useApi } from 'services/api';
-import { Loading, Highlighted, FormattedAmount } from 'components';
-import { calcInterestShare, getPledgeId } from 'model';
-import { useSubscribable } from 'utils/react';
-import { formatBalance } from 'utils/format';
-import { usePledgeSubscription, Status } from 'generated/gql/pool';
+import { FormattedAmount, DoubleLineCell, Label, Loading } from 'components';
+import { Status } from 'generated/gql/pool';
+
+import { useMyInterestShare } from './useMyInterestShare';
+import { useMyStakeCost } from './useMyStakeCost';
 
 interface Props {
   supporter: string;
@@ -15,6 +13,7 @@ interface Props {
   status: Status;
   loanBody: string;
   initialLoanSize: string;
+  children?: React.ReactNode;
 }
 
 export function MyStakeCost({
@@ -24,52 +23,37 @@ export function MyStakeCost({
   loanBody,
   status,
   initialLoanSize,
+  children,
 }: Props) {
-  const pledgeHash = React.useMemo(() => getPledgeId(supporter, borrower, proposalId), [
-    supporter,
-    borrower,
-    proposalId,
-  ]);
+  const pledgeHashData = { supporter, borrower, proposalId };
+  const [interestShare, interestShareMeta] = useMyInterestShare({
+    initialLoanSize,
+    ...pledgeHashData,
+  });
+  const [stakeCost, stakeCostMeta] = useMyStakeCost({ status, loanBody, ...pledgeHashData });
 
-  const api = useApi();
-  const pledgeGqlResult = usePledgeSubscription({ variables: { pledgeHash } });
-
-  const pLocked = pledgeGqlResult.data?.pledge?.pLocked || '0';
-  const lInitialLocked = pledgeGqlResult.data?.pledge?.lInitialLocked || '0';
-
-  const additionalLiquidity = status === Status.Proposed ? lInitialLocked : loanBody;
-
-  const [myStakeCost, myStakeCostMeta] = useSubscribable(
-    () => api.fundsModule.getAvailableBalanceIncreasing$(supporter, pLocked, additionalLiquidity),
-    [supporter, pLocked, additionalLiquidity],
+  const renderTopPart = useCallback(
+    () => <>{stakeCost && <FormattedAmount sum={stakeCost} variant="plain" />}</>,
+    [stakeCost],
   );
 
-  const [fullLoanStake, fullLoanStakeMeta] = useSubscribable(
-    () => api.loanModule.calculateFullLoanStake$(initialLoanSize),
-    [initialLoanSize],
+  const renderBottomPart = useCallback(
+    () => (
+      <>
+        {children}
+        {interestShare && (
+          <Label hint="My collateral percent info" inline>
+            <FormattedAmount sum={interestShare} variant="plain" />
+          </Label>
+        )}
+      </>
+    ),
+    [interestShare],
   );
-  const interestShareDecimals = 2;
-  const interestShare =
-    fullLoanStake && calcInterestShare(lInitialLocked, fullLoanStake, interestShareDecimals);
 
   return (
-    <Loading gqlResults={pledgeGqlResult} meta={[myStakeCostMeta, fullLoanStakeMeta]}>
-      {new BN(pLocked).gtn(0) ? (
-        <>
-          {myStakeCost && <FormattedAmount sum={myStakeCost} />}{' '}
-          {interestShare && (
-            <Highlighted color="positive">
-              {formatBalance({
-                amountInBaseUnits: interestShare,
-                baseDecimals: interestShareDecimals,
-              })}
-              %
-            </Highlighted>
-          )}
-        </>
-      ) : (
-        '—'
-      )}
+    <Loading meta={[stakeCostMeta, interestShareMeta]}>
+      <DoubleLineCell renderTopPart={renderTopPart} renderBottomPart={renderBottomPart} />
     </Loading>
   );
 }

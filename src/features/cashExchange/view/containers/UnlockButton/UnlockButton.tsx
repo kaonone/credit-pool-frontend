@@ -3,7 +3,7 @@ import BN from 'bn.js';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { ConfirmationDialog, Loading, FormattedBalance, Button, ButtonProps } from 'components';
+import { ConfirmationDialog, Loading, Button, ButtonProps } from 'components';
 import { useSubscribable } from 'utils/react';
 import { usePledgeSubscription } from 'generated/gql/pool';
 import { getPledgeId } from 'model';
@@ -80,10 +80,7 @@ export function UnlockButton(props: IProps) {
         gqlResults={pledgeGqlResult}
       >
         <Button {...restProps} onClick={open}>
-          {t(tKeys.buttonTitle.getKey())}&nbsp;
-          {availableForUnlockCost && (
-            <FormattedBalance sum={availableForUnlockCost.toString()} token="dai" />
-          )}
+          Withdraw
         </Button>
       </Loading>
       <ConfirmationDialog

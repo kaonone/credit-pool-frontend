@@ -4,13 +4,14 @@ import cn from 'classnames';
 import { makeStyles } from 'utils/styles';
 import { PercentAmount } from 'model/entities';
 
-type Props = {
+export type Props = {
   userProvided: PercentAmount;
   poolProvided: PercentAmount;
+  hideLabel?: boolean;
 };
 
 export function CollateralDistributionBar(props: Props) {
-  const { poolProvided, userProvided } = props;
+  const { poolProvided, userProvided, hideLabel } = props;
   const classes = useStyles(props);
 
   function renderPledgeDistribution() {
@@ -40,7 +41,7 @@ export function CollateralDistributionBar(props: Props) {
   return (
     <div className={classes.root}>
       {renderPledgeDistribution()}
-      <span>{poolProvided.add(userProvided).toFormattedString()}</span>
+      {!hideLabel && <span>{poolProvided.add(userProvided).toFormattedString()}</span>}
     </div>
   );
 }
