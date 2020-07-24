@@ -27,8 +27,7 @@ export function useMyInterestShare({
     [initialLoanSize],
   );
 
-  const interestShare =
-    fullLoanStake && calcInterestShare(lInitialLocked, fullLoanStake);
+  const interestShare = fullLoanStake && calcInterestShare(lInitialLocked, fullLoanStake);
 
   return [interestShare || null, fullLoanStakeMeta];
 }
