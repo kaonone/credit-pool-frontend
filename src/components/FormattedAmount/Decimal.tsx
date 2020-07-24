@@ -21,7 +21,7 @@ export function Decimal(props: Props) {
     <>
       {formatInteger(integer)}
       {fractional && (
-        <span className={cn({ [classes.fractional]: variant === 'plain' })}>.{fractional}</span>
+        <span className={cn({ [classes.fractional]: variant === 'default' })}>.{fractional}</span>
       )}
     </>
   );

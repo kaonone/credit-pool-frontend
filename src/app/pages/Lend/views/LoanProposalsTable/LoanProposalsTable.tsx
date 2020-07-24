@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useMemo } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import {
@@ -10,13 +10,12 @@ import {
   Hint,
   Loading,
 } from 'components';
-import { makeStyles } from 'utils/styles';
+import { makeStyles, useTheme } from 'utils/styles';
+import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
 import { LiquidityAmount, PercentAmount } from 'model/entities';
-import { useSubscribable } from 'utils/react';
-import { calcShare } from 'domainLogic';
+import { CollateralContent } from 'features/loans/containers/CollateralContent';
 
-import { CollateralDistributionBar } from '../CollateralDistributionBar/CollateralDistributionBar';
 import { LoanProposalAdditionalInfo } from '../LoanProposalAdditionalInfo/LoanProposalAdditionalInfo';
 
 export type LoanProposal = {
@@ -34,35 +33,7 @@ type Props = {
 
 function LoanRequested(props: Pick<LoanProposal, 'loanRequested'>) {
   const { loanRequested } = props;
-  return <FormattedAmount sum={loanRequested} />;
-}
-
-function useCollateral(loanRequested: string, lStaked: LiquidityAmount) {
-  const api = useApi();
-
-  const [fullLoanStake] = useSubscribable(
-    () => api.loanModule.calculateFullLoanStake$(loanRequested),
-    [loanRequested],
-  );
-
-  const lBorrowerStake = fullLoanStake?.divn(3); // TODO: add this value in subgraph to be able to calc collateral
-
-  return {
-    poolProvided:
-      fullLoanStake && lBorrowerStake
-        ? calcShare(fullLoanStake, lStaked.sub(lBorrowerStake))
-        : new PercentAmount(0),
-    userProvided:
-      lBorrowerStake && fullLoanStake
-        ? calcShare(fullLoanStake, lBorrowerStake)
-        : new PercentAmount(0),
-  };
-}
-
-function CollateralContent(props: Pick<LoanProposal, 'loanRequested' | 'lStaked'>) {
-  const { loanRequested, lStaked } = props;
-  const { userProvided, poolProvided } = useCollateral(loanRequested.toString(), lStaked);
-  return <CollateralDistributionBar userProvided={userProvided} poolProvided={poolProvided} />;
+  return <FormattedAmount sum={loanRequested} variant="plain" />;
 }
 
 function AdditionalInfoContent(props: Pick<LoanProposal, 'descriptionHash'>) {
@@ -80,7 +51,7 @@ function AdditionalInfoContent(props: Pick<LoanProposal, 'descriptionHash'>) {
   );
 }
 
-const columns: Array<NewTable.models.Column<LoanProposal>> = [
+const makeColumns = (backgroundColor: string): Array<NewTable.models.Column<LoanProposal>> => [
   {
     renderTitle: () => 'Borrower',
     cellContent: {
@@ -140,7 +111,12 @@ const columns: Array<NewTable.models.Column<LoanProposal>> = [
     cellContent: {
       kind: 'simple',
       render: () => (
-        <Button variant="outlined" color="primary" onClick={() => undefined}>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() => undefined}
+          backgroundColor={backgroundColor}
+        >
           Stake
         </Button>
       ),
@@ -162,6 +138,9 @@ const columns: Array<NewTable.models.Column<LoanProposal>> = [
 export function LoanProposalsTable(props: Props) {
   const { loanProposals } = props;
   const classes = useStyles();
+  const theme = useTheme();
+
+  const columns = useMemo(() => makeColumns(theme.palette.background.paper), [theme]);
 
   function renderTableHeader() {
     return (

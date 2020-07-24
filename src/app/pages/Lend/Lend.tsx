@@ -29,6 +29,7 @@ export function Lend() {
   const { result, paginationView } = useSubgraphPagination(useLoanProposalsQuery, {});
 
   const api = useApi();
+
   const [liquidityCurrency, liquidityTokenMeta] = useSubscribable(
     () => api.fundsModule.getLiquidityCurrency$(),
     [api],
