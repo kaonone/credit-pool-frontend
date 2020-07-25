@@ -5,9 +5,9 @@ import { DueDateCell } from 'features/loans/components/DueDateCell';
 import { ActionsCell } from 'features/loans/components/ActionsCell';
 import { MyCollateralCell } from 'features/loans/components/MyCollateralCell';
 
-import { UserDebt } from '../../../models'
+import { UserDebt } from '../../../models';
 
-export const makeTableColumns = (account: string): Array<NewTable.models.Column<UserDebt>> => ([
+export const makeTableColumns = (account: string): Array<NewTable.models.Column<UserDebt>> => [
   {
     renderTitle: () => 'Loan amount',
     cellContent: {
@@ -76,4 +76,4 @@ export const makeTableColumns = (account: string): Array<NewTable.models.Column<
       render: x => <ActionsCell account={account} debt={x.rawDebt} />,
     },
   },
-]);
+];

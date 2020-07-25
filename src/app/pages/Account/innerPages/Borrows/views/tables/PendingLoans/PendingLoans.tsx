@@ -2,21 +2,20 @@ import React, { useMemo } from 'react';
 import BN from 'bn.js';
 
 import { NewTable, Loading } from 'components';
-
 import { useSubgraphPagination, useSubscribable } from 'utils/react';
 import { useMyBorrowedPendingLoansQuery } from 'generated/gql/pool';
 import { MyBorrowedPendingLoansQuery } from 'generated/gql/subgraphRequests';
 import { getLoanDuePaymentDate } from 'model';
 import { PercentAmount, LiquidityAmount, Currency } from 'model/entities';
+import { useApi } from 'services/api';
 
-import { makeTableColumns } from './columns'
+import { makeTableColumns } from './columns';
 import { UserDebt } from '../../../models';
 import { useStyles } from './PendingLoans.style';
-import { useApi } from 'services/api';
 
 type Props = {
   account: string;
-}
+};
 
 function convertDebts(
   debts: MyBorrowedPendingLoansQuery['debts'],
@@ -62,10 +61,7 @@ export const PendingLoans: React.FC<Props> = props => {
     [debts, liquidityCurrency, repayDeadlinePeriod],
   );
 
-  const columns = useMemo(() => (account ? makeTableColumns(account) : []), [
-    debts,
-    account,
-  ]);
+  const columns = useMemo(() => (account ? makeTableColumns(account) : []), [debts, account]);
 
   return (
     <div className={classes.root}>

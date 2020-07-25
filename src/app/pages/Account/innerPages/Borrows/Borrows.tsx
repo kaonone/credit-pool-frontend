@@ -9,7 +9,7 @@ export const Borrows: React.FC = () => {
 
   return (
     <WithAccount>
-      {(({ account }) => (
+      {({ account }) => (
         <div className={classes.root}>
           <views.Metrics />
           <div className={classes.currentLoansTable}>
@@ -21,7 +21,7 @@ export const Borrows: React.FC = () => {
             <views.tables.PendingLoans account={account} />
           </div>
         </div>
-      ))}
+      )}
     </WithAccount>
   );
 
