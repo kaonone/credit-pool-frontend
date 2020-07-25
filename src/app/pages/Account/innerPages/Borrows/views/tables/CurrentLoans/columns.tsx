@@ -37,6 +37,7 @@ export const makeTableColumns = (account: string): Array<NewTable.models.Column<
     },
   },
 
+  // TODO implement
   // {
   //   renderTitle: () => 'Due payment',
   //   align: 'right',
