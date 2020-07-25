@@ -1,74 +1,79 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import BN from 'bn.js';
 
-import { NewTable, Label, DoubleLineCell } from 'components';
+import { NewTable, Loading } from 'components';
 
-import * as views from './views';
+import { useSubgraphPagination, useSubscribable } from 'utils/react';
+import { useMyBorrowedPendingLoansQuery } from 'generated/gql/pool';
+import { MyBorrowedPendingLoansQuery } from 'generated/gql/subgraphRequests';
+import { getLoanDuePaymentDate } from 'model';
+import { PercentAmount, LiquidityAmount, Currency } from 'model/entities';
+
+import { makeTableColumns } from './columns'
+import { UserDebt } from './models';
 import { useStyles } from './PendingLoans.style';
+import { useApi } from 'services/api';
 
-const columns: Array<NewTable.models.Column<any>> = [
-  {
-    renderTitle: () => 'Loan amount',
-    cellContent: {
-      kind: 'simple',
-      render: () => '100,000.00',
-    },
-  },
+type Props = {
+  account: string;
+}
 
-  {
-    renderTitle: () => (
-      <Label inline hint="hint">
-        Interest rate
-      </Label>
-    ),
-    align: 'right',
-    cellContent: {
-      kind: 'simple',
-      render: () => '15.00%',
-    },
-  },
+function convertDebts(
+  debts: MyBorrowedPendingLoansQuery['debts'],
+  liquidityCurrency: Currency,
+  repayDeadlinePeriod: BN,
+): UserDebt[] {
+  return debts.map<UserDebt>(debt => ({
+    borrower: debt.borrower.id,
+    total: new LiquidityAmount(debt.total, liquidityCurrency),
+    lStaked: new LiquidityAmount(debt.lStaked, liquidityCurrency),
+    apr: new PercentAmount(debt.apr).div(10),
+    dueDate: getLoanDuePaymentDate(debt.last_update, repayDeadlinePeriod),
+    rawDebt: debt,
+    stakeProgress: debt.stakeProgress === '0x64' ? 'incomplete' : 'complete',
+  }));
+}
 
-  {
-    renderTitle: () => 'Loan Term',
-    align: 'right',
-    cellContent: {
-      kind: 'simple',
-      render: () => '90 days',
-    },
-  },
-
-  {
-    renderTitle: () => (
-      <Label inline hint="hint">
-        My Collateral
-      </Label>
-    ),
-    align: 'right',
-    cellContent: {
-      kind: 'simple',
-      render: () => (
-        <DoubleLineCell renderTopPart={() => '50,000.00'} renderBottomPart={() => '50.00%'} />
-      ),
-    },
-  },
-
-  {
-    renderTitle: () => null,
-    align: 'right',
-    cellContent: {
-      kind: 'simple',
-      render: () => <views.Buttons />,
-    },
-  },
-];
-
-const entries = [1];
-
-export const PendingLoans: React.FC = () => {
+export const PendingLoans: React.FC<Props> = props => {
+  const { account } = props;
   const classes = useStyles();
+
+  const api = useApi();
+
+  const { result, paginationView } = useSubgraphPagination(useMyBorrowedPendingLoansQuery, {
+    address: account,
+  });
+
+  const debts = result.data?.debts || [];
+
+  const [liquidityCurrency, liquidityCurrencyMeta] = useSubscribable(
+    () => api.fundsModule.getLiquidityCurrency$(),
+    [],
+  );
+
+  const [loansConfig, loansConfigMeta] = useSubscribable(() => api.loanModule.getConfig$(), []);
+
+  const repayDeadlinePeriod = loansConfig?.debtRepayDeadlinePeriod;
+
+  const entries = useMemo(
+    () =>
+      liquidityCurrency && repayDeadlinePeriod
+        ? convertDebts(debts, liquidityCurrency, repayDeadlinePeriod)
+        : [],
+    [debts, liquidityCurrency, repayDeadlinePeriod],
+  );
+
+  const columns = useMemo(() => (account ? makeTableColumns(account) : []), [
+    debts,
+    account,
+  ]);
 
   return (
     <div className={classes.root}>
-      <NewTable.Component columns={columns} entries={entries} />
+      <Loading gqlResults={result} meta={[liquidityCurrencyMeta, loansConfigMeta]}>
+        <NewTable.Component columns={columns} entries={entries} />
+        {paginationView}
+      </Loading>
     </div>
   );
 };
