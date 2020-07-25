@@ -14,7 +14,7 @@ export const Borrows: React.FC = () => {
           <views.Metrics />
           <div className={classes.currentLoansTable}>
             {renderTableTitle('Current Loans')}
-            <views.tables.CurrentLoans />
+            <views.tables.CurrentLoans account={account} />
           </div>
           <div className={classes.pendingLoansTable}>
             {renderTableTitle('Pending Loans')}

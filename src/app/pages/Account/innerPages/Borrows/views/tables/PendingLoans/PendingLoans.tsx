@@ -10,7 +10,7 @@ import { getLoanDuePaymentDate } from 'model';
 import { PercentAmount, LiquidityAmount, Currency } from 'model/entities';
 
 import { makeTableColumns } from './columns'
-import { UserDebt } from './models';
+import { UserDebt } from '../../../models';
 import { useStyles } from './PendingLoans.style';
 import { useApi } from 'services/api';
 
@@ -30,7 +30,6 @@ function convertDebts(
     apr: new PercentAmount(debt.apr).div(10),
     dueDate: getLoanDuePaymentDate(debt.last_update, repayDeadlinePeriod),
     rawDebt: debt,
-    stakeProgress: debt.stakeProgress === '0x64' ? 'incomplete' : 'complete',
   }));
 }
 

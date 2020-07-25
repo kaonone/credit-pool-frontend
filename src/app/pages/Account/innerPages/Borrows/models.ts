@@ -7,6 +7,5 @@ export type UserDebt = {
   lStaked: LiquidityAmount;
   apr: PercentAmount;
   dueDate: Date | null;
-  stakeProgress: 'complete' | 'incomplete';
   rawDebt: PartialDebt;
 };

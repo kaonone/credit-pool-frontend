@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { NewTable, Label, FormattedAmount } from 'components';
-import { MyCollateralCell } from 'features/loans/components/MyCollateralCell';
+import { NewTable, Label, DoubleLineCell, FormattedAmount } from 'components';
+import { DueDateCell } from 'features/loans/components/DueDateCell';
+import { ActionsCell } from 'features/loans/components/ActionsCell';
 
 import { UserDebt } from '../../../models'
-import { ActionsCell } from 'features/loans/components/ActionsCell';
 
 export const makeTableColumns = (account: string): Array<NewTable.models.Column<UserDebt>> => ([
   {
@@ -29,13 +29,22 @@ export const makeTableColumns = (account: string): Array<NewTable.models.Column<
   },
 
   {
-    renderTitle: () => 'Loan Term',
+    renderTitle: () => 'Due date',
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: () => '90 days',
+      render: x => <DueDateCell dueDate={x.dueDate} />,
     },
   },
+
+  // {
+  //   renderTitle: () => 'Due payment',
+  //   align: 'right',
+  //   cellContent: {
+  //     kind: 'simple',
+  //     render: x => x.dueDate,
+  //   },
+  // },
 
   {
     renderTitle: () => (
@@ -46,13 +55,8 @@ export const makeTableColumns = (account: string): Array<NewTable.models.Column<
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: x => (
-        <MyCollateralCell
-          debt={x.rawDebt}
-          account={account}
-          loanRequested={x.total}
-          lStaked={x.lStaked}
-        />
+      render: () => (
+        <DoubleLineCell renderTopPart={() => '50,000.00'} renderBottomPart={() => '50.00%'} />
       ),
     },
   },
