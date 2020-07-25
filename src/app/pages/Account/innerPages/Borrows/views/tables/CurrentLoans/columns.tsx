@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { NewTable, Label, DoubleLineCell, FormattedAmount } from 'components';
+import { NewTable, Label, FormattedAmount } from 'components';
 import { DueDateCell } from 'features/loans/components/DueDateCell';
 import { ActionsCell } from 'features/loans/components/ActionsCell';
+import { MyCollateralCell } from 'features/loans/components/MyCollateralCell';
 
 import { UserDebt } from '../../../models'
 
@@ -56,8 +57,13 @@ export const makeTableColumns = (account: string): Array<NewTable.models.Column<
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: () => (
-        <DoubleLineCell renderTopPart={() => '50,000.00'} renderBottomPart={() => '50.00%'} />
+      render: x => (
+        <MyCollateralCell
+          debt={x.rawDebt}
+          account={account}
+          loanRequested={x.total}
+          lStaked={x.lStaked}
+        />
       ),
     },
   },
