@@ -1,5 +1,7 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 
+import { routes } from 'app/routes';
 import { Grid, Label, Button } from 'components';
 import {
   TotalValueLocked,
@@ -15,6 +17,7 @@ import {
   AverageLoanTerm,
   LoanTerm,
 } from 'features/metrics';
+import { BuyingShareButton } from 'features/buyShare';
 import { makeStyles } from 'utils/styles';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 
@@ -86,15 +89,21 @@ export function Strategies() {
           <div className={classes.advantages}>
             <Label>{t(tKeys.liquidityAdvantages.getKey())}</Label>
           </div>
-          <Button fullWidth color="primary" variant="contained">
+          <BuyingShareButton fullWidth variant="contained" color="primary">
             {t(tKeys.liquidityButton.getKey())}
-          </Button>
+          </BuyingShareButton>
         </Grid>
         <Grid item className={classes.metricContainer}>
           <div className={classes.advantages}>
             <Label>{t(tKeys.lendingAdvantages.getKey())}</Label>
           </div>
-          <Button fullWidth color="primary" variant="contained">
+          <Button
+            fullWidth
+            color="primary"
+            variant="contained"
+            component={Link}
+            to={routes.lend.getRedirectPath()}
+          >
             {t(tKeys.lendingButton.getKey())}
           </Button>
         </Grid>
@@ -102,7 +111,13 @@ export function Strategies() {
           <div className={classes.advantages}>
             <Label>{t(tKeys.borrowingAdvantages.getKey())}</Label>
           </div>
-          <Button fullWidth color="primary" variant="contained">
+          <Button
+            fullWidth
+            color="primary"
+            variant="contained"
+            component={Link}
+            to={routes.borrow.getRedirectPath()}
+          >
             {t(tKeys.borrowingButton.getKey())}
           </Button>
         </Grid>
