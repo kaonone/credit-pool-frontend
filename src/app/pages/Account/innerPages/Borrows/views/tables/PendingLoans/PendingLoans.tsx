@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import BN from 'bn.js';
 
-import { NewTable, Loading } from 'components';
+import { NewTable, Loading, Hint, Typography } from 'components';
 import { useSubgraphPagination, useSubscribable } from 'utils/react';
 import { useMyBorrowedPendingLoansQuery } from 'generated/gql/pool';
 import { MyBorrowedPendingLoansQuery } from 'generated/gql/subgraphRequests';
@@ -66,8 +66,16 @@ export const PendingLoans: React.FC<Props> = props => {
   return (
     <div className={classes.root}>
       <Loading gqlResults={result} meta={[liquidityCurrencyMeta, loansConfigMeta]}>
-        <NewTable.Component columns={columns} entries={entries} />
-        {paginationView}
+        {!entries.length ? (
+          <Hint>
+            <Typography>Not found</Typography>
+          </Hint>
+        ) : (
+          <>
+            <NewTable.Component columns={columns} entries={entries} />
+            {paginationView}
+          </>
+        )}
       </Loading>
     </div>
   );
