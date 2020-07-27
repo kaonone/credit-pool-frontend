@@ -10,3 +10,10 @@ export function calcShare(
 ): PercentAmount {
   return new PercentAmount(bnToBn(currentValue)).div(bnToBn(fullValue)).mul(100);
 }
+
+export function calcLoanAPY(
+  userInterestShare: PercentAmount,
+  loanAPR: PercentAmount,
+): PercentAmount {
+  return new PercentAmount(userInterestShare).mul(loanAPR).div(100);
+}

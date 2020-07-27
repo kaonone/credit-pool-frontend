@@ -1,11 +1,12 @@
 import * as React from 'react';
 
-import { NewTable, Label, DoubleLineCell, AccountAddress, FormattedAmount } from 'components';
+import { NewTable, Label, AccountAddress, FormattedAmount } from 'components';
 import { LiquidityAmount, PercentAmount } from 'model/entities';
 
 import { DueDateCell } from './DueDateCell';
 import { ActionsCell } from './ActionsCell';
 import { MyCollateralCell } from './MyCollateralCell';
+import { MyAPYCell } from './MyAPYCell';
 import { PartialDebt } from './types';
 
 export type UserDebt = {
@@ -65,10 +66,7 @@ export const makeTableColumns = (
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: () => (
-        // TODO: Integrate data
-        <DoubleLineCell renderTopPart={() => '4.00%'} renderBottomPart={() => '200,000.00'} />
-      ),
+      render: debt => <MyAPYCell loanAPR={debt.apr} debt={debt.rawDebt} account={account} />,
     },
   },
 
