@@ -15,7 +15,6 @@ export type UserDebt = {
   lStaked: LiquidityAmount;
   apr: PercentAmount;
   dueDate: Date | null;
-  proposalId: string;
   rawDebt: PartialDebt;
 };
 
@@ -67,15 +66,7 @@ export const makeTableColumns = (
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: debt => (
-        <MyAPYCell
-          loanAPR={debt.apr}
-          supporter={account}
-          borrower={debt.borrower}
-          initialLoanSize={debt.rawDebt.total}
-          proposalId={debt.proposalId}
-        />
-      ),
+      render: debt => <MyAPYCell loanAPR={debt.apr} debt={debt.rawDebt} account={account} />,
     },
   },
 
