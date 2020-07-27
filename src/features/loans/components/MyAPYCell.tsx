@@ -1,10 +1,9 @@
-import React, { useMemo, useCallback } from 'react';
-import BN from 'bn.js';
+import React, { useMemo } from 'react';
 
-import { useMyInterestShare, useMyStakeCost } from 'features/stake';
+import { useMyInterestShare } from 'features/stake';
 import { PercentAmount } from 'model/entities';
-import { Loading, FormattedAmount, DoubleLineCell } from 'components';
-import { calcLoanAPY, calcLoanProfit } from 'domainLogic';
+import { Loading, FormattedAmount } from 'components';
+import { calcLoanAPY } from 'domainLogic';
 
 import { PartialDebt } from './types';
 
@@ -20,14 +19,9 @@ export function MyAPYCell({ loanAPR, account, debt }: Props) {
     borrower: debt.borrower.id,
     proposalId: debt.proposal_id,
   };
+
   const [interestShare, interestShareMeta] = useMyInterestShare({
     initialLoanSize: debt.total,
-    ...pledgeHashData,
-  });
-
-  const [stakeCost, stakeCostMeta] = useMyStakeCost({
-    status: debt.status,
-    loanBody: new BN(debt.total).sub(new BN(debt.repayed)).toString(),
     ...pledgeHashData,
   });
 
@@ -36,24 +30,9 @@ export function MyAPYCell({ loanAPR, account, debt }: Props) {
     interestShare,
   ]);
 
-  const myProfit = useMemo(() => (myAPY && stakeCost ? calcLoanProfit(myAPY, stakeCost) : null), [
-    myAPY,
-    stakeCost,
-  ]);
-
-  const renderTopPart = useCallback(
-    () => <>{myAPY !== null && <FormattedAmount sum={myAPY} variant="plain" />}</>,
-    [myAPY],
-  );
-
-  const renderBottomPart = useCallback(
-    () => <>{myProfit !== null && <FormattedAmount sum={myProfit} variant="plain" />}</>,
-    [myProfit],
-  );
-
   return (
-    <Loading meta={[interestShareMeta, stakeCostMeta]}>
-      <DoubleLineCell renderTopPart={renderTopPart} renderBottomPart={renderBottomPart} />
+    <Loading meta={[interestShareMeta]}>
+      {myAPY !== null && <FormattedAmount sum={myAPY} variant="plain" />}
     </Loading>
   );
 }
