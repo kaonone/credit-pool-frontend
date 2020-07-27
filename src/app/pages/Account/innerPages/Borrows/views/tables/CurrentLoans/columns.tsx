@@ -12,7 +12,7 @@ export const makeTableColumns = (account: string): Array<NewTable.models.Column<
     renderTitle: () => 'Loan amount',
     cellContent: {
       kind: 'simple',
-      render: x => <FormattedAmount sum={x.total} variant="plain" />,
+      render: x => <FormattedAmount sum={x.body} variant="plain" />,
     },
   },
 
@@ -61,7 +61,7 @@ export const makeTableColumns = (account: string): Array<NewTable.models.Column<
         <MyCollateralCell
           debt={x.rawDebt}
           account={account}
-          loanRequested={x.total}
+          loanRequested={x.body}
           lStaked={x.lStaked}
         />
       ),

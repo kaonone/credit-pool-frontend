@@ -15,7 +15,7 @@ import { useStyles } from './CurrentLoans.style';
 
 type Props = {
   account: string;
-}
+};
 
 function convertDebts(
   debts: MyBorrowedPendingLoansQuery['debts'],
@@ -24,7 +24,7 @@ function convertDebts(
 ): UserDebt[] {
   return debts.map<UserDebt>(debt => ({
     borrower: debt.borrower.id,
-    total: new LiquidityAmount(debt.total, liquidityCurrency),
+    body: new LiquidityAmount(debt.total, liquidityCurrency).sub(debt.repayed),
     lStaked: new LiquidityAmount(debt.lStaked, liquidityCurrency),
     apr: new PercentAmount(debt.apr).div(10),
     dueDate: getLoanDuePaymentDate(debt.last_update, repayDeadlinePeriod),
@@ -61,10 +61,7 @@ export const CurrentLoans: React.FC<Props> = props => {
     [debts, liquidityCurrency, repayDeadlinePeriod],
   );
 
-  const columns = useMemo(() => (account ? makeTableColumns(account) : []), [
-    debts,
-    account,
-  ]);
+  const columns = useMemo(() => (account ? makeTableColumns(account) : []), [debts, account]);
 
   return (
     <div className={classes.root}>

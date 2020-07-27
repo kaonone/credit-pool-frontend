@@ -5,6 +5,7 @@ import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { ProgressChart } from 'components/ProgressChart/ProgressChart';
 import { Label } from 'components/Label/Label';
 import { FormattedAmount } from 'components/FormattedAmount/FormattedAmount';
+import { ComingSoon } from 'components/ComingSoon/ComingSoon';
 
 import { useStyles, CHART_WIDTH } from './AvailableLoansChart.style';
 
@@ -28,6 +29,7 @@ function AvailableLoansChart() {
 
   return (
     <div className={classes.root}>
+      <ComingSoon position="overlay" />
       <ProgressChart
         value={70}
         total={100}
