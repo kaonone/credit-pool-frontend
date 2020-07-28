@@ -6,9 +6,9 @@ import { PoolBalanceChart } from 'features/balance';
 import { PoolCompositionChart } from 'features/poolInfo';
 import { makeStyles } from 'utils/styles';
 import {
+  AvgPoolAPY,
   PoolSize,
   PoolSize24h,
-  PoolAPY,
   AverageLoanAPY,
   ActiveMembers,
   ActiveMembers24h,
@@ -37,7 +37,7 @@ export function StatsPage() {
           <Grid item xs className={cn(classes.withVerticalBorder, classes.centerBlock)}>
             <Card className={classes.card}>
               <CardContent className={classes.cardContent}>
-                <PoolAPY />
+                <AvgPoolAPY title="Pool APY" />
                 <AverageLoanAPY />
               </CardContent>
             </Card>
@@ -53,7 +53,7 @@ export function StatsPage() {
         </Grid>
       </Grid>
       <Grid container className={classes.row}>
-        <Grid item xs>
+        <Grid item xs className={classes.balanceChart}>
           <PoolBalanceChart />
         </Grid>
         <Grid item xs className={classes.centerBlock}>
@@ -110,5 +110,8 @@ const useStyles = makeStyles(() => ({
   },
   metricContainer: {
     marginTop: 30,
+  },
+  balanceChart: {
+    overflow: 'hidden',
   },
 }));

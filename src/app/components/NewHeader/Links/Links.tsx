@@ -13,11 +13,6 @@ const links: Link.models.Link[] = [
     ref: routes.stats.getRoutePath(),
   },
   {
-    kind: 'internal',
-    label: tKeys.modules.navigation.governance.getKey(),
-    ref: routes.governance.getRoutePath(),
-  },
-  {
     kind: 'external',
     ref: 'https://wiki.akropolis.io/spartafaq/',
     label: tKeys.modules.navigation.wiki.getKey(),

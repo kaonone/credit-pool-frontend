@@ -4,16 +4,16 @@ import { Link } from 'react-router-dom';
 import { routes } from 'app/routes';
 import { Grid, Label, Button } from 'components';
 import {
-  TotalValueLocked,
+  PoolSize,
   AverageAPY,
   AvailableForBorrowing,
-  TotalValueLocked24h,
+  PoolSize24h,
   AverageLoanSize,
   TotalBorrowed,
   TotalAKROEarned,
   Proposals,
   MinimumAPY,
-  AveragePassiveAPY,
+  AvgPoolAPY,
   AverageLoanTerm,
   LoanTerm,
 } from 'features/metrics';
@@ -36,7 +36,7 @@ export function Strategies() {
               {t(tKeys.liquidityProvisionTitle.getKey())}
             </Label>
           </div>
-          <TotalValueLocked />
+          <PoolSize title="Total Value Locked" withoutEstablished />
         </Grid>
         <Grid item className={classes.metricContainer}>
           <div className={classes.title}>
@@ -53,7 +53,7 @@ export function Strategies() {
       </Grid>
       <Grid container justify="space-between">
         <Grid item className={classes.metricContainer}>
-          <TotalValueLocked24h />
+          <PoolSize24h />
         </Grid>
         <Grid item className={classes.metricContainer}>
           <AverageLoanSize />
@@ -75,7 +75,7 @@ export function Strategies() {
       </Grid>
       <Grid container justify="space-between">
         <Grid item className={classes.metricContainer}>
-          <AveragePassiveAPY />
+          <AvgPoolAPY title="Average passive APY" />
         </Grid>
         <Grid item className={classes.metricContainer}>
           <AverageLoanTerm />
