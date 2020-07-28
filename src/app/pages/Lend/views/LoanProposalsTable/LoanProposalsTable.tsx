@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom';
 
 import {
   NewTable,
@@ -16,6 +17,7 @@ import { useApi } from 'services/api';
 import { LiquidityAmount, PercentAmount } from 'model/entities';
 import { CollateralContent } from 'features/loans/containers/CollateralContent';
 import { GivingStakeButton } from 'features/giveStake';
+import { routes } from 'app/routes';
 
 import { LoanProposalAdditionalInfo } from '../LoanProposalAdditionalInfo/LoanProposalAdditionalInfo';
 
@@ -33,11 +35,6 @@ export type LoanProposal = {
 type Props = {
   loanProposals: LoanProposal[];
 };
-
-function LoanRequested(props: Pick<LoanProposal, 'loanRequested'>) {
-  const { loanRequested } = props;
-  return <FormattedAmount sum={loanRequested} variant="plain" />;
-}
 
 function AdditionalInfoContent(props: Pick<LoanProposal, 'descriptionHash'>) {
   const { descriptionHash } = props;
@@ -74,7 +71,7 @@ const makeColumns = (backgroundColor: string): Array<NewTable.models.Column<Loan
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: x => <LoanRequested loanRequested={x.loanRequested} />,
+      render: x => <FormattedAmount sum={x.loanRequested} variant="plain" />,
     },
   },
 
@@ -116,16 +113,15 @@ const makeColumns = (backgroundColor: string): Array<NewTable.models.Column<Loan
       render: x => (
         <>
           {!x.isOwnProposal && (
-            <div style={{ display: 'inline-flex' }}>
-              <GivingStakeButton
-                variant="outlined"
-                color="primary"
-                backgroundColor={backgroundColor}
-                loanSize={x.loanRequested.toString()}
-                proposalId={x.proposalId}
-                borrower={x.borrower}
-              />
-            </div>
+            <GivingStakeButton
+              variant="outlined"
+              color="primary"
+              size="small"
+              backgroundColor={backgroundColor}
+              loanSize={x.loanRequested.toString()}
+              proposalId={x.proposalId}
+              borrower={x.borrower}
+            />
           )}
         </>
       ),
@@ -155,7 +151,12 @@ export function LoanProposalsTable(props: Props) {
     return (
       <div className={classes.tableHeader}>
         <div className={classes.tableTitle}>Loan proposals</div>
-        <Button variant="contained" color="primary" onClick={() => undefined}>
+        <Button
+          component={Link}
+          variant="contained"
+          color="primary"
+          to={routes.account.stakes.getRedirectPath()}
+        >
           My Stakes
         </Button>
       </div>

@@ -43,7 +43,7 @@ export function LendContent(props: Props) {
   );
   const loanProposals: LoanProposal[] = React.useMemo(
     () => convertLoanProposals(result, liquidityCurrency, account),
-    [result, liquidityCurrency],
+    [result, liquidityCurrency, account],
   );
   return (
     <>
