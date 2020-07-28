@@ -2,14 +2,15 @@ import * as React from 'react';
 import BN from 'bn.js';
 
 import { Metric, Label, FormattedAmount, Loading } from 'components';
-import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { usePoolInfo, usePoolInfoDayAgo } from 'features/poolInfo';
 import { LiquidityAmount, Currency } from 'model/entities';
 
-const tKeys = tKeysAll.components.metrics;
+type Props = {
+  title?: string;
+};
 
-export function PoolSize24h() {
-  const { t } = useTranslate();
+export function PoolSize24h(props: Props) {
+  const { title = '24h Change' } = props;
 
   const { lBalance, lDebt, gqlResult } = usePoolInfo();
   const { lBalanceDayAgo, lDebtDayAgo, gqlResultDayAgo } = usePoolInfoDayAgo();
@@ -24,10 +25,7 @@ export function PoolSize24h() {
 
   return (
     <Loading gqlResults={[gqlResult, gqlResultDayAgo]}>
-      <Metric
-        title={<Label>{t(tKeys.dayChange.getKey())}</Label>}
-        value={<FormattedAmount hasSign sum={value} />}
-      />
+      <Metric title={<Label>{title}</Label>} value={<FormattedAmount hasSign sum={value} />} />
     </Loading>
   );
 }

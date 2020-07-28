@@ -10,7 +10,14 @@ import { LiquidityAmount, Currency } from 'model/entities';
 
 const tKeys = tKeysAll.components.metrics.poolSize;
 
-export function PoolSize() {
+type Props = {
+  title?: string;
+  withoutEstablished?: boolean;
+};
+
+export function PoolSize(props: Props) {
+  const { title = 'Pool size', withoutEstablished } = props;
+
   const { t } = useTranslate();
   const classes = useStyles();
 
@@ -22,12 +29,14 @@ export function PoolSize() {
   return (
     <Loading gqlResults={gqlResult}>
       <Metric
-        title={<Label>{t(tKeys.poolSize.getKey())}</Label>}
+        title={<Label>{title}</Label>}
         value={<FormattedAmount sum={value} />}
         subValue={
-          <span className={classes.established}>{`${t(
-            tKeys.established.getKey(),
-          )} ${establishedDate.format('DD MMMM YYYY')}`}</span>
+          !withoutEstablished && (
+            <span className={classes.established}>{`${t(
+              tKeys.established.getKey(),
+            )} ${establishedDate.format('DD MMMM YYYY')}`}</span>
+          )
         }
       />
     </Loading>

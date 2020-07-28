@@ -5,14 +5,22 @@ import { usePoolMetricsSubscription, usePoolMetricByDateSubscription } from 'gen
 export function usePoolInfo() {
   const poolMetricsGqlResult = usePoolMetricsSubscription();
 
-  const { lBalance, lDebt, lProposals, usersLength, depositSum, withdrawSum } = poolMetricsGqlResult
-    .data?.pools[0] || {
+  const {
+    lBalance,
+    lDebt,
+    lProposals,
+    usersLength,
+    depositSum,
+    withdrawSum,
+    proposalsCount,
+  } = poolMetricsGqlResult.data?.pools[0] || {
     lBalance: '0',
     lDebt: '0',
     lProposals: '0',
     usersLength: '0',
     depositSum: '0',
     withdrawSum: '0',
+    proposalsCount: '0',
   };
 
   return {
@@ -22,6 +30,7 @@ export function usePoolInfo() {
     usersLength,
     depositSum,
     withdrawSum,
+    proposalsCount,
     gqlResult: poolMetricsGqlResult,
   };
 }
