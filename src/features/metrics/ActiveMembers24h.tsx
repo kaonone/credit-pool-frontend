@@ -1,22 +1,25 @@
 import * as React from 'react';
+import BN from 'bn.js';
 
-import { Metric, Label, Grid, ChartBlock } from 'components';
+import { Metric, Label, Grid, Loading } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
+import { usePoolInfo, usePoolInfoDayAgo } from 'features/poolInfo';
 
 const tKeys = tKeysAll.components.metrics;
-
-const valueMock = '200';
 
 export function ActiveMembers24h() {
   const { t } = useTranslate();
 
+  const { usersLength, gqlResult } = usePoolInfo();
+  const { usersLengthDayAgo, gqlResultDayAgo } = usePoolInfoDayAgo();
+
+  const value = new BN(usersLength).sub(new BN(usersLengthDayAgo)).toString();
+
   return (
     <Grid container>
-      <Metric
-        title={<Label>{t(tKeys.dayChange.getKey())}</Label>}
-        value={valueMock}
-        chart={<ChartBlock value="1234" variant="increase" sign="+" />}
-      />
+      <Loading gqlResults={[gqlResult, gqlResultDayAgo]}>
+        <Metric title={<Label>{t(tKeys.dayChange.getKey())}</Label>} value={value} />
+      </Loading>
     </Grid>
   );
 }

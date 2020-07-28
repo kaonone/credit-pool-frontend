@@ -1,9 +1,12 @@
 import * as React from 'react';
+import BN from 'bn.js';
+import moment from 'moment';
 
-import { Metric, Label, FormattedAmount, ChartBlock } from 'components';
+import { Metric, Label, FormattedAmount, Loading } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
-import { liquidityAmount } from 'utils/mock';
 import { makeStyles } from 'utils/styles';
+import { usePoolInfo } from 'features/poolInfo';
+import { LiquidityAmount, Currency } from 'model/entities';
 
 const tKeys = tKeysAll.components.metrics.poolSize;
 
@@ -11,17 +14,23 @@ export function PoolSize() {
   const { t } = useTranslate();
   const classes = useStyles();
 
+  const { lBalance, lDebt, gqlResult } = usePoolInfo();
+  const value = new LiquidityAmount(new BN(lBalance).add(new BN(lDebt)), new Currency('$', 18));
+
+  const establishedDate = moment.utc('Jun-30-2020 02:06:47 PM');
+
   return (
-    <Metric
-      title={<Label>{t(tKeys.poolSize.getKey())}</Label>}
-      value={<FormattedAmount sum={liquidityAmount} />}
-      subValue={
-        <span className={classes.established}>{`${t(
-          tKeys.established.getKey(),
-        )} 30 June 2020`}</span>
-      }
-      chart={<ChartBlock value="1234" variant="increase" sign="+" />}
-    />
+    <Loading gqlResults={gqlResult}>
+      <Metric
+        title={<Label>{t(tKeys.poolSize.getKey())}</Label>}
+        value={<FormattedAmount sum={value} />}
+        subValue={
+          <span className={classes.established}>{`${t(
+            tKeys.established.getKey(),
+          )} ${establishedDate.format('DD MMMM YYYY')}`}</span>
+        }
+      />
+    </Loading>
   );
 }
 

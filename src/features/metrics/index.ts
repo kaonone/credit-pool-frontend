@@ -9,7 +9,6 @@ export { OutstandingLoans } from './OutstandingLoans';
 export { ActiveAPYFromOutstandingLoans } from './ActiveAPYFromOutstandingLoans';
 export { PoolSize } from './PoolSize';
 export { PoolSize24h } from './PoolSize24h';
-export { PoolAPY } from './PoolAPY';
 export { AverageLoanAPY } from './AverageLoanAPY';
 export { ActiveMembers } from './ActiveMembers';
 export { ActiveMembers24h } from './ActiveMembers24h';
