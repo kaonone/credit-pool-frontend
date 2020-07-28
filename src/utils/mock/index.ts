@@ -42,3 +42,10 @@ export const makeMockedDatePoints = () =>
     date: moment().subtract(index, 'days').unix() * 1000, // Date in milliseconds
     value: Math.random(),
   })).reverse();
+
+export const barChartData = [
+  new PercentAmount(66),
+  new PercentAmount(34),
+  new PercentAmount(66),
+  new PercentAmount(66),
+];
