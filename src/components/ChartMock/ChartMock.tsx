@@ -27,8 +27,6 @@ export function ChartMock() {
   );
 }
 
-const chartHeight = 16;
-
 const useStyles = makeStyles(
   () => ({
     root: {},
@@ -39,9 +37,7 @@ const useStyles = makeStyles(
     },
     chart: {
       width: 54,
-      height: chartHeight,
-      marginTop: -chartHeight, // Hint to fix recharts svg surface vertical shift
-      marginBottom: chartHeight,
+      height: 16,
     },
   }),
   { name: 'ChartMock' },

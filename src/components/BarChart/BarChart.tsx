@@ -26,12 +26,12 @@ export function BarChart(props: Props) {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    height: '100%',
     display: 'inline-flex',
   },
   bar: {
     position: 'relative',
     width: 4,
+    height: 38,
     background: theme.palette.background.default,
     borderRadius: 2,
 

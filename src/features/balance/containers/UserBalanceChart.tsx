@@ -11,8 +11,6 @@ import { decimalsToWei } from 'utils/bn';
 import { zeroAddress } from 'utils/mock';
 import { InlineChart } from 'components/InlineChart/InlineChart';
 
-const chartHeight = 20;
-
 const useStyles = makeStyles(
   {
     hidden: {
@@ -22,9 +20,7 @@ const useStyles = makeStyles(
     },
     chart: {
       width: 53,
-      height: chartHeight,
-      marginTop: -chartHeight, // Hint to fix recharts svg surface vertical shift
-      marginBottom: chartHeight,
+      height: 20,
     },
   },
   { name: 'UserBalanceChart' },
