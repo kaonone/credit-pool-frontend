@@ -6,11 +6,16 @@ import { useSubgraphPagination, useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
 import { LiquidityAmount, PercentAmount, Currency } from 'model/entities';
 
-import { LoanProposalsTable, LoanProposal } from './views/LoanProposalsTable/LoanProposalsTable';
+import { LoanProposalsTable, LoanProposal } from '../LoanProposalsTable/LoanProposalsTable';
+
+type Props = {
+  account: string;
+};
 
 function convertLoanProposals(
   result: LoanProposalsQueryResult,
   liquidityCurrency: Currency | undefined,
+  account: string,
 ) {
   const debts = result.data?.debts;
   return liquidityCurrency
@@ -21,22 +26,24 @@ function convertLoanProposals(
         loanDuration: '90 days',
         lStaked: new LiquidityAmount(debt.lStaked, liquidityCurrency),
         descriptionHash: debt.description,
+        proposalId: debt.proposal_id,
+        isOwnProposal: account.toLowerCase() === debt.borrower.id.toLowerCase(),
       })) || []
     : [];
 }
 
-export function Lend() {
+export function LendContent(props: Props) {
+  const { account } = props;
   const { result, paginationView } = useSubgraphPagination(useLoanProposalsQuery, {});
 
   const api = useApi();
-
   const [liquidityCurrency, liquidityTokenMeta] = useSubscribable(
     () => api.fundsModule.getLiquidityCurrency$(),
     [api],
   );
   const loanProposals: LoanProposal[] = React.useMemo(
-    () => convertLoanProposals(result, liquidityCurrency),
-    [result, liquidityCurrency],
+    () => convertLoanProposals(result, liquidityCurrency, account),
+    [result, liquidityCurrency, account],
   );
   return (
     <>
