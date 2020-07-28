@@ -7,6 +7,8 @@ import { LiquidityAmount } from 'model/entities';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 
+import { progressProps } from './common';
+
 type Props = {
   title?: string;
 };
@@ -34,10 +36,17 @@ export function PoolSize24h(props: Props) {
   );
 
   return (
-    <Loading gqlResults={[gqlResult, gqlResultDayAgo]} meta={liquidityCurrencyMeta}>
-      {value && (
-        <Metric title={<Label>{title}</Label>} value={<FormattedAmount hasSign sum={value} />} />
-      )}
-    </Loading>
+    <Metric
+      title={<Label>{title}</Label>}
+      value={
+        <Loading
+          gqlResults={[gqlResult, gqlResultDayAgo]}
+          meta={liquidityCurrencyMeta}
+          progressProps={progressProps}
+        >
+          {value && <FormattedAmount hasSign sum={value} />}
+        </Loading>
+      }
+    />
   );
 }

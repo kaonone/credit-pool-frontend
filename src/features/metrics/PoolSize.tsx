@@ -10,6 +10,8 @@ import { LiquidityAmount } from 'model/entities';
 import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
 
+import { progressProps } from './common';
+
 const tKeys = tKeysAll.components.metrics.poolSize;
 
 type Props = {
@@ -40,21 +42,21 @@ export function PoolSize(props: Props) {
   const establishedDate = moment.utc('Jun-30-2020 02:06:47 PM');
 
   return (
-    <Loading gqlResults={gqlResult} meta={liquidityCurrencyMeta}>
-      {value && (
-        <Metric
-          title={<Label>{title}</Label>}
-          value={<FormattedAmount sum={value} />}
-          subValue={
-            !withoutEstablished && (
-              <span className={classes.established}>{`${t(
-                tKeys.established.getKey(),
-              )} ${establishedDate.format('DD MMMM YYYY')}`}</span>
-            )
-          }
-        />
-      )}
-    </Loading>
+    <Metric
+      title={<Label>{title}</Label>}
+      value={
+        <Loading gqlResults={gqlResult} meta={liquidityCurrencyMeta} progressProps={progressProps}>
+          {value && <FormattedAmount sum={value} />}
+        </Loading>
+      }
+      subValue={
+        !withoutEstablished && (
+          <span className={classes.established}>{`${t(
+            tKeys.established.getKey(),
+          )} ${establishedDate.format('DD MMMM YYYY')}`}</span>
+        )
+      }
+    />
   );
 }
 
