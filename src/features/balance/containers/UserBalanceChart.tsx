@@ -11,16 +11,20 @@ import { decimalsToWei } from 'utils/bn';
 import { zeroAddress } from 'utils/mock';
 import { InlineChart } from 'components/InlineChart/InlineChart';
 
+const chartHeight = 20;
+
 const useStyles = makeStyles(
   {
-    root: {
-      width: 53,
-      height: 20,
-    },
     hidden: {
       opacity: 0,
       width: 0,
       height: 0,
+    },
+    chart: {
+      width: 53,
+      height: chartHeight,
+      marginTop: -chartHeight, // Hint to fix recharts svg surface vertical shift
+      marginBottom: chartHeight,
     },
   },
   { name: 'UserBalanceChart' },
@@ -95,15 +99,17 @@ function UserBalanceChart() {
     [balances, decimals, currentBalance?.toString()],
   );
 
+  console.log(chartPoints);
+
   return (
     <Loading
       gqlResults={[balancesResult, myUserResult]}
       meta={[accountMeta, liquidityTokenMeta, currentBalanceMeta]}
     >
       <div className={classes.hidden}>
-        <svg>{theme.gradients.inlineChart[0].svgLinear('userBalanceChart')}</svg>
+        <svg>{theme.gradients.linearChart[2].svgLinear('userBalanceChart')}</svg>
       </div>
-      <div className={classes.root}>
+      <div className={classes.chart}>
         <InlineChart
           points={chartPoints}
           lines={['value']}

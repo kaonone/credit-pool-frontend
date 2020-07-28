@@ -113,8 +113,8 @@ function PoolBalanceChart() {
     <Loading gqlResults={balancesResult} meta={liquidityCurrencyMeta}>
       <div className={classes.hidden}>
         <svg>
-          {theme.gradients.poolBalanceChart[0].svgLinear('lEnterPriceGradient')}
-          {theme.gradients.poolBalanceChart[1].svgLinear('lExitPriceGradient')}
+          {theme.gradients.linearChart[0].svgLinear('lEnterPriceGradient')}
+          {theme.gradients.linearChart[1].svgLinear('lExitPriceGradient')}
         </svg>
       </div>
       <BalanceChart

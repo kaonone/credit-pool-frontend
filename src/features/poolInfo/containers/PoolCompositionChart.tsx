@@ -3,7 +3,7 @@ import * as R from 'ramda';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useTheme, makeStyles } from 'utils/styles';
-import { mockSectors } from 'utils/mock';
+import { mockedSectors } from 'utils/mock';
 import { CompositionChart, ComingSoon } from 'components';
 
 const tKeys = tKeysAll.components.poolCompositionChart;
@@ -40,7 +40,7 @@ function PoolCompositionChart() {
       <div className={classes.hidden}>{renderGradients()}</div>
       <CompositionChart
         title={t(tKeys.poolComposition.getKey())}
-        chartData={mockSectors}
+        chartData={mockedSectors}
         sectorColors={R.pluck('sector', colors)}
         labelColors={R.pluck('label', colors)}
       />

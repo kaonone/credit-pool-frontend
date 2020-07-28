@@ -33,6 +33,7 @@ const useStyles = makeStyles(
     },
     value: {
       display: 'flex',
+      alignItems: 'center',
       fontSize: 32,
       fontWeight: 300,
       lineHeight: 'normal',
@@ -42,7 +43,9 @@ const useStyles = makeStyles(
       fontSize: 16,
     },
     chart: {
+      marginBottom: 5,
       marginLeft: 10,
+      alignSelf: 'flex-end',
     },
   }),
   { name: 'Metric' },
