@@ -1,5 +1,5 @@
 export { Borrow } from './Borrow/Borrow';
-export { Lend } from './Lend';
+export { LendPage } from './Lend/LendPage';
 export { AccountPage } from './Account/AccountPage';
 export { BalancesPage } from './Balances/Balances';
 export { DemoPage } from './Demo/DemoPage';

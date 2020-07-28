@@ -8,7 +8,7 @@ import { memoize } from 'utils/decorators';
 import { createErc20 } from 'generated/contracts';
 import { Token, TokenAmount } from 'model/entities';
 import { ETH_NETWORK_CONFIG } from 'env';
-import { getCurrentValueOrThrow } from 'utils/rxjs';
+import { getCurrentValueOrThrow, awaitFirst } from 'utils/rxjs';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
@@ -19,6 +19,14 @@ export class Erc20Api {
   @autobind
   public async approve(fromAddress: string, spender: string, amount: TokenAmount): Promise<void> {
     const txDai = this.getErc20TxContract(amount.currency.address);
+
+    const allowance = await awaitFirst(
+      this.getAllowance$(amount.currency.address, fromAddress, spender),
+    );
+
+    if (allowance.gte(amount.toBN())) {
+      return;
+    }
 
     const promiEvent = txDai.methods.approve(
       { spender, amount: amount.toBN() },
@@ -69,6 +77,16 @@ export class Erc20Api {
     return contract.methods.balanceOf({ account }, [
       contract.events.Transfer({ filter: { from: account } }),
       contract.events.Transfer({ filter: { to: account } }),
+    ]);
+  }
+
+  @memoize((...args: string[]) => args.join())
+  public getAllowance$(tokenAddress: string, owner: string, spender: string): Observable<BN> {
+    const contract = this.getErc20ReadonlyContract(tokenAddress);
+
+    return contract.methods.allowance({ owner, spender }, [
+      contract.events.Transfer({ filter: { from: owner } }),
+      contract.events.Approval({ filter: { owner, spender } }),
     ]);
   }
 

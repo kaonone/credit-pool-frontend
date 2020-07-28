@@ -20,7 +20,7 @@ export function GivingStakeButton(props: IProps) {
   const { t } = useTranslate();
 
   return (
-    <ModalButton content={t(tKeys.buttonTitle.getKey())} fullWidth {...restProps}>
+    <ModalButton content={t(tKeys.buttonTitle.getKey())} {...restProps}>
       {({ closeModal }) => (
         <WithAccount>
           {({ account }) => (
