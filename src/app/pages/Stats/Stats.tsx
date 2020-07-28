@@ -53,7 +53,7 @@ export function StatsPage() {
         </Grid>
       </Grid>
       <Grid container className={classes.row}>
-        <Grid item xs>
+        <Grid item xs className={classes.balanceChart}>
           <PoolBalanceChart />
         </Grid>
         <Grid item xs className={classes.centerBlock}>
@@ -110,5 +110,8 @@ const useStyles = makeStyles(() => ({
   },
   metricContainer: {
     marginTop: 30,
+  },
+  balanceChart: {
+    overflow: 'hidden',
   },
 }));
