@@ -63,6 +63,7 @@ function getGradients(type: 'dark' | 'light') {
       makeGradient(['#f985f5', '#f863dd']),
     ] as const,
     progressChart: makeGradient(['#7d40ff', '#02a4ff']),
+    inlineChart: [makeGradient(['#c43ff0', '#574cf2'])] as const,
   };
 }
 

@@ -2,22 +2,29 @@ import * as React from 'react';
 import moment from 'moment';
 import BN from 'bn.js';
 
-import { BalanceChart, Loading, FormattedBalance, Growth, IPeriodInfo } from 'components';
+import { Loading } from 'components';
 import { useMyUserBalancesSubscription, useMyUserSubscription } from 'generated/gql/pool';
-import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { makeStyles } from 'utils/styles';
+import { makeStyles, useTheme } from 'utils/styles';
 import { useSubscribable } from 'utils/react';
 import { decimalsToWei } from 'utils/bn';
 import { zeroAddress } from 'utils/mock';
+import { InlineChart } from 'components/InlineChart/InlineChart';
 
-export const useStyles = makeStyles({
-  growth: {
-    fontSize: '0.8em',
+const useStyles = makeStyles(
+  {
+    root: {
+      width: 53,
+      height: 20,
+    },
+    hidden: {
+      opacity: 0,
+      width: 0,
+      height: 0,
+    },
   },
-});
-
-const tKeys = tKeysAll.app.pages.overview;
+  { name: 'UserBalanceChart' },
+);
 
 interface IUserBalancePoint {
   date: number;
@@ -26,8 +33,8 @@ interface IUserBalancePoint {
 
 function UserBalanceChart() {
   const classes = useStyles();
+  const theme = useTheme();
   const api = useApi();
-  const { t } = useTranslate();
   const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
   const myUserResult = useMyUserSubscription({
@@ -88,31 +95,21 @@ function UserBalanceChart() {
     [balances, decimals, currentBalance?.toString()],
   );
 
-  const renderCurrentBalance = React.useCallback(
-    (periodInfo: IPeriodInfo<IUserBalancePoint>) => (
-      <>
-        {currentBalance && <FormattedBalance sum={currentBalance} token="dai" />}{' '}
-        <Growth
-          className={classes.growth}
-          previous={new BN(periodInfo.firstPoint.value * 100)}
-          current={new BN(periodInfo.lastPoint.value * 100)}
-        />
-      </>
-    ),
-    [currentBalance?.toString()],
-  );
-
   return (
     <Loading
       gqlResults={[balancesResult, myUserResult]}
       meta={[accountMeta, liquidityTokenMeta, currentBalanceMeta]}
     >
-      <BalanceChart
-        renderCurrentBalance={renderCurrentBalance}
-        chartPoints={chartPoints}
-        chartLines={['value']}
-        title={t(tKeys.myBalanceTitle.getKey())}
-      />
+      <div className={classes.hidden}>
+        <svg>{theme.gradients.inlineChart[0].svgLinear('userBalanceChart')}</svg>
+      </div>
+      <div className={classes.root}>
+        <InlineChart
+          points={chartPoints}
+          lines={['value']}
+          lineColors={{ value: 'url(#userBalanceChart)' }}
+        />
+      </div>
     </Loading>
   );
 }

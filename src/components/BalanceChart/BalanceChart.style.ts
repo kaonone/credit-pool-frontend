@@ -3,13 +3,15 @@ import { makeStyles } from 'utils/styles';
 export const useStyles = makeStyles(() => ({
   root: {},
 
-  balanceValue: {},
-
   graphic: {
     width: '100%',
     height: 200,
     marginTop: 24,
-    marginBottom: 20,
+    marginBottom: 14,
+  },
+
+  balanceValue: {
+    marginTop: 20,
   },
 
   cardContent: {

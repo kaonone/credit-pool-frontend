@@ -15,13 +15,16 @@ import { ETH_NETWORK_CONFIG } from 'env';
 
 import { CurrentBalance, BalanceValue } from '../components/CurrentBalance';
 
-export const useStyles = makeStyles(() => ({
-  hidden: {
-    opacity: 0,
-    width: 0,
-    height: 0,
-  },
-}));
+export const useStyles = makeStyles(
+  () => ({
+    hidden: {
+      opacity: 0,
+      width: 0,
+      height: 0,
+    },
+  }),
+  { name: 'PoolBalanceChart' },
+);
 
 interface PoolPoint {
   date: number;

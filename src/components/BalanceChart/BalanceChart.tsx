@@ -1,8 +1,9 @@
 import * as React from 'react';
 
-import { Chart, IPoint } from 'components/Chart';
+import { Chart, IPoint, Period } from 'components/Chart';
 import { Label } from 'components/Label/Label';
 
+import { PeriodSwitch } from './components/PeriodSwitch/PeriodSwitch';
 import { useStyles } from './BalanceChart.style';
 
 interface IProps<P extends IPoint> {
@@ -10,30 +11,17 @@ interface IProps<P extends IPoint> {
   chartPoints: P[];
   chartLines: Array<keyof P>;
   chartLineColors?: Partial<Record<keyof P, string>>;
-  renderCurrentBalance(periodInfo: IPeriodInfo<P>): React.ReactNode;
-}
-
-export interface IPeriodInfo<P extends IPoint> {
-  firstPoint: P;
-  lastPoint: P;
-  period: string;
+  renderCurrentBalance(): React.ReactNode;
 }
 
 function BalanceChart<P extends IPoint>(props: IProps<P>) {
   const { title, chartPoints, chartLines, chartLineColors, renderCurrentBalance } = props;
   const classes = useStyles();
-  const [periodInfo, setPeriodInfo] = React.useState<IPeriodInfo<P> | null>(null);
+  const [period, setPeriod] = React.useState<Period>('all');
 
-  const handleChartPeriodChange = React.useCallback(
-    (firstPoint: P, lastPoint: P, period: string) => {
-      setPeriodInfo({
-        firstPoint,
-        lastPoint,
-        period,
-      });
-    },
-    [],
-  );
+  const handleChartPeriodChange = React.useCallback((newPeriod: Period) => {
+    setPeriod(newPeriod);
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -43,10 +31,12 @@ function BalanceChart<P extends IPoint>(props: IProps<P>) {
           points={chartPoints}
           lines={chartLines}
           lineColors={chartLineColors}
-          onPeriodChange={handleChartPeriodChange}
+          period={period}
+          showGrids
         />
       </div>
-      <div className={classes.balanceValue}>{periodInfo && renderCurrentBalance(periodInfo)}</div>
+      <PeriodSwitch period={period} onSelect={handleChartPeriodChange} />
+      <div className={classes.balanceValue}>{renderCurrentBalance()}</div>
     </div>
   );
 }
