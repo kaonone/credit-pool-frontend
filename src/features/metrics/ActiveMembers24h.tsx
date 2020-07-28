@@ -5,6 +5,8 @@ import { Metric, Label, Grid, Loading } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { usePoolInfo, usePoolInfoDayAgo } from 'features/poolInfo';
 
+import { progressProps } from './common';
+
 const tKeys = tKeysAll.components.metrics;
 
 export function ActiveMembers24h() {
@@ -17,9 +19,14 @@ export function ActiveMembers24h() {
 
   return (
     <Grid container>
-      <Loading gqlResults={[gqlResult, gqlResultDayAgo]}>
-        <Metric title={<Label>{t(tKeys.dayChange.getKey())}</Label>} value={value} />
-      </Loading>
+      <Metric
+        title={<Label>{t(tKeys.dayChange.getKey())}</Label>}
+        value={
+          <Loading gqlResults={[gqlResult, gqlResultDayAgo]} progressProps={progressProps}>
+            {value}
+          </Loading>
+        }
+      />
     </Grid>
   );
 }

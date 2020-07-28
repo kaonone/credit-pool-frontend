@@ -6,6 +6,8 @@ import { PercentAmount } from 'model/entities';
 import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
 
+import { progressProps } from './common';
+
 const tKeys = tKeysAll.components.metrics;
 
 export function MinimumAPY() {
@@ -18,11 +20,13 @@ export function MinimumAPY() {
   const minLoanAPR = new PercentAmount(debtInterestMin).div(10);
 
   return (
-    <Loading>
-      <Metric
-        title={<Label>{t(tKeys.minimumAPY.getKey())}</Label>}
-        value={<FormattedAmount sum={minLoanAPR} />}
-      />
-    </Loading>
+    <Metric
+      title={<Label>{t(tKeys.minimumAPY.getKey())}</Label>}
+      value={
+        <Loading progressProps={progressProps}>
+          <FormattedAmount sum={minLoanAPR} />
+        </Loading>
+      }
+    />
   );
 }
