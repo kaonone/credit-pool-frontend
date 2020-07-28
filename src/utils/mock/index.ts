@@ -1,6 +1,7 @@
+import moment from 'moment';
+
 import { Token, TokenAmount, LiquidityAmount, Currency, PercentAmount } from 'model/entities';
 import { Fraction } from 'model/entities/Fraction';
-import moment from 'moment';
 
 export const zeroAddress = '0x0000000000000000000000000000000000000000';
 
@@ -36,7 +37,8 @@ export const mockedSectors = [
   },
 ];
 
-export const makeMockedDatePoints = () => Array.from(Array(10), (_elem, index) => ({
-  date: moment().subtract(index, 'days').unix() * 1000, // Date in milliseconds
-  value: Math.random(),
-})).reverse();
+export const makeMockedDatePoints = () =>
+  Array.from(Array(10), (_elem, index) => ({
+    date: moment().subtract(index, 'days').unix() * 1000, // Date in milliseconds
+    value: Math.random(),
+  })).reverse();

@@ -99,8 +99,6 @@ function UserBalanceChart() {
     [balances, decimals, currentBalance?.toString()],
   );
 
-  console.log(chartPoints);
-
   return (
     <Loading
       gqlResults={[balancesResult, myUserResult]}

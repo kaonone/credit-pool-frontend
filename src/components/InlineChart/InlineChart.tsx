@@ -6,7 +6,7 @@ type Props<P extends IPoint> = {
   points: P[];
   lines: Array<keyof P>;
   lineColors?: Partial<Record<keyof P, string>>;
-  period?: Period,
+  period?: Period;
 };
 
 export function InlineChart<P extends IPoint>(props: Props<P>) {
