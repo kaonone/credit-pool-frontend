@@ -19,7 +19,7 @@ function BalanceChart<P extends IPoint>(props: IProps<P>) {
   const classes = useStyles();
   const [period, setPeriod] = React.useState<Period>('all');
 
-  const handleChartPeriodChange = React.useCallback((newPeriod: Period) => {
+  const handlePeriodSwitchSelect = React.useCallback((newPeriod: Period) => {
     setPeriod(newPeriod);
   }, []);
 
@@ -35,7 +35,7 @@ function BalanceChart<P extends IPoint>(props: IProps<P>) {
           showGrids
         />
       </div>
-      <PeriodSwitch period={period} onSelect={handleChartPeriodChange} />
+      <PeriodSwitch period={period} onSelect={handlePeriodSwitchSelect} />
       <div className={classes.balanceValue}>{renderCurrentBalance()}</div>
     </div>
   );
