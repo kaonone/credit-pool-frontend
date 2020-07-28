@@ -15,6 +15,7 @@ import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
 import { LiquidityAmount, PercentAmount } from 'model/entities';
 import { CollateralContent } from 'features/loans/containers/CollateralContent';
+import { GivingStakeButton } from 'features/giveStake';
 
 import { LoanProposalAdditionalInfo } from '../LoanProposalAdditionalInfo/LoanProposalAdditionalInfo';
 
@@ -25,6 +26,8 @@ export type LoanProposal = {
   loanDuration: string;
   lStaked: LiquidityAmount;
   descriptionHash: string;
+  proposalId: string;
+  isOwnProposal: boolean;
 };
 
 type Props = {
@@ -110,15 +113,21 @@ const makeColumns = (backgroundColor: string): Array<NewTable.models.Column<Loan
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: () => (
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={() => undefined}
-          backgroundColor={backgroundColor}
-        >
-          Stake
-        </Button>
+      render: x => (
+        <>
+          {!x.isOwnProposal && (
+            <div style={{ display: 'inline-flex' }}>
+              <GivingStakeButton
+                variant="outlined"
+                color="primary"
+                backgroundColor={backgroundColor}
+                loanSize={x.loanRequested.toString()}
+                proposalId={x.proposalId}
+                borrower={x.borrower}
+              />
+            </div>
+          )}
+        </>
       ),
     },
   },
