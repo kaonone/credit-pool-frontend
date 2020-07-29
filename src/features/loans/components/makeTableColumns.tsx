@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { NewTable, Label, AccountAddress, FormattedAmount } from 'components';
+import { NewTable, Label, AccountAddress, FormattedAmount, Box } from 'components';
 import { LiquidityAmount, PercentAmount } from 'model/entities';
 
 import { DueDateCell } from './DueDateCell';
@@ -11,7 +11,7 @@ import { PartialDebt } from './types';
 
 export type UserDebt = {
   borrower: string;
-  total: LiquidityAmount;
+  body: LiquidityAmount;
   lStaked: LiquidityAmount;
   apr: PercentAmount;
   dueDate: Date | null;
@@ -35,7 +35,7 @@ export const makeTableColumns = (
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: debt => <FormattedAmount sum={debt.total} variant="plain" />,
+      render: debt => <FormattedAmount sum={debt.body} variant="plain" />,
     },
   },
 
@@ -83,7 +83,7 @@ export const makeTableColumns = (
         <MyCollateralCell
           debt={debt.rawDebt}
           account={account}
-          loanRequested={debt.total}
+          loanRequested={debt.body}
           lStaked={debt.lStaked}
         />
       ),
@@ -95,7 +95,11 @@ export const makeTableColumns = (
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: debt => <ActionsCell debt={debt.rawDebt} account={account} />,
+      render: debt => (
+        <Box display="inline-flex" justifyContent="flex-end" minWidth={160}>
+          <ActionsCell debt={debt.rawDebt} account={account} />
+        </Box>
+      ),
     },
   },
 ];
