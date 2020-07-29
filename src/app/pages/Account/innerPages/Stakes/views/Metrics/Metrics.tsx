@@ -1,7 +1,6 @@
 import React from 'react';
 
 import * as metrics from 'features/metrics';
-import { ComingSoon } from 'components';
 
 import { useStyles } from './Metrics.style';
 
@@ -31,10 +30,7 @@ export const Metrics: React.FC = () => {
   function renderMetric(Metric: React.FC, index: number) {
     return (
       <div key={index} className={classes.columnElement}>
-        <ComingSoon position="overlay" />
-        <div className={classes.comingSoonMetric}>
-          <Metric />
-        </div>
+        <Metric />
       </div>
     );
   }

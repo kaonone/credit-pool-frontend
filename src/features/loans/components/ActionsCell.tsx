@@ -113,7 +113,7 @@ export function ActionsCell({ debt, account }: IProps) {
         {actions.length ? (
           <Grid container spacing={1}>
             {actions.map((action, index) => (
-              <Grid xs item key={index}>
+              <Grid item key={index}>
                 {action}
               </Grid>
             ))}
@@ -126,9 +126,7 @@ export function ActionsCell({ debt, account }: IProps) {
 
 const useStyles = makeStyles(
   () => ({
-    root: {
-      minWidth: 210,
-    },
+    root: {},
     sum: {
       marginBottom: 10,
     },

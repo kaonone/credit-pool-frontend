@@ -5,6 +5,7 @@ export const CHART_WIDTH = 135;
 export const useStyles = makeStyles(
   theme => ({
     root: {},
+    title: {},
     chartContainer: {
       marginTop: 25,
       display: 'flex',

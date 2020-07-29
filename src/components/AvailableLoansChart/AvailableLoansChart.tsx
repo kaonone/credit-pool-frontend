@@ -17,6 +17,7 @@ function AvailableLoansChart() {
 
   const renderTitle = () => (
     <div className={classes.label}>
+      <ComingSoon variant="label" />
       <div className={classes.title}>
         <Label>{t(tKeys.totalAvailable.getKey())}</Label>
       </div>
@@ -29,7 +30,6 @@ function AvailableLoansChart() {
 
   return (
     <div className={classes.root}>
-      <ComingSoon position="overlay" />
       <ProgressChart
         value={70}
         total={100}

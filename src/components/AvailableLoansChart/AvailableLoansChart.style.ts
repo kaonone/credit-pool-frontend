@@ -6,7 +6,6 @@ const CHART_HEIGHT = 155;
 export const useStyles = makeStyles(
   () => ({
     root: {
-      position: 'relative',
       width: CHART_WIDTH,
       height: CHART_HEIGHT,
     },
@@ -19,6 +18,7 @@ export const useStyles = makeStyles(
       alignItems: 'center',
     },
     title: {
+      marginTop: 4,
       maxWidth: 120,
     },
     sum: {

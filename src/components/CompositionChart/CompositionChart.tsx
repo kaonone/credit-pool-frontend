@@ -1,13 +1,12 @@
 import * as React from 'react';
 import * as R from 'ramda';
 
-import { Label } from 'components/Label/Label';
 import { PieChart, Props as PieChartProps } from 'components/PieChart/PieChart';
 
 import { useStyles } from './CompositionChart.style';
 
 type Props = {
-  title: string;
+  title: React.ReactNode;
   labelColors: string[];
 };
 
@@ -45,7 +44,7 @@ function CompositionChart({
 
   return (
     <div className={classes.root}>
-      <Label>{title}</Label>
+      <div className={classes.title}>{title}</div>
       <div className={classes.chartContainer}>
         <div className={classes.chart}>
           <PieChart
