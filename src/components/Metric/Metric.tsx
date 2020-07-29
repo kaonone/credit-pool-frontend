@@ -43,7 +43,7 @@ const useStyles = makeStyles(
       fontSize: 16,
     },
     chart: {
-      marginBottom: 5,
+      marginBottom: 8,
       marginLeft: 10,
       alignSelf: 'flex-end',
       lineHeight: 0,
