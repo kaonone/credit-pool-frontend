@@ -16,9 +16,9 @@ type IProps = ButtonProps & {
 };
 
 const tKeysConfirmation = tKeysAll.features.changeLoanState.exchangingConfirmation;
-const tKeys = tKeysAll.features.changeLoanState.unlockButton;
+const tKeys = tKeysAll.features.changeLoanState.unlockCollateralButton;
 
-export function UnlockButton(props: IProps) {
+export function UnlockCollateralButton(props: IProps) {
   const { borrower, proposalId, debtId, ...restProps } = props;
   const { t } = useTranslate();
   const api = useApi();

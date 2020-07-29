@@ -231,7 +231,7 @@ const en = {
       liquidateLoanButton: {
         confirmMessage: 'Are you sure you want to liquidate a loan?',
       },
-      unlockButton: {
+      unlockCollateralButton: {
         buttonTitle: 'Unlock',
         confirmMessage:
           'Are you sure you want to withdraw unlocked stake %{pledgeForUnlock} and earn %{earnForUnlock}?',
