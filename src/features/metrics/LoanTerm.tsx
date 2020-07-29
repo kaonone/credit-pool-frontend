@@ -11,9 +11,6 @@ export function LoanTerm() {
   const { t } = useTranslate();
 
   return (
-    <Metric
-      title={<Label withComingSoon>{t(tKeys.loanTerm.getKey())}</Label>}
-      value={valueMock}
-    />
+    <Metric title={<Label withComingSoon>{t(tKeys.loanTerm.getKey())}</Label>} value={valueMock} />
   );
 }
