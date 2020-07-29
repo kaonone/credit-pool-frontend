@@ -12,11 +12,11 @@ type Props = {
   fontSize?: 'inherit' | 'medium' | 'large';
   icon?: React.ReactNode;
   inline?: boolean;
-  hasComingSoonLabel?: boolean;
+  withComingSoon?: boolean;
 };
 
 export const Label: React.FC<Props> = props => {
-  const { hint, inline, icon, children, hasComingSoonLabel, fontSize = 'inherit' } = props;
+  const { hint, inline, icon, children, withComingSoon, fontSize = 'inherit' } = props;
   const classes = useStyles(props);
 
   return (
@@ -37,7 +37,7 @@ export const Label: React.FC<Props> = props => {
           </Tooltip>
         </>
       )}
-      {hasComingSoonLabel && (
+      {withComingSoon && (
         <span className={classes.comingSoonLabel}>
           <ComingSoon variant="label" />
         </span>

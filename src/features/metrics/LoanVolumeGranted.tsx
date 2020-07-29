@@ -11,7 +11,7 @@ export function LoanVolumeGranted() {
 
   return (
     <Metric
-      title={<Label hasComingSoonLabel>{t(tKeys.loanVolumeGranted.getKey())}</Label>}
+      title={<Label withComingSoon>{t(tKeys.loanVolumeGranted.getKey())}</Label>}
       value={<FormattedAmount sum={liquidityAmount} />}
     />
   );

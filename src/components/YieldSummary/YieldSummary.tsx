@@ -13,7 +13,7 @@ function YieldSummary() {
   return (
     <div className={classes.root}>
       <header className={classes.header}>
-        <Label fontSize="large" hasComingSoonLabel>
+        <Label fontSize="large" withComingSoon>
           {t(tKeysAll.components.yield.title.getKey())}
         </Label>
         <PeriodSwitch period="d" onSelect={() => {}} />

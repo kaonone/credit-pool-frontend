@@ -12,7 +12,7 @@ export function OutstandingLoans() {
   return (
     <Metric
       title={
-        <Label hint={t(tKeys.description.getKey())} hasComingSoonLabel>
+        <Label hint={t(tKeys.description.getKey())} withComingSoon>
           {t(tKeys.label.getKey())}
         </Label>
       }

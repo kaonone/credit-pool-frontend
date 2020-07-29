@@ -39,7 +39,7 @@ function PoolCompositionChart() {
     <div className={classes.root}>
       <div className={classes.hidden}>{renderGradients()}</div>
       <CompositionChart
-        title={<Label hasComingSoonLabel>{t(tKeys.poolComposition.getKey())}</Label>}
+        title={<Label withComingSoon>{t(tKeys.poolComposition.getKey())}</Label>}
         chartData={mockedSectors}
         sectorColors={R.pluck('sector', colors)}
         labelColors={R.pluck('label', colors)}

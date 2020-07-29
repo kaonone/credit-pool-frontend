@@ -11,7 +11,7 @@ export function AverageLoanSize() {
 
   return (
     <Metric
-      title={<Label hasComingSoonLabel>{t(tKeys.averageLoanSize.getKey())}</Label>}
+      title={<Label withComingSoon>{t(tKeys.averageLoanSize.getKey())}</Label>}
       value={<FormattedAmount sum={liquidityAmount} />}
     />
   );

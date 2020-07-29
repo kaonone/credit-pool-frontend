@@ -12,7 +12,7 @@ export function AverageLoanTerm() {
 
   return (
     <Metric
-      title={<Label hasComingSoonLabel>{t(tKeys.averageLoanTerm.getKey())}</Label>}
+      title={<Label withComingSoon>{t(tKeys.averageLoanTerm.getKey())}</Label>}
       value={valueMock}
     />
   );

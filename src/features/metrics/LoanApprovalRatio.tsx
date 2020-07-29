@@ -11,7 +11,7 @@ export function LoanApprovalRatio() {
 
   return (
     <Metric
-      title={<Label hasComingSoonLabel>{t(tKeys.loanApprovalRatio.getKey())}</Label>}
+      title={<Label withComingSoon>{t(tKeys.loanApprovalRatio.getKey())}</Label>}
       value={<FormattedAmount sum={percentAmount} />}
       chart={<BarChart values={barChartData} />}
     />

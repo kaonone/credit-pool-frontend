@@ -13,7 +13,7 @@ export function AKRO() {
   return (
     <Metric
       title={
-        <Label hint={t(tKeys.description.getKey())} icon={<AKROIcon />} hasComingSoonLabel>
+        <Label hint={t(tKeys.description.getKey())} icon={<AKROIcon />} withComingSoon>
           AKRO
         </Label>
       }

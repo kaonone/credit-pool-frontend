@@ -11,7 +11,7 @@ export function AverageAPY() {
 
   return (
     <Metric
-      title={<Label hasComingSoonLabel>{t(tKeys.averageAPY.getKey())}</Label>}
+      title={<Label withComingSoon>{t(tKeys.averageAPY.getKey())}</Label>}
       value={<FormattedAmount sum={percentAmount} />}
       chart={<ChartBlock variant="increase" />}
     />

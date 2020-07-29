@@ -12,7 +12,7 @@ export function AverageLoanAPY() {
 
   return (
     <Metric
-      title={<Label hasComingSoonLabel>{t(tKeys.averageLoanAPY.getKey())}</Label>}
+      title={<Label withComingSoon>{t(tKeys.averageLoanAPY.getKey())}</Label>}
       value={valueMock}
       chart={<ChartBlock value="1234" variant="increase" sign="+" />}
     />

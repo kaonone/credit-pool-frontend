@@ -43,7 +43,7 @@ export function PortfolioSnapshot(props: Props) {
     <div className={classes.root}>
       <table className={classes.table}>
         <caption className={classes.caption}>
-          <Label fontSize="large" hint={t(tKeys.description.getKey())} hasComingSoonLabel>
+          <Label fontSize="large" hint={t(tKeys.description.getKey())} withComingSoon>
             {t(tKeys.caption.getKey())}
           </Label>
         </caption>

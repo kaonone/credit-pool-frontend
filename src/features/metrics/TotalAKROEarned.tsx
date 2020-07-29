@@ -11,7 +11,7 @@ export function TotalAKROEarned() {
 
   return (
     <Metric
-      title={<Label hasComingSoonLabel>{t(tKeys.totalAKROEarned.getKey())}</Label>}
+      title={<Label withComingSoon>{t(tKeys.totalAKROEarned.getKey())}</Label>}
       value={<FormattedAmount sum={liquidityAmount} />}
     />
   );
