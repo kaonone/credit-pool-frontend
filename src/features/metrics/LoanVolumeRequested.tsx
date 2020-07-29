@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Metric, Label, FormattedAmount, ComingSoon } from 'components';
+import { Metric, Label, FormattedAmount } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { liquidityAmount } from 'utils/mock';
 
@@ -10,12 +10,9 @@ export function LoanVolumeRequested() {
   const { t } = useTranslate();
 
   return (
-    <div style={{ position: 'relative' }}>
-      <ComingSoon position="overlay" />
-      <Metric
-        title={<Label>{t(tKeys.loanVolumeRequested.getKey())}</Label>}
-        value={<FormattedAmount sum={liquidityAmount} />}
-      />
-    </div>
+    <Metric
+      title={<Label hasComingSoonLabel>{t(tKeys.loanVolumeRequested.getKey())}</Label>}
+      value={<FormattedAmount sum={liquidityAmount} />}
+    />
   );
 }

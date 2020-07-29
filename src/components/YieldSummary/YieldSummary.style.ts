@@ -5,10 +5,11 @@ import * as YieldChart from './images/chart-yield.svg';
 export const useStyles = makeStyles(
   () => ({
     root: {
-      position: 'relative',
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
+      maxWidth: 480,
+      marginLeft: 'auto',
     },
 
     header: {

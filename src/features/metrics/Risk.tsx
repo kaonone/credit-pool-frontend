@@ -11,7 +11,11 @@ export function Risk() {
 
   return (
     <Metric
-      title={<Label hint={t(tKeys.description.getKey())}>{t(tKeys.label.getKey())}</Label>}
+      title={
+        <Label hint={t(tKeys.description.getKey())} hasComingSoonLabel>
+          {t(tKeys.label.getKey())}
+        </Label>
+      }
       value={<FormattedAmount sum={liquidityAmount} />}
     />
   );

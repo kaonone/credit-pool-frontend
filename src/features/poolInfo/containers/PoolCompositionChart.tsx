@@ -4,7 +4,7 @@ import * as R from 'ramda';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useTheme, makeStyles } from 'utils/styles';
 import { mockSectors } from 'utils/mock';
-import { CompositionChart, ComingSoon } from 'components';
+import { CompositionChart, Label } from 'components';
 
 const tKeys = tKeysAll.components.poolCompositionChart;
 
@@ -39,22 +39,18 @@ function PoolCompositionChart() {
     <div className={classes.root}>
       <div className={classes.hidden}>{renderGradients()}</div>
       <CompositionChart
-        title={t(tKeys.poolComposition.getKey())}
+        title={<Label hasComingSoonLabel>{t(tKeys.poolComposition.getKey())}</Label>}
         chartData={mockSectors}
         sectorColors={R.pluck('sector', colors)}
         labelColors={R.pluck('label', colors)}
       />
-      <ComingSoon position="overlay" />
     </div>
   );
 }
 
 const useStyles = makeStyles(
   () => ({
-    root: {
-      position: 'relative',
-      padding: 10,
-    },
+    root: {},
     hidden: {
       height: 0,
       visibility: 'hidden',
