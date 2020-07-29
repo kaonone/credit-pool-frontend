@@ -7,12 +7,7 @@ const en = {
       overview: {
         poolBalanceTitle: 'Pool Deposit/Withdrawal Price Curve',
         distributions: 'Distributions',
-        myBalanceTitle: 'My balance',
         poolInfoTitle: 'Pool information',
-      },
-      balances: {
-        balanceChangesTitle: 'Deposit/Withdraw history',
-        earningsTitle: 'Earnings',
       },
       account: {
         tabs: {
