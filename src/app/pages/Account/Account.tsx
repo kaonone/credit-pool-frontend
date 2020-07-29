@@ -15,7 +15,7 @@ import * as innerPages from './innerPages';
 
 const tKeys = tKeysAll.app.pages.account;
 
-export function AccountPage() {
+export function Account() {
   const { t } = useTranslate();
   const match = useRouteMatch<{ page: string }>('/account/:page');
   const [selectedPage, setSelectedPage] = React.useState(routes.account.summary.getElementKey());
@@ -135,5 +135,5 @@ const useStyles = makeStyles(
       justifyContent: 'space-between',
     },
   }),
-  { name: 'AccountPage' },
+  { name: 'Account' },
 );

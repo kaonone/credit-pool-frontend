@@ -4,6 +4,6 @@ import { WithAccount } from 'app/components/WithAccount/WithAccount';
 
 import { LendContent } from './views/LendContent/LendContent';
 
-export function LendPage() {
+export function Lend() {
   return <WithAccount>{({ account }) => <LendContent account={account} />}</WithAccount>;
 }
