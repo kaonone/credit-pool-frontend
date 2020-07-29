@@ -5,6 +5,7 @@ import { Metric, Label, FormattedAmount, Loading } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
+import { UserBalanceChart } from 'features/balance';
 
 import { progressProps } from './common';
 
@@ -28,6 +29,7 @@ export function AvailableBalance() {
           {availableBalance && <FormattedAmount sum={availableBalance} />}
         </Loading>
       }
+      chart={<UserBalanceChart />}
     />
   );
 }

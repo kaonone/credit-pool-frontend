@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import { Token, TokenAmount, LiquidityAmount, Currency, PercentAmount } from 'model/entities';
 import { Fraction } from 'model/entities/Fraction';
 
@@ -12,7 +14,7 @@ export const liquidityAmount = new LiquidityAmount('1123123123123123123123', new
 
 export const percentAmount = new PercentAmount(new Fraction('15555', '100000'));
 
-export const mockSectors = [
+export const mockedSectors = [
   {
     value: 10,
     label: 'RSV',
@@ -33,4 +35,17 @@ export const mockSectors = [
     value: 30,
     label: 'USDC',
   },
+];
+
+export const makeMockedDatePoints = () =>
+  Array.from(Array(10), (_elem, index) => ({
+    date: moment().subtract(index, 'days').unix() * 1000, // Date in milliseconds
+    value: Math.random(),
+  })).reverse();
+
+export const barChartData = [
+  new PercentAmount(66),
+  new PercentAmount(34),
+  new PercentAmount(66),
+  new PercentAmount(66),
 ];

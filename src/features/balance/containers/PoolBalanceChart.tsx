@@ -15,13 +15,16 @@ import { ETH_NETWORK_CONFIG } from 'env';
 
 import { CurrentBalance, BalanceValue } from '../components/CurrentBalance';
 
-export const useStyles = makeStyles(() => ({
-  hidden: {
-    opacity: 0,
-    width: 0,
-    height: 0,
-  },
-}));
+export const useStyles = makeStyles(
+  () => ({
+    hidden: {
+      opacity: 0,
+      width: 0,
+      height: 0,
+    },
+  }),
+  { name: 'PoolBalanceChart' },
+);
 
 interface PoolPoint {
   date: number;
@@ -110,8 +113,8 @@ function PoolBalanceChart() {
     <Loading gqlResults={balancesResult} meta={liquidityCurrencyMeta}>
       <div className={classes.hidden}>
         <svg>
-          {theme.gradients.poolBalanceChart[0].svgLinear('lEnterPriceGradient')}
-          {theme.gradients.poolBalanceChart[1].svgLinear('lExitPriceGradient')}
+          {theme.gradients.linearChart[0].svgLinear('lEnterPriceGradient')}
+          {theme.gradients.linearChart[1].svgLinear('lExitPriceGradient')}
         </svg>
       </div>
       <BalanceChart

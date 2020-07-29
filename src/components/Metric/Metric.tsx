@@ -46,6 +46,7 @@ const useStyles = makeStyles(
       marginBottom: 5,
       marginLeft: 10,
       alignSelf: 'flex-end',
+      lineHeight: 0,
     },
   }),
   { name: 'Metric' },

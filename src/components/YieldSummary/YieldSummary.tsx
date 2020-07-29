@@ -2,7 +2,7 @@ import React from 'react';
 
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { Label } from 'components/Label/Label';
-import { PeriodSwitch } from 'components/Chart/components/PeriodSwitch/PeriodSwitch';
+import { PeriodSwitch } from 'components/BalanceChart/components/PeriodSwitch/PeriodSwitch';
 
 import { useStyles } from './YieldSummary.style';
 
