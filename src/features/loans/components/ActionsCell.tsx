@@ -4,11 +4,13 @@ import BN from 'bn.js';
 import { Status, usePledgeSubscription } from 'generated/gql/pool';
 import { isEqualHex } from 'utils/hex';
 import { bnToBn } from 'utils/bn';
+import { makeStyles, useTheme } from 'utils/styles';
 import { Grid, Loading } from 'components';
 import { getPledgeId } from 'model';
 import { ActivateLoanButton, UnlockButton, CancelProposalButton } from 'features/cashExchange';
 import { UnstakingButton } from 'features/unstake';
 import { LoanRepayingButton } from 'features/repayLoan';
+import { AvailableForUnlock } from 'features/metrics';
 
 import { PartialDebt } from './types';
 
@@ -27,6 +29,9 @@ export function ActionsCell({ debt, account }: IProps) {
     stakeProgress,
     proposal_id: proposalId,
   } = debt;
+  const classes = useStyles();
+  const theme = useTheme();
+
   const pledgeHash = React.useMemo(() => getPledgeId(account, borrower.id, proposalId), [
     account,
     borrower.id,
@@ -49,10 +54,11 @@ export function ActionsCell({ debt, account }: IProps) {
   const isAvailableForUnlock = pInterest.gtn(0);
 
   const commonProps = {
-    variant: 'contained',
+    variant: 'outlined',
     color: 'primary',
     size: 'small',
-    fullWidth: true,
+    backgroundColor: theme.palette.background.paper,
+    fullWidth: false,
   } as const;
 
   const actions = [
@@ -83,26 +89,45 @@ export function ActionsCell({ debt, account }: IProps) {
       />
     ) : null,
     isAvailableForUnlock && debtId ? (
-      <UnlockButton
-        borrower={borrower.id}
-        proposalId={proposalId}
-        debtId={debtId}
-        {...commonProps}
-      />
+      <>
+        <div className={classes.sum}>
+          <AvailableForUnlock borrower={borrower.id} debtId={debtId} />
+        </div>
+        <UnlockButton
+          borrower={borrower.id}
+          proposalId={proposalId}
+          debtId={debtId}
+          {...commonProps}
+        />
+      </>
     ) : null,
   ].filter(Boolean);
 
   return (
-    <Loading gqlResults={pledgeGqlResult}>
-      {actions.length ? (
-        <Grid container spacing={1}>
-          {actions.map((action, index) => (
-            <Grid xs item key={index}>
-              {action}
-            </Grid>
-          ))}
-        </Grid>
-      ) : null}
-    </Loading>
+    <div className={classes.root}>
+      <Loading gqlResults={pledgeGqlResult}>
+        {actions.length ? (
+          <Grid container spacing={1}>
+            {actions.map((action, index) => (
+              <Grid xs item key={index}>
+                {action}
+              </Grid>
+            ))}
+          </Grid>
+        ) : null}
+      </Loading>
+    </div>
   );
 }
+
+const useStyles = makeStyles(
+  () => ({
+    root: {
+      minWidth: 210,
+    },
+    sum: {
+      marginBottom: 10,
+    },
+  }),
+  { name: 'ActionCells' },
+);

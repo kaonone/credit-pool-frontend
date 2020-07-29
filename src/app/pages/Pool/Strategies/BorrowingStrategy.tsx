@@ -1,8 +1,7 @@
 import React from 'react';
-import { of } from 'rxjs';
-import BN from 'bn.js';
+import { empty } from 'rxjs';
 
-import { Loading, FormattedBalance } from 'components';
+import { Loading, FormattedAmount } from 'components';
 import { CreatingLoanProposalButton } from 'features/createLoanProposal';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
@@ -15,9 +14,8 @@ export function BorrowingStrategy() {
   const [account] = useSubscribable(() => api.web3Manager.account, []);
 
   const [maxAvailableLoanSize, maxAvailableLoanSizeMeta] = useSubscribable(
-    () => (account ? api.loanModule.getMaxAvailableLoanSizeInDai$(account) : of(new BN(0))),
+    () => (account ? api.loanModule.getMaxAvailableLoanSize$(account) : empty()),
     [api, account],
-    new BN(0),
   );
 
   const [loanConfig, loanConfigMeta] = useSubscribable(() => api.loanModule.getConfig$(), [api]);
@@ -36,7 +34,7 @@ export function BorrowingStrategy() {
       title="Borrowing"
       primaryMetric={
         <Loading meta={maxAvailableLoanSizeMeta}>
-          <FormattedBalance sum={maxAvailableLoanSize.toString()} token="dai" />
+          {maxAvailableLoanSize && <FormattedAmount sum={maxAvailableLoanSize} />}
         </Loading>
       }
       secondaryMetric={

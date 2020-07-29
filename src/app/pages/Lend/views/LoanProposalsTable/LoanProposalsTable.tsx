@@ -1,6 +1,6 @@
-import * as React from 'react';
-import BN from 'bn.js';
+import React, { useMemo } from 'react';
 import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom';
 
 import {
   NewTable,
@@ -11,13 +11,14 @@ import {
   Hint,
   Loading,
 } from 'components';
-import { makeStyles } from 'utils/styles';
+import { makeStyles, useTheme } from 'utils/styles';
+import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
 import { LiquidityAmount, PercentAmount } from 'model/entities';
-import { useSubscribable } from 'utils/react';
-import { calcCollateral } from 'domainLogic';
+import { CollateralContent } from 'features/loans/containers/CollateralContent';
+import { GivingStakeButton } from 'features/giveStake';
+import { routes } from 'app/routes';
 
-import { CollateralDistributionBar } from '../CollateralDistributionBar/CollateralDistributionBar';
 import { LoanProposalAdditionalInfo } from '../LoanProposalAdditionalInfo/LoanProposalAdditionalInfo';
 
 export type LoanProposal = {
@@ -25,43 +26,15 @@ export type LoanProposal = {
   loanRequested: LiquidityAmount;
   loanAPY: PercentAmount;
   loanDuration: string;
-  lStaked: string;
+  lStaked: LiquidityAmount;
   descriptionHash: string;
+  proposalId: string;
+  isOwnProposal: boolean;
 };
 
 type Props = {
   loanProposals: LoanProposal[];
 };
-
-function LoanRequested(props: Pick<LoanProposal, 'loanRequested'>) {
-  const { loanRequested } = props;
-  return <FormattedAmount sum={loanRequested} />;
-}
-
-function useCollateral(loanRequested: string, lStaked: string) {
-  const api = useApi();
-
-  const [fullLoanStake] = useSubscribable(
-    () => api.loanModule.calculateFullLoanStake$(loanRequested),
-    [loanRequested],
-  );
-
-  const lBorrowerStake = fullLoanStake?.divn(3); // TODO: add this value in subgraph to be able to calc collateral
-
-  return {
-    poolProvided: calcCollateral(fullLoanStake, lStaked).toNumber(),
-    userProvided:
-      lBorrowerStake && fullLoanStake
-        ? lBorrowerStake.div(fullLoanStake).mul(new BN(100)).toNumber()
-        : 0,
-  };
-}
-
-function CollateralContent(props: Pick<LoanProposal, 'loanRequested' | 'lStaked'>) {
-  const { loanRequested, lStaked } = props;
-  const { userProvided, poolProvided } = useCollateral(loanRequested.toString(), lStaked);
-  return <CollateralDistributionBar userProvided={userProvided} poolProvided={poolProvided} />;
-}
 
 function AdditionalInfoContent(props: Pick<LoanProposal, 'descriptionHash'>) {
   const { descriptionHash } = props;
@@ -78,7 +51,7 @@ function AdditionalInfoContent(props: Pick<LoanProposal, 'descriptionHash'>) {
   );
 }
 
-const columns: Array<NewTable.models.Column<LoanProposal>> = [
+const makeColumns = (backgroundColor: string): Array<NewTable.models.Column<LoanProposal>> => [
   {
     renderTitle: () => 'Borrower',
     cellContent: {
@@ -98,7 +71,7 @@ const columns: Array<NewTable.models.Column<LoanProposal>> = [
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: x => <LoanRequested loanRequested={x.loanRequested} />,
+      render: x => <FormattedAmount sum={x.loanRequested} variant="plain" />,
     },
   },
 
@@ -137,10 +110,20 @@ const columns: Array<NewTable.models.Column<LoanProposal>> = [
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: () => (
-        <Button variant="outlined" color="primary" onClick={() => undefined}>
-          Stake
-        </Button>
+      render: x => (
+        <>
+          {!x.isOwnProposal && (
+            <GivingStakeButton
+              variant="outlined"
+              color="primary"
+              size="small"
+              backgroundColor={backgroundColor}
+              loanSize={x.loanRequested.toString()}
+              proposalId={x.proposalId}
+              borrower={x.borrower}
+            />
+          )}
+        </>
       ),
     },
   },
@@ -160,12 +143,20 @@ const columns: Array<NewTable.models.Column<LoanProposal>> = [
 export function LoanProposalsTable(props: Props) {
   const { loanProposals } = props;
   const classes = useStyles();
+  const theme = useTheme();
+
+  const columns = useMemo(() => makeColumns(theme.palette.background.paper), [theme]);
 
   function renderTableHeader() {
     return (
       <div className={classes.tableHeader}>
         <div className={classes.tableTitle}>Loan proposals</div>
-        <Button variant="contained" color="primary" onClick={() => undefined}>
+        <Button
+          component={Link}
+          variant="contained"
+          color="primary"
+          to={routes.account.stakes.getRedirectPath()}
+        >
           My Stakes
         </Button>
       </div>

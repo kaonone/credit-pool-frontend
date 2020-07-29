@@ -6,9 +6,9 @@ const CHART_HEIGHT = 155;
 export const useStyles = makeStyles(
   () => ({
     root: {
+      position: 'relative',
       width: CHART_WIDTH,
       height: CHART_HEIGHT,
-      overflow: 'hidden',
     },
     label: {
       lineHeight: 1.15,

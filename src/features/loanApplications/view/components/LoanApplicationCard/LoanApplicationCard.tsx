@@ -13,7 +13,7 @@ import { getPledgeId } from 'model';
 import { useSubscribable } from 'utils/react';
 import { formatBalance } from 'utils/format';
 import { Status, usePledgeSubscription } from 'generated/gql/pool';
-import { calcCollateral } from 'domainLogic';
+import { calcShare } from 'domainLogic';
 
 import { useStyles } from './LoanApplicationCard.style';
 import { Progress } from '../Progress/Progress';
@@ -118,7 +118,7 @@ const LoanApplicationCard = memo(function LoanApplicationCard(props: IProps) {
     ],
   );
 
-  const progressInPercents = calcCollateral(fullLoanStake, stakedValue).toNumber();
+  const progressInPercents = fullLoanStake ? calcShare(fullLoanStake, stakedValue).toNumber() : 0;
   const isMyProposal = !!account && account.toLowerCase() === borrower.toLowerCase();
   const asideContent = React.useMemo(
     () => (

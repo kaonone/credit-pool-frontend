@@ -102,7 +102,11 @@ export function Table<T, U = null>(props: Props<T, U>) {
 
   function renderEntry(entry: T, rowIndex: number, beforeSummary?: boolean) {
     if (expandedArea === null) {
-      return renderEntryRow(entry, rowIndex, beforeSummary);
+      return (
+        <React.Fragment key={rowIndex}>
+          {renderEntryRow(entry, rowIndex, beforeSummary)}
+        </React.Fragment>
+      );
     }
 
     return (

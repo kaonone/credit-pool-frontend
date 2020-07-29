@@ -10,7 +10,6 @@ import { useSubscribable, useValidateAmount } from 'utils/react';
 import { Loading, Typography, Box } from 'components';
 import { roundWei, min } from 'utils/bn';
 import { calcInterestShare } from 'model';
-import { formatBalance } from 'utils/format';
 
 import { AmountPrefiller } from './AmountPrefiller';
 
@@ -101,22 +100,8 @@ export function GivingStakeForm({
       return amount
         ? api.loanModule.calculateFullLoanStake$(loanSize).pipe(
             map(fullLoanStake => {
-              const rawSourceAmount = amount.toBN();
-
-              const interestShareDecimals = 2;
-              const rawInterestShareDelta = calcInterestShare(
-                rawSourceAmount,
-                fullLoanStake,
-                interestShareDecimals,
-              );
-
-              const interestShareDelta = `${formatBalance({
-                amountInBaseUnits: rawInterestShareDelta,
-                baseDecimals: interestShareDecimals,
-              })}%`;
-
               return t(tKeys.confirmMessage.getKey(), {
-                interestShareDelta,
+                interestShareDelta: calcInterestShare(amount, fullLoanStake).toFormattedString(),
                 sourceAmount: amount.toFormattedString(),
               });
             }),

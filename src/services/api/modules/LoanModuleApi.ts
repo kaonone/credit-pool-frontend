@@ -481,12 +481,14 @@ export class LoanModuleApi {
   }
 
   @memoize(R.identity)
-  public getMaxAvailableLoanSizeInDai$(address: string): Observable<BN> {
-    return this.erc20Api.getPtkBalance$(address).pipe(
-      switchMap(balance => {
-        return this.fundsModuleApi.getPtkToDaiExitInfo$(balance.toString());
-      }),
-      map(item => item.total.muln(100).divn(MIN_COLLATERAL_PERCENT_FOR_BORROWER)),
+  public getMaxAvailableLoanSize$(address: string): Observable<LiquidityAmount> {
+    return this.fundsModuleApi.toLiquidityAmount$(
+      this.erc20Api.getPtkBalance$(address).pipe(
+        switchMap(balance => {
+          return this.fundsModuleApi.getPtkToDaiExitInfo$(balance.toString());
+        }),
+        map(item => item.total.muln(100).divn(MIN_COLLATERAL_PERCENT_FOR_BORROWER)),
+      ),
     );
   }
 
