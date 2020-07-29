@@ -215,7 +215,7 @@ const en = {
       confirmMessage:
         'Are you sure you want to unstake %{sourceAmount}? Your interest share will decrease by %{interestShareDelta}',
     },
-    cashExchange: {
+    changeLoanState: {
       activateLoanButton: {
         confirmMessage:
           'Are you sure you want to activate a loan? Please note that your loan will be transferred directly to your wallet.',
@@ -231,7 +231,7 @@ const en = {
       liquidateLoanButton: {
         confirmMessage: 'Are you sure you want to liquidate a loan?',
       },
-      unlockButton: {
+      unlockCollateralButton: {
         buttonTitle: 'Unlock',
         confirmMessage:
           'Are you sure you want to withdraw unlocked stake %{pledgeForUnlock} and earn %{earnForUnlock}?',

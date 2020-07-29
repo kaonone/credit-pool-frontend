@@ -9,12 +9,11 @@ import { createDeFiModule } from 'generated/contracts';
 import { memoize } from 'utils/decorators';
 import { TokenAmount, PercentAmount } from 'model/entities';
 import { getCurrentValueOrThrow } from 'utils/rxjs';
-import { decimalsToWei } from 'utils/bn';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
 import { Erc20Api } from './Erc20Api';
-import { SubgraphApi } from './SubgraphApi.model';
+import { SubgraphApi } from './SubgraphApi';
 
 export class DefiModuleApi {
   private readonlyContract: Contracts['defiModule'];
@@ -44,28 +43,7 @@ export class DefiModuleApi {
 
     return timer(0, reloadDelay).pipe(
       map(() => new BN(Date.now()).divn(1000).subn(24 * 60 * 60)),
-      switchMap(fromDate => this.subgraphApi.DefiAprsFromDate({ fromDate: fromDate.toString() })),
-      map(data => {
-        if (!data.defiAPRs) {
-          return new PercentAmount(0);
-        }
-
-        const { numerator, denominator } = data.defiAPRs.reduce(
-          (acc, cur) => {
-            const apr = new PercentAmount(cur.apr).div(decimalsToWei(cur.aprDecimals));
-            return {
-              numerator: acc.numerator.add(apr.mul(cur.duration)),
-              denominator: acc.denominator.add(new BN(cur.duration)),
-            };
-          },
-          {
-            numerator: new PercentAmount(0),
-            denominator: new BN(0),
-          },
-        );
-
-        return numerator.div(denominator);
-      }),
+      switchMap(this.subgraphApi.getAvgPoolAPY$),
     );
   }
 

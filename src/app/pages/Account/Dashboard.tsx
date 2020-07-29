@@ -3,7 +3,7 @@ import BN from 'bn.js';
 import { of } from 'rxjs';
 
 import { Grid, Loading, FormattedBalance } from 'components';
-import { WithdrawDefiYieldButton } from 'features/cashExchange';
+import { WithdrawDefiYieldButton } from 'features/changeLoanState';
 import { BuyingShareButton } from 'features/buyShare';
 import { SellingShareButton } from 'features/sellShare';
 import { WithdrawDistributionsButton } from 'features/distibutions';

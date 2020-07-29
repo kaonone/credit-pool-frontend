@@ -8,8 +8,8 @@ import { zeroAddress } from 'utils/mock';
 
 type IProps = ButtonProps;
 
-const tKeysConfirmation = tKeysAll.features.cashExchange.exchangingConfirmation;
-const tKeys = tKeysAll.features.cashExchange.withdrawDefiYieldButton;
+const tKeysConfirmation = tKeysAll.features.changeLoanState.exchangingConfirmation;
+const tKeys = tKeysAll.features.changeLoanState.withdrawDefiYieldButton;
 
 function WithdrawDefiYieldButton(props: IProps) {
   const { t } = useTranslate();
