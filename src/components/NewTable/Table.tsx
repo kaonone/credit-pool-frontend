@@ -218,7 +218,7 @@ export function Table<T, U = null>(props: Props<T, U>) {
 
   function renderEntryRow(entry: T, rowIndex: number, beforeSummary?: boolean) {
     return (
-      <tr className={cn({ [classes.rowBeforeSummary]: beforeSummary })}>
+      <tr key={rowIndex} className={cn({ [classes.rowBeforeSummary]: beforeSummary })}>
         {columns.map(makeCellRenderer(entry, rowIndex))}
       </tr>
     );

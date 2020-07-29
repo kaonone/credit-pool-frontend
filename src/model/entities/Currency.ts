@@ -17,6 +17,10 @@ export class Currency implements ICurrency, IBrand {
     return view;
   }
 
+  toString() {
+    return JSON.stringify(this);
+  }
+
   equals(a: Currency): boolean {
     return this.symbol === a.symbol && this.decimals === a.decimals;
   }

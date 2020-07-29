@@ -5,7 +5,7 @@ export { ActivitiesPage } from './Activities/ActivitiesPage';
 export { BalancesPage } from './Balances/Balances';
 export { DemoPage } from './Demo/DemoPage';
 export { DistributionsPage } from './Distributions/DistributionsPage';
-export { LiquidationsPage } from './Liquidations/Liquidations';
+export { Liquidations } from './Liquidations/Liquidations';
 export { MyGuaranteesPage } from './MyGuarantees/MyGuarantees';
 export { MyLoansPage } from './MyLoans/MyLoans';
 export { PoolPage } from './Pool/PoolPage';

@@ -1,5 +1,5 @@
-query DebtsAvailableForLiquidation($first: Int!, $skip: Int!, $liquidationDate: BigInt!) {
-  debts(first: $first, skip: $skip, where: {last_update_lt: $liquidationDate, status_not: CLOSED}) {
+subscription DebtsAvailableForLiquidation($lastUpdateLt: BigInt!, $lastUpdateGt: BigInt) {
+  debts(where: {last_update_lt: $lastUpdateLt, last_update_gt: $lastUpdateGt, status_not: CLOSED}) {
     debt_id
     proposal_id
     apr

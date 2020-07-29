@@ -5,15 +5,8 @@ import { Status, usePledgeSubscription } from 'generated/gql/pool';
 import { isEqualHex } from 'utils/hex';
 import { bnToBn } from 'utils/bn';
 import { Grid, Loading } from 'components';
-import { useSubscribable } from 'utils/react';
-import { useApi } from 'services/api';
-import { getLoanDuePaymentDate, getPledgeId } from 'model';
-import {
-  ActivateLoanButton,
-  UnlockButton,
-  LiquidateLoanButton,
-  CancelProposalButton,
-} from 'features/cashExchange';
+import { getPledgeId } from 'model';
+import { ActivateLoanButton, UnlockButton, CancelProposalButton } from 'features/cashExchange';
 import { UnstakingButton } from 'features/unstake';
 import { LoanRepayingButton } from 'features/repayLoan';
 
@@ -34,9 +27,6 @@ export function ActionsCell({ debt, account }: IProps) {
     stakeProgress,
     proposal_id: proposalId,
   } = debt;
-  const api = useApi();
-  const [config, configMeta] = useSubscribable(() => api.loanModule.getConfig$(), []);
-
   const pledgeHash = React.useMemo(() => getPledgeId(account, borrower.id, proposalId), [
     account,
     borrower.id,
@@ -47,10 +37,6 @@ export function ActionsCell({ debt, account }: IProps) {
   const pInterest = new BN(pledgeGqlResult.data?.pledge?.pInterest || '0');
   const pLocked = new BN(pledgeGqlResult.data?.pledge?.pLocked || '0');
 
-  const duePaymentDate =
-    config && getLoanDuePaymentDate(lastUpdate, config.debtRepayDeadlinePeriod)?.getTime();
-  const isDuePaymentExpired = duePaymentDate && duePaymentDate < Date.now();
-
   const isMyLoan = isEqualHex(borrower.id, account);
 
   const isAvailableForUnstake = status === Status.Proposed && !isMyLoan && pLocked.gtn(0);
@@ -58,7 +44,6 @@ export function ActionsCell({ debt, account }: IProps) {
   const isAvailableForActivation =
     isMyLoan && status === Status.Proposed && bnToBn(stakeProgress).gten(100);
 
-  const isAvailableForLiquidation = status !== Status.Closed && isDuePaymentExpired;
   const isAvailableForRepay =
     isMyLoan && (status === Status.Executed || status === Status.PartiallyRepayed);
   const isAvailableForUnlock = pInterest.gtn(0);
@@ -105,15 +90,10 @@ export function ActionsCell({ debt, account }: IProps) {
         {...commonProps}
       />
     ) : null,
-    isAvailableForLiquidation && debtId ? (
-      <LiquidateLoanButton borrower={borrower.id} debtId={debtId} {...commonProps}>
-        Liquidate
-      </LiquidateLoanButton>
-    ) : null,
   ].filter(Boolean);
 
   return (
-    <Loading meta={configMeta} gqlResults={pledgeGqlResult}>
+    <Loading gqlResults={pledgeGqlResult}>
       {actions.length ? (
         <Grid container spacing={1}>
           {actions.map((action, index) => (
