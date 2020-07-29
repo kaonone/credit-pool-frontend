@@ -4,13 +4,13 @@ import Typography from '@material-ui/core/Typography';
 
 import { NewTable, AccountAddress, FormattedAmount, Hint } from 'components';
 import { makeStyles } from 'utils/styles';
-import { UpcomingLoanToLiquidate } from 'model/loans';
+import { LoanToLiquidate } from 'model/loans';
 
 type Props = {
-  upcomingLoans: UpcomingLoanToLiquidate[];
+  upcomingLoans: LoanToLiquidate[];
 };
 
-const columns: Array<NewTable.models.Column<UpcomingLoanToLiquidate>> = [
+const columns: Array<NewTable.models.Column<LoanToLiquidate>> = [
   {
     renderTitle: () => 'Borrower',
     cellContent: {

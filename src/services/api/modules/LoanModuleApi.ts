@@ -19,7 +19,7 @@ import {
   PLEDGE_MARGIN_DIVIDER,
 } from 'env';
 import { RepaymentMethod } from 'model/types';
-import { LoanToLiquidate, UpcomingLoanToLiquidate } from 'model/loans';
+import { LoanToLiquidate } from 'model/loans';
 import { calcWithdrawAmountBeforeFee } from 'model';
 import { TokenAmount, LiquidityAmount } from 'model/entities';
 import { getCurrentValueOrThrow } from 'utils/rxjs';
@@ -646,7 +646,7 @@ export class LoanModuleApi {
       switchMap(now =>
         combineLatest([this.getConfig$(), this.fundsModuleApi.getLiquidityCurrency$()]).pipe(
           switchMap(([{ debtRepayDeadlinePeriod }, currency]) => {
-            return this.subgraphApi.loadLoansAvailableForLiquidation$(
+            return this.subgraphApi.loadLoansForLiquidation$(
               currency,
               debtRepayDeadlinePeriod,
               getPaymentDueDate(now, debtRepayDeadlinePeriod),
@@ -659,7 +659,7 @@ export class LoanModuleApi {
   }
 
   @memoize()
-  public getLoansUpcomingForLiquidation$(): Observable<UpcomingLoanToLiquidate[]> {
+  public getLoansUpcomingForLiquidation$(): Observable<LoanToLiquidate[]> {
     return timer(0, RE_REQUEST_LOANS_TIMEOUT).pipe(
       map(() => moment()),
       switchMap(now =>
@@ -667,7 +667,7 @@ export class LoanModuleApi {
           switchMap(([{ debtRepayDeadlinePeriod }, currency]) => {
             const loansBecomeUpcomingFrom = new BN(now.subtract(85, 'days').unix()).toString();
 
-            return this.subgraphApi.loadLoansUpcomingForLiquidation$(
+            return this.subgraphApi.loadLoansForLiquidation$(
               currency,
               debtRepayDeadlinePeriod,
               loansBecomeUpcomingFrom,

@@ -7,9 +7,3 @@ export type LoanToLiquidate = {
   repaymentDue: number;
   pastDueInDays: number;
 };
-
-export type UpcomingLoanToLiquidate = {
-  borrower: string;
-  loanGranted: LiquidityAmount;
-  repaymentDue: number;
-};

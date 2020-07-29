@@ -6,13 +6,10 @@ import { map } from 'rxjs/operators';
 import { Currency, PercentAmount } from 'model/entities';
 import { memoize } from 'utils/decorators';
 import { decimalsToWei } from 'utils/bn';
-import { LoanToLiquidate, UpcomingLoanToLiquidate } from 'model/loans';
+import { LoanToLiquidate } from 'model/loans';
 
 import { makeSubgraphApi } from './makeSubgraphApi';
-import {
-  mkLoansAvailableForLiquidationConverter,
-  mkLoansUpcomingForLiquidationConverter,
-} from './converters';
+import { mkLoansForLiquidationConverter } from './converters';
 
 export class SubgraphApi {
   private sdk = makeSubgraphApi(this.apolloClient);
@@ -46,7 +43,7 @@ export class SubgraphApi {
   }
 
   @memoize((currency: Currency, ...rest: string[]) => currency.toString() + rest.join())
-  public loadLoansAvailableForLiquidation$(
+  public loadLoansForLiquidation$(
     currency: Currency,
     debtRepayDeadlinePeriod: BN,
     lastUpdateLt: string,
@@ -56,25 +53,7 @@ export class SubgraphApi {
       .DebtsAvailableForLiquidation({ lastUpdateLt, lastUpdateGt })
       .pipe(
         map(data =>
-          data.debts.map(
-            mkLoansAvailableForLiquidationConverter(currency, debtRepayDeadlinePeriod),
-          ),
-        ),
-      );
-  }
-
-  @memoize((currency: Currency, ...rest: string[]) => currency.toString() + rest.join())
-  public loadLoansUpcomingForLiquidation$(
-    currency: Currency,
-    debtRepayDeadlinePeriod: BN,
-    lastUpdateLt: string,
-    lastUpdateGt: string,
-  ): Observable<UpcomingLoanToLiquidate[]> {
-    return this.sdk
-      .DebtsAvailableForLiquidation({ lastUpdateLt, lastUpdateGt })
-      .pipe(
-        map(data =>
-          data.debts.map(mkLoansUpcomingForLiquidationConverter(currency, debtRepayDeadlinePeriod)),
+          data.debts.map(mkLoansForLiquidationConverter(currency, debtRepayDeadlinePeriod)),
         ),
       );
   }
