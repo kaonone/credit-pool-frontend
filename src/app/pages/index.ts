@@ -1,7 +1,6 @@
 export { Borrow } from './Borrow/Borrow';
 export { LendPage } from './Lend/LendPage';
 export { AccountPage } from './Account/AccountPage';
-export { BalancesPage } from './Balances/Balances';
 export { DemoPage } from './Demo/DemoPage';
 export { DistributionsPage } from './Distributions/DistributionsPage';
 export { Liquidations } from './Liquidations/Liquidations';

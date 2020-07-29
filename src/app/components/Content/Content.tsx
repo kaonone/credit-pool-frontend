@@ -4,6 +4,14 @@ import { Switch, Route, Redirect } from 'react-router';
 import { routes } from '../../routes';
 import * as pages from '../../pages';
 
+// DemoPage
+// AccountPage
+// LendPage
+// Borrow
+// Liquidations
+// HistoryPage
+// StatsPage
+
 export const Content: React.FC = () => {
   return (
     <Switch>
