@@ -5,5 +5,5 @@ export { DemoPage } from './Demo/DemoPage';
 export { DistributionsPage } from './Distributions/DistributionsPage';
 export { Liquidations } from './Liquidations/Liquidations';
 export { StatsPage } from './Stats/Stats';
-export { CreditPool } from './CreditPool/CreditPool';
+export { Landing } from './Landing/Landing';
 export { HistoryPage } from './History/HistoryPage';

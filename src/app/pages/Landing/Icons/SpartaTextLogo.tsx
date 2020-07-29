@@ -4,28 +4,31 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { makeStyles, useTheme } from 'utils/styles';
 
-const useStyles = makeStyles({
-  root: {
-    width: 'unset',
+const useStyles = makeStyles(
+  {
+    root: {
+      width: 'unset',
+    },
   },
-});
+  { name: 'SpartaTextLogo' },
+);
 
-function CreditPoolTextLogo(props: React.ComponentProps<typeof SvgIcon>) {
+function SpartaTextLogo(props: React.ComponentProps<typeof SvgIcon>) {
   const classes = useStyles();
   const theme = useTheme();
 
   return (
     <SvgIcon {...props} classes={classes} viewBox="0 0 143 22">
       <defs>
-        <linearGradient id="CreditPoolTextLogo-gradient" x1="0%" y1="50%" y2="50%">
-          {theme.gradients.creditPoolText.points.map(({ offset, color }, index) => (
+        <linearGradient id="SpartaTextLogo-gradient" x1="0%" y1="50%" y2="50%">
+          {theme.gradients.spartaText.points.map(({ offset, color }, index) => (
             <stop key={index} offset={offset} stopColor={color} />
           ))}
         </linearGradient>
       </defs>
       <g fill="none" fillRule="evenodd" transform="translate(-227 -191)">
         <path
-          fill="url(#CreditPoolTextLogo-gradient)"
+          fill="url(#SpartaTextLogo-gradient)"
           d="M235.63 212.85c.95 0 1.91-.11 2.88-.34a8.34 8.34 0 0 0 2.62-1.08 6.14 6.14 0 0 0 1.91-1.93c.5-.79.75-1.74.75-2.85 0-1.04-.2-1.9-.57-2.58a5.09 5.09 0 0 0-1.52-1.7 8.09 8.09 0 0 0-2.15-1.06c-.8-.26-1.62-.5-2.44-.69-.83-.2-1.65-.37-2.45-.54-.8-.16-1.51-.37-2.15-.63a4.22 4.22 0 0 1-1.52-.98c-.38-.4-.57-.92-.57-1.56a3.05 3.05 0 0 1 1.45-2.8c.44-.28.94-.48 1.5-.6a8.5 8.5 0 0 1 1.73-.17c1.44 0 2.63.34 3.56 1.01.92.67 1.46 1.76 1.62 3.26h2.63a7.35 7.35 0 0 0-.66-2.97 5.78 5.78 0 0 0-1.63-2.06c-.7-.55-1.5-.95-2.42-1.2a11.18 11.18 0 0 0-5.77-.01c-.91.24-1.72.61-2.43 1.1s-1.28 1.14-1.71 1.9a5.53 5.53 0 0 0-.65 2.74c0 .96.2 1.75.57 2.39.38.63.9 1.15 1.52 1.55.64.4 1.35.72 2.15.96.8.25 1.62.46 2.45.65l2.44.54c.8.17 1.52.4 2.15.69.63.28 1.14.64 1.52 1.1.38.44.57 1.03.57 1.75 0 .76-.16 1.38-.47 1.87a3.4 3.4 0 0 1-1.23 1.15c-.5.29-1.07.49-1.7.6-.64.12-1.27.18-1.9.18-.77 0-1.53-.1-2.28-.3a5.7 5.7 0 0 1-1.94-.9c-.56-.41-1-.93-1.35-1.56a4.73 4.73 0 0 1-.5-2.27H227c0 1.27.23 2.36.69 3.29a6.32 6.32 0 0 0 1.87 2.28c.79.6 1.7 1.04 2.75 1.33 1.04.3 2.15.44 3.32.44zm21.45-.47v-8.54h6.38c2.1.02 3.7-.52 4.78-1.6 1.08-1.1 1.62-2.62 1.62-4.57 0-1.95-.54-3.47-1.62-4.55-1.08-1.08-2.68-1.62-4.78-1.62h-9.16v20.88h2.78zm5.44-10.88h-5.44v-7.66h5.44c1.58 0 2.74.32 3.47.98.73.65 1.1 1.6 1.1 2.85s-.37 2.2-1.1 2.87c-.73.66-1.89.98-3.47.96zm16.1 10.88l2.34-6.29h8.84l2.28 6.3h3.07l-8.16-20.9h-3.07l-8.13 20.9h2.83zm10.3-8.63h-7.08l3.54-9.74h.06l3.48 9.74zm18.2 8.63v-8.92h6.8c.67 0 1.22.1 1.63.3.4.21.74.48 1 .83.25.34.43.74.55 1.2a15.12 15.12 0 0 1 .47 3l.06 1.47c.02.46.06.87.13 1.24s.2.67.4.88h3.1c-.3-.35-.52-.75-.67-1.21a9.54 9.54 0 0 1-.33-1.45c-.08-.5-.13-1.02-.15-1.55a13.64 13.64 0 0 0-.34-3.01c-.1-.47-.27-.9-.5-1.28-.22-.38-.52-.7-.9-.98s-.87-.46-1.48-.58v-.06c1.27-.35 2.2-1 2.77-1.96.57-.95.86-2.07.86-3.33 0-1.7-.56-3.04-1.68-4.01-1.12-.98-2.68-1.46-4.67-1.46h-9.82v20.88h2.78zm5.8-11.26h-5.8v-7.28h6.9c1.32 0 2.26.33 2.85 1 .58.65.87 1.51.87 2.57 0 .76-.13 1.38-.4 1.85-.25.48-.6.86-1.04 1.14-.44.29-.95.48-1.54.57-.58.1-1.2.15-1.84.15zm25.6 11.26v-18.54h6.97v-2.34h-16.7v2.34h6.95v18.54h2.78zm14.12 0l2.34-6.29h8.83l2.28 6.3h3.07l-8.16-20.9h-3.07l-8.13 20.9h2.83zm10.3-8.63h-7.09l3.54-9.74h.06l3.48 9.74z"
         />
       </g>
@@ -33,4 +36,4 @@ function CreditPoolTextLogo(props: React.ComponentProps<typeof SvgIcon>) {
   );
 }
 
-export { CreditPoolTextLogo };
+export { SpartaTextLogo };

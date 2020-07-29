@@ -5,16 +5,16 @@ import { routes } from 'app/routes';
 import { Button, Intro, Link, LinkProps } from 'components';
 import { makeStyles } from 'utils/styles';
 
-import { CreditPoolIcon, CreditPoolTextLogo } from '../Icons';
+import { SpartaIcon, SpartaTextLogo } from '../Icons';
 
-export function CreditPoolIntro() {
+export function SpartaIntro() {
   const classes = useStyles();
   return (
     <Intro
       icon={
         <>
-          <CreditPoolIcon fontSize="inherit" />
-          <CreditPoolTextLogo className={classes.textLogo} />
+          <SpartaIcon fontSize="inherit" />
+          <SpartaTextLogo className={classes.textLogo} />
         </>
       }
       title={
@@ -59,25 +59,28 @@ export function CreditPoolIntro() {
   );
 }
 
-const useStyles = makeStyles(theme => ({
-  textLogo: {
-    fontSize: theme.spacing(2.75),
-    marginLeft: theme.spacing(2.5),
-  },
-  content: {
-    display: 'flex',
-    alignItems: 'center',
-    whiteSpace: 'nowrap',
+const useStyles = makeStyles(
+  theme => ({
+    textLogo: {
+      fontSize: theme.spacing(2.75),
+      marginLeft: theme.spacing(2.5),
+    },
+    content: {
+      display: 'flex',
+      alignItems: 'center',
+      whiteSpace: 'nowrap',
 
-    fontSize: theme.spacing(1.5),
-    [theme.breakpoints.up('tabletXS')]: {
-      fontSize: theme.spacing(2.5),
+      fontSize: theme.spacing(1.5),
+      [theme.breakpoints.up('tabletXS')]: {
+        fontSize: theme.spacing(2.5),
+      },
     },
-  },
-  button: {
-    margin: theme.spacing(0, 1.25),
-    [theme.breakpoints.up('tabletXS')]: {
-      margin: theme.spacing(0, 2),
+    button: {
+      margin: theme.spacing(0, 1.25),
+      [theme.breakpoints.up('tabletXS')]: {
+        margin: theme.spacing(0, 2),
+      },
     },
-  },
-}));
+  }),
+  { name: 'SpartaIntro' },
+);

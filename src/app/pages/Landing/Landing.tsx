@@ -1,14 +1,14 @@
 import * as React from 'react';
 
+import { Header } from 'app/components/LandingHeader/Header';
 import { Layout, Benefits } from 'components';
-import { Header } from 'app/components/CreditPoolHeader/Header';
 import { Footer } from 'app/components/Footer/Footer';
 import { makeStyles } from 'utils/styles';
 
-import { CreditPoolIntro } from './Intro/Intro';
+import { SpartaIntro } from './Intro/Intro';
 import { benefits, footerNavItems } from './constants';
 
-export function CreditPool() {
+export function Landing() {
   const classes = useStyles();
   return (
     <Layout>
@@ -16,7 +16,7 @@ export function CreditPool() {
         <Header />
       </Layout.Header>
       <Layout.Container>
-        <CreditPoolIntro />
+        <SpartaIntro />
         <Benefits benefits={benefits} className={classes.section} />
       </Layout.Container>
       <Layout.Footer>
@@ -26,25 +26,28 @@ export function CreditPool() {
   );
 }
 
-const useStyles = makeStyles(theme => ({
-  '@global': {
-    body: {
-      backgroundColor:
-        theme.palette.type === 'light' ? theme.colors.athensGray : theme.colors.obsidian,
-    },
-  },
-
-  section: {
-    marginTop: theme.spacing(5),
-    [theme.breakpoints.up('tabletSM')]: {
-      marginTop: theme.spacing(7.5),
-    },
-
-    '&:last-child': {
-      marginBottom: theme.spacing(3.75),
-      [theme.breakpoints.up('tabletSM')]: {
-        marginBottom: theme.spacing(7.5),
+const useStyles = makeStyles(
+  theme => ({
+    '@global': {
+      body: {
+        backgroundColor:
+          theme.palette.type === 'light' ? theme.colors.athensGray : theme.colors.obsidian,
       },
     },
-  },
-}));
+
+    section: {
+      marginTop: theme.spacing(5),
+      [theme.breakpoints.up('tabletSM')]: {
+        marginTop: theme.spacing(7.5),
+      },
+
+      '&:last-child': {
+        marginBottom: theme.spacing(3.75),
+        [theme.breakpoints.up('tabletSM')]: {
+          marginBottom: theme.spacing(7.5),
+        },
+      },
+    },
+  }),
+  { name: 'Landing' },
+);

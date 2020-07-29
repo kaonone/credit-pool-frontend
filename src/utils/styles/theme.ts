@@ -45,12 +45,12 @@ function getGradients(type: 'dark' | 'light') {
       colors.heliotrope2,
       colors.heliotrope,
     ]),
-    creditPoolIcon: makeGradient(
+    spartaIcon: makeGradient(
       type === 'dark'
         ? [colors.northWesternPurple, colors.darkPurple]
         : [colors.lilac, colors.iris],
     ),
-    creditPoolText: makeGradient([colors.blueViolet, colors.lavenderBlue]),
+    spartaText: makeGradient([colors.blueViolet, colors.lavenderBlue]),
     linearChart: [
       makeGradient(['#fc87e2', '#f24cb6']),
       makeGradient(['#63afdd', '#574cf2']),
