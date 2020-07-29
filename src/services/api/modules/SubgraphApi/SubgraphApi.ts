@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import BN from 'bn.js';
 import ApolloClient from 'apollo-client';
 import { map } from 'rxjs/operators';
+import { autobind } from 'core-decorators';
 
 import { Currency, PercentAmount } from 'model/entities';
 import { memoize } from 'utils/decorators';
@@ -16,6 +17,7 @@ export class SubgraphApi {
 
   constructor(private apolloClient: ApolloClient<any>) {}
 
+  @autobind
   public getAvgPoolAPY$(fromDate: BN) {
     return this.sdk.DefiAprsFromDate({ fromDate: fromDate.toString() }).pipe(
       map(data => {

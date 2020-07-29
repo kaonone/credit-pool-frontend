@@ -30,16 +30,6 @@ export const useStyles = makeStyles(
           color: theme.palette.error.main,
           backgroundColor: lighten(theme.palette.error.main, 0.8),
         },
-
-        '&$withOverlay': {
-          position: 'absolute',
-          top: -8,
-          bottom: -8,
-          left: -8,
-          right: -8,
-          zIndex: 1,
-          overflow: 'hidden',
-        },
       },
 
       isSmall: {},
@@ -47,8 +37,6 @@ export const useStyles = makeStyles(
 
       colorDefault: {},
       colorError: {},
-
-      withOverlay: {},
     };
   },
   { name: 'Hint' },

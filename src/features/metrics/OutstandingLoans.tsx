@@ -11,7 +11,11 @@ export function OutstandingLoans() {
 
   return (
     <Metric
-      title={<Label hint={t(tKeys.description.getKey())}>{t(tKeys.label.getKey())}</Label>}
+      title={
+        <Label hint={t(tKeys.description.getKey())} withComingSoon>
+          {t(tKeys.label.getKey())}
+        </Label>
+      }
       value={<FormattedAmount sum={liquidityAmount} />}
     />
   );

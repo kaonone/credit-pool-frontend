@@ -11,7 +11,7 @@ export function OverallAPY() {
 
   return (
     <Metric
-      title={<Label>{t(tKeys.label.getKey())}</Label>}
+      title={<Label withComingSoon>{t(tKeys.label.getKey())}</Label>}
       value={<FormattedAmount sum={percentAmount} />}
       chart={<ChartBlock />}
     />

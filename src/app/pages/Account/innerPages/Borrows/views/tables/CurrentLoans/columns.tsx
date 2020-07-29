@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { NewTable, Label, FormattedAmount } from 'components';
+import { NewTable, Label, FormattedAmount, Box } from 'components';
 import { DueDateCell } from 'features/loans/components/DueDateCell';
 import { ActionsCell } from 'features/loans/components/ActionsCell';
 import { MyCollateralCell } from 'features/loans/components/MyCollateralCell';
@@ -73,7 +73,11 @@ export const makeTableColumns = (account: string): Array<NewTable.models.Column<
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: x => <ActionsCell account={account} debt={x.rawDebt} />,
+      render: x => (
+        <Box display="inline-flex" minWidth={210} justifyContent="flex-end">
+          <ActionsCell account={account} debt={x.rawDebt} />
+        </Box>
+      ),
     },
   },
 ];

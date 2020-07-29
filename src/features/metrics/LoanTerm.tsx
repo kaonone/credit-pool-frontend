@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Metric, Label, Grid, ComingSoon } from 'components';
+import { Metric, Label } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 
 const tKeys = tKeysAll.components.metrics;
@@ -11,11 +11,6 @@ export function LoanTerm() {
   const { t } = useTranslate();
 
   return (
-    <div style={{ position: 'relative' }}>
-      <ComingSoon position="overlay" />
-      <Grid container>
-        <Metric title={<Label>{t(tKeys.loanTerm.getKey())}</Label>} value={valueMock} />
-      </Grid>
-    </div>
+    <Metric title={<Label withComingSoon>{t(tKeys.loanTerm.getKey())}</Label>} value={valueMock} />
   );
 }

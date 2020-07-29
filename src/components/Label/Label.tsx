@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import { InfoIconV2 } from 'components/icons';
+import { ComingSoon } from 'components/ComingSoon/ComingSoon';
 import { makeStyles } from 'utils/styles';
 
 type Props = {
@@ -11,10 +12,11 @@ type Props = {
   fontSize?: 'inherit' | 'medium' | 'large';
   icon?: React.ReactNode;
   inline?: boolean;
+  withComingSoon?: boolean;
 };
 
 export const Label: React.FC<Props> = props => {
-  const { hint, inline, icon, children, fontSize = 'inherit' } = props;
+  const { hint, inline, icon, children, withComingSoon, fontSize = 'inherit' } = props;
   const classes = useStyles(props);
 
   return (
@@ -25,7 +27,7 @@ export const Label: React.FC<Props> = props => {
     >
       {icon && <>{icon}&nbsp;</>}
       {children}
-      {hint ? (
+      {hint && (
         <>
           &nbsp;
           <Tooltip title={hint} placement="right">
@@ -34,7 +36,12 @@ export const Label: React.FC<Props> = props => {
             </span>
           </Tooltip>
         </>
-      ) : null}
+      )}
+      {withComingSoon && (
+        <span className={classes.comingSoonLabel}>
+          <ComingSoon variant="label" />
+        </span>
+      )}
     </Typography>
   );
 };
@@ -64,8 +71,8 @@ const useStyles = makeStyles(
       display: 'inline-flex',
     },
 
-    content: {
-      marginBottom: 8,
+    comingSoonLabel: {
+      marginLeft: 10,
     },
 
     inherit: {},
