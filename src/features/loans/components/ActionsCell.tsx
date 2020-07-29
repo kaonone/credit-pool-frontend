@@ -7,7 +7,7 @@ import { bnToBn } from 'utils/bn';
 import { makeStyles, useTheme } from 'utils/styles';
 import { Grid, Loading } from 'components';
 import { getPledgeId } from 'model';
-import { ActivateLoanButton, UnlockButton, CancelProposalButton } from 'features/cashExchange';
+import { ActivateLoanButton, UnlockButton, CancelProposalButton } from 'features/changeLoanState';
 import { UnstakingButton } from 'features/unstake';
 import { LoanRepayingButton } from 'features/repayLoan';
 import { AvailableForUnlock } from 'features/metrics';

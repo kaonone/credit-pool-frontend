@@ -10,8 +10,8 @@ type IProps = ButtonProps & {
   borrower: string;
 };
 
-const tKeysConfirmation = tKeysAll.features.cashExchange.exchangingConfirmation;
-const tKeys = tKeysAll.features.cashExchange.liquidateLoanButton;
+const tKeysConfirmation = tKeysAll.features.changeLoanState.exchangingConfirmation;
+const tKeys = tKeysAll.features.changeLoanState.liquidateLoanButton;
 
 function LiquidateLoanButton(props: IProps) {
   const { borrower, debtId, ...restProps } = props;

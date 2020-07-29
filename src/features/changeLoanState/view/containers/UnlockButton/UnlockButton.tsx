@@ -15,8 +15,8 @@ type IProps = ButtonProps & {
   borrower: string;
 };
 
-const tKeysConfirmation = tKeysAll.features.cashExchange.exchangingConfirmation;
-const tKeys = tKeysAll.features.cashExchange.unlockButton;
+const tKeysConfirmation = tKeysAll.features.changeLoanState.exchangingConfirmation;
+const tKeys = tKeysAll.features.changeLoanState.unlockButton;
 
 export function UnlockButton(props: IProps) {
   const { borrower, proposalId, debtId, ...restProps } = props;

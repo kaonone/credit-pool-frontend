@@ -215,7 +215,7 @@ const en = {
       confirmMessage:
         'Are you sure you want to unstake %{sourceAmount}? Your interest share will decrease by %{interestShareDelta}',
     },
-    cashExchange: {
+    changeLoanState: {
       activateLoanButton: {
         confirmMessage:
           'Are you sure you want to activate a loan? Please note that your loan will be transferred directly to your wallet.',
