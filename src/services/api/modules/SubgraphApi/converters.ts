@@ -18,8 +18,8 @@ export function mkLoansAvailableForLiquidationConverter(
       borrower: x.borrower.id,
       debtID: x.debt_id as string,
       loanGranted: new LiquidityAmount(x.total, currency),
-      repaymentDue: repaymentDue.format('DD.MM.YYYY'),
-      pastDue: `${repaymentDue.diff(moment(), 'days')} Days`,
+      repaymentDue: repaymentDue.unix() * 1000,
+      pastDueInDays: repaymentDue.diff(moment(), 'days'),
     };
   };
 }
@@ -31,8 +31,7 @@ export function mkLoansUpcomingForLiquidationConverter(
   return (x: SR.DebtsAvailableForLiquidationSubscription['debts'][0]): UpcomingLoanToLiquidate => ({
     borrower: x.borrower.id,
     loanGranted: new LiquidityAmount(x.total, currency),
-    repaymentDue: moment(
-      getLoanDuePaymentDate(x.last_update, debtRepayDeadlinePeriod) as Date,
-    ).format('DD.MM.YYYY'),
+    repaymentDue:
+      (getLoanDuePaymentDate(x.last_update, debtRepayDeadlinePeriod)?.getTime() as number) * 1000,
   });
 }

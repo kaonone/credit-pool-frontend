@@ -1,4 +1,5 @@
 import * as React from 'react';
+import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
 
 import { NewTable, AccountAddress, FormattedAmount, Hint } from 'components';
@@ -38,7 +39,7 @@ const columns: Array<NewTable.models.Column<UpcomingLoanToLiquidate>> = [
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: x => <>{x.repaymentDue}</>,
+      render: x => <>{moment(x.repaymentDue).format('DD.MM.YYYY')}</>,
     },
   },
 ];

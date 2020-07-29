@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Typography from '@material-ui/core/Typography';
+import moment from 'moment';
 
 import { NewTable, AccountAddress, FormattedAmount, Hint } from 'components';
 import { makeStyles } from 'utils/styles';
@@ -42,7 +43,7 @@ const mkColumns = (
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: x => <>{x.repaymentDue}</>,
+      render: x => <>{moment(x.repaymentDue).format('DD.MM.YYYY')}</>,
     },
   },
 
@@ -51,7 +52,7 @@ const mkColumns = (
     align: 'right',
     cellContent: {
       kind: 'simple',
-      render: x => <span style={{ color: 'red' }}>{x.pastDue}</span>,
+      render: x => <span style={{ color: 'red' }}>{`${x.pastDueInDays} Days`}</span>,
     },
   },
 

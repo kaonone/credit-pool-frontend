@@ -4,12 +4,12 @@ export type LoanToLiquidate = {
   borrower: string;
   debtID: string;
   loanGranted: LiquidityAmount;
-  repaymentDue: string;
-  pastDue: string;
+  repaymentDue: number;
+  pastDueInDays: number;
 };
 
 export type UpcomingLoanToLiquidate = {
   borrower: string;
   loanGranted: LiquidityAmount;
-  repaymentDue: string;
+  repaymentDue: number;
 };
