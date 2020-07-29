@@ -30,6 +30,7 @@ const useStyles = makeStyles(
       justifyContent: 'center',
       padding: 10,
       background: theme.palette.background.hint,
+      borderRadius: 4,
     },
     isLabel: {
       minWidth: 86,
