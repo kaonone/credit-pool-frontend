@@ -1,7 +1,5 @@
 import { makeStyles } from 'utils/styles';
 
-export const switchButtonsHeight = 20;
-
 export const useStyles = makeStyles(
   theme => ({
     root: {
@@ -9,8 +7,8 @@ export const useStyles = makeStyles(
     },
 
     switchButton: {
+      padding: '3px 6px',
       minWidth: 30,
-      height: switchButtonsHeight,
       border: 0,
       borderRadius: 24,
       fontSize: 12,

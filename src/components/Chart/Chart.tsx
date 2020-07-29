@@ -1,10 +1,18 @@
 import * as React from 'react';
 import * as R from 'ramda';
-import { LineChart, XAxis, YAxis, CartesianGrid, Line, ResponsiveContainer } from 'recharts';
+import {
+  LineChart,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Line,
+  ResponsiveContainer,
+  XAxisProps,
+  YAxisProps,
+} from 'recharts';
 
 import { useTheme } from 'utils/styles';
 
-import { PeriodSwitch } from './components/PeriodSwitch/PeriodSwitch';
 import { makeFormatDateByPeriod, getTicks, makeGridGenerator } from './helpers';
 import { Period, IPoint } from './models';
 import { useStyles } from './Chart.style';
@@ -13,22 +21,24 @@ interface IProps<P extends IPoint> {
   points: P[];
   lines: Array<keyof P>;
   lineColors?: Partial<Record<keyof P, string>>;
-  onPeriodChange?: (firstPoint: P, lastPoint: P, period: string) => any;
+  period: Period;
+  xAxisProps?: Partial<XAxisProps>;
+  yAxisProps?: Partial<YAxisProps>;
+  showGrids?: boolean;
 }
 
 function Chart<P extends IPoint>(props: IProps<P>) {
   const {
     points,
     lines,
+    period,
     lineColors = {} as Partial<Record<keyof P, string>>,
-    onPeriodChange,
+    xAxisProps = {} as Partial<XAxisProps>,
+    yAxisProps = {} as Partial<YAxisProps>,
+    showGrids = false,
   } = props;
   const classes = useStyles();
   const theme = useTheme();
-
-  const [period, setPeriod] = React.useState<Period>(
-    () => getTicks(points, lines, 'all').realPeriod,
-  );
 
   const { ticks, realPeriod } = React.useMemo(() => getTicks(points, lines, period), [
     points,
@@ -39,11 +49,7 @@ function Chart<P extends IPoint>(props: IProps<P>) {
   const gridGenerator = React.useMemo(() => makeGridGenerator(3), []);
 
   const firstTick = R.head(ticks);
-  const lastTick = R.last(ticks);
 
-  React.useEffect(() => {
-    onPeriodChange && firstTick && lastTick && onPeriodChange(firstTick, lastTick, period);
-  }, [...Object.values(firstTick || {}), ...Object.values(lastTick || {}), period, onPeriodChange]);
   if (!firstTick) {
     return null;
   }
@@ -84,49 +90,48 @@ function Chart<P extends IPoint>(props: IProps<P>) {
   );
 
   return (
-    <div className={classes.root}>
-      <div className={classes.graphic}>
-        <ResponsiveContainer>
-          {/* TODO: Fix blank space on left */}
-          <LineChart data={ticks} margin={{ left: -55, right: 0, bottom: 0, top: 0 }}>
-            <XAxis
-              dataKey="date"
-              type="number"
-              interval={0}
-              axisLine={{ stroke: theme.palette.text.primary }}
-              domain={[ticks[0].date, ticks[ticks.length - 1].date]}
-              allowDataOverflow
-              ticks={R.pluck('date', ticks)}
-              tickSize={0}
-              tick={renderTick}
-            />
-            <YAxis
-              axisLine={{ stroke: theme.palette.text.primary }}
-              tick={false}
-              padding={{ top: 10, bottom: 1 }}
-            />
-            <CartesianGrid
-              stroke={theme.palette.text.primary}
-              strokeOpacity={0.1}
-              vertical={false}
-              horizontalCoordinatesGenerator={gridGenerator}
-            />
-            {lines.map(line => (
-              <Line
-                key={String(line)}
-                dataKey={String(line)}
-                stroke={lineColors[line] || '#613aaf'}
-                type="natural"
-                strokeWidth={2}
-                dot={false}
-                isAnimationActive={false}
-              />
-            ))}
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-      <PeriodSwitch period={period} onSelect={setPeriod} />
-    </div>
+    <ResponsiveContainer>
+      <LineChart data={ticks} margin={{ top: 0, bottom: 0, left: 0, right: 0 }}>
+        <XAxis
+          dataKey="date"
+          type="number"
+          interval={0}
+          axisLine={{ stroke: theme.palette.text.primary }}
+          domain={[ticks[0].date, ticks[ticks.length - 1].date]}
+          allowDataOverflow
+          ticks={R.pluck('date', ticks)}
+          tickSize={0}
+          tick={renderTick}
+          {...xAxisProps}
+        />
+        <YAxis
+          axisLine={{ stroke: theme.palette.text.primary }}
+          tick={false}
+          padding={{ top: 10, bottom: 1 }}
+          width={1}
+          {...yAxisProps}
+        />
+        {showGrids && (
+          <CartesianGrid
+            stroke={theme.palette.text.primary}
+            strokeOpacity={0.1}
+            vertical={false}
+            horizontalCoordinatesGenerator={gridGenerator}
+          />
+        )}
+        {lines.map(line => (
+          <Line
+            key={String(line)}
+            dataKey={String(line)}
+            stroke={lineColors[line] || '#613aaf'}
+            type="basis"
+            strokeWidth={2}
+            dot={false}
+            isAnimationActive={false}
+          />
+        ))}
+      </LineChart>
+    </ResponsiveContainer>
   );
 }
 

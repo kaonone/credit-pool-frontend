@@ -433,7 +433,7 @@ const en = {
       averagePassiveAPY: 'Average passive APY',
       averageAPY: 'Average APY',
       proposals: 'Proposals',
-      averageLoanTerm: 'AverageLoanTerm',
+      averageLoanTerm: 'Average Loan Term',
       availableForBorrowing: 'Maximum Available for Borrowing',
       totalBorrowed: 'Total Borrowed',
       minimumAPY: 'Minimum APY',

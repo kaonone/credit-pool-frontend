@@ -1,7 +1,8 @@
 import * as React from 'react';
 import cn from 'classnames';
 
-import { Period, periods } from '../../models';
+import { Period, periods } from 'components/Chart';
+
 import { useStyles } from './PeriodSwitch.style';
 
 interface IPeriodSwitchProps {

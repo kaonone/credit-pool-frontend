@@ -51,9 +51,10 @@ function getGradients(type: 'dark' | 'light') {
         : [colors.lilac, colors.iris],
     ),
     creditPoolText: makeGradient([colors.blueViolet, colors.lavenderBlue]),
-    poolBalanceChart: [
+    linearChart: [
       makeGradient(['#fc87e2', '#f24cb6']),
       makeGradient(['#63afdd', '#574cf2']),
+      makeGradient(['#c43ff0', '#574cf2']),
     ] as const,
     poolCompositionChart: [
       makeGradient(['#63f8b3', '#dcff9c']),

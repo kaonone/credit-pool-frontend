@@ -45,6 +45,7 @@ export { AccountAddress } from './AccountAddress/AccountAddress';
 export { AvailableLoansChart } from './AvailableLoansChart/AvailableLoansChart';
 export { DeFiScoreChart } from './DeFiScoreChart/DeFiScoreChart';
 export { FormattedTokenAmount } from './FormattedTokenAmount/FormattedTokenAmount';
+export { BarChart } from './BarChart/BarChart';
 
 export * from './ErrorBoundary';
 export * from './Hint/Hint';
