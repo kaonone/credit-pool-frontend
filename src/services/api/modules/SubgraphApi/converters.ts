@@ -14,7 +14,7 @@ export function mkLoansForLiquidationConverter(currency: Currency, debtRepayDead
     return {
       borrower: x.borrower.id,
       debtID: x.debt_id as string,
-      loanGranted: new LiquidityAmount(x.total, currency),
+      loanGranted: new LiquidityAmount(x.total, currency).sub(x.repayed),
       repaymentDue: repaymentDue.unix() * 1000,
       pastDueInDays: repaymentDue.diff(moment(), 'days'),
     };
