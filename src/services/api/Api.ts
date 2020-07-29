@@ -9,13 +9,13 @@ import { TransactionsApi } from './modules/TransactionsApi';
 import { SwarmApi } from './modules/SwarmApi';
 import { CurveModuleApi } from './modules/CurveModuleApi';
 import { DefiModuleApi } from './modules/DefiModuleApi';
-import { makeSubgraphApi } from './modules/SubgraphApi';
+import { SubgraphApi } from './modules/SubgraphApi';
 import { PTokenApi } from './modules/PTokenApi';
 
 export class Api {
   public web3Manager = new Web3Manager();
   public swarmApi = new SwarmApi();
-  public subgraphApi = makeSubgraphApi(this.apolloClient);
+  public subgraphApi = new SubgraphApi(this.apolloClient);
 
   public transactions = new TransactionsApi();
   public erc20 = new Erc20Api(this.web3Manager, this.transactions);
@@ -37,6 +37,7 @@ export class Api {
     this.fundsModule,
     this.swarmApi,
     this.curveModule,
+    this.subgraphApi,
   );
 
   public liquidityModule = new LiquidityModuleApi(

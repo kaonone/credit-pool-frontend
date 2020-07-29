@@ -1,19 +1,20 @@
 import React, { useCallback } from 'react';
 
+import { Button, ButtonProps, ConfirmationDialog } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { ConfirmationDialog, Button, ButtonProps } from 'components';
 
 type IProps = ButtonProps & {
   proposalId: string;
   borrower: string;
+  loanAmount: string;
 };
 
-const tKeysConfirmation = tKeysAll.features.cashExchange.exchangingConfirmation;
-const tKeys = tKeysAll.features.cashExchange.cancelProposalButton;
+const tKeysConfirmation = tKeysAll.features.changeLoanState.exchangingConfirmation;
+const tKeys = tKeysAll.features.changeLoanState.activateLoanButton;
 
-function CancelProposalButton(props: IProps) {
-  const { borrower, proposalId, ...restProps } = props;
+function ActivateLoanButton(props: IProps) {
+  const { borrower, proposalId, loanAmount, ...restProps } = props;
   const { t } = useTranslate();
   const api = useApi();
 
@@ -23,9 +24,9 @@ function CancelProposalButton(props: IProps) {
   const close = React.useCallback(() => setIsOpen(false), []);
 
   const handleActivate = useCallback(async (): Promise<void> => {
-    await api.loanModule.cancelDebtProposal(borrower, proposalId);
+    await api.loanModule.executeDebtProposal(borrower, proposalId, loanAmount);
     close();
-  }, [borrower, proposalId]);
+  }, [borrower, proposalId, loanAmount]);
 
   return (
     <>
@@ -43,4 +44,4 @@ function CancelProposalButton(props: IProps) {
   );
 }
 
-export { CancelProposalButton };
+export { ActivateLoanButton };

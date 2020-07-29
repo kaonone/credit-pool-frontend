@@ -9,7 +9,7 @@ import { zeroAddress } from 'utils/mock';
 
 type IProps = ButtonProps;
 
-const tKeysConfirmation = tKeysAll.features.cashExchange.exchangingConfirmation;
+const tKeysConfirmation = tKeysAll.features.changeLoanState.exchangingConfirmation;
 const tKeys = tKeysAll.features.distributions;
 
 export function WithdrawDistributionsButton(props: IProps) {

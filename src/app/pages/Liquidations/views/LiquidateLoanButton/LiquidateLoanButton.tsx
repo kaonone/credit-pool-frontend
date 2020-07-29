@@ -1,22 +1,24 @@
 import React, { useCallback } from 'react';
 
-import { Button, ButtonProps, ConfirmationDialog } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
+import { ConfirmationDialog, Loading, Button, ButtonProps } from 'components';
+import { useSubscribable } from 'utils/react';
 
 type IProps = ButtonProps & {
-  proposalId: string;
+  debtId: string;
   borrower: string;
-  loanAmount: string;
 };
 
-const tKeysConfirmation = tKeysAll.features.cashExchange.exchangingConfirmation;
-const tKeys = tKeysAll.features.cashExchange.activateLoanButton;
+const tKeysConfirmation = tKeysAll.features.changeLoanState.exchangingConfirmation;
+const tKeys = tKeysAll.features.changeLoanState.liquidateLoanButton;
 
-function ActivateLoanButton(props: IProps) {
-  const { borrower, proposalId, loanAmount, ...restProps } = props;
+function LiquidateLoanButton(props: IProps) {
+  const { borrower, debtId, ...restProps } = props;
   const { t } = useTranslate();
   const api = useApi();
+
+  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -24,13 +26,13 @@ function ActivateLoanButton(props: IProps) {
   const close = React.useCallback(() => setIsOpen(false), []);
 
   const handleActivate = useCallback(async (): Promise<void> => {
-    await api.loanModule.executeDebtProposal(borrower, proposalId, loanAmount);
+    account && (await api.loanModule.liquidateDebt(account, borrower, debtId));
     close();
-  }, [borrower, proposalId, loanAmount]);
+  }, [account, borrower, debtId]);
 
   return (
     <>
-      <Button {...restProps} onClick={open} />
+      <Loading meta={accountMeta}>{account && <Button {...restProps} onClick={open} />}</Loading>
       <ConfirmationDialog
         isOpen={isOpen}
         message={t(tKeys.confirmMessage.getKey())}
@@ -44,4 +46,4 @@ function ActivateLoanButton(props: IProps) {
   );
 }
 
-export { ActivateLoanButton };
+export { LiquidateLoanButton };

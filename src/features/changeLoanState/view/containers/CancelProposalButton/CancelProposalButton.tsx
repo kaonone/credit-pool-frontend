@@ -2,23 +2,20 @@ import React, { useCallback } from 'react';
 
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { ConfirmationDialog, Loading, Button, ButtonProps } from 'components';
-import { useSubscribable } from 'utils/react';
+import { ConfirmationDialog, Button, ButtonProps } from 'components';
 
 type IProps = ButtonProps & {
-  debtId: string;
+  proposalId: string;
   borrower: string;
 };
 
-const tKeysConfirmation = tKeysAll.features.cashExchange.exchangingConfirmation;
-const tKeys = tKeysAll.features.cashExchange.liquidateLoanButton;
+const tKeysConfirmation = tKeysAll.features.changeLoanState.exchangingConfirmation;
+const tKeys = tKeysAll.features.changeLoanState.cancelProposalButton;
 
-function LiquidateLoanButton(props: IProps) {
-  const { borrower, debtId, ...restProps } = props;
+function CancelProposalButton(props: IProps) {
+  const { borrower, proposalId, ...restProps } = props;
   const { t } = useTranslate();
   const api = useApi();
-
-  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
 
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -26,13 +23,13 @@ function LiquidateLoanButton(props: IProps) {
   const close = React.useCallback(() => setIsOpen(false), []);
 
   const handleActivate = useCallback(async (): Promise<void> => {
-    account && (await api.loanModule.liquidateDebt(account, borrower, debtId));
+    await api.loanModule.cancelDebtProposal(borrower, proposalId);
     close();
-  }, [account, borrower, debtId]);
+  }, [borrower, proposalId]);
 
   return (
     <>
-      <Loading meta={accountMeta}>{account && <Button {...restProps} onClick={open} />}</Loading>
+      <Button {...restProps} onClick={open} />
       <ConfirmationDialog
         isOpen={isOpen}
         message={t(tKeys.confirmMessage.getKey())}
@@ -46,4 +43,4 @@ function LiquidateLoanButton(props: IProps) {
   );
 }
 
-export { LiquidateLoanButton };
+export { CancelProposalButton };

@@ -2,6 +2,7 @@ import { Observable, BehaviorSubject, of, combineLatest, timer } from 'rxjs';
 import { map, first as firstOperator, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
+import moment from 'moment';
 import { autobind } from 'core-decorators';
 import PromiEvent from 'web3/promiEvent';
 
@@ -18,6 +19,7 @@ import {
   PLEDGE_MARGIN_DIVIDER,
 } from 'env';
 import { RepaymentMethod } from 'model/types';
+import { LoanToLiquidate } from 'model/loans';
 import { calcWithdrawAmountBeforeFee } from 'model';
 import { TokenAmount, LiquidityAmount } from 'model/entities';
 import { getCurrentValueOrThrow } from 'utils/rxjs';
@@ -28,10 +30,17 @@ import { Erc20Api } from './Erc20Api';
 import { FundsModuleApi } from './FundsModuleApi';
 import { SwarmApi } from './SwarmApi';
 import { CurveModuleApi } from './CurveModuleApi';
+import { SubgraphApi } from './SubgraphApi/SubgraphApi';
 
 function first<T>(input: Observable<T>): Promise<T> {
   return input.pipe(firstOperator()).toPromise();
 }
+
+function getPaymentDueDate(now: moment.Moment, debtRepayDeadlinePeriod: BN): string {
+  return new BN(now.subtract(debtRepayDeadlinePeriod.toNumber(), 'seconds').unix()).toString();
+}
+
+const RE_REQUEST_LOANS_TIMEOUT = 2000;
 
 export class LoanModuleApi {
   public readonlyContracts: {
@@ -53,6 +62,7 @@ export class LoanModuleApi {
     private fundsModuleApi: FundsModuleApi,
     private swarmApi: SwarmApi,
     private curveModuleApi: CurveModuleApi,
+    private subgraphApi: SubgraphApi,
   ) {
     this.readonlyContracts = {
       loan: createLoanModule(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.loanModule),
@@ -627,5 +637,45 @@ export class LoanModuleApi {
           pWithdrawn,
         })),
       );
+  }
+
+  @memoize()
+  public getLoansAvailableForLiquidation$(): Observable<LoanToLiquidate[]> {
+    return timer(0, RE_REQUEST_LOANS_TIMEOUT).pipe(
+      map(() => moment()),
+      switchMap(now =>
+        combineLatest([this.getConfig$(), this.fundsModuleApi.getLiquidityCurrency$()]).pipe(
+          switchMap(([{ debtRepayDeadlinePeriod }, currency]) => {
+            return this.subgraphApi.loadLoansForLiquidation$(
+              currency,
+              debtRepayDeadlinePeriod,
+              getPaymentDueDate(now, debtRepayDeadlinePeriod),
+              new BN(0).toString(),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  @memoize()
+  public getLoansUpcomingForLiquidation$(): Observable<LoanToLiquidate[]> {
+    return timer(0, RE_REQUEST_LOANS_TIMEOUT).pipe(
+      map(() => moment()),
+      switchMap(now =>
+        combineLatest([this.getConfig$(), this.fundsModuleApi.getLiquidityCurrency$()]).pipe(
+          switchMap(([{ debtRepayDeadlinePeriod }, currency]) => {
+            const loansBecomeUpcomingFrom = new BN(now.subtract(85, 'days').unix()).toString();
+
+            return this.subgraphApi.loadLoansForLiquidation$(
+              currency,
+              debtRepayDeadlinePeriod,
+              loansBecomeUpcomingFrom,
+              getPaymentDueDate(now, debtRepayDeadlinePeriod),
+            );
+          }),
+        ),
+      ),
+    );
   }
 }

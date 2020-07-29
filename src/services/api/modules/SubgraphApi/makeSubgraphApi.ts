@@ -4,9 +4,9 @@ import gql from 'graphql-tag';
 
 import { getSdk } from 'generated/gql/subgraphRequests';
 
-import { SubgraphApi } from './SubgraphApi.model';
+import { SubgraphSdk } from './model';
 
-export function makeSubgraphApi(apolloClient: ApolloClient<any>): SubgraphApi {
+export function makeSubgraphApi(apolloClient: ApolloClient<any>): SubgraphSdk {
   return getSdk({
     request: (query: string, variables?: any) => {
       const subject = new ReplaySubject();
