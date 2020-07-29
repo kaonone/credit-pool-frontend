@@ -4,7 +4,6 @@ export { AccountPage } from './Account/AccountPage';
 export { DemoPage } from './Demo/DemoPage';
 export { DistributionsPage } from './Distributions/DistributionsPage';
 export { Liquidations } from './Liquidations/Liquidations';
-export { PoolPage } from './Pool/PoolPage';
 export { StatsPage } from './Stats/Stats';
 export { CreditPool } from './CreditPool/CreditPool';
 export { HistoryPage } from './History/HistoryPage';
