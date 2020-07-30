@@ -5,7 +5,6 @@ import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { ProgressChart } from 'components/ProgressChart/ProgressChart';
 import { Label } from 'components/Label/Label';
 import { FormattedAmount } from 'components/FormattedAmount/FormattedAmount';
-import { ComingSoon } from 'components/ComingSoon/ComingSoon';
 
 import { useStyles, CHART_WIDTH } from './AvailableLoansChart.style';
 
@@ -17,7 +16,6 @@ function AvailableLoansChart() {
 
   const renderTitle = () => (
     <div className={classes.label}>
-      <ComingSoon variant="label" />
       <div className={classes.title}>
         <Label>{t(tKeys.totalAvailable.getKey())}</Label>
       </div>
