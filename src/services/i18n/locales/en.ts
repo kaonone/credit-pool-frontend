@@ -347,9 +347,6 @@ const en = {
       currentPagination: '%{from} - %{to} of %{total}',
       currentSubgraphPagination: '%{from} - %{to}',
     },
-    activitiesCard: {
-      expansionPanelTitle: 'Reason',
-    },
     metrics: {
       akro: {
         description: 'Here is a title description',
