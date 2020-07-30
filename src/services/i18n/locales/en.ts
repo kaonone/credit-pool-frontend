@@ -333,23 +333,6 @@ const en = {
         },
       },
     },
-    loanApplications: {
-      notFound: 'Loan applications not found',
-      lend: 'lend',
-      to: 'to',
-      apr: 'apr',
-      myStake: 'My stake',
-      collateral: 'Collateral',
-      timeLeft: 'Time left',
-      expansionPanelTitle: 'Reason',
-      status: {
-        PROPOSED: 'proposed',
-        APPROVED: 'approved',
-        DECLINED: 'declined',
-        PARTIALLY_REPAYED: 'partially repayed',
-        CLOSED: 'closed',
-      },
-    },
   },
   utils: {
     validation: {
