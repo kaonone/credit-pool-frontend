@@ -28,7 +28,7 @@ function convertDebts(
 ): UserDebt[] {
   return debts.map<UserDebt>(debt => ({
     borrower: debt.borrower.id,
-    total: new LiquidityAmount(debt.total, liquidityCurrency),
+    body: new LiquidityAmount(debt.total, liquidityCurrency).sub(debt.repayed),
     lStaked: new LiquidityAmount(debt.lStaked, liquidityCurrency),
     apr: new PercentAmount(debt.apr).div(10),
     dueDate: getLoanDuePaymentDate(debt.last_update, repayDeadlinePeriod),
