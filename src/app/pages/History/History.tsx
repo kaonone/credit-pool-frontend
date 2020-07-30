@@ -12,7 +12,7 @@ import { Profit } from './InnerPages/Profit/Profit';
 
 const tKeys = tKeysAll.app.pages.history;
 
-export function HistoryPage() {
+export function History() {
   const match = useRouteMatch<{ page: string }>('/history/:page');
   const [selectedPage, setSelectedPage] = React.useState(
     routes.history.transaction.getElementKey(),
@@ -78,5 +78,5 @@ const useStyles = makeStyles(
       marginBottom: 40,
     },
   }),
-  { name: 'HistoryPage' },
+  { name: 'History' },
 );

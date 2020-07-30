@@ -18,7 +18,7 @@ import {
   LoanApprovalRatio,
 } from 'features/metrics';
 
-export function StatsPage() {
+export function Stats() {
   const classes = useStyles();
   return (
     <Grid container direction="column">

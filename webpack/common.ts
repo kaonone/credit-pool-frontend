@@ -6,6 +6,7 @@ import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
+import DeadCodePlugin from 'webpack-deadcode-plugin';
 
 import { getEnv } from '../src/core/getEnv';
 
@@ -68,6 +69,10 @@ const config: webpack.Configuration = {
     ],
   },
   plugins: [
+    new DeadCodePlugin({
+      patterns: ['../src/**/*.(ts|tsx)'],
+      exclude: ['/**/*.(stories|spec|test).(ts|tsx)'],
+    }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',

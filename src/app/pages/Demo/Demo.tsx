@@ -17,7 +17,7 @@ import { CreatingLoanProposalButton } from 'features/createLoanProposal';
 
 import * as tableData from './tableData';
 
-export function DemoPage() {
+export function Demo() {
   const { result, paginationView } = useSubgraphPagination(useUsersQuery, {});
 
   return (

@@ -7,12 +7,7 @@ const en = {
       overview: {
         poolBalanceTitle: 'Pool Deposit/Withdrawal Price Curve',
         distributions: 'Distributions',
-        myBalanceTitle: 'My balance',
         poolInfoTitle: 'Pool information',
-      },
-      balances: {
-        balanceChangesTitle: 'Deposit/Withdraw history',
-        earningsTitle: 'Earnings',
       },
       account: {
         tabs: {
@@ -220,11 +215,6 @@ const en = {
         confirmMessage:
           'Are you sure you want to activate a loan? Please note that your loan will be transferred directly to your wallet.',
       },
-      withdrawDefiYieldButton: {
-        buttonTitle: 'Withdraw',
-        confirmMessage:
-          'Are you sure you want to withdraw %{amount} from yield? Please note that your yield will be transferred directly to your wallet.',
-      },
       cancelProposalButton: {
         confirmMessage: 'Are you sure you want to cancel a loan proposal?',
       },
@@ -247,14 +237,6 @@ const en = {
         no: 'no',
         yes: 'yes',
       },
-    },
-    personalInformation: {
-      deposit: 'Deposit',
-      availableBalance: 'Available balance',
-      currentProfit: 'Profit',
-      defiYield: 'Yield',
-      locked: 'Locked',
-      credit: 'Current loans',
     },
     distributions: {
       claimsList: {
@@ -338,23 +320,6 @@ const en = {
         },
       },
     },
-    loanApplications: {
-      notFound: 'Loan applications not found',
-      lend: 'lend',
-      to: 'to',
-      apr: 'apr',
-      myStake: 'My stake',
-      collateral: 'Collateral',
-      timeLeft: 'Time left',
-      expansionPanelTitle: 'Reason',
-      status: {
-        PROPOSED: 'proposed',
-        APPROVED: 'approved',
-        DECLINED: 'declined',
-        PARTIALLY_REPAYED: 'partially repayed',
-        CLOSED: 'closed',
-      },
-    },
   },
   utils: {
     validation: {
@@ -376,9 +341,6 @@ const en = {
       itemsPerPage: 'Items per page',
       currentPagination: '%{from} - %{to} of %{total}',
       currentSubgraphPagination: '%{from} - %{to}',
-    },
-    activitiesCard: {
-      expansionPanelTitle: 'Reason',
     },
     metrics: {
       akro: {
