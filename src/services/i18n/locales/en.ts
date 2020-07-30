@@ -215,11 +215,6 @@ const en = {
         confirmMessage:
           'Are you sure you want to activate a loan? Please note that your loan will be transferred directly to your wallet.',
       },
-      withdrawDefiYieldButton: {
-        buttonTitle: 'Withdraw',
-        confirmMessage:
-          'Are you sure you want to withdraw %{amount} from yield? Please note that your yield will be transferred directly to your wallet.',
-      },
       cancelProposalButton: {
         confirmMessage: 'Are you sure you want to cancel a loan proposal?',
       },
