@@ -62,7 +62,7 @@ export const Sidebar: React.FC = () => {
   const classes = useStyles();
 
   const [isExpanded, setCloseSidebar] = React.useState(() => sidebarStorage.getItem('isExpanded'));
-  const [links, setLinks] = React.useState(upperLinks);
+  const [links, setLinks] = React.useState<Link.models.Link[]>([]);
 
   const handleExpanded = () => {
     sidebarStorage.setItem('isExpanded', !isExpanded);
@@ -82,7 +82,7 @@ export const Sidebar: React.FC = () => {
     (prev, cur) => prev !== cur,
     () =>
       setLinks(
-        distributionBalance?.isZero()
+        !distributionBalance || distributionBalance.isZero()
           ? upperLinks.filter(link => requeredLinks.find(reqLink => reqLink === link.label))
           : upperLinks,
       ),
