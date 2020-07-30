@@ -2099,6 +2099,13 @@
     "@types/bn.js" "*"
     "@types/underscore" "*"
 
+"@types/webpack-deadcode-plugin@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@types/webpack-deadcode-plugin/-/webpack-deadcode-plugin-0.1.0.tgz#e23c5b504c75050cb59782061c0de99df0e97f41"
+  integrity sha512-b9sxhCUaRdIazncLDyGU9igipsMA115zkoRASTS+kT3MNmMXkEZiy27VwJB4XC2qESjQFnBvj+H6If0QZCntLQ==
+  dependencies:
+    "@types/webpack" "*"
+
 "@types/webpack-dev-server@^3.1.7":
   version "3.1.7"
   resolved "https://registry.yarnpkg.com/@types/webpack-dev-server/-/webpack-dev-server-3.1.7.tgz#a3e7a20366e68bc9853c730b56e994634cb78dac"
@@ -6935,7 +6942,7 @@ fast-diff@^1.1.2:
   resolved "https://registry.yarnpkg.com/fast-diff/-/fast-diff-1.2.0.tgz#73ee11982d86caaf7959828d519cfe927fac5f03"
   integrity sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==
 
-fast-glob@^2.2.2:
+fast-glob@^2.0.0, fast-glob@^2.2.2:
   version "2.2.7"
   resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-2.2.7.tgz#6953857c3afa475fff92ee6015d52da70a4cd39d"
   integrity sha512-g1KuQwHOZAmOZMuBtHdxDtju+T2RT8jgCC9aANsbpdiDDTSnjgfuVsIBNKbUeJI3oKMRExcfNDtJl4OhbffMsw==
@@ -15017,6 +15024,14 @@ webpack-cli@^3.3.9:
     supports-color "6.1.0"
     v8-compile-cache "2.0.3"
     yargs "13.2.4"
+
+webpack-deadcode-plugin@^0.1.12:
+  version "0.1.12"
+  resolved "https://registry.yarnpkg.com/webpack-deadcode-plugin/-/webpack-deadcode-plugin-0.1.12.tgz#9f497600281fe7f2f0cd4160ba883ca9bff7e62a"
+  integrity sha512-2Frz/osUE+2va6ANoJQoLr9V6Pydh/LZPHaBGUwC/Ms7KNIIJ3ulRvnhpEWvIoZJ1fTm0KAAkcpbbnL9AisPyA==
+  dependencies:
+    chalk "^2.0.0"
+    fast-glob "^2.0.0"
 
 webpack-dev-middleware@^3.7.2:
   version "3.7.2"
