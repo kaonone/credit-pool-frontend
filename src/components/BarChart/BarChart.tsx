@@ -13,8 +13,8 @@ export function BarChart(props: Props) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      {values.map(value => (
-        <div className={classes.bar}>
+      {values.map((value, index) => (
+        <div className={classes.bar} key={index}>
           <div
             className={classes.filledValue}
             style={{ background: fillColor, height: `${value}%` }}
