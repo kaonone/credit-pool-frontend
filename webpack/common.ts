@@ -71,7 +71,7 @@ const config: webpack.Configuration = {
   plugins: [
     new DeadCodePlugin({
       patterns: ['../src/**/*.(ts|tsx)'],
-      exclude: ['/**/*.(stories|spec).(ts|tsx)'],
+      exclude: ['/**/*.(stories|spec|test).(ts|tsx)'],
     }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
