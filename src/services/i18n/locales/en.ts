@@ -243,14 +243,6 @@ const en = {
         yes: 'yes',
       },
     },
-    personalInformation: {
-      deposit: 'Deposit',
-      availableBalance: 'Available balance',
-      currentProfit: 'Profit',
-      defiYield: 'Yield',
-      locked: 'Locked',
-      credit: 'Current loans',
-    },
     distributions: {
       claimsList: {
         notFound: 'Claims not found',
