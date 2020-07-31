@@ -134,7 +134,7 @@ export class PTokenApi {
   public isPoolUser$(): Observable<boolean> {
     return this.web3Manager.account$.pipe(
       switchMap(account => (account ? this.getDistributionBalanceOf$(account) : empty())),
-      map(balance => balance.isZero()),
+      map(balance => !balance.isZero()),
     );
   }
 }
