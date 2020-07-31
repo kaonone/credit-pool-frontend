@@ -80,7 +80,14 @@ export function ProviderButton({
             </Grid>
             <Box clone alignSelf="stretch">
               <Grid item>
-                <Button className={classes.actionName} variant="outlined" color="primary" size="small" backgroundColor={theme.palette.background.paper} fullWidth>
+                <Button
+                  className={classes.actionName}
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  backgroundColor={theme.palette.background.paper}
+                  fullWidth
+                >
                   {t(tKeys.features.auth.modalTitle.disconnect.getKey())}
                 </Button>
               </Grid>

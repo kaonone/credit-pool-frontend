@@ -20,7 +20,9 @@ export function LoanProposalAdditionalInfo(props: Props) {
       <div>
         Risk Score:
         {riskScore === null ? (
-          <div className={classes.comingSoonLabel}><ComingSoon variant="label" /></div>
+          <div className={classes.comingSoonLabel}>
+            <ComingSoon variant="label" />
+          </div>
         ) : (
           <span className={classes.riskScoreValue}>{riskScore}</span>
         )}
