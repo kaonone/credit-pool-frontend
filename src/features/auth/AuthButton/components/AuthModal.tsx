@@ -36,14 +36,14 @@ export function AuthModal(props: AuthModalProps) {
       onClose={onClose}
       TransitionProps={{ tabIndex: 'unset' } as any}
     >
-      <DialogTitle>
+      <DialogTitle disableTypography>
         {isLogged ? t(modalTitle.connected.getKey()) : t(modalTitle.disconnected.getKey())}
       </DialogTitle>
       <CloseIcon className={classes.closeButton} onClick={onClose} />
       <DialogContent className={classes.content}>
         <Grid container spacing={1} justify="center">
           {wallets.map((type, index) => (
-            <Grid item xs={4} key={index}>
+            <Grid item xs={4} key={index} className={classes.providerButton}>
               <ProviderButton
                 fullWidth
                 connect={connect}
@@ -67,7 +67,7 @@ export function AuthModal(props: AuthModalProps) {
 
 const useStyles = makeStyles({
   root: {
-    padding: 32,
+    padding: '40px 40px 30px',
   },
   closeButton: {
     position: 'absolute',
@@ -77,6 +77,9 @@ const useStyles = makeStyles({
     cursor: 'pointer',
   },
   content: {
-    marginTop: 30,
+    overflow: 'visible',
+  },
+  providerButton: {
+    marginTop: 20,
   },
 });

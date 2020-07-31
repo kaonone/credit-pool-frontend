@@ -417,6 +417,13 @@ function getTheme(type: 'light' | 'dark'): Theme {
           padding: 0,
         },
       },
+
+      MuiDialogTitle: {
+        root: {
+          fontSize: '1.375rem',
+          fontWeight: 300,
+        },
+      },
     },
   });
 }

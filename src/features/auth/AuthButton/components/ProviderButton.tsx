@@ -7,7 +7,7 @@ import { useCommunication } from 'utils/react';
 import { ButtonBase, Loading, Typography, Box, ShortAddress, Grid, Button } from 'components';
 import { WalletType } from 'services/api';
 import { tKeys, useTranslate } from 'services/i18n';
-import { makeStyles, Theme, darken, lighten } from 'utils/styles';
+import { makeStyles, useTheme, Theme, darken, lighten } from 'utils/styles';
 import { zeroAddress } from 'utils/mock';
 import { Bitski, Fortmatic, Metamask, Portis, WalletConnect } from 'components/icons/wallets';
 
@@ -27,6 +27,14 @@ const iconByWallet: Record<WalletType, typeof SvgIcon> = {
   connectWallet: WalletConnect,
 };
 
+const walletTitle: Record<WalletType, string> = {
+  bitski: 'Bitski',
+  fortmatic: 'Fortmatic',
+  metamask: 'Metamask',
+  portis: 'Portis',
+  connectWallet: 'WalletConnect',
+};
+
 export function ProviderButton({
   type,
   connect,
@@ -35,6 +43,7 @@ export function ProviderButton({
   fullWidth,
 }: ProviderButtonProps) {
   const classes = useStyles();
+  const theme = useTheme();
   const connecting = useCommunication(connect, [connect]);
   const Icon = iconByWallet[type];
 
@@ -59,7 +68,7 @@ export function ProviderButton({
         </Grid>
         <Grid item>
           <Typography className={classes.title}>
-            {connectedAddress ? <Address address={connectedAddress} /> : type}
+            {connectedAddress ? <Address address={connectedAddress} /> : walletTitle[type]}
           </Typography>
         </Grid>
         {connectedAddress ? (
@@ -71,7 +80,7 @@ export function ProviderButton({
             </Grid>
             <Box clone alignSelf="stretch">
               <Grid item>
-                <Button className={classes.actionName} variant="outlined">
+                <Button className={classes.actionName} variant="outlined" color="primary" size="small" backgroundColor={theme.palette.background.paper} fullWidth>
                   {t(tKeys.features.auth.modalTitle.disconnect.getKey())}
                 </Button>
               </Grid>
@@ -100,7 +109,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(1),
     transition: theme.transitions.create(['background-color']),
     borderRadius: 12,
-    minHeight: 171,
+    minHeight: 160,
 
     '&:hover, &$focusVisible': {
       backgroundColor:
@@ -143,14 +152,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 
   title: {
     lineHeight: 1,
-    marginTop: 20,
+    marginTop: 12,
   },
 
   icon: {
-    fontSize: 56,
+    fontSize: 53,
   },
 
-  container: {
-    width: 'auto',
-  },
+  container: {},
 }));
