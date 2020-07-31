@@ -8,8 +8,9 @@ import { FormWithConfirmation, TokenAmountField, FieldNames, SpyField } from 'co
 import { TokenAmount, Token } from 'model/entities';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
+import { makeStyles } from 'utils/styles';
 import { useSubscribable, useValidateAmount } from 'utils/react';
-import { Loading } from 'components';
+import { Loading, Typography } from 'components';
 
 interface FormData {
   amount: TokenAmount | null;
@@ -17,6 +18,7 @@ interface FormData {
 
 interface BuyingShareFormProps {
   account: string;
+  note?: string;
   onCancel(): void;
 }
 
@@ -30,7 +32,8 @@ const initialValues: FormData = {
 
 const tKeys = tKeysAll.features.buyShare;
 
-export function BuyingShareForm({ onCancel, account }: BuyingShareFormProps) {
+export function BuyingShareForm({ onCancel, account, note }: BuyingShareFormProps) {
+  const classes = useStyles();
   const { t } = useTranslate();
   const api = useApi();
 
@@ -99,6 +102,7 @@ export function BuyingShareForm({ onCancel, account }: BuyingShareFormProps) {
       <Loading meta={supportedTokensMeta}>
         {supportedTokens && (
           <>
+            {note && <Typography className={classes.note}>{note}</Typography>}
             <TokenAmountField
               name={fieldNames.amount}
               currencies={supportedTokens}
@@ -114,3 +118,12 @@ export function BuyingShareForm({ onCancel, account }: BuyingShareFormProps) {
     </FormWithConfirmation>
   );
 }
+
+const useStyles = makeStyles(
+  () => ({
+    note: {
+      marginBottom: 10,
+    },
+  }),
+  { name: 'BuyingShareForm' },
+);
