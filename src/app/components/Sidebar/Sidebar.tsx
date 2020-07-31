@@ -15,7 +15,7 @@ import { useStyles } from './Sidebar.style';
 import * as components from './components';
 import { sidebarStorage } from './sidebarStorage';
 
-const upperLinks: Link.models.Link[] = [
+const mkUpperLinks = (liquidationsIncluded: boolean): Link.models.Link[] => [
   {
     kind: 'internal',
     ref: routes.account.getRoutePath(),
@@ -37,12 +37,16 @@ const upperLinks: Link.models.Link[] = [
     renderIcon: makeIconRenderer(icons.Borrow),
   },
 
-  {
-    kind: 'internal',
-    ref: routes.liquidations.getRoutePath(),
-    label: tKeys.modules.navigation.liquidations.getKey(),
-    renderIcon: makeIconRenderer(icons.Liquidations),
-  },
+  ...(liquidationsIncluded
+    ? [
+        {
+          kind: 'internal' as 'internal',
+          ref: routes.liquidations.getRoutePath(),
+          label: tKeys.modules.navigation.liquidations.getKey(),
+          renderIcon: makeIconRenderer(icons.Liquidations),
+        },
+      ]
+    : []),
 
   {
     kind: 'internal',
@@ -52,7 +56,7 @@ const upperLinks: Link.models.Link[] = [
   },
 ];
 
-const requeredLinks = [
+const requiredLinks = [
   tKeys.modules.navigation.account.getKey(),
   tKeys.modules.navigation.lend.getKey(),
   tKeys.modules.navigation.borrow.getKey(),
@@ -61,6 +65,14 @@ const requeredLinks = [
 export const Sidebar: React.FC = () => {
   const classes = useStyles();
 
+  const api = useApi();
+  const [hasLoansToLiquidate] = useSubscribable(
+    () => api.loanModule.hasLoansToLiquidate$(),
+    [api],
+    false,
+  );
+
+  const upperLinks = React.useMemo(() => mkUpperLinks(hasLoansToLiquidate), [hasLoansToLiquidate]);
   const [isExpanded, setCloseSidebar] = React.useState(() => sidebarStorage.getItem('isExpanded'));
   const [links, setLinks] = React.useState(upperLinks);
 
@@ -69,7 +81,6 @@ export const Sidebar: React.FC = () => {
     setCloseSidebar(!isExpanded);
   };
 
-  const api = useApi();
   const [account] = useSubscribable(() => api.web3Manager.account, [], null);
 
   const [distributionBalance] = useSubscribable(
@@ -77,15 +88,24 @@ export const Sidebar: React.FC = () => {
     [api, account],
   );
 
+  const getUpdatedLinks = React.useCallback(
+    () =>
+      distributionBalance?.isZero()
+        ? upperLinks.filter(link => requiredLinks.find(reqLink => reqLink === link.label))
+        : upperLinks,
+    [distributionBalance, upperLinks],
+  );
+
   useOnChangeState(
     distributionBalance,
     (prev, cur) => prev !== cur,
-    () =>
-      setLinks(
-        distributionBalance?.isZero()
-          ? upperLinks.filter(link => requeredLinks.find(reqLink => reqLink === link.label))
-          : upperLinks,
-      ),
+    () => setLinks(getUpdatedLinks()),
+  );
+
+  useOnChangeState(
+    upperLinks,
+    (prev, cur) => prev !== cur,
+    () => setLinks(getUpdatedLinks()),
   );
 
   return (

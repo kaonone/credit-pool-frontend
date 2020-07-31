@@ -40,7 +40,7 @@ function getPaymentDueDate(now: moment.Moment, debtRepayDeadlinePeriod: BN): str
   return new BN(now.subtract(debtRepayDeadlinePeriod.toNumber(), 'seconds').unix()).toString();
 }
 
-const RE_REQUEST_LOANS_TIMEOUT = 2000;
+const RE_REQUEST_LOANS_TIMEOUT = 1000 * 60 * 30;
 
 export class LoanModuleApi {
   public readonlyContracts: {
@@ -674,6 +674,28 @@ export class LoanModuleApi {
               getPaymentDueDate(now, debtRepayDeadlinePeriod),
             );
           }),
+        ),
+      ),
+    );
+  }
+
+  @memoize()
+  public hasLoansToLiquidate$(): Observable<boolean> {
+    return timer(0, RE_REQUEST_LOANS_TIMEOUT).pipe(
+      map(() => moment()),
+      switchMap(now =>
+        combineLatest([this.getConfig$(), this.fundsModuleApi.getLiquidityCurrency$()]).pipe(
+          switchMap(([{ debtRepayDeadlinePeriod }, currency]) => {
+            const loansFrom = new BN(now.subtract(85, 'days').unix()).toString();
+
+            return this.subgraphApi.loadLoansForLiquidation$(
+              currency,
+              debtRepayDeadlinePeriod,
+              loansFrom,
+              new BN(0).toString(),
+            );
+          }),
+          map(x => x.length > 0),
         ),
       ),
     );
