@@ -28,7 +28,7 @@ export function UnlockCollateralButton(props: IProps) {
   const open = React.useCallback(() => setIsOpen(true), []);
   const close = React.useCallback(() => setIsOpen(false), []);
 
-  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
+  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account$, []);
   const pledgeGqlResult = usePledgeSubscription({
     variables: {
       pledgeHash: account && proposalId ? getPledgeId(account, borrower, proposalId) : '',

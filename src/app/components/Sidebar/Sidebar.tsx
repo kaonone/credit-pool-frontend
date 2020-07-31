@@ -1,8 +1,8 @@
 import React from 'react';
 import cn from 'classnames';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import { empty, combineLatest } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
@@ -60,15 +60,9 @@ const mkAdditionalLinks = (liquidationsIncluded: boolean): Link.models.Link[] =>
 ];
 
 function getLinks$(api: ReturnType<typeof useApi>) {
-  return api.web3Manager.account.pipe(
-    switchMap(account =>
-      combineLatest(
-        account ? api.pToken.getDistributionBalanceOf$(account) : empty(),
-        api.loanModule.hasLoansToLiquidate$(),
-      ),
-    ),
-    map(([balance, hasLoansToLiquidate]) =>
-      requiredLinks.concat(balance.isZero() ? [] : mkAdditionalLinks(hasLoansToLiquidate)),
+  return combineLatest(api.pToken.isPoolUser$(), api.loanModule.hasLoansToLiquidate$()).pipe(
+    map(([isPoolUser, hasLoansToLiquidate]) =>
+      requiredLinks.concat(isPoolUser ? mkAdditionalLinks(hasLoansToLiquidate) : []),
     ),
   );
 }

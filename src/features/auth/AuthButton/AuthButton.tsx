@@ -26,7 +26,7 @@ export function AuthButton({ connectRedirectPath, disconnectRedirectPath }: Prop
   const classes = useStyles();
   const { t } = useTranslate();
 
-  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, [], null);
+  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account$, [], null);
   const [status] = useSubscribable(() => api.web3Manager.status, [], 'pending');
   const [connectedWallet] = useSubscribable(() => api.web3Manager.connectedWallet, [], null);
 

@@ -7,7 +7,7 @@ import { useSubscribable } from 'utils/react';
 
 export function YourMaxAvailableCredit() {
   const api = useApi();
-  const [account] = useSubscribable(() => api.web3Manager.account, []);
+  const [account] = useSubscribable(() => api.web3Manager.account$, []);
   const [max, maxMeta] = useSubscribable(
     () => (account ? api.loanModule.getMaxAvailableLoanSize$(account) : empty()),
     [api, account],

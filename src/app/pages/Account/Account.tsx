@@ -2,7 +2,6 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import { useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
-import { empty } from 'rxjs';
 
 import { routes } from 'app/routes';
 import { makeStyles } from 'utils/styles';
@@ -23,11 +22,7 @@ export function Account() {
   const page = match ? match.params.page : routes.account.summary.getElementKey();
 
   const api = useApi();
-  const [account] = useSubscribable(() => api.web3Manager.account, [], null);
-  const [distributionBalance, distributionBalanceMeta] = useSubscribable(
-    () => (account ? api.pToken.getDistributionBalanceOf$(account) : empty()),
-    [api, account],
-  );
+  const [isPoolUser, isPoolUserMeta] = useSubscribable(() => api.pToken.isPoolUser$(), [api]);
 
   const handleTabChange = (_: React.ChangeEvent<{}>, tab: string) => {
     setSelectedPage(tab);
@@ -41,8 +36,8 @@ export function Account() {
 
   return (
     <Grid className={classes.root}>
-      <Loading meta={distributionBalanceMeta}>
-        {distributionBalance && !distributionBalance.isZero() ? (
+      <Loading meta={isPoolUserMeta}>
+        {isPoolUser ? (
           <TabContext value={selectedPage}>
             <div className={classes.navigationBar}>
               <TabsList value={selectedPage} className={classes.tabs} onChange={handleTabChange}>
