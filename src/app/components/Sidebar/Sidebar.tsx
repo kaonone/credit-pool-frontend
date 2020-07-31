@@ -1,9 +1,10 @@
 import React from 'react';
 import cn from 'classnames';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import { empty } from 'rxjs';
+import { empty, combineLatest } from 'rxjs';
+import { switchMap, map } from 'rxjs/operators';
 
-import { useSubscribable, useOnChangeState } from 'utils/react';
+import { useSubscribable } from 'utils/react';
 import { useApi } from 'services/api';
 import { tKeys } from 'services/i18n';
 import { IconButton } from 'components';
@@ -15,14 +16,16 @@ import { useStyles } from './Sidebar.style';
 import * as components from './components';
 import { sidebarStorage } from './sidebarStorage';
 
-const upperLinks: Link.models.Link[] = [
+const requiredLinks: Link.models.Link[] = [
   {
     kind: 'internal',
     ref: routes.account.getRoutePath(),
     label: tKeys.modules.navigation.account.getKey(),
     renderIcon: makeIconRenderer(icons.Account),
   },
+];
 
+const mkAdditionalLinks = (liquidationsIncluded: boolean): Link.models.Link[] => [
   {
     kind: 'internal',
     ref: routes.lend.getRoutePath(),
@@ -37,12 +40,16 @@ const upperLinks: Link.models.Link[] = [
     renderIcon: makeIconRenderer(icons.Borrow),
   },
 
-  {
-    kind: 'internal',
-    ref: routes.liquidations.getRoutePath(),
-    label: tKeys.modules.navigation.liquidations.getKey(),
-    renderIcon: makeIconRenderer(icons.Liquidations),
-  },
+  ...(liquidationsIncluded
+    ? [
+        {
+          kind: 'internal',
+          ref: routes.liquidations.getRoutePath(),
+          label: tKeys.modules.navigation.liquidations.getKey(),
+          renderIcon: makeIconRenderer(icons.Liquidations),
+        } as const,
+      ]
+    : []),
 
   {
     kind: 'internal',
@@ -52,41 +59,31 @@ const upperLinks: Link.models.Link[] = [
   },
 ];
 
-const requeredLinks = [
-  tKeys.modules.navigation.account.getKey(),
-  tKeys.modules.navigation.lend.getKey(),
-  tKeys.modules.navigation.borrow.getKey(),
-];
+function getLinks$(api: ReturnType<typeof useApi>) {
+  return api.web3Manager.account.pipe(
+    switchMap(account =>
+      combineLatest(
+        account ? api.pToken.getDistributionBalanceOf$(account) : empty(),
+        api.loanModule.hasLoansToLiquidate$(),
+      ),
+    ),
+    map(([balance, hasLoansToLiquidate]) =>
+      requiredLinks.concat(balance.isZero() ? [] : mkAdditionalLinks(hasLoansToLiquidate)),
+    ),
+  );
+}
 
 export const Sidebar: React.FC = () => {
   const classes = useStyles();
+  const api = useApi();
 
+  const [links] = useSubscribable(() => getLinks$(api), [api], requiredLinks);
   const [isExpanded, setCloseSidebar] = React.useState(() => sidebarStorage.getItem('isExpanded'));
-  const [links, setLinks] = React.useState<Link.models.Link[]>([]);
 
   const handleExpanded = () => {
     sidebarStorage.setItem('isExpanded', !isExpanded);
     setCloseSidebar(!isExpanded);
   };
-
-  const api = useApi();
-  const [account] = useSubscribable(() => api.web3Manager.account, [], null);
-
-  const [distributionBalance] = useSubscribable(
-    () => (account ? api.pToken.getDistributionBalanceOf$(account) : empty()),
-    [api, account],
-  );
-
-  useOnChangeState(
-    distributionBalance,
-    (prev, cur) => prev !== cur,
-    () =>
-      setLinks(
-        !distributionBalance || distributionBalance.isZero()
-          ? upperLinks.filter(link => requeredLinks.find(reqLink => reqLink === link.label))
-          : upperLinks,
-      ),
-  );
 
   return (
     <div
