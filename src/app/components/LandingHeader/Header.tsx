@@ -2,7 +2,6 @@ import React from 'react';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { Adaptive } from 'services/adaptability';
-import { ThemeButton } from 'services/theme';
 import { NavInline, Link } from 'components';
 import { LogoWithNameIcon } from 'components/icons';
 import { IMenuItem } from 'utils/types/common';
@@ -42,14 +41,6 @@ export function Header({ customNavItems, CustomLogo }: Props) {
         items={customNavItems || menuItems}
         className={classes.navInline}
         extraRight={[
-          <React.Fragment key="0">
-            <Adaptive to="tabletXS">
-              <ThemeButton size="small" />
-            </Adaptive>
-            <Adaptive from="tabletXS">
-              <ThemeButton />
-            </Adaptive>
-          </React.Fragment>,
           <React.Fragment key="1">
             <Adaptive to="tabletXS">
               <AppButton size="small" />
