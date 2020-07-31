@@ -56,13 +56,17 @@ export function History() {
           />
         </TabsList>
         <TabPanel value={routes.history.transaction.getElementKey()}>
-          <ComingSoon />
+          <div className={classes.comingSoon}>
+            <ComingSoon />
+          </div>
         </TabPanel>
         <TabPanel value={routes.history.profit.getElementKey()}>
           <Profit />
         </TabPanel>
         <TabPanel value={routes.history.liquidations.getElementKey()}>
-          <ComingSoon />
+          <div className={classes.comingSoon}>
+            <ComingSoon />
+          </div>
         </TabPanel>
       </TabContext>
     </Grid>
@@ -72,10 +76,13 @@ export function History() {
 const useStyles = makeStyles(
   () => ({
     root: {
-      padding: '50px 60px',
+      padding: '50px 0px',
     },
     tabs: {
-      marginBottom: 40,
+      margin: '0 50px 68px',
+    },
+    comingSoon: {
+      margin: '0 50px',
     },
   }),
   { name: 'History' },
