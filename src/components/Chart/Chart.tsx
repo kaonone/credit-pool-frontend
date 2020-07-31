@@ -102,6 +102,7 @@ function Chart<P extends IPoint>(props: IProps<P>) {
           ticks={R.pluck('date', ticks)}
           tickSize={0}
           tick={renderTick}
+          height={20}
           {...xAxisProps}
         />
         <YAxis

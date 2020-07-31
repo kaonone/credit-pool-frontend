@@ -12,14 +12,11 @@ export const useStyles = makeStyles(
     },
     sum: {
       fontSize: 22,
+      lineHeight: 1.4,
       fontWeight: 300,
       whiteSpace: 'nowrap',
     },
     label: {
-      fontSize: 12,
-      fontWeight: 300,
-      marginTop: 6,
-
       '&:before': {
         content: "''",
         display: 'inline-block',
@@ -31,6 +28,8 @@ export const useStyles = makeStyles(
       },
     },
     labelText: {
+      fontSize: 12,
+      fontWeight: 300,
       color: theme.palette.text.primary,
     },
   }),

@@ -7,11 +7,11 @@ export const useStyles = makeStyles(() => ({
     width: '100%',
     height: 200,
     marginTop: 24,
-    marginBottom: 14,
+    marginBottom: 18,
   },
 
   balanceValue: {
-    marginTop: 20,
+    marginTop: 17,
   },
 
   cardContent: {
