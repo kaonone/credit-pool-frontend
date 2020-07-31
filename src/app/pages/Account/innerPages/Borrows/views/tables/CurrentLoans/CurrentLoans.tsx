@@ -72,7 +72,7 @@ export const CurrentLoans: React.FC<Props> = props => {
           </Hint>
         ) : (
           <>
-            <NewTable.Component columns={columns} entries={entries} />
+            <NewTable.Component columns={columns} entries={entries} withStripes />
             {paginationView}
           </>
         )}

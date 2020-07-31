@@ -18,7 +18,7 @@ export const useStyles = makeStyles(
     comingSoonLabel: {
       marginLeft: -20,
       marginTop: 14,
-    }
+    },
   }),
   { name: 'Metrics' },
 );

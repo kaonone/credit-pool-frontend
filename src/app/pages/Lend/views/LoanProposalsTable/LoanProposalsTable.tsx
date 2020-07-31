@@ -56,13 +56,7 @@ const makeColumns = (backgroundColor: string): Array<NewTable.models.Column<Loan
     renderTitle: () => 'Borrower',
     cellContent: {
       kind: 'simple',
-      render: x => (
-        <>
-          <div style={{ display: 'inline-flex' }}>
-            <AccountAddress address={x.borrower} size="small" />
-          </div>
-        </>
-      ),
+      render: x => <AccountAddress address={x.borrower} size="small" />,
     },
   },
 
@@ -192,7 +186,7 @@ const useStyles = makeStyles(
       paddingRight: 50,
       paddingLeft: 50,
       marginTop: 50,
-      marginBottom: 28,
+      marginBottom: 22,
     },
     tableTitle: {
       fontWeight: 300,

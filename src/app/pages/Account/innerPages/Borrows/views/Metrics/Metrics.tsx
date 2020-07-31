@@ -21,7 +21,7 @@ export const Metrics: React.FC = () => {
         <AvailableLoansChart />
         <div className={classes.comingSoonLabel}>
           <ComingSoon variant="label" />
-      </div>
+        </div>
       </div>
     </div>
   );

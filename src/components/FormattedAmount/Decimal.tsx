@@ -28,9 +28,9 @@ export function Decimal(props: Props) {
 }
 
 const useStyles = makeStyles(
-  () => ({
+  theme => ({
     fractional: {
-      color: '#494972',
+      color: theme.colors.stateBlue,
     },
   }),
   { name: 'Decimal' },

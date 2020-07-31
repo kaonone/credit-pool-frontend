@@ -105,4 +105,5 @@ export const colors = {
   foggyNight: '#13131b',
   independence: '#4d4b6c',
   darkSpace: '#1c1c2a',
+  stateBlue: '#494972',
 };

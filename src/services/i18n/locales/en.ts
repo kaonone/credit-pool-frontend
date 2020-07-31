@@ -338,8 +338,8 @@ const en = {
   },
   components: {
     pagination: {
-      itemsPerPage: 'Items per page',
-      currentPagination: '%{from} - %{to} of %{total}',
+      currentPagination: '%{from}-%{to}',
+      ofTotal: 'of %{total}',
       currentSubgraphPagination: '%{from} - %{to}',
     },
     metrics: {

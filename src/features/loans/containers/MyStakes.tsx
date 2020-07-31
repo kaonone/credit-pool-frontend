@@ -81,7 +81,7 @@ export const MyStakes: React.FC<Props> = ({ title, filter, account }) => {
           </Hint>
         ) : (
           <>
-            <NewTable.Component columns={columns} entries={entries} />
+            <NewTable.Component columns={columns} entries={entries} withStripes />
             {paginationView}
           </>
         )}
