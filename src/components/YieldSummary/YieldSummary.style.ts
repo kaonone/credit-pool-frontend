@@ -8,20 +8,26 @@ export const useStyles = makeStyles(
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
-      maxWidth: 480,
+      maxWidth: 430,
       marginLeft: 'auto',
     },
 
     header: {
+      marginBottom: 27,
+    },
+
+    content: {
+      flex: 1,
       display: 'flex',
-      flexWrap: 'wrap',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginBottom: 20,
+      flexDirection: 'column',
+      alignItems: 'flex-end',
+      height: '100%',
     },
 
     chart: {
       flex: 1,
+      alignSelf: 'stretch',
+      marginTop: 21,
       background: `url('${YieldChart}') no-repeat center / contain`,
     },
   }),

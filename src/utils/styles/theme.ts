@@ -115,7 +115,7 @@ export const darkPalette = {
     main: colors.monza,
   },
   background: {
-    hint: colors.charade,
+    hint: colors.darkSpace,
     default: colors.obsidian,
     paper: colors.foggyNight,
     paperSecondary: colors.darkBlueMagenta,

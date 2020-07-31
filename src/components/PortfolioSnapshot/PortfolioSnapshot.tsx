@@ -107,25 +107,35 @@ const useStyles = makeStyles(
       fontWeight: 300,
       width: '100%',
       marginBottom: 30,
-      '& td, th': {
-        paddingTop: 15,
-        paddingBottom: 15,
+      '& td': {
+        paddingTop: 13,
+        paddingBottom: 13,
         textAlign: 'right',
       },
       '& th': {
         fontWeight: 400,
         paddingBottom: 20,
+        marginBottom: 17,
+        textAlign: 'right',
       },
       '& th:first-child': {
         textAlign: 'left',
       },
+      '& tr:first-child td': {
+        paddingTop: 32,
+      },
       '& tr:last-child': {
         borderBottom: `1px solid ${rgba(colors.white, 0.1)}`,
         borderRadius: 6,
+
+        '& td': {
+          paddingBottom: 22,
+        },
       },
     },
     caption: {
       textAlign: 'left',
+      marginBottom: 25,
     },
     assetName: {
       marginLeft: 10,
