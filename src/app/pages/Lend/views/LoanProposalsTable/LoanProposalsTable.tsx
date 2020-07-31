@@ -34,6 +34,7 @@ export type LoanProposal = {
 
 type Props = {
   loanProposals: LoanProposal[];
+  isStakingAllowed: boolean;
 };
 
 function AdditionalInfoContent(props: Pick<LoanProposal, 'descriptionHash'>) {
@@ -51,7 +52,10 @@ function AdditionalInfoContent(props: Pick<LoanProposal, 'descriptionHash'>) {
   );
 }
 
-const makeColumns = (backgroundColor: string): Array<NewTable.models.Column<LoanProposal>> => [
+const makeColumns = (
+  isStakingAllowed: boolean,
+  backgroundColor: string,
+): Array<NewTable.models.Column<LoanProposal>> => [
   {
     renderTitle: () => 'Borrower',
     cellContent: {
@@ -121,6 +125,7 @@ const makeColumns = (backgroundColor: string): Array<NewTable.models.Column<Loan
               loanSize={x.loanRequested.toString()}
               proposalId={x.proposalId}
               borrower={x.borrower}
+              disabled={!isStakingAllowed}
             />
           )}
         </>
@@ -141,24 +146,29 @@ const makeColumns = (backgroundColor: string): Array<NewTable.models.Column<Loan
 ];
 
 export function LoanProposalsTable(props: Props) {
-  const { loanProposals } = props;
+  const { loanProposals, isStakingAllowed } = props;
   const classes = useStyles();
   const theme = useTheme();
 
-  const columns = useMemo(() => makeColumns(theme.palette.background.paper), [theme]);
+  const columns = useMemo(() => makeColumns(isStakingAllowed, theme.palette.background.paper), [
+    isStakingAllowed,
+    theme,
+  ]);
 
   function renderTableHeader() {
     return (
       <div className={classes.tableHeader}>
         <div className={classes.tableTitle}>Loan proposals</div>
-        <Button
-          component={Link}
-          variant="contained"
-          color="primary"
-          to={routes.account.stakes.getRedirectPath()}
-        >
-          My Stakes
-        </Button>
+        {isStakingAllowed && (
+          <Button
+            component={Link}
+            variant="contained"
+            color="primary"
+            to={routes.account.stakes.getRedirectPath()}
+          >
+            My Stakes
+          </Button>
+        )}
       </div>
     );
   }
@@ -181,6 +191,10 @@ export function LoanProposalsTable(props: Props) {
     </div>
   );
 }
+
+LoanProposalsTable.defaultProps = {
+  isStakingAllowed: true,
+} as Partial<Props>;
 
 const useStyles = makeStyles(
   () => ({
