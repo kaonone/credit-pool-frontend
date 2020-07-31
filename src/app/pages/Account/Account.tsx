@@ -95,6 +95,7 @@ export function Account() {
             component={Link}
             variant="contained"
             color="primary"
+            size="small"
             to={routes.lend.getRedirectPath()}
           >
             Lend
@@ -107,6 +108,7 @@ export function Account() {
             component={Link}
             variant="contained"
             color="primary"
+            size="small"
             to={routes.borrow.getRedirectPath()}
           >
             Borrow

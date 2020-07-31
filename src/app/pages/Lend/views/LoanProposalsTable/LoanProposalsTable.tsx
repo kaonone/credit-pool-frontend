@@ -155,6 +155,7 @@ export function LoanProposalsTable(props: Props) {
           component={Link}
           variant="contained"
           color="primary"
+          size="small"
           to={routes.account.stakes.getRedirectPath()}
         >
           My Stakes

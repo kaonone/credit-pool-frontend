@@ -39,7 +39,7 @@ export const useStyles = makeStyles(theme => ({
   sizeSmall: {
     padding: theme.spacing(0.25, 1),
     fontSize: theme.spacing(1.25),
-    minWidth: theme.spacing(4),
+    minWidth: theme.spacing(13.25),
     minHeight: theme.spacing(smallHeight),
     borderRadius: theme.spacing(smallHeight / 2),
     [theme.breakpoints.up('tabletXS')]: {
