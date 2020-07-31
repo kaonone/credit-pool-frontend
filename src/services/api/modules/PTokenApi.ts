@@ -1,5 +1,5 @@
-import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, BehaviorSubject, combineLatest, empty } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
 import { autobind } from 'core-decorators';
@@ -128,5 +128,13 @@ export class PTokenApi {
     return this.readonlyContract.methods
       .nextDistributionTimestamp(undefined, this.readonlyContract.events.DistributionCreated())
       .pipe(map(item => item.toNumber()));
+  }
+
+  @memoize()
+  public isPoolUser$(): Observable<boolean> {
+    return this.web3Manager.account$.pipe(
+      switchMap(account => (account ? this.getDistributionBalanceOf$(account) : empty())),
+      map(balance => !balance.isZero()),
+    );
   }
 }

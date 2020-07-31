@@ -33,7 +33,11 @@ const en = {
         borrowingAdvantages: 'Only 50% Collateral',
         liquidityButton: 'Become Liquidity Provider',
         lendingButton: 'Lend',
+        noteAboutLending:
+          'In order to start lending, you first need to make a deposit & become a Sparta member.',
         borrowingButton: 'Borrow',
+        noteAboutBorrowing:
+          'In order to take out a loan, you need to make a deposit first, covering 50% collateral for the loan you want to request.',
       },
     },
     components: {

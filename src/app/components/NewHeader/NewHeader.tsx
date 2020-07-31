@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { AuthButton } from 'features/auth';
-import { ThemeButton } from 'services/theme';
 import { routes } from 'app/routes';
 
 import { useStyles } from './NewHeader.style';
@@ -30,7 +29,6 @@ export const NewHeader: React.FC = () => {
             disconnectRedirectPath={routes.stats.getRedirectPath()}
           />
         </div>
-        <ThemeButton />
       </div>
     </header>
   );

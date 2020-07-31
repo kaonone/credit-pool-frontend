@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 
-import { routes } from 'app/routes';
-import { Grid, Label, Button } from 'components';
+import { Grid, Label } from 'components';
 import {
   PoolSize,
   AverageAPY,
@@ -97,29 +95,27 @@ export function Strategies() {
           <div className={classes.advantages}>
             <Label>{t(tKeys.lendingAdvantages.getKey())}</Label>
           </div>
-          <Button
+          <BuyingShareButton
             fullWidth
-            color="primary"
             variant="contained"
-            component={Link}
-            to={routes.lend.getRedirectPath()}
+            color="primary"
+            note={t(tKeys.noteAboutLending.getKey())}
           >
             {t(tKeys.lendingButton.getKey())}
-          </Button>
+          </BuyingShareButton>
         </Grid>
         <Grid item className={classes.metricContainer}>
           <div className={classes.advantages}>
             <Label>{t(tKeys.borrowingAdvantages.getKey())}</Label>
           </div>
-          <Button
+          <BuyingShareButton
             fullWidth
-            color="primary"
             variant="contained"
-            component={Link}
-            to={routes.borrow.getRedirectPath()}
+            color="primary"
+            note={t(tKeys.noteAboutBorrowing.getKey())}
           >
             {t(tKeys.borrowingButton.getKey())}
-          </Button>
+          </BuyingShareButton>
         </Grid>
       </Grid>
     </Grid>
