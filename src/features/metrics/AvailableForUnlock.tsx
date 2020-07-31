@@ -12,7 +12,7 @@ type Props = {
 
 export function AvailableForUnlock({ borrower, debtId }: Props) {
   const api = useApi();
-  const [account] = useSubscribable(() => api.web3Manager.account, []);
+  const [account] = useSubscribable(() => api.web3Manager.account$, []);
 
   const [pAvailableForUnlock, pAvailableForUnlockMeta] = useSubscribable(
     () =>

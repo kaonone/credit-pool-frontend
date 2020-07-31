@@ -1,7 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import { empty } from 'rxjs';
 
 import { useSubscribable, useOnChangeState } from 'utils/react';
 import { useApi } from 'services/api';
@@ -70,19 +69,15 @@ export const Sidebar: React.FC = () => {
   };
 
   const api = useApi();
-  const [account] = useSubscribable(() => api.web3Manager.account, [], null);
 
-  const [distributionBalance] = useSubscribable(
-    () => (account ? api.pToken.getDistributionBalanceOf$(account) : empty()),
-    [api, account],
-  );
+  const [isPoolUser] = useSubscribable(() => api.pToken.isPoolUser$(), [api]);
 
   useOnChangeState(
-    distributionBalance,
+    isPoolUser,
     (prev, cur) => prev !== cur,
     () =>
       setLinks(
-        !distributionBalance || distributionBalance.isZero()
+        isPoolUser
           ? upperLinks.filter(link => requeredLinks.find(reqLink => reqLink === link.label))
           : upperLinks,
       ),

@@ -17,7 +17,7 @@ export function MyPoolShare() {
   const { t } = useTranslate();
 
   const api = useApi();
-  const [account] = useSubscribable(() => api.web3Manager.account, []);
+  const [account] = useSubscribable(() => api.web3Manager.account$, []);
   const [userShare, userShareMeta] = useSubscribable(
     () => (account ? api.pToken.getUserShare$(account) : empty()),
     [api, account],

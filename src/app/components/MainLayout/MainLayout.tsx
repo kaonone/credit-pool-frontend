@@ -16,7 +16,7 @@ export const MainLayout: React.FC<Props> = props => {
   const classes = useStyles();
 
   const api = useApi();
-  const [account] = useSubscribable(() => api.web3Manager.account, [], null);
+  const [account] = useSubscribable(() => api.web3Manager.account$, [], null);
 
   return (
     <div className={classes.root}>

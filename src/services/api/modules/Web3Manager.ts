@@ -82,7 +82,7 @@ export class Web3Manager {
     return this.manager.txWeb3;
   }
 
-  get account() {
+  get account$() {
     return this.manager.account;
   }
 

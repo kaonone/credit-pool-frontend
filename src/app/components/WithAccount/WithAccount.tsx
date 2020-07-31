@@ -15,7 +15,7 @@ export function WithAccount({ children }: Props) {
   const { t, tKeys } = useTranslate();
 
   const api = useApi();
-  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
+  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account$, []);
 
   const child =
     typeof children === 'function' ? children({ account: account || zeroAddress }) : children;

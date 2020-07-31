@@ -35,7 +35,7 @@ function UserBalanceChart() {
   const classes = useStyles();
   const theme = useTheme();
   const api = useApi();
-  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account, []);
+  const [account, accountMeta] = useSubscribable(() => api.web3Manager.account$, []);
 
   const myUserResult = useMyUserSubscription({
     variables: {

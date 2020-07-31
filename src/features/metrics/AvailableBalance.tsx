@@ -15,7 +15,7 @@ export function AvailableBalance() {
   const { t } = useTranslate();
 
   const api = useApi();
-  const [account] = useSubscribable(() => api.web3Manager.account, []);
+  const [account] = useSubscribable(() => api.web3Manager.account$, []);
   const [availableBalance, availableBalanceMeta] = useSubscribable(
     () => (account ? api.fundsModule.getAvailableBalance$(account) : empty()),
     [api, account],
