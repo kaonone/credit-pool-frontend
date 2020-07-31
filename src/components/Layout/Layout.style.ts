@@ -55,6 +55,7 @@ export const useStyles = makeStyles(
     footer: {
       marginTop: 'auto',
       paddingBottom: 28,
+      paddingTop: 0,
 
       [theme.breakpoints.up('tabletXS')]: {
         paddingBottom: 34,

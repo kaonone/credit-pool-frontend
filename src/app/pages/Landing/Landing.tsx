@@ -30,6 +30,7 @@ const useStyles = makeStyles(
   theme => ({
     '@global': {
       body: {
+        overflowY: 'auto',
         backgroundColor:
           theme.palette.type === 'light' ? theme.colors.athensGray : theme.colors.obsidian,
       },
