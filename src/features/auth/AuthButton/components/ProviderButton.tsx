@@ -108,14 +108,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'flex-start',
     padding: theme.spacing(1),
     transition: theme.transitions.create(['background-color']),
-    borderRadius: 12,
-    minHeight: 160,
+    borderRadius: 6,
+    minHeight: 115,
+    minWidth: 135,
 
     '&:hover, &$focusVisible': {
-      backgroundColor:
-        theme.palette.type === 'dark'
-          ? lighten(theme.palette.background.paper, 0.2)
-          : darken(theme.palette.background.paper, 0.2),
+      backgroundColor: '#191924',
     },
   },
 

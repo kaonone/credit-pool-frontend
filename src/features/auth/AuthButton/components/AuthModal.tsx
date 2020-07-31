@@ -45,7 +45,6 @@ export function AuthModal(props: AuthModalProps) {
           {wallets.map((type, index) => (
             <Grid item xs={4} key={index} className={classes.providerButton}>
               <ProviderButton
-                fullWidth
                 connect={connect}
                 disconnect={disconnect}
                 type={type}
@@ -67,7 +66,7 @@ export function AuthModal(props: AuthModalProps) {
 
 const useStyles = makeStyles({
   root: {
-    padding: '40px 40px 30px',
+    padding: '50px 60px',
   },
   closeButton: {
     position: 'absolute',
@@ -78,8 +77,11 @@ const useStyles = makeStyles({
   },
   content: {
     overflow: 'visible',
+    padding: 0,
+    marginTop: 44,
   },
   providerButton: {
     marginTop: 20,
+    textAlign: 'center',
   },
 });

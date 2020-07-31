@@ -422,6 +422,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
         root: {
           fontSize: '1.375rem',
           fontWeight: 300,
+          padding: 0,
         },
       },
     },

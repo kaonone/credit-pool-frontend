@@ -81,8 +81,8 @@ const en = {
     auth: {
       applicationNetwork: 'This application works with the network "%{networkName}"',
       modalTitle: {
-        connected: 'Disconnect or change wallet:',
-        disconnected: 'Choose your wallet:',
+        connected: 'Disconnect or change wallet',
+        disconnected: 'Connect wallet',
         connectedTo: 'Connected to',
         disconnect: 'Disconnect',
       },
