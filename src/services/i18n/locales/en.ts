@@ -323,6 +323,13 @@ const en = {
           CLOSED: 'closed',
         },
       },
+      myStakes: {
+        noOutstandingLoans:
+          "You don't have outstanding loans at the moment. Wait for borrowers to activate pending loans you have a stake in, or just chill like this cat",
+        noPendingLoans:
+          'There is no pending loans you have a stake in at the moment. Search for new proposals!',
+        lendButton: 'Lend',
+      },
     },
   },
   utils: {
