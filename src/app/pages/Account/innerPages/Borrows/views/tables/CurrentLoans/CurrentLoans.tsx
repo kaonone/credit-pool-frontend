@@ -2,12 +2,14 @@ import React, { useMemo } from 'react';
 import BN from 'bn.js';
 
 import { useApi } from 'services/api';
+import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { NewTable, Loading, Hint, Typography } from 'components';
 import { useSubgraphPagination, useSubscribable } from 'utils/react';
 import { useMyBorrowedCurrentLoansQuery } from 'generated/gql/pool';
 import { MyBorrowedPendingLoansQuery } from 'generated/gql/subgraphRequests';
 import { getLoanDuePaymentDate } from 'model';
 import { PercentAmount, LiquidityAmount, Currency } from 'model/entities';
+import { Cat1 } from 'components/icons';
 
 import { UserDebt } from '../../../models';
 import { makeTableColumns } from './columns';
@@ -32,9 +34,12 @@ function convertDebts(
   }));
 }
 
+const tKeys = tKeysAll.features.loans.myBorrows;
+
 export const CurrentLoans: React.FC<Props> = props => {
   const { account } = props;
   const classes = useStyles();
+  const { t } = useTranslate();
 
   const api = useApi();
 
@@ -67,8 +72,8 @@ export const CurrentLoans: React.FC<Props> = props => {
     <div className={classes.root}>
       <Loading gqlResults={result} meta={[liquidityCurrencyMeta, loansConfigMeta]}>
         {!entries.length ? (
-          <Hint>
-            <Typography>Not found</Typography>
+          <Hint renderIcon={renderCatIcon}>
+            <Typography>{t(tKeys.noCurrentLoans.getKey())}</Typography>
           </Hint>
         ) : (
           <>
@@ -79,4 +84,8 @@ export const CurrentLoans: React.FC<Props> = props => {
       </Loading>
     </div>
   );
+
+  function renderCatIcon() {
+    return <Cat1 className={classes.catIcon} />;
+  }
 };

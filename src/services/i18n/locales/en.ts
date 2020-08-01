@@ -330,6 +330,12 @@ const en = {
           'There is no pending loans you have a stake in at the moment. Search for new proposals!',
         lendButton: 'Lend',
       },
+      myBorrows: {
+        noCurrentLoans: "You don't have any active loans at the moment. Chill!",
+        noPendingLoans:
+          "You don't have any pending loans at the moment. If you wish to make a loan request — be prepared to stake 50% of collateral",
+        borrowButton: 'Borrow',
+      },
     },
   },
   utils: {
