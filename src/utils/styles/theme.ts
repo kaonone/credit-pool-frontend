@@ -45,6 +45,11 @@ function getGradients(type: 'dark' | 'light') {
       colors.heliotrope2,
       colors.heliotrope,
     ]),
+    outlinedButton: makeGradient([
+      { color: colors.heliotrope, offset: '0%' },
+      { color: colors.royalBlue, offset: '33.3%' },
+      { color: colors.heliotrope, offset: '100%' },
+    ]),
     spartaIcon: makeGradient(
       type === 'dark'
         ? [colors.northWesternPurple, colors.darkPurple]

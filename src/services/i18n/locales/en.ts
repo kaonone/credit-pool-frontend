@@ -11,9 +11,9 @@ const en = {
       },
       account: {
         tabs: {
-          summary: 'My summary',
-          stakes: 'My stakes',
-          borrows: 'My borrows',
+          summary: 'My Summary',
+          stakes: 'My Stakes',
+          borrows: 'My Borrows',
         },
       },
       history: {

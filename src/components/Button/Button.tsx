@@ -43,6 +43,7 @@ const Button: OverridableComponent<ButtonTypeMap> = function ButtonFunc<
         outlinedPrimary: cn(classes.outlinedPrimary, muiClasses.outlinedPrimary),
         ...rest.classes,
       }}
+      disableRipple
     />
   );
 };
