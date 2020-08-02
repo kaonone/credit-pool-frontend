@@ -73,7 +73,7 @@ export const useStyles = makeStyles(theme => ({
     backgroundImage: theme.gradients.outlinedButton.linear('to right'),
     backgroundSize: backgroundGradientSize,
     color: theme.palette.text.primary,
-    transition: 'background-postion 1s',
+    transition: 'background-position 1s',
 
     '&$disabled': {
       background: `rgba(255, 255, 255, 0.2)`,
