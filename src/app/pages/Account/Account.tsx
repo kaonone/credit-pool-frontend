@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 
 import { routes } from 'app/routes';
 import { makeStyles } from 'utils/styles';
+import { useSubscribable } from 'utils/react';
 import { TabsList, TabContext, Tab, TabPanel, Loading, Button } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
-import { useSubscribable } from 'utils/react';
 
 import * as innerPages from './innerPages';
 
@@ -90,6 +90,7 @@ export function Account() {
             component={Link}
             variant="contained"
             color="primary"
+            size="small"
             to={routes.lend.getRedirectPath()}
           >
             Lend
@@ -102,6 +103,7 @@ export function Account() {
             component={Link}
             variant="contained"
             color="primary"
+            size="small"
             to={routes.borrow.getRedirectPath()}
           >
             Borrow

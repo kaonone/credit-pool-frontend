@@ -1,4 +1,5 @@
 import * as React from 'react';
+import cn from 'classnames';
 import { useHistory } from 'react-router';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import Avatar from '@material-ui/core/Avatar';
@@ -70,6 +71,8 @@ export function AuthButton({ connectRedirectPath, disconnectRedirectPath }: Prop
     },
   );
 
+  const isConnected: boolean = accountMeta.loaded && !!account;
+
   return (
     <>
       <Button
@@ -77,7 +80,7 @@ export function AuthButton({ connectRedirectPath, disconnectRedirectPath }: Prop
         variant={connectedWallet ? 'outlined' : 'contained'}
         onClick={toggleIsOpened}
         disabled={!accountMeta.loaded}
-        className={classes.root}
+        className={cn(classes.root, { [classes.connected]: isConnected })}
         endIcon={
           <Loading
             ignoreError
@@ -85,7 +88,7 @@ export function AuthButton({ connectRedirectPath, disconnectRedirectPath }: Prop
             communication={connectCommunication}
             progressVariant="circle"
             progressProps={{
-              size: 24,
+              size: 16,
             }}
           />
         }
@@ -107,7 +110,7 @@ export function AuthButton({ connectRedirectPath, disconnectRedirectPath }: Prop
                   <Typography className={classes.address}>{getShortAddress(account)}</Typography>
                 </Grid>
                 <Grid item>
-                  <Typography className={classes.connected}>
+                  <Typography className={classes.connectedTo}>
                     {`${t(tKeys.features.auth.modalTitle.connectedTo.getKey())} 
                     ${t(tKeys.features.networkWarning.networkType[NETWORK_ID].getKey())}`}
                   </Typography>
@@ -115,9 +118,7 @@ export function AuthButton({ connectRedirectPath, disconnectRedirectPath }: Prop
               </Grid>
             </>
           ) : (
-            <Typography className={classes.connect}>
-              {t(tKeys.features.auth.connect.getKey())}
-            </Typography>
+            t(tKeys.features.auth.connect.getKey())
           )}
         </Loading>
       </Button>
@@ -136,26 +137,27 @@ export function AuthButton({ connectRedirectPath, disconnectRedirectPath }: Prop
 
 const useStyles = makeStyles({
   root: {
-    padding: '0 15px 0 0',
+    '&$connected': {
+      padding: 0,
+    },
   },
   address: {
     fontSize: 12,
     lineHeight: 1,
   },
-  connected: {
+  connectedTo: {
     fontSize: 12,
     lineHeight: 1,
     opacity: 0.5,
     marginTop: 3,
   },
-  connect: {
-    paddingLeft: 10,
-  },
   container: {
     marginLeft: 11,
+    paddingRight: 16,
   },
   icon: {
     width: 34,
     height: 34,
   },
+  connected: {},
 });

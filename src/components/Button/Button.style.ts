@@ -28,7 +28,7 @@ export const useStyles = makeStyles(theme => ({
     borderRadius: theme.spacing(height / 2),
 
     [theme.breakpoints.up('tabletXS')]: {
-      padding: theme.spacing(1, 4),
+      padding: theme.spacing(1.25, 2.5),
       fontSize: theme.spacing(2),
       minWidth: theme.spacing(8.25),
       minHeight: theme.spacing(heightTabletXS),
@@ -39,14 +39,18 @@ export const useStyles = makeStyles(theme => ({
   sizeSmall: {
     padding: theme.spacing(0.25, 1),
     fontSize: theme.spacing(1.25),
-    minWidth: theme.spacing(4),
     minHeight: theme.spacing(smallHeight),
     borderRadius: theme.spacing(smallHeight / 2),
     [theme.breakpoints.up('tabletXS')]: {
-      padding: theme.spacing(0.5, 2),
+      padding: theme.spacing(0.875, 2),
       fontSize: theme.spacing(2),
+      minWidth: theme.spacing(13.25),
       minHeight: theme.spacing(smallHeightTabletXS),
       borderRadius: theme.spacing(smallHeightTabletXS / 2),
+    },
+
+    '&$outlinedPrimary': {
+      minWidth: theme.spacing(12.25),
     },
   },
 
@@ -55,6 +59,7 @@ export const useStyles = makeStyles(theme => ({
     minHeight: theme.spacing(largeHeight),
     borderRadius: theme.spacing(largeHeight / 2),
     [theme.breakpoints.up('tabletXS')]: {
+      padding: theme.spacing(1.85, 4),
       fontSize: theme.spacing(2.5),
       minHeight: theme.spacing(largeHeightTabletXS),
       borderRadius: theme.spacing(largeHeightTabletXS / 2),
@@ -65,8 +70,15 @@ export const useStyles = makeStyles(theme => ({
     borderWidth: 0,
     zIndex: 1,
     position: 'relative',
-    backgroundImage: theme.gradients.main.linear('to right'),
+    backgroundImage: theme.gradients.outlinedButton.linear('to right'),
+    backgroundSize: backgroundGradientSize,
     color: theme.palette.text.primary,
+    transition: 'background-position 1s',
+
+    '&$disabled': {
+      background: `rgba(255, 255, 255, 0.2)`,
+      color: `rgba(255, 255, 255, 0.5)`,
+    },
 
     '&:before': {
       zIndex: -1,
@@ -102,9 +114,14 @@ export const useStyles = makeStyles(theme => ({
       },
     },
 
-    '&:hover, &$focusVisible': {
+    '&:hover:not(:active), &$focusVisible': {
       border: 'none',
       color: theme.colors.royalBlue2,
+    },
+
+    '&:active': {
+      border: 'none',
+      backgroundPosition: '50%',
     },
   },
 
@@ -116,9 +133,11 @@ export const useStyles = makeStyles(theme => ({
     background: theme.gradients.button.linear('to right'),
     backgroundSize: backgroundGradientSize,
     opacity: 0.99,
+    transition: 'background-position 1s',
 
     '&$disabled': {
-      background: `rgba(0, 0, 0, 0.12)`,
+      background: `rgba(255, 255, 255, 0.1)`,
+      color: `rgba(255, 255, 255, 0.5)`,
     },
 
     '&:before': {
@@ -135,7 +154,7 @@ export const useStyles = makeStyles(theme => ({
       backgroundSize: backgroundGradientSize,
       filter: 'blur(8px)',
       opacity: 0,
-      transition: '0.5s',
+      transition: '1s',
 
       borderRadius: theme.spacing(height / 2 + 2 * shadowOffset),
 
@@ -156,13 +175,18 @@ export const useStyles = makeStyles(theme => ({
       },
     },
 
-    '&:hover, &$focusVisible': {
+    '&:hover:not(:active), &$focusVisible': {
       animation: '$animate 8s linear infinite',
 
       '&:before': {
         opacity: 0.7,
         animation: '$animate 8s linear infinite',
       },
+    },
+
+    '&:active': {
+      boxShadow: 'none',
+      backgroundPosition: '50%',
     },
   },
 

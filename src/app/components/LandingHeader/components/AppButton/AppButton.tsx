@@ -13,7 +13,6 @@ function AppButton({ size }: Partial<Pick<ButtonProps, 'size'>>) {
 
   return (
     <Button<typeof RouterLink>
-      fullWidth
       size={size}
       variant="contained"
       color="primary"

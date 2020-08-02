@@ -5,6 +5,7 @@ export { default as Box } from '@material-ui/core/Box';
 export { default as ButtonBase } from '@material-ui/core/ButtonBase';
 export { default as CircularProgress } from '@material-ui/core/CircularProgress';
 export { default as CssBaseline } from '@material-ui/core/CssBaseline';
+export { default as Divider } from '@material-ui/core/Divider';
 export { default as Dialog } from '@material-ui/core/Dialog';
 export { default as DialogContent } from '@material-ui/core/DialogContent';
 export { default as DialogTitle } from '@material-ui/core/DialogTitle';

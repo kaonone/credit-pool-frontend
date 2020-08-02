@@ -30,6 +30,19 @@ export const useStyles = makeStyles(
           color: theme.palette.error.main,
           backgroundColor: lighten(theme.palette.error.main, 0.8),
         },
+
+        '&$withButton': {
+          justifyContent: 'space-between',
+          textAlign: 'left',
+        },
+      },
+
+      icon: {
+        marginLeft: 10,
+      },
+
+      button: {
+        marginLeft: 10,
       },
 
       isSmall: {},
@@ -37,6 +50,8 @@ export const useStyles = makeStyles(
 
       colorDefault: {},
       colorError: {},
+
+      withButton: {},
     };
   },
   { name: 'Hint' },

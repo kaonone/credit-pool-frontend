@@ -1,10 +1,8 @@
 import * as React from 'react';
-import cn from 'classnames';
 
-import { Grid, Card, CardContent } from 'components';
+import { Grid, Divider, Box } from 'components';
 import { PoolBalanceChart } from 'features/balance';
 import { PoolCompositionChart } from 'features/poolInfo';
-import { makeStyles } from 'utils/styles';
 import {
   AvgPoolAPY,
   PoolSize,
@@ -19,99 +17,67 @@ import {
 } from 'features/metrics';
 
 export function Stats() {
-  const classes = useStyles();
   return (
-    <Grid container direction="column">
-      <Grid item className={cn(classes.row, classes.withHorizontalBorder)}>
-        <Grid container>
-          <Grid item xs>
-            <Card className={classes.card}>
-              <CardContent className={classes.cardContent}>
-                <PoolSize />
-                <div className={classes.metricContainer}>
-                  <PoolSize24h />
-                </div>
-              </CardContent>
-            </Card>
+    <Box p={[7, 6]}>
+      <Grid container spacing={5}>
+        <Grid item xs container spacing={3} direction="column" justify="space-between">
+          <Grid item>
+            <PoolSize />
           </Grid>
-          <Grid item xs className={cn(classes.withVerticalBorder, classes.centerBlock)}>
-            <Card className={classes.card}>
-              <CardContent className={classes.cardContent}>
-                <AvgPoolAPY title="Pool APY" />
-                <AverageLoanAPY />
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs>
-            <Card className={classes.card}>
-              <CardContent className={classes.cardContent}>
-                <ActiveMembers />
-                <ActiveMembers24h />
-              </CardContent>
-            </Card>
+          <Grid item>
+            <PoolSize24h />
           </Grid>
         </Grid>
-      </Grid>
-      <Grid container className={classes.row}>
-        <Grid item xs className={classes.balanceChart}>
+        <Grid item>
+          <Divider orientation="vertical" />
+        </Grid>
+        <Grid item xs container spacing={3} direction="column" justify="space-between">
+          <Grid item>
+            <AvgPoolAPY title="Pool APY" />
+          </Grid>
+          <Grid item>
+            <AverageLoanAPY />
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Divider orientation="vertical" />
+        </Grid>
+        <Grid item xs container spacing={3} direction="column" justify="space-between">
+          <Grid item>
+            <ActiveMembers />
+          </Grid>
+          <Grid item>
+            <ActiveMembers24h />
+          </Grid>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Divider orientation="horizontal" />
+        </Grid>
+
+        <Grid item xs={4}>
           <PoolBalanceChart />
         </Grid>
-        <Grid item xs className={classes.centerBlock}>
-          <Card className={classes.card}>
-            <CardContent className={classes.cardContent}>
-              <LoanVolumeRequested />
-              <LoanVolumeGranted />
-              <AverageLoanSize />
-            </CardContent>
-          </Card>
+        <Grid item xs container spacing={3} direction="column" justify="space-between">
+          <Grid item>
+            <LoanVolumeRequested />
+          </Grid>
+          <Grid item>
+            <LoanVolumeGranted />
+          </Grid>
+          <Grid item>
+            <AverageLoanSize />
+          </Grid>
         </Grid>
-        <Grid item xs>
-          <Card className={classes.card}>
-            <CardContent className={classes.cardContent}>
-              <PoolCompositionChart />
-              <LoanApprovalRatio />
-            </CardContent>
-          </Card>
+        <Grid item xs container spacing={3} direction="column" justify="space-between">
+          <Grid item>
+            <PoolCompositionChart />
+          </Grid>
+          <Grid item>
+            <LoanApprovalRatio />
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </Box>
   );
 }
-
-const useStyles = makeStyles(() => ({
-  card: {
-    height: '100%',
-    boxShadow: 'none',
-  },
-  withVerticalBorder: {
-    borderLeft: '1px solid rgba(255,255,255,0.1)',
-    borderRight: '1px solid rgba(255,255,255,0.1)',
-  },
-  centerBlock: {
-    paddingLeft: 56,
-    paddingRight: 56,
-    marginRight: 50,
-    marginLeft: 50,
-  },
-  withHorizontalBorder: {
-    borderBottom: '1px solid rgba(255,255,255,0.1)',
-  },
-  row: {
-    padding: '50px 0',
-    margin: '0 50px',
-    width: 'calc(100% - 100px)',
-  },
-  cardContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    padding: '0 !important',
-    height: '100%',
-  },
-  metricContainer: {
-    marginTop: 30,
-  },
-  balanceChart: {
-    overflow: 'hidden',
-  },
-}));

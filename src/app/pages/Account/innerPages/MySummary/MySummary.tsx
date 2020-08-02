@@ -29,10 +29,10 @@ export function MySummary() {
         <Grid item xs={12}>
           <Grid container spacing={8}>
             <Grid item xs>
-              <BuyingShareButton variant="contained" color="primary" />
+              <BuyingShareButton variant="contained" color="primary" size="small" />
             </Grid>
             <Grid item xs>
-              <SellingShareButton variant="contained" color="primary" />
+              <SellingShareButton variant="contained" color="primary" size="small" />
             </Grid>
           </Grid>
         </Grid>

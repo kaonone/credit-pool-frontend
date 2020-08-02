@@ -11,7 +11,13 @@ export const useStyles = makeStyles(
     },
 
     totalLoans: {
+      display: 'flex',
       marginLeft: 150,
+    },
+
+    comingSoonLabel: {
+      marginLeft: -20,
+      marginTop: 14,
     },
   }),
   { name: 'Metrics' },

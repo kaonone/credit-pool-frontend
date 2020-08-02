@@ -28,14 +28,11 @@ export const Label: React.FC<Props> = props => {
       {icon && <>{icon}&nbsp;</>}
       {children}
       {hint && (
-        <>
-          &nbsp;
-          <Tooltip title={hint} placement="right">
-            <span>
-              <InfoIconV2 fontSize="small" />
-            </span>
-          </Tooltip>
-        </>
+        <Tooltip title={hint} placement="right">
+          <span className={classes.infoIcon}>
+            <InfoIconV2 fontSize="small" />
+          </span>
+        </Tooltip>
       )}
       {withComingSoon && (
         <span className={classes.comingSoonLabel}>
@@ -71,8 +68,12 @@ const useStyles = makeStyles(
       display: 'inline-flex',
     },
 
-    comingSoonLabel: {
+    infoIcon: {
       marginLeft: 10,
+    },
+
+    comingSoonLabel: {
+      marginLeft: 13,
     },
 
     inherit: {},

@@ -45,6 +45,11 @@ function getGradients(type: 'dark' | 'light') {
       colors.heliotrope2,
       colors.heliotrope,
     ]),
+    outlinedButton: makeGradient([
+      { color: colors.heliotrope, offset: '0%' },
+      { color: colors.royalBlue, offset: '33.3%' },
+      { color: colors.heliotrope, offset: '100%' },
+    ]),
     spartaIcon: makeGradient(
       type === 'dark'
         ? [colors.northWesternPurple, colors.darkPurple]
@@ -115,7 +120,7 @@ export const darkPalette = {
     main: colors.monza,
   },
   background: {
-    hint: colors.charade,
+    hint: colors.darkSpace,
     default: colors.obsidian,
     paper: colors.foggyNight,
     paperSecondary: colors.darkBlueMagenta,
@@ -319,12 +324,24 @@ function getTheme(type: 'light' | 'dark'): Theme {
 
       MuiTabs: {
         root: {
+          position: 'relative',
           display: 'inline-flex',
           overflow: 'hidden',
           minHeight: tabsHeight,
           borderRadius: tabsHeight / 2,
           padding: tabsIndicatorSpace,
-          border: `${tabsBorderWidth}px solid ${colors.heliotrope}`,
+          background: 'linear-gradient(to left, #544cf2, #d93cef)',
+
+          '&::before': {
+            content: "''",
+            position: 'absolute',
+            top: 1,
+            left: 1,
+            right: 1,
+            bottom: 1,
+            borderRadius: tabsHeight / 2,
+            background: colors.foggyNight,
+          },
         },
 
         indicator: {
@@ -341,16 +358,41 @@ function getTheme(type: 'light' | 'dark'): Theme {
           overflow: 'hidden',
           borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
         },
+
+        flexContainer: {
+          height: '100%',
+        },
       },
 
       MuiTab: {
         root: {
+          position: 'relative',
+          overflow: 'visible',
           minHeight: 'unset',
           padding: defaultTheme.spacing(0.2, 1.5),
           textTransform: 'unset',
           fontSize: '1rem',
+          fontWeight: 300,
           lineHeight: 1.5,
           borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
+
+          '&::after': {
+            content: "''",
+            position: 'absolute',
+            left: 0,
+            width: 1,
+            top: 3,
+            bottom: 3,
+            background: 'currentColor',
+            opacity: 0,
+            transition: defaultTheme.transitions.create('opacity'),
+          },
+
+          '&:not($selected)': {
+            '& + &::after': {
+              opacity: 0.2,
+            },
+          },
 
           '&$selected': {
             color: colors.white,
@@ -377,6 +419,14 @@ function getTheme(type: 'light' | 'dark'): Theme {
       // @ts-ignore
       MuiTabPanel: {
         root: {
+          padding: 0,
+        },
+      },
+
+      MuiDialogTitle: {
+        root: {
+          fontSize: '1.375rem',
+          fontWeight: 300,
           padding: 0,
         },
       },

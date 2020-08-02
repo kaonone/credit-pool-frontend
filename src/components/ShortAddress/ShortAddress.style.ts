@@ -1,6 +1,6 @@
-import { makeStyles } from 'utils/styles';
+import { makeStyles, rgba } from 'utils/styles';
 
-export const useStyles = makeStyles(() => {
+export const useStyles = makeStyles(theme => {
   return {
     shortAddress: {
       fontSize: 'inherit',
@@ -8,7 +8,7 @@ export const useStyles = makeStyles(() => {
     },
     tooltip: {
       cursor: 'pointer',
-      borderBottom: '1px dashed',
+      borderBottom: `1px dashed ${rgba(theme.palette.text.primary, 0.5)}`,
     },
   };
 });

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { makeStyles } from 'utils/styles';
+import { ComingSoon } from 'components';
 
 type Props = {
   reason: string;
@@ -19,7 +20,9 @@ export function LoanProposalAdditionalInfo(props: Props) {
       <div>
         Risk Score:
         {riskScore === null ? (
-          <> Not available yet</>
+          <div className={classes.comingSoonLabel}>
+            <ComingSoon variant="label" />
+          </div>
         ) : (
           <span className={classes.riskScoreValue}>{riskScore}</span>
         )}
@@ -37,6 +40,11 @@ const useStyles = makeStyles(
     },
     reason: {
       fontStyle: 'italic',
+    },
+    comingSoonLabel: {
+      display: 'inline-block',
+      marginLeft: '10px',
+      verticalAlign: 'middle',
     },
     riskScoreValue: {
       color: '#6bff97',

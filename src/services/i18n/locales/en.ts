@@ -11,9 +11,9 @@ const en = {
       },
       account: {
         tabs: {
-          summary: 'My summary',
-          stakes: 'My stakes',
-          borrows: 'My borrows',
+          summary: 'My Summary',
+          stakes: 'My Stakes',
+          borrows: 'My Borrows',
         },
       },
       history: {
@@ -85,8 +85,8 @@ const en = {
     auth: {
       applicationNetwork: 'This application works with the network "%{networkName}"',
       modalTitle: {
-        connected: 'Disconnect or change wallet:',
-        disconnected: 'Choose your wallet:',
+        connected: 'Disconnect or change wallet',
+        disconnected: 'Connect wallet',
         connectedTo: 'Connected to',
         disconnect: 'Disconnect',
       },
@@ -323,6 +323,19 @@ const en = {
           CLOSED: 'closed',
         },
       },
+      myStakes: {
+        noOutstandingLoans:
+          "You don't have outstanding loans at the moment. Wait for borrowers to activate pending loans you have a stake in, or just chill like this cat",
+        noPendingLoans:
+          'There is no pending loans you have a stake in at the moment. Search for new proposals!',
+        lendButton: 'Lend',
+      },
+      myBorrows: {
+        noCurrentLoans: "You don't have any active loans at the moment. Chill!",
+        noPendingLoans:
+          "You don't have any pending loans at the moment. If you wish to make a loan request — be prepared to stake 50% of collateral",
+        borrowButton: 'Borrow',
+      },
     },
   },
   utils: {
@@ -342,8 +355,8 @@ const en = {
   },
   components: {
     pagination: {
-      itemsPerPage: 'Items per page',
-      currentPagination: '%{from} - %{to} of %{total}',
+      currentPagination: '%{from}-%{to}',
+      ofTotal: 'of %{total}',
       currentSubgraphPagination: '%{from} - %{to}',
     },
     metrics: {

@@ -29,6 +29,7 @@ const useStyles = makeStyles(
   () => ({
     root: {},
     title: {
+      marginBottom: 13,
       fontSize: 16,
     },
     value: {

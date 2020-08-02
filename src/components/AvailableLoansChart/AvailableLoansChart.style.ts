@@ -18,7 +18,7 @@ export const useStyles = makeStyles(
       alignItems: 'center',
     },
     title: {
-      marginTop: 4,
+      marginBottom: 15,
       maxWidth: 120,
     },
     sum: {

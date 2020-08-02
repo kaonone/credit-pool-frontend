@@ -13,7 +13,7 @@ export const useStyles = makeStyles(
     },
 
     tableTitle: {
-      marginBottom: 20,
+      marginBottom: 30,
     },
   }),
   { name: 'Borrows' },

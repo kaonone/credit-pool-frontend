@@ -19,13 +19,7 @@ const mkColumns = (
     renderTitle: () => 'Borrower',
     cellContent: {
       kind: 'simple',
-      render: x => (
-        <>
-          <div style={{ display: 'inline-flex' }}>
-            <AccountAddress address={x.borrower} size="small" />
-          </div>
-        </>
-      ),
+      render: x => <AccountAddress address={x.borrower} size="small" />,
     },
   },
 

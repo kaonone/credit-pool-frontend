@@ -1,16 +1,19 @@
 import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import BN from 'bn.js';
 
-import { NewTable, Loading, Hint, Typography } from 'components';
+import { NewTable, Loading, Hint, Typography, Button } from 'components';
 import { useSubgraphPagination, useSubscribable } from 'utils/react';
 import { useMyBorrowedPendingLoansQuery } from 'generated/gql/pool';
 import { MyBorrowedPendingLoansQuery } from 'generated/gql/subgraphRequests';
 import { getLoanDuePaymentDate } from 'model';
 import { PercentAmount, LiquidityAmount, Currency } from 'model/entities';
 import { useApi } from 'services/api';
+import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
+import { routes } from 'app/routes';
 
-import { makeTableColumns } from './columns';
 import { UserDebt } from '../../../models';
+import { makeTableColumns } from './columns';
 import { useStyles } from './PendingLoans.style';
 
 type Props = {
@@ -32,9 +35,12 @@ function convertDebts(
   }));
 }
 
+const tKeys = tKeysAll.features.loans.myBorrows;
+
 export const PendingLoans: React.FC<Props> = props => {
   const { account } = props;
   const classes = useStyles();
+  const { t } = useTranslate();
 
   const api = useApi();
 
@@ -67,16 +73,30 @@ export const PendingLoans: React.FC<Props> = props => {
     <div className={classes.root}>
       <Loading gqlResults={result} meta={[liquidityCurrencyMeta, loansConfigMeta]}>
         {!entries.length ? (
-          <Hint>
-            <Typography>Not found</Typography>
+          <Hint renderButton={renderBorrowButton}>
+            <Typography>{t(tKeys.noPendingLoans.getKey())}</Typography>
           </Hint>
         ) : (
           <>
-            <NewTable.Component columns={columns} entries={entries} />
+            <NewTable.Component columns={columns} entries={entries} withStripes />
             {paginationView}
           </>
         )}
       </Loading>
     </div>
   );
+
+  function renderBorrowButton() {
+    return (
+      <Button
+        component={Link}
+        variant="contained"
+        color="primary"
+        size="small"
+        to={routes.borrow.getRedirectPath()}
+      >
+        {t(tKeys.borrowButton.getKey())}
+      </Button>
+    );
+  }
 };
