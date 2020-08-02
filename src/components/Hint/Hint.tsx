@@ -14,20 +14,13 @@ function Hint(props: Props) {
   const { children, renderIcon, renderButton, size = 'medium', color = 'default' } = props;
   const classes = useStyles();
 
-  const className = cn(
-    classes.root,
-    {
-      [classes.isSmall]: size === 'small',
-      [classes.isMedium]: size === 'medium',
-    },
-    {
-      [classes.colorDefault]: color === 'default',
-      [classes.colorError]: color === 'error',
-    },
-    {
-      [classes.withButton]: renderButton !== undefined,
-    },
-  );
+  const className = cn(classes.root, {
+    [classes.isSmall]: size === 'small',
+    [classes.isMedium]: size === 'medium',
+    [classes.colorDefault]: color === 'default',
+    [classes.colorError]: color === 'error',
+    [classes.withButton]: renderButton !== undefined,
+  });
 
   return (
     <div className={className}>
