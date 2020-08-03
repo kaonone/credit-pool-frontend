@@ -1,5 +1,6 @@
 // tslint:disable: max-line-length
 import * as React from 'react';
+import * as R from 'ramda';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { makeStyles } from 'utils/styles';
@@ -20,7 +21,7 @@ function Messari(props: React.ComponentProps<typeof SvgIcon>) {
   const classes = useStyles();
 
   return (
-    <SvgIcon {...props} className={classes.root} viewBox="0 0 119 40">
+    <SvgIcon {...props} classes={R.pick(['root'], classes)} viewBox="0 0 119 40">
       <defs />
       <g fill="none">
         <rect className={classes.rect} width="118.49" height="40" rx="6" fill="currentColor" />

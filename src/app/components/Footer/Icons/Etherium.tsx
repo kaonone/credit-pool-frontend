@@ -1,5 +1,6 @@
 // tslint:disable: max-line-length
 import * as React from 'react';
+import * as R from 'ramda';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { makeStyles } from 'utils/styles';
@@ -15,7 +16,7 @@ function Ethereum(props: React.ComponentProps<typeof SvgIcon>) {
   const classes = useStyles();
 
   return (
-    <SvgIcon {...props} classes={classes} viewBox="0 0 160 40">
+    <SvgIcon {...props} classes={R.pick(['root'], classes)} viewBox="0 0 160 40">
       <g fill="none">
         <rect width="159.2" height="40" rx="6" fill="currentColor" />
         <g stroke="#2D2D2D" strokeWidth=".3">
