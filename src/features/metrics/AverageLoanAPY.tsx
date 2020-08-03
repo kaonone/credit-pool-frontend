@@ -1,11 +1,10 @@
 import * as React from 'react';
 
-import { Metric, Label, ChartBlock } from 'components';
+import { Metric, Label, ChartBlock, FormattedAmount } from 'components';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
+import { percentAmount } from 'utils/mock';
 
 const tKeys = tKeysAll.components.metrics;
-
-const valueMock = '15.40';
 
 export function AverageLoanAPY() {
   const { t } = useTranslate();
@@ -13,8 +12,8 @@ export function AverageLoanAPY() {
   return (
     <Metric
       title={<Label withComingSoon>{t(tKeys.averageLoanAPY.getKey())}</Label>}
-      value={valueMock}
-      chart={<ChartBlock value="1234" variant="increase" sign="+" />}
+      value={<FormattedAmount sum={percentAmount} />}
+      chart={<ChartBlock value="0" variant="increase" sign="+" />}
     />
   );
 }

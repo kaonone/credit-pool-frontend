@@ -26,15 +26,13 @@ function CompositionChart({
   const renderLegend = React.useCallback(
     () => (
       <ul className={classes.legend}>
-        {sortedData.map(({ label, value }, index) => (
+        {sortedData.map(({ label }, index) => (
           <li
             className={classes.legendItem}
             key={label}
             style={{ color: (labelColors && labelColors[index]) || sectorColors[index] }}
           >
-            <span className={classes.label}>
-              {`${value}%`}&nbsp;{label}
-            </span>
+            <span className={classes.label}>0%&nbsp;{label}</span>
           </li>
         ))}
       </ul>
