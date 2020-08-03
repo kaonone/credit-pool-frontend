@@ -1,23 +1,22 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import Dialog, { DialogProps } from '@material-ui/core/Dialog';
-import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
 import DialogContent from '@material-ui/core/DialogContent';
+import CloseIcon from '@material-ui/icons/Close';
 
-import { makeStyles, WithDarkTheme } from 'utils/styles';
+import { makeStyles } from 'utils/styles';
+
+import { Button } from '../Button/Button';
 
 interface IChildrenProps {
   closeModal(): void;
 }
 
 type ButtonProps = Pick<
-  GetProps<typeof Button>,
+  React.ComponentProps<typeof Button>,
   'variant' | 'color' | 'disabled' | 'fullWidth' | 'size' | 'startIcon'
 >;
 
 interface IProps extends ButtonProps {
-  modalType?: 'drawer' | 'dialog';
   dialogMaxWidth?: DialogProps['maxWidth'];
   content: React.ReactNode;
   children: React.ReactNode | ((props: IChildrenProps) => React.ReactNode);
@@ -25,7 +24,7 @@ interface IProps extends ButtonProps {
 
 function ModalButton(props: IProps) {
   const classes = useStyles();
-  const { children, content, dialogMaxWidth, modalType = 'drawer', ...rest } = props;
+  const { children, content, dialogMaxWidth, ...rest } = props;
   const [isOpened, setIsOpened] = React.useState(false);
 
   const openModal = React.useCallback(() => setIsOpened(true), []);
@@ -36,27 +35,26 @@ function ModalButton(props: IProps) {
       <Button {...rest} onClick={openModal}>
         {content}
       </Button>
-      {modalType === 'dialog' && (
-        <Dialog fullWidth maxWidth={dialogMaxWidth || 'sm'} open={isOpened} onClose={closeModal}>
-          <DialogContent className={classes.dialogContent}>
-            {typeof children === 'function' ? children({ closeModal }) : children}
-          </DialogContent>
-        </Dialog>
-      )}
-      {modalType === 'drawer' && (
-        <WithDarkTheme>
-          <Drawer open={isOpened} anchor="right" onClose={closeModal}>
-            {typeof children === 'function' ? children({ closeModal }) : children}
-          </Drawer>
-        </WithDarkTheme>
-      )}
+      <Dialog fullWidth maxWidth={dialogMaxWidth || 'sm'} open={isOpened} onClose={closeModal}>
+        <DialogContent className={classes.dialogContent}>
+          <CloseIcon className={classes.closeButton} onClick={closeModal} />
+          {typeof children === 'function' ? children({ closeModal }) : children}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   dialogContent: {
-    padding: theme.spacing(2.5),
+    padding: '50px !important',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 24,
+    right: 24,
+    opacity: 0.5,
+    cursor: 'pointer',
   },
 }));
 

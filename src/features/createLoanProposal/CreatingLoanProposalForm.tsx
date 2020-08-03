@@ -37,7 +37,7 @@ interface FormData {
 
 interface CreatingLoanProposalFormProps {
   account: string;
-  onCancel(): void;
+  onCancel?(): void;
 }
 
 const fieldNames: FieldNames<FormData> = {
@@ -68,8 +68,8 @@ export function CreatingLoanProposalForm({ onCancel, account }: CreatingLoanProp
     () =>
       currentToken
         ? api.loanModule
-            .getMaxAvailableLoanSizeInDai$(account)
-            .pipe(map(loanSize => roundWei(loanSize, currentToken.decimals, 'floor', 2)))
+            .getMaxAvailableLoanSize$(account)
+            .pipe(map(loanSize => roundWei(loanSize.toBN(), currentToken.decimals, 'floor', 2)))
         : empty(),
     [api, account, currentToken],
   );

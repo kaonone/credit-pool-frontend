@@ -1,13 +1,13 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 
+import { ButtonProps } from 'components';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { ModalButton } from 'components/ModalButton/ModalButton';
 import { WithAccount } from 'app/components/WithAccount/WithAccount';
 
 import { GivingStakeForm } from './GivingStakeForm';
 
-type IProps = React.ComponentPropsWithoutRef<typeof Button> & {
+type IProps = ButtonProps & {
   loanSize: string;
   proposalId: string;
   borrower: string;
@@ -20,7 +20,7 @@ export function GivingStakeButton(props: IProps) {
   const { t } = useTranslate();
 
   return (
-    <ModalButton content={t(tKeys.buttonTitle.getKey())} fullWidth {...restProps}>
+    <ModalButton content={t(tKeys.buttonTitle.getKey())} {...restProps}>
       {({ closeModal }) => (
         <WithAccount>
           {({ account }) => (

@@ -1,0 +1,64 @@
+name: Deploy to GH Pages
+
+on:
+  push:
+    branches:
+    - testnet
+    - sandbox
+    - mainnet
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10
+
+      - name: Install dependencies
+        run: yarn
+
+      - run: echo Generate code
+      - run: yarn codegen:testnet
+        if: github.ref == 'refs/heads/testnet'
+      - run: yarn codegen:sandbox
+        if: github.ref == 'refs/heads/sandbox'
+      - run: yarn codegen:mainnet
+        if: github.ref == 'refs/heads/mainnet'
+
+      - name: Test
+        run: yarn test
+
+      - run: echo Build application
+      - run: yarn build:testnet
+        if: github.ref == 'refs/heads/testnet'
+      - run: yarn build:sandbox
+        if: github.ref == 'refs/heads/sandbox'
+      - run: yarn build:mainnet
+        if: github.ref == 'refs/heads/mainnet'
+
+      - run: echo Deploy 🚀
+      - uses: JamesIves/github-pages-deploy-action@releases/v3
+        if: github.ref == 'refs/heads/testnet'
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: build
+          REPOSITORY_NAME: akropolisio/sparta-testnet-frontend
+      - uses: JamesIves/github-pages-deploy-action@releases/v3
+        if: github.ref == 'refs/heads/sandbox'
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: build
+      - uses: JamesIves/github-pages-deploy-action@releases/v3
+        if: github.ref == 'refs/heads/mainnet'
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: build
+          REPOSITORY_NAME: akropolisio/sparta-mainnet-frontend

@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
 import { FieldRenderProps } from 'react-final-form';
-import { GetProps } from '_helpers';
 
 import { useTranslate } from 'services/i18n';
 import { getFieldWithComponent } from 'utils/react';
 
 import { NumberInput } from '../inputs';
 
-type IProps = Omit<GetProps<typeof NumberInput>, 'ref'> & FieldRenderProps<any, HTMLElement>;
+type IProps = Omit<React.ComponentProps<typeof NumberInput>, 'ref'> &
+  FieldRenderProps<any, HTMLElement>;
 
 function NumberInputFieldComponent(props: IProps) {
   const { input, meta, ...rest } = props;
@@ -17,7 +17,7 @@ function NumberInputFieldComponent(props: IProps) {
       ? rest.error && meta.error && t(meta.error)
       : meta.touched && meta.error && t(meta.error);
 
-  const onChange: GetProps<typeof NumberInput>['onChange'] = useCallback(
+  const onChange: React.ComponentProps<typeof NumberInput>['onChange'] = useCallback(
     value => input.onChange(value.floatValue),
     [input.onChange],
   );

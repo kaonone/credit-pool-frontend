@@ -7,7 +7,6 @@ import React, {
   useState,
 } from 'react';
 import BN from 'bn.js';
-import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Observable } from 'rxjs';
 
@@ -18,6 +17,7 @@ import { makeStyles } from 'utils/styles';
 import { ICurrency, IToBN } from 'model/types';
 import { useSubscribable } from 'utils/react';
 
+import { Button } from '../Button/Button';
 import { TextInput } from './TextInput';
 
 interface IOwnProps<A extends Amount<ICurrency>> {
@@ -51,7 +51,7 @@ export function AmountInput<A extends Amount<ICurrency>>(props: AmountInputProps
 
   const defaultCurrency = currencies[0] as A['currency'] | undefined;
 
-  const currentValue = tokenAmount?.value || new BN(0);
+  const currentValue = tokenAmount?.toBN() || new BN(0);
   const currentCurrency = tokenAmount?.currency || defaultCurrency;
   const currentDecimals = currentCurrency?.decimals || 0;
 

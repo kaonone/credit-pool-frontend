@@ -1,72 +1,83 @@
 import BN from 'bn.js';
 
-import { ICurrency, IToBN } from 'model/types';
-import { bnToBn } from 'utils/bn';
+import { ICurrency, IToBN, IToFraction, Decimal } from 'model/types';
+import { decimalsToWei } from 'utils/bn';
 
-export abstract class Amount<C extends ICurrency> implements IToBN {
+import { Fraction } from './Fraction';
+
+export type Value = number | string | BN | IToBN | Fraction | IToFraction;
+
+export abstract class Amount<C extends ICurrency> implements IToBN, IToFraction {
   public abstract _type: symbol;
-  public readonly value: BN;
+  private value: Fraction;
 
-  constructor(amount: string | BN | IToBN, public readonly currency: C) {
-    this.value = bnToBn(amount);
+  constructor(amount: Value, public readonly currency: C) {
+    this.value = toFraction(amount);
   }
 
-  public abstract makeAmount(amount: string | BN, currency: C): this;
-  public abstract toFormattedString(precision?: number): string;
+  public abstract makeAmount(amount: Value, currency: C): this;
+  public abstract toFormattedString(precision?: number, withSymbol?: boolean): string;
 
-  public withValue(newValue: string | BN | IToBN): this {
-    return this.makeAmount(bnToBn(newValue), this.currency);
+  public withValue(newValue: Value): this {
+    return this.makeAmount(toFraction(newValue), this.currency);
   }
 
-  public sub(value: BN | Amount<C>): this {
-    return this.makeAmount(this.value.sub(toBN(value)), this.currency);
+  public sub(value: Value): this {
+    return this.makeAmount(this.value.sub(toFraction(value)), this.currency);
   }
 
-  public add(value: BN | Amount<C>): this {
-    return this.makeAmount(this.value.add(toBN(value)), this.currency);
+  public add(value: Value): this {
+    return this.makeAmount(this.value.add(toFraction(value)), this.currency);
   }
 
-  public div(value: BN | Amount<C>): this {
-    return this.makeAmount(this.value.div(toBN(value)), this.currency);
+  public div(value: Value): this {
+    return this.makeAmount(this.value.div(toFraction(value)), this.currency);
   }
 
-  public divn(value: number): this {
-    return this.makeAmount(this.value.divn(value), this.currency);
-  }
-
-  public mul(value: BN | Amount<C>): this {
-    return this.makeAmount(this.value.mul(toBN(value)), this.currency);
-  }
-
-  public muln(value: number): this {
-    return this.makeAmount(this.value.muln(value), this.currency);
+  public mul(value: Value): this {
+    return this.makeAmount(this.value.mul(toFraction(value)), this.currency);
   }
 
   public isZero(): boolean {
     return this.value.isZero();
   }
 
-  public gt(value: BN | Amount<C>): boolean {
-    return this.value.gt(toBN(value));
+  public isNeg(): boolean {
+    return this.value.isNeg();
   }
 
-  public gtn(value: number): boolean {
-    return this.value.gtn(value);
+  // TODO make allowance for currency.decimals
+  public gt(value: Value): boolean {
+    return this.value.gt(toFraction(value));
   }
 
   public toBN(): BN {
+    return this.value.toBN();
+  }
+
+  public toFraction(): Fraction {
     return this.value;
   }
 
+  public toDecimal(precision: number): Decimal {
+    return this.value.toDecimal(this.currency.decimals, precision);
+  }
+
   public toNumber(): number {
-    return this.value.toNumber();
+    return this.value.div(decimalsToWei(this.currency.decimals)).toNumber();
   }
 
   public toString(base?: number | 'hex' | undefined, length?: number | undefined): string {
-    return this.value.toString(base, length);
+    return this.toBN().toString(base, length);
   }
 }
 
-function toBN(valueOrAmount: BN | Amount<ICurrency>): BN {
-  return BN.isBN(valueOrAmount) ? valueOrAmount : valueOrAmount.value;
+function toFraction(value: Value): Fraction {
+  if (value instanceof Fraction) {
+    return value;
+  }
+  if (typeof value === 'object' && 'toFraction' in value) {
+    return value.toFraction();
+  }
+  return new Fraction(value);
 }

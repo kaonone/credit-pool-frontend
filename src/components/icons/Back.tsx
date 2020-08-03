@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-function Back(props: GetProps<typeof SvgIcon>) {
+function Back(props: React.ComponentProps<typeof SvgIcon>) {
   return (
     <SvgIcon {...props} viewBox="0 0 24 24">
       <path

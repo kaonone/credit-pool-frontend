@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
-function SellCashIcon(props: GetProps<typeof SvgIcon>) {
+function SellCashIcon(props: React.ComponentProps<typeof SvgIcon>) {
   return (
     <SvgIcon {...props} viewBox="0 0 20 20">
       <path

@@ -1,26 +1,19 @@
-import { Observable, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, BehaviorSubject, timer } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { autobind } from 'core-decorators';
 import * as R from 'ramda';
+import BN from 'bn.js';
 
 import { ETH_NETWORK_CONFIG } from 'env';
 import { createDeFiModule } from 'generated/contracts';
 import { memoize } from 'utils/decorators';
-import { TokenAmount } from 'model/entities';
+import { TokenAmount, PercentAmount } from 'model/entities';
+import { getCurrentValueOrThrow } from 'utils/rxjs';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
-import { TokensApi } from './TokensApi';
-
-function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNullable<T> {
-  const value = subject.getValue();
-
-  if (value === null || value === undefined) {
-    throw new Error('Subject is not contain non nullable value');
-  }
-
-  return value as NonNullable<T>;
-}
+import { Erc20Api } from './Erc20Api';
+import { SubgraphApi } from './SubgraphApi';
 
 export class DefiModuleApi {
   private readonlyContract: Contracts['defiModule'];
@@ -29,7 +22,8 @@ export class DefiModuleApi {
   constructor(
     private web3Manager: Web3ManagerModule,
     private transactionsApi: TransactionsApi,
-    private tokensApi: TokensApi,
+    private erc20Api: Erc20Api,
+    private subgraphApi: SubgraphApi,
   ) {
     this.readonlyContract = createDeFiModule(
       web3Manager.web3,
@@ -43,10 +37,20 @@ export class DefiModuleApi {
       .subscribe(this.txContract);
   }
 
+  @memoize()
+  public getAvgPoolAPY$(): Observable<PercentAmount> {
+    const reloadDelay = 60 * 60 * 1000;
+
+    return timer(0, reloadDelay).pipe(
+      map(() => new BN(Date.now()).divn(1000).subn(24 * 60 * 60)),
+      switchMap(this.subgraphApi.getAvgPoolAPY$),
+    );
+  }
+
   @memoize(R.identity)
   public getAvailableInterest$(account: string): Observable<TokenAmount> {
-    return this.tokensApi.toTokenAmount(
-      ETH_NETWORK_CONFIG.contracts.dai,
+    return this.erc20Api.toTokenAmount(
+      ETH_NETWORK_CONFIG.tokens.dai,
       this.readonlyContract.methods.availableInterest({ account }, [
         this.readonlyContract.events.InvestmentDistributionCreated(),
         this.readonlyContract.events.WithdrawInterest({ filter: { account } }),

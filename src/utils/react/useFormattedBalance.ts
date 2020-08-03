@@ -14,7 +14,7 @@ type FormattedBalance = {
 };
 
 const addressByToken: Record<TokenType, string> = {
-  dai: ETH_NETWORK_CONFIG.contracts.dai,
+  dai: ETH_NETWORK_CONFIG.tokens.dai,
   ptk: ETH_NETWORK_CONFIG.contracts.ptk,
 };
 
@@ -25,10 +25,9 @@ export function useFormattedBalance(
   variant: 'short' | 'long' = 'long',
 ): [FormattedBalance, ISubscriptionMeta] {
   const api = useApi();
-  const [token, tokenMeta] = useSubscribable(
-    () => api.tokens.getToken$(addressByToken[tokenType]),
-    [tokenType],
-  );
+  const [token, tokenMeta] = useSubscribable(() => api.erc20.getToken$(addressByToken[tokenType]), [
+    tokenType,
+  ]);
 
   return [
     (token && {

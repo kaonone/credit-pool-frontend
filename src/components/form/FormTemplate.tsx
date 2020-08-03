@@ -2,10 +2,13 @@ import React from 'react';
 import { Form, FormProps } from 'react-final-form';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import cn from 'classnames';
 
 import { Hint } from 'components/Hint/Hint';
+import { makeStyles } from 'utils/styles';
+
+import { Button } from '../Button/Button';
 
 type AnyObject = Record<string, any>;
 
@@ -16,13 +19,15 @@ export type FormTemplateProps<FormValues extends AnyObject> = Omit<
   title: string;
   cancelButton?: string;
   submitButton?: string;
-  onCancel: () => void;
+  onCancel?(): void;
 };
 
 export function FormTemplate<FormValues extends AnyObject>(props: FormTemplateProps<FormValues>) {
   const { title, cancelButton, submitButton, onCancel, ...restProps } = props;
 
   const children = React.Children.toArray(restProps.children);
+
+  const classes = useStyles();
 
   return (
     <Form
@@ -31,20 +36,26 @@ export function FormTemplate<FormValues extends AnyObject>(props: FormTemplatePr
     >
       {({ handleSubmit, submitError, submitting, dirtySinceLastSubmit }) => (
         <form onSubmit={handleSubmit}>
-          <Grid container justify="center" spacing={2}>
+          <Grid container justify="center" spacing={4}>
             <Grid item xs={12}>
               <Typography variant="h5" gutterBottom>
                 {title}
               </Typography>
-
-              {children[0]}
             </Grid>
-            {children.length > 1 &&
-              children.slice(1).map((item, index) => (
-                <Grid key={index} item xs={12}>
-                  {item}
-                </Grid>
-              ))}
+            {children.map((item, index) => (
+              <Grid
+                key={index}
+                item
+                xs={12}
+                className={cn(classes.formElement, {
+                  // TODO uncomment after forms redesign
+                  // [classes.withoutBorder]: index === children.length - 1,
+                  [classes.withoutBorder]: true,
+                })}
+              >
+                {item}
+              </Grid>
+            ))}
             {!dirtySinceLastSubmit && !!submitError && (
               <Grid item xs={12}>
                 <Hint>
@@ -53,9 +64,11 @@ export function FormTemplate<FormValues extends AnyObject>(props: FormTemplatePr
               </Grid>
             )}
             <Grid item xs={6}>
-              <Button variant="outlined" fullWidth onClick={onCancel}>
-                {cancelButton || 'Cancel'}
-              </Button>
+              {onCancel && (
+                <Button variant="outlined" fullWidth onClick={onCancel}>
+                  {cancelButton || 'Cancel'}
+                </Button>
+              )}
             </Grid>
             <Grid item xs={6}>
               <Button
@@ -74,3 +87,14 @@ export function FormTemplate<FormValues extends AnyObject>(props: FormTemplatePr
     </Form>
   );
 }
+
+const useStyles = makeStyles(() => ({
+  formElement: {
+    borderBottom: '1px solid rgba(255,255,255,0.1)',
+    marginBottom: 24,
+  },
+  withoutBorder: {
+    border: 'none',
+    marginBottom: 0,
+  },
+}));

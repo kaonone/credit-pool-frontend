@@ -1,5 +1,7 @@
 import BN from 'bn.js';
 
+import type { Fraction } from './entities/Fraction';
+
 // TODO remove this
 export type TokenType = 'dai' | 'ptk';
 
@@ -18,12 +20,21 @@ export interface ICurrency {
   equals(a: this): boolean;
 }
 
+export type Decimal = {
+  integer: string;
+  fractional: string;
+};
+
 export interface IBrand {
   _type: symbol;
 }
 
 export interface IToBN {
   toBN(): BN;
+}
+
+export interface IToFraction {
+  toFraction(): Fraction;
 }
 
 export function isToBN(value: unknown): value is IToBN {

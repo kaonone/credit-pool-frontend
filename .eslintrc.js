@@ -83,5 +83,6 @@ module.exports = {
     'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
     'no-undef': 'off',
     'consistent-return': 'off',
+    'default-case': 'off',
   },
 };

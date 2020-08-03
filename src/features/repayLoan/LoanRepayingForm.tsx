@@ -77,7 +77,7 @@ export function LoanRepayingForm({
     new BN(0),
   );
   const [availableDaiBalance, availableDaiBalanceMeta] = useSubscribable(
-    () => api.tokens.getDaiBalance$(account || zeroAddress),
+    () => api.erc20.getDaiBalance$(account || zeroAddress),
     [api, account],
     new BN(0),
   );
@@ -92,13 +92,13 @@ export function LoanRepayingForm({
         repaymentMethod === 'fromAvailablePoolBalance'
           ? lessThenOrEqual(
               availablePoolBalance,
-              amount.value,
+              amount.toBN(),
               () => amount.withValue(availablePoolBalance).toFormattedString(),
               tKeys.insufficientBalanceError.getKey(),
             )
           : lessThenOrEqual(
               availableDaiBalance,
-              amount.value,
+              amount.toBN(),
               () => amount.withValue(availableDaiBalance).toFormattedString(),
               tKeys.insufficientBalanceError.getKey(),
             );
