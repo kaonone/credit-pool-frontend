@@ -137,7 +137,7 @@ export class FundsModuleApi {
     return lAmount.isZero()
       ? of(lAmount)
       : this.readonlyContract.methods.calculatePoolEnter(
-          { lAmount, liquidityCorrection: new BN(0) },
+          { lAmount },
           this.readonlyContract.events.Status(),
         );
   }

@@ -115,10 +115,11 @@ export class LoanModuleApi {
     debtInterestMultiplier: BN;
   }> {
     return combineLatest([
-      this.readonlyContracts.limits.methods.allLimits(
-        undefined,
-        this.readonlyContracts.limits.events.LimitChanged(),
-      ),
+      this.readonlyContracts.limits.methods.lDebtAmountMin(),
+      this.readonlyContracts.limits.methods.debtInterestMin(),
+      this.readonlyContracts.limits.methods.pledgePercentMin(),
+      this.readonlyContracts.limits.methods.lMinPledgeMax(),
+      this.readonlyContracts.limits.methods.debtLoadMax(),
       this.readonlyContracts.loan.methods.DEBT_REPAY_DEADLINE_PERIOD(),
       this.readonlyContracts.proposals.methods.COLLATERAL_TO_DEBT_RATIO(),
       this.readonlyContracts.proposals.methods.COLLATERAL_TO_DEBT_RATIO_MULTIPLIER(),
@@ -127,7 +128,11 @@ export class LoanModuleApi {
     ]).pipe(
       map(
         ([
-          [lDebtAmountMin, debtInterestMin, pledgePercentMin, lMinPledgeMax, debtLoadMax],
+          lDebtAmountMin,
+          debtInterestMin,
+          pledgePercentMin,
+          lMinPledgeMax,
+          debtLoadMax,
           debtRepayDeadlinePeriod,
           collateralToDebtRatio,
           collateralToDebtRatioMultiplier,

@@ -1,30 +1,6 @@
 [{
     "anonymous": false,
     "inputs": [{
-        "indexed": false,
-        "internalType": "enum ILoanLimitsModule.LoanLimitType",
-        "name": "limitType",
-        "type": "uint8"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "oldValue",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "newValue",
-        "type": "uint256"
-      }
-    ],
-    "name": "LimitChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [{
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -93,33 +69,7 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "MODULE_CDAI",
-    "outputs": [{
-      "internalType": "string",
-      "name": "",
-      "type": "string"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
     "name": "MODULE_CURVE",
-    "outputs": [{
-      "internalType": "string",
-      "name": "",
-      "type": "string"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "MODULE_DEFI",
     "outputs": [{
       "internalType": "string",
       "name": "",
@@ -326,11 +276,7 @@
   },
   {
     "constant": false,
-    "inputs": [{
-      "internalType": "address",
-      "name": "_pool",
-      "type": "address"
-    }],
+    "inputs": [],
     "name": "initialize",
     "outputs": [],
     "payable": false,
@@ -339,7 +285,11 @@
   },
   {
     "constant": false,
-    "inputs": [],
+    "inputs": [{
+      "internalType": "address",
+      "name": "_pool",
+      "type": "address"
+    }],
     "name": "initialize",
     "outputs": [],
     "payable": false,
@@ -469,50 +419,6 @@
       "name": "",
       "type": "uint256"
     }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "allLimits",
-    "outputs": [{
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
