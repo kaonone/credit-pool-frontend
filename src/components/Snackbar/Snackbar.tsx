@@ -39,6 +39,11 @@ function Snackbar(props: IProps) {
         horizontal: 'right',
       }}
       action={renderButton}
+      classes={{
+        variantInfo: classes.pending,
+        variantSuccess: classes.success,
+        variantError: classes.error,
+      }}
     >
       {children}
     </SnackbarProvider>
