@@ -304,7 +304,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
           backgroundColor: '#fff',
         },
         message: {
-          color: colors.rhino,
+          color: colors.obsidian,
         },
       },
 
