@@ -83,15 +83,6 @@ const makeColumns = (
   },
 
   {
-    renderTitle: () => 'Loan duration',
-    align: 'right',
-    cellContent: {
-      kind: 'simple',
-      render: x => <>{x.loanDuration}</>,
-    },
-  },
-
-  {
     renderTitle: () => (
       <Label inline hint="My collateral info">
         Collateral

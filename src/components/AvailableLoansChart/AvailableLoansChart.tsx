@@ -22,7 +22,7 @@ function AvailableLoansChart() {
       <div className={classes.sum}>
         <FormattedAmount sum={liquidityAmount} />
       </div>
-      <div className={classes.percentage}>70.00%</div>
+      <div className={classes.percentage}>0%</div>
     </div>
   );
 

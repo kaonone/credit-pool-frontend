@@ -55,7 +55,8 @@ export function AmountPrefiller(props: AmountPrefillerProps) {
             name={fieldName}
             fieldValue={value}
             size="small"
-            variant="contained"
+            variant="outlined"
+            color="primary"
             className={classes.buttonOverride}
           >
             <FormattedAmount sum={value} precision={0} /> -&gt; {sharePercent}

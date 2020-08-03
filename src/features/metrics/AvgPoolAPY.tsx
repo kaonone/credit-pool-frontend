@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Label, FormattedAmount, Metric, Loading } from 'components';
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
+import { percentAmount } from 'utils/mock';
 
 import { progressProps } from './common';
 
@@ -11,7 +12,7 @@ type Props = {
   hint?: string;
 };
 
-export function AvgPoolAPY(props: Props) {
+export function AvgPoolAPYOriginal(props: Props) {
   const { title = 'APY', hint } = props;
 
   const api = useApi();
@@ -27,6 +28,21 @@ export function AvgPoolAPY(props: Props) {
           {avgPoolAPY && <FormattedAmount sum={avgPoolAPY} />}
         </Loading>
       }
+    />
+  );
+}
+
+export function AvgPoolAPY(props: Props) {
+  const { title = 'APY', hint } = props;
+
+  return (
+    <Metric
+      title={
+        <Label hint={hint} withComingSoon>
+          {title}
+        </Label>
+      }
+      value={<FormattedAmount sum={percentAmount} />}
     />
   );
 }

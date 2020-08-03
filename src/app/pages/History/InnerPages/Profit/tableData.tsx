@@ -1,7 +1,10 @@
 import React from 'react';
+import { map } from 'rxjs/operators';
 
-import { NewTable, FormattedAmount, AccountAddress } from 'components';
+import { NewTable, FormattedAmount, AccountAddress, Loading } from 'components';
 import { TokenAmount } from 'model/entities';
+import { useApi } from 'services/api';
+import { useSubscribable } from 'utils/react';
 
 export type Order = {
   date: number;
@@ -30,7 +33,7 @@ export const columnsWithSubtable: Array<NewTable.models.Column<Order, Claim>> = 
     renderTitle: () => 'LPs Profit',
     cellContent: {
       kind: 'simple',
-      render: x => <FormattedAmount sum={x.profit} />,
+      render: x => <PTKToLiquidity sum={x.profit} />,
     },
   },
 
@@ -38,7 +41,7 @@ export const columnsWithSubtable: Array<NewTable.models.Column<Order, Claim>> = 
     renderTitle: () => 'Claimed',
     cellContent: {
       kind: 'simple',
-      render: x => <FormattedAmount sum={x.claimed} />,
+      render: x => <PTKToLiquidity sum={x.claimed} />,
     },
   },
 
@@ -70,10 +73,23 @@ export const columnsWithSubtable: Array<NewTable.models.Column<Order, Claim>> = 
 
           {
             renderTitle: () => 'Claimed',
-            renderCell: x => <FormattedAmount sum={x.amount} />,
+            renderCell: x => <PTKToLiquidity sum={x.amount} />,
           },
         ],
       },
     },
   },
 ];
+
+function PTKToLiquidity({ sum }: { sum: TokenAmount }) {
+  const api = useApi();
+  const [liquidity, liquidityMeta] = useSubscribable(
+    () =>
+      api.fundsModule.toLiquidityAmount$(
+        api.fundsModule.getPtkToDaiExitInfo$(sum.toString()).pipe(map(({ user }) => user)),
+      ),
+    [api, sum.toString()],
+  );
+
+  return <Loading meta={liquidityMeta}>{liquidity && <FormattedAmount sum={liquidity} />}</Loading>;
+}

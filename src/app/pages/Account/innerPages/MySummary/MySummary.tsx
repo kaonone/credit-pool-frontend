@@ -44,30 +44,30 @@ export function MySummary() {
             data={[
               {
                 asset: 'DAI',
-                apy: '0.25%',
-                earned: '100,220.45',
-                balance: '123,220.45',
+                apy: '0%',
+                earned: '0',
+                balance: '0',
               },
               {
                 asset: 'USDC',
-                apy: '0.25%',
-                earned: '100,220.45',
-                balance: '123,220.45',
+                apy: '0%',
+                earned: '0',
+                balance: '0',
               },
               {
                 asset: 'USDT',
-                apy: '0.25%',
-                earned: '100,220.45',
-                balance: '123,220.45',
+                apy: '0%',
+                earned: '0',
+                balance: '0',
               },
               {
                 asset: 'TUSD',
-                apy: '0.25%',
-                earned: '100,220.45',
-                balance: '123,220.45',
+                apy: '0%',
+                earned: '0',
+                balance: '0',
               },
             ]}
-            loansIssued="6,193.38"
+            loansIssued="0"
           />
         </Grid>
         <Grid item xs={5}>
