@@ -7,8 +7,13 @@ import { useStyles } from './Button.style';
 
 type ButtonClassKey = keyof ReturnType<typeof useStyles>;
 
+// hint to support gradient borders
+export type OwnProps = {
+  backgroundColor?: string;
+};
+
 interface ButtonTypeMap<P = {}, D extends React.ElementType = 'button'> {
-  props: P & MuiButtonTypeMap['props'];
+  props: P & MuiButtonTypeMap['props'] & OwnProps;
   defaultComponent: D;
   classKey: ButtonClassKey;
 }
@@ -22,8 +27,8 @@ const Button: OverridableComponent<ButtonTypeMap> = function ButtonFunc<
   P = {},
   D extends React.ElementType = 'button'
 >(props: ButtonProps<D, P>) {
-  const classes = useStyles();
-  const { classes: muiClasses = {}, ...rest } = props;
+  const classes = useStyles(props);
+  const { classes: muiClasses = {}, backgroundColor, ...rest } = props;
 
   return (
     <MuiButton
@@ -38,6 +43,7 @@ const Button: OverridableComponent<ButtonTypeMap> = function ButtonFunc<
         outlinedPrimary: cn(classes.outlinedPrimary, muiClasses.outlinedPrimary),
         ...rest.classes,
       }}
+      disableRipple
     />
   );
 };

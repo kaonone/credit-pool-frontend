@@ -11,7 +11,18 @@ generates:
       withComponent: false
       withHOC: false
       withHooks: true
-      reactApolloVersion: 3
+      scalars:
+        BigInt: string
+        BigDecimal: string
+        Bytes: string
+  src/generated/gql/subgraphRequests.ts:
+    documents: "./src/**/*.pool.graphql"
+    schema: "https://api.thegraph.com/subgraphs/name/in19farkt/akropolis-os-mainnet"
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request
+    config:
       scalars:
         BigInt: string
         BigDecimal: string

@@ -1,1 +1,0 @@
-export { PersonalMetrics } from './PersonalMetrics';

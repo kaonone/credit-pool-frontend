@@ -5,14 +5,39 @@ const en = {
     connectingWarning: 'You need connect to wallet',
     pages: {
       overview: {
-        poolBalanceTitle: 'Input/Output costs',
+        poolBalanceTitle: 'Pool Deposit/Withdrawal Price Curve',
         distributions: 'Distributions',
-        myBalanceTitle: 'My balance',
         poolInfoTitle: 'Pool information',
       },
-      balances: {
-        balanceChangesTitle: 'Deposit/Withdraw history',
-        earningsTitle: 'Earnings',
+      account: {
+        tabs: {
+          summary: 'My Summary',
+          stakes: 'My Stakes',
+          borrows: 'My Borrows',
+        },
+      },
+      history: {
+        tabs: {
+          transaction: 'Transaction History',
+          profit: 'LPs Profit',
+          liquidations: 'Liquidations',
+        },
+      },
+      strategies: {
+        liquidityProvisionTitle: 'Liquidity provision',
+        liquidityProvisionHint: 'Liquidity provision',
+        lendingTitle: 'Lending',
+        borrowingTitle: 'Borrowing',
+        liquidityAdvantages: 'Passive Interest, Lower Risks',
+        lendingAdvantages: 'High Interest, High Risk',
+        borrowingAdvantages: 'Only 50% Collateral',
+        liquidityButton: 'Become Liquidity Provider',
+        lendingButton: 'Lend',
+        noteAboutLending:
+          'In order to start lending, you first need to make a deposit & become a Sparta member.',
+        borrowingButton: 'Borrow',
+        noteAboutBorrowing:
+          'In order to take out a loan, you need to make a deposit first, covering 50% collateral for the loan you want to request.',
       },
     },
     components: {
@@ -46,11 +71,26 @@ const en = {
       privacyPolicy: 'Privacy Policy',
       termsConditions: 'Terms & Conditions',
       pointSystem: 'Point System',
+      statistics: 'Statistics',
+      governance: 'Governance',
+      account: 'Account',
+      lend: 'Lend',
+      borrow: 'Borrow',
+      liquidations: 'Liquidations',
+      history: 'History',
+      copyright: 'Sparta v1.0 by Akropolis Decentralised Ltd',
     },
   },
   features: {
     auth: {
       applicationNetwork: 'This application works with the network "%{networkName}"',
+      modalTitle: {
+        connected: 'Disconnect or change wallet',
+        disconnected: 'Connect wallet',
+        connectedTo: 'Connected to',
+        disconnect: 'Disconnect',
+      },
+      connect: 'Connect to wallet',
     },
     notifications: {
       'erc20.approve': {
@@ -120,16 +160,16 @@ const en = {
       },
     },
     sellShare: {
-      buttonTitle: 'Sell',
-      formTitle: 'Sell share',
+      buttonTitle: 'Withdraw',
+      formTitle: 'Withdraw',
       placeholder: 'Enter sum starting from %{amount}',
       confirmMessage: 'Are you sure you want withdraw %{sourceAmount}?',
       interestConfirmation:
         ' Additional ~%{interestAmount} will be deducted from your available balance as a payment for the the accumulated interest on your outstanding loans. Full amount to be written off from your available balance will be ~%{fullAmount}.',
     },
     buyShare: {
-      buttonTitle: 'Buy',
-      formTitle: 'Buy share',
+      buttonTitle: 'Deposit',
+      formTitle: 'Deposit',
       placeholder: 'Enter sum starting from %{amount}',
       confirmMessage: 'Are you sure you want deposit %{sourceAmount}?',
     },
@@ -174,15 +214,10 @@ const en = {
       confirmMessage:
         'Are you sure you want to unstake %{sourceAmount}? Your interest share will decrease by %{interestShareDelta}',
     },
-    cashExchange: {
+    changeLoanState: {
       activateLoanButton: {
         confirmMessage:
           'Are you sure you want to activate a loan? Please note that your loan will be transferred directly to your wallet.',
-      },
-      withdrawDefiYieldButton: {
-        buttonTitle: 'Withdraw',
-        confirmMessage:
-          'Are you sure you want to withdraw %{amount} from yield? Please note that your yield will be transferred directly to your wallet.',
       },
       cancelProposalButton: {
         confirmMessage: 'Are you sure you want to cancel a loan proposal?',
@@ -190,7 +225,7 @@ const en = {
       liquidateLoanButton: {
         confirmMessage: 'Are you sure you want to liquidate a loan?',
       },
-      unlockButton: {
+      unlockCollateralButton: {
         buttonTitle: 'Unlock',
         confirmMessage:
           'Are you sure you want to withdraw unlocked stake %{pledgeForUnlock} and earn %{earnForUnlock}?',
@@ -206,14 +241,6 @@ const en = {
         no: 'no',
         yes: 'yes',
       },
-    },
-    personalInformation: {
-      deposit: 'Deposit',
-      availableBalance: 'Available balance',
-      currentProfit: 'Profit',
-      defiYield: 'Yield',
-      locked: 'Locked',
-      credit: 'Current loans',
     },
     distributions: {
       claimsList: {
@@ -276,7 +303,6 @@ const en = {
     loans: {
       loansList: {
         myLoans: 'My loans',
-        myGuarantees: 'My guarantees',
         others: 'Others',
       },
       loansPanel: {
@@ -297,22 +323,18 @@ const en = {
           CLOSED: 'closed',
         },
       },
-    },
-    loanApplications: {
-      notFound: 'Loan applications not found',
-      lend: 'lend',
-      to: 'to',
-      apr: 'apr',
-      myStake: 'My stake',
-      collateral: 'Collateral',
-      timeLeft: 'Time left',
-      expansionPanelTitle: 'Reason',
-      status: {
-        PROPOSED: 'proposed',
-        APPROVED: 'approved',
-        DECLINED: 'declined',
-        PARTIALLY_REPAYED: 'partially repayed',
-        CLOSED: 'closed',
+      myStakes: {
+        noOutstandingLoans:
+          "You don't have outstanding loans at the moment. Wait for borrowers to activate pending loans you have a stake in, or just chill like this cat",
+        noPendingLoans:
+          'There is no pending loans you have a stake in at the moment. Search for new proposals!',
+        lendButton: 'Lend',
+      },
+      myBorrows: {
+        noCurrentLoans: "You don't have any active loans at the moment. Chill!",
+        noPendingLoans:
+          "You don't have any pending loans at the moment. If you wish to make a loan request — be prepared to stake 50% of collateral",
+        borrowButton: 'Borrow',
       },
     },
   },
@@ -333,12 +355,93 @@ const en = {
   },
   components: {
     pagination: {
-      itemsPerPage: 'Items per page',
-      currentPagination: '%{from} - %{to} of %{total}',
+      currentPagination: '%{from}-%{to}',
+      ofTotal: 'of %{total}',
       currentSubgraphPagination: '%{from} - %{to}',
     },
-    activitiesCard: {
-      expansionPanelTitle: 'Reason',
+    metrics: {
+      akro: {
+        description: 'Here is a title description',
+      },
+      myBalance: {
+        myBalance: 'My balance (USD)',
+        deposit: 'Deposit',
+        description: 'Here is a title description',
+      },
+      myPoolShare: {
+        myPoolShare: 'My Pool Share',
+        totalPoolLiquidity: 'Total Pool Liquidity',
+        description: 'Here is a title description',
+      },
+      apy: {
+        description: 'Here is a title description',
+        withdraw: 'Withdraw',
+      },
+      allMyIssuedLoans: {
+        label: 'Overall loans issued by me',
+      },
+      overallAPY: {
+        label: 'Overall APY',
+      },
+      risk: {
+        label: 'Risk',
+        description: 'Risk description',
+      },
+      outstandingLoans: {
+        label: 'Outstanding loans',
+        description: 'Outstanding loans description',
+      },
+      activeAPYFromOutstandingLoans: {
+        label: 'Active APY from outstanding loans',
+        description: 'Outstanding loans description',
+      },
+      poolSize: {
+        poolSize: 'Pool size',
+        established: 'Established',
+      },
+      dayChange: '24h Change',
+      poolAPY: 'Pool APY',
+      averageLoanAPY: 'Average Loan APY',
+      activeMembers: 'Active Members',
+      averageLoanSize: 'Average Loan Size',
+      loanVolumeGranted: 'Loan Volume Granted',
+      loanVolumeRequested: 'Loan Volume Requested',
+      loanApprovalRatio: 'Loan Approval Ratio',
+      totalValueLocked: 'Total Value Locked',
+      totalAKROEarned: 'Total AKRO Earned',
+      averagePassiveAPY: 'Average passive APY',
+      averageAPY: 'Average APY',
+      proposals: 'Proposals',
+      averageLoanTerm: 'Average Loan Term',
+      availableForBorrowing: 'Maximum Available for Borrowing',
+      totalBorrowed: 'Total Borrowed',
+      minimumAPY: 'Minimum APY',
+      loanTerm: 'Loan Term',
+    },
+    portfolioSnapshot: {
+      caption: 'Portfolio Snapshot',
+      asset: 'Asset',
+      apy: 'APY',
+      earned: 'Earned',
+      balance: 'Balance',
+      description: 'Here is a title description',
+      loansIssued: 'Loans Issued',
+    },
+    yield: {
+      title: 'Yield',
+    },
+    poolBalanceChart: {
+      ptkDepositPrice: 'ASPT Deposit Price',
+      ptkWithdrawalPrice: 'ASPT Withdrawal Price',
+    },
+    poolCompositionChart: {
+      poolComposition: 'Pool Composition',
+    },
+    availableLoansChart: {
+      totalAvailable: 'Total Available for Loans',
+    },
+    deFiScoreChart: {
+      deFiScore: 'DeFi Score',
     },
   },
 };

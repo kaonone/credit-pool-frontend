@@ -1,43 +1,83 @@
 import * as React from 'react';
 
-import { Grid, Card, CardContent } from 'components';
+import { Grid, Divider, Box } from 'components';
 import { PoolBalanceChart } from 'features/balance';
-import { makeStyles } from 'utils/styles';
-import { PoolMetrics } from 'features/poolInfo';
+import { PoolCompositionChart } from 'features/poolInfo';
+import {
+  AvgPoolAPY,
+  PoolSize,
+  PoolSize24h,
+  AverageLoanAPY,
+  ActiveMembers,
+  ActiveMembers24h,
+  LoanVolumeRequested,
+  LoanVolumeGranted,
+  AverageLoanSize,
+  LoanApprovalRatio,
+} from 'features/metrics';
 
-export function StatsPage() {
-  const classes = useStyles();
+export function Stats() {
   return (
-    <Grid container spacing={4}>
-      <Grid item xs={12}>
-        <PoolBalanceChart />
+    <Box p={[7, 6]}>
+      <Grid container spacing={5}>
+        <Grid item xs container spacing={3} direction="column" justify="space-between">
+          <Grid item>
+            <PoolSize />
+          </Grid>
+          <Grid item>
+            <PoolSize24h />
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Divider orientation="vertical" />
+        </Grid>
+        <Grid item xs container spacing={3} direction="column" justify="space-between">
+          <Grid item>
+            <AvgPoolAPY title="Pool APY" />
+          </Grid>
+          <Grid item>
+            <AverageLoanAPY />
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Divider orientation="vertical" />
+        </Grid>
+        <Grid item xs container spacing={3} direction="column" justify="space-between">
+          <Grid item>
+            <ActiveMembers />
+          </Grid>
+          <Grid item>
+            <ActiveMembers24h />
+          </Grid>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Divider orientation="horizontal" />
+        </Grid>
+
+        <Grid item xs={4}>
+          <PoolBalanceChart />
+        </Grid>
+        <Grid item xs container spacing={3} direction="column" justify="space-between">
+          <Grid item>
+            <LoanVolumeRequested />
+          </Grid>
+          <Grid item>
+            <LoanVolumeGranted />
+          </Grid>
+          <Grid item>
+            <AverageLoanSize />
+          </Grid>
+        </Grid>
+        <Grid item xs container spacing={3} direction="column" justify="space-between">
+          <Grid item>
+            <PoolCompositionChart />
+          </Grid>
+          <Grid item>
+            <LoanApprovalRatio />
+          </Grid>
+        </Grid>
       </Grid>
-      <Grid item xs={6}>
-        <Card className={classes.card}>
-          <CardContent>
-            <PoolMetrics
-              orientation="vertical"
-              includes={['availableBalance', 'depositPlusWithdraw24Volume', 'members']}
-            />
-          </CardContent>
-        </Card>
-      </Grid>
-      <Grid item xs={6}>
-        <Card className={classes.card}>
-          <CardContent>
-            <PoolMetrics
-              orientation="vertical"
-              includes={['investmentApr', 'loans', 'totalPtkSupply']}
-            />
-          </CardContent>
-        </Card>
-      </Grid>
-    </Grid>
+    </Box>
   );
 }
-
-const useStyles = makeStyles(() => ({
-  card: {
-    height: '100%',
-  },
-}));

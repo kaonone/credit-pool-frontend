@@ -8,7 +8,6 @@ import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
 import { ButtonProps, Button, Grid, FormattedAmount } from 'components';
 import { calcInterestShare } from 'model';
-import { formatBalance } from 'utils/format';
 import { makeStyles } from 'utils/styles';
 
 interface AmountPrefillerProps {
@@ -32,24 +31,13 @@ export function AmountPrefiller(props: AmountPrefillerProps) {
       combineLatest([minValue$, maxValue$, api.loanModule.calculateFullLoanStake$(loanSize)]).pipe(
         map(([minValue, maxValue, fullLoanStake]) => {
           const valueDelta = maxValue.sub(minValue);
-          const interestShareDecimals = 2;
 
           return [0, 50, 100].map<PrefillValue>(size => {
-            const value = minValue.add(valueDelta.muln(size).divn(100));
-
-            const interestShare = calcInterestShare(
-              value.toBN(),
-              fullLoanStake,
-              interestShareDecimals,
-            );
+            const value = minValue.add(valueDelta.mul(size).div(100));
 
             return {
               value,
-              interestShare: `${formatBalance({
-                amountInBaseUnits: interestShare,
-                baseDecimals: interestShareDecimals,
-                precision: 0,
-              })}%`,
+              interestShare: calcInterestShare(value, fullLoanStake).toFormattedString(),
             };
           });
         }),
@@ -67,7 +55,8 @@ export function AmountPrefiller(props: AmountPrefillerProps) {
             name={fieldName}
             fieldValue={value}
             size="small"
-            variant="contained"
+            variant="outlined"
+            color="primary"
             className={classes.buttonOverride}
           >
             <FormattedAmount sum={value} precision={0} /> -&gt; {sharePercent}

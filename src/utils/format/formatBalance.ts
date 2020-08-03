@@ -3,7 +3,8 @@ import BN from 'bn.js';
 import { bnToBn } from 'utils/bn/bnToBn';
 import { IToBN } from 'model/types';
 
-import { formatDecimal } from './formatDecimal';
+import { formatInteger } from './formatInteger';
+import { getDecimal } from './getDecimal';
 
 type SymbolPosition = 'start-space' | 'start' | 'end-space' | 'end';
 
@@ -24,35 +25,16 @@ export function formatBalance({
   variant = 'long',
   symbolPosition = 'end-space',
 }: IFormatBalanceOptions): string {
-  let balanceString = bnToBn(amountInBaseUnits).toString();
+  const balanceString = bnToBn(amountInBaseUnits).toString();
 
   if (balanceString.length === 0 || balanceString === '0') {
     return withUnit('0', { symbolPosition, tokenSymbol });
   }
 
-  const isNegative = balanceString[0].startsWith('-');
+  const { fractional, integer } = getDecimal(balanceString, baseDecimals, precision);
 
-  if (isNegative) {
-    balanceString = balanceString.substr(1);
-  }
-
-  const mid = balanceString.length - baseDecimals;
-  const prefix = balanceString.substr(0, mid);
-  const padding = mid < 0 ? 0 - mid : 0;
-
-  const minPrecision =
-    baseDecimals - precision > balanceString.length - 1
-      ? baseDecimals - balanceString.length + 1
-      : precision;
-  const decimalsZerosLength = baseDecimals < minPrecision ? baseDecimals : minPrecision;
-
-  const postfix = `${`${'0'.repeat(padding)}${balanceString}`.substr(mid < 0 ? 0 : mid)}000`.substr(
-    0,
-    decimalsZerosLength,
-  );
-
-  const long = `${isNegative ? '-' : ''}${formatDecimal(prefix || '0')}${
-    baseDecimals && postfix ? `.${postfix}` : ''
+  const long = `${formatInteger(integer || '0')}${
+    baseDecimals && fractional ? `.${fractional}` : ''
   }`;
   const short = long.replace(/^(\d+?\.\d*?)0*$/, '$1').replace(/^(\d+?)\.$/, '$1');
 

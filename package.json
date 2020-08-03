@@ -17,9 +17,9 @@
     "test:watch": "jest --watch",
     "test:debug": "node --inspect-brk ./node_modules/.bin/jest --runInBand --watch",
     "test:coverage": "jest --coverage --watch",
-    "codegen:testnet": "graphql-codegen --config codegen-testnet.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
-    "codegen:sandbox": "graphql-codegen --config codegen-sandbox.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
-    "codegen:mainnet": "graphql-codegen --config codegen-mainnet.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json"
+    "codegen:testnet": "rm -rf ./src/generated && graphql-codegen --config codegen-testnet.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
+    "codegen:sandbox": "rm -rf ./src/generated && graphql-codegen --config codegen-sandbox.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json",
+    "codegen:mainnet": "rm -rf ./src/generated && graphql-codegen --config codegen-mainnet.yml; typechain --target web3-rxjs --outDir src/generated/contracts **/abi/*.json"
   },
   "betterScripts": {
     "node": {
@@ -34,7 +34,7 @@
       "command": "better-npm-run node webpack --config webpack/prod.ts"
     },
     "dev": {
-      "command": "better-npm-run node webpack-dev-server --open --config webpack/dev.ts"
+      "command": "better-npm-run node webpack-dev-server --config webpack/dev.ts"
     }
   },
   "author": "Serdtsev Dmitriy",
@@ -95,10 +95,11 @@
   },
   "devDependencies": {
     "@date-io/core": "^1.3.11",
-    "@graphql-codegen/cli": "1.8.2",
-    "@graphql-codegen/typescript": "^1.8.2",
-    "@graphql-codegen/typescript-operations": "^1.8.2",
-    "@graphql-codegen/typescript-react-apollo": "^1.8.2",
+    "@graphql-codegen/cli": "^1.17.0",
+    "@graphql-codegen/typescript": "^1.17.0",
+    "@graphql-codegen/typescript-graphql-request": "^1.17.0",
+    "@graphql-codegen/typescript-operations": "^1.17.0",
+    "@graphql-codegen/typescript-react-apollo": "^1.17.0",
     "@types/circular-dependency-plugin": "^5.0.0",
     "@types/classnames": "^2.2.9",
     "@types/d3-scale": "^2.1.1",
@@ -118,6 +119,7 @@
     "@types/recharts": "^1.8.10",
     "@types/web3": "^1.0.20",
     "@types/webpack": "^4.39.2",
+    "@types/webpack-deadcode-plugin": "^0.1.0",
     "@types/webpack-dev-server": "^3.1.7",
     "@types/webpack-merge": "^4.1.5",
     "@types/ws": "^6.0.3",
@@ -138,7 +140,7 @@
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "^4.0.4",
-    "favicons-webpack-plugin": "^1.0.2",
+    "favicons-webpack-plugin": "0.0.9",
     "file-loader": "^4.2.0",
     "filemanager-webpack-plugin": "^2.0.5",
     "gh-pages": "^2.1.1",
@@ -150,11 +152,12 @@
     "ts-node": "^8.4.1",
     "tsconfig-paths": "^3.9.0",
     "typechain": "^1.0.3",
-    "typechain-target-web3-rxjs": "^0.1.2",
+    "typechain-target-web3-rxjs": "^0.1.3",
     "typescript": "^3.9.3",
     "url-loader": "^2.2.0",
     "webpack": "^4.41.0",
     "webpack-cli": "^3.3.9",
+    "webpack-deadcode-plugin": "^0.1.12",
     "webpack-dev-server": "^3.8.2",
     "webpack-merge": "^4.2.2"
   }

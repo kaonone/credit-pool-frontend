@@ -2,7 +2,7 @@ import moment from 'moment';
 import * as R from 'ramda';
 import * as d3Scale from 'd3-scale';
 
-import { Period, IPoint } from '../Chart';
+import { Period, IPoint } from '../models';
 
 const POINTS_LENGTH = 21;
 
@@ -20,12 +20,9 @@ export function getTicks<P extends IPoint>(
 
   const firstPointDateByPeriod: Record<Period, () => number> = {
     all: () => firstPoint.date,
-    '24h': () => moment(currentDate).subtract(1, 'day').valueOf(),
-    '3d': () => moment(currentDate).subtract(3, 'day').valueOf(),
-    '1w': () => moment(currentDate).subtract(1, 'week').valueOf(),
-    '2w': () => moment(currentDate).subtract(2, 'week').valueOf(),
-    '1m': () => moment(currentDate).subtract(1, 'month').valueOf(),
-    '3m': () => moment(currentDate).subtract(3, 'month').valueOf(),
+    d: () => moment(currentDate).subtract(1, 'day').valueOf(),
+    w: () => moment(currentDate).subtract(1, 'week').valueOf(),
+    m: () => moment(currentDate).subtract(1, 'month').valueOf(),
     '6m': () => moment(currentDate).subtract(6, 'month').valueOf(),
   };
 
@@ -56,13 +53,13 @@ function calculatePeriodByDuration(duration: number): Period {
   const days = mDuration.asDays();
 
   if (days <= 1) {
-    return '24h';
+    return 'd';
   }
   if (weeks <= 1) {
-    return '1w';
+    return 'w';
   }
   if (months <= 1) {
-    return '1m';
+    return 'm';
   }
   if (months <= 6) {
     return '6m';

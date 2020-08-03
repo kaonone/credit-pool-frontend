@@ -82,7 +82,7 @@ export class Web3Manager {
     return this.manager.txWeb3;
   }
 
-  get account() {
+  get account$() {
     return this.manager.account;
   }
 
@@ -103,6 +103,7 @@ export class Web3Manager {
 
   @autobind
   async connect(wallet: WalletType) {
+    await this.disconnect();
     const payload = await this.manager.connect(connectors[wallet]);
     this.connectedWallet.next(wallet);
     this.storage.setItem('lastProvider', wallet);

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import BN from 'bn.js';
 import { FieldRenderProps } from 'react-final-form';
 
@@ -15,7 +14,7 @@ interface IOwnProps {
   withSelect?: boolean;
 }
 
-type IProps = Omit<GetProps<typeof TextInput>, 'ref'> &
+type IProps = Omit<React.ComponentProps<typeof TextInput>, 'ref'> &
   FieldRenderProps<any, HTMLElement> &
   IOwnProps;
 

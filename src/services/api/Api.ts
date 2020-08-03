@@ -1,48 +1,61 @@
+import ApolloClient from 'apollo-client';
+
 import { Web3Manager } from './modules/Web3Manager';
 import { FundsModuleApi } from './modules/FundsModuleApi';
 import { LoanModuleApi } from './modules/LoanModuleApi';
 import { LiquidityModuleApi } from './modules/LiquidityModuleApi';
-import { TokensApi } from './modules/TokensApi';
+import { Erc20Api } from './modules/Erc20Api';
 import { TransactionsApi } from './modules/TransactionsApi';
 import { SwarmApi } from './modules/SwarmApi';
 import { CurveModuleApi } from './modules/CurveModuleApi';
 import { DefiModuleApi } from './modules/DefiModuleApi';
+import { SubgraphApi } from './modules/SubgraphApi';
+import { PTokenApi } from './modules/PTokenApi';
 
 export class Api {
   public web3Manager = new Web3Manager();
   public swarmApi = new SwarmApi();
+  public subgraphApi = new SubgraphApi(this.apolloClient);
 
   public transactions = new TransactionsApi();
-  public tokens = new TokensApi(this.web3Manager, this.transactions);
+  public erc20 = new Erc20Api(this.web3Manager, this.transactions);
+  public pToken = new PTokenApi(this.web3Manager, this.transactions, this.erc20);
 
   public curveModule = new CurveModuleApi(this.web3Manager);
-  public fundsModule = new FundsModuleApi(this.web3Manager, this.curveModule, this.tokens);
-  public defiModule = new DefiModuleApi(this.web3Manager, this.transactions, this.tokens);
+  public fundsModule = new FundsModuleApi(this.web3Manager, this.curveModule, this.erc20);
+  public defiModule = new DefiModuleApi(
+    this.web3Manager,
+    this.transactions,
+    this.erc20,
+    this.subgraphApi,
+  );
+
   public loanModule = new LoanModuleApi(
     this.web3Manager,
-    this.tokens,
+    this.erc20,
     this.transactions,
     this.fundsModule,
     this.swarmApi,
     this.curveModule,
+    this.subgraphApi,
   );
 
   public liquidityModule = new LiquidityModuleApi(
     this.web3Manager,
-    this.tokens,
+    this.erc20,
     this.transactions,
     this.fundsModule,
     this.curveModule,
   );
 
-  constructor() {
+  constructor(private apolloClient: ApolloClient<any>) {
     this.fundsModule.setTotalLProposalGetter(
       this.loanModule.getTotalLProposals$.bind(this.loanModule), // TODO add autobind to memoize decorator
     );
     this.fundsModule.setUnpaidInterestGetter(
       this.loanModule.getUnpaidInterest$.bind(this.loanModule),
     );
-    this.tokens.setEvents({
+    this.pToken.setEvents({
       forReloadPtkDistributionBalance: [
         this.loanModule.readonlyContracts.proposals.events.DebtProposalExecuted(),
       ],

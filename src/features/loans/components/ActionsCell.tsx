@@ -4,18 +4,17 @@ import BN from 'bn.js';
 import { Status, usePledgeSubscription } from 'generated/gql/pool';
 import { isEqualHex } from 'utils/hex';
 import { bnToBn } from 'utils/bn';
+import { makeStyles, useTheme } from 'utils/styles';
 import { Grid, Loading } from 'components';
-import { useSubscribable } from 'utils/react';
-import { useApi } from 'services/api';
-import { getLoanDuePaymentDate, getPledgeId } from 'model';
+import { getPledgeId } from 'model';
 import {
   ActivateLoanButton,
-  UnlockButton,
-  LiquidateLoanButton,
+  UnlockCollateralButton,
   CancelProposalButton,
-} from 'features/cashExchange';
+} from 'features/changeLoanState';
 import { UnstakingButton } from 'features/unstake';
 import { LoanRepayingButton } from 'features/repayLoan';
+import { AvailableForUnlock } from 'features/metrics';
 
 import { PartialDebt } from './types';
 
@@ -34,8 +33,8 @@ export function ActionsCell({ debt, account }: IProps) {
     stakeProgress,
     proposal_id: proposalId,
   } = debt;
-  const api = useApi();
-  const [config, configMeta] = useSubscribable(() => api.loanModule.getConfig$(), []);
+  const classes = useStyles();
+  const theme = useTheme();
 
   const pledgeHash = React.useMemo(() => getPledgeId(account, borrower.id, proposalId), [
     account,
@@ -47,10 +46,6 @@ export function ActionsCell({ debt, account }: IProps) {
   const pInterest = new BN(pledgeGqlResult.data?.pledge?.pInterest || '0');
   const pLocked = new BN(pledgeGqlResult.data?.pledge?.pLocked || '0');
 
-  const duePaymentDate =
-    config && getLoanDuePaymentDate(lastUpdate, config.debtRepayDeadlinePeriod)?.getTime();
-  const isDuePaymentExpired = duePaymentDate && duePaymentDate < Date.now();
-
   const isMyLoan = isEqualHex(borrower.id, account);
 
   const isAvailableForUnstake = status === Status.Proposed && !isMyLoan && pLocked.gtn(0);
@@ -58,16 +53,16 @@ export function ActionsCell({ debt, account }: IProps) {
   const isAvailableForActivation =
     isMyLoan && status === Status.Proposed && bnToBn(stakeProgress).gten(100);
 
-  const isAvailableForLiquidation = status !== Status.Closed && isDuePaymentExpired;
   const isAvailableForRepay =
     isMyLoan && (status === Status.Executed || status === Status.PartiallyRepayed);
   const isAvailableForUnlock = pInterest.gtn(0);
 
   const commonProps = {
-    variant: 'contained',
+    variant: 'outlined',
     color: 'primary',
     size: 'small',
-    fullWidth: true,
+    backgroundColor: theme.palette.background.paper,
+    fullWidth: false,
   } as const;
 
   const actions = [
@@ -98,31 +93,43 @@ export function ActionsCell({ debt, account }: IProps) {
       />
     ) : null,
     isAvailableForUnlock && debtId ? (
-      <UnlockButton
-        borrower={borrower.id}
-        proposalId={proposalId}
-        debtId={debtId}
-        {...commonProps}
-      />
-    ) : null,
-    isAvailableForLiquidation && debtId ? (
-      <LiquidateLoanButton borrower={borrower.id} debtId={debtId} {...commonProps}>
-        Liquidate
-      </LiquidateLoanButton>
+      <>
+        <div className={classes.sum}>
+          <AvailableForUnlock borrower={borrower.id} debtId={debtId} />
+        </div>
+        <UnlockCollateralButton
+          borrower={borrower.id}
+          proposalId={proposalId}
+          debtId={debtId}
+          {...commonProps}
+        />
+      </>
     ) : null,
   ].filter(Boolean);
 
   return (
-    <Loading meta={configMeta} gqlResults={pledgeGqlResult}>
-      {actions.length ? (
-        <Grid container spacing={1}>
-          {actions.map((action, index) => (
-            <Grid xs item key={index}>
-              {action}
-            </Grid>
-          ))}
-        </Grid>
-      ) : null}
-    </Loading>
+    <div className={classes.root}>
+      <Loading gqlResults={pledgeGqlResult}>
+        {actions.length ? (
+          <Grid container spacing={1}>
+            {actions.map((action, index) => (
+              <Grid item key={index}>
+                {action}
+              </Grid>
+            ))}
+          </Grid>
+        ) : null}
+      </Loading>
+    </div>
   );
 }
+
+const useStyles = makeStyles(
+  () => ({
+    root: {},
+    sum: {
+      marginBottom: 10,
+    },
+  }),
+  { name: 'ActionCells' },
+);

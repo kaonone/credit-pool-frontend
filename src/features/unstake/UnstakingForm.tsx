@@ -10,7 +10,6 @@ import { useApi } from 'services/api';
 import { useSubscribable, useValidateAmount } from 'utils/react';
 import { Loading } from 'components';
 import { calcInterestShare, getPledgeId } from 'model';
-import { formatBalance } from 'utils/format';
 import { zeroAddress } from 'utils/mock';
 import { usePledgeSubscription } from 'generated/gql/pool';
 
@@ -60,7 +59,7 @@ export function UnstakingForm({
     () =>
       api.fundsModule
         .getAvailableBalanceIncreasing$(account || zeroAddress, pInitialLocked, lInitialLocked)
-        .pipe(map(item => item.value)),
+        .pipe(map(item => item.toBN())),
     [api, account, pInitialLocked, lInitialLocked],
   );
 
@@ -105,26 +104,16 @@ export function UnstakingForm({
             api.loanModule.calculateFullLoanStake$(loanSize),
           ]).pipe(
             map(([currentFullStakeCost, fullLoanStake]) => {
-              const interestShareDecimals = 2;
-
               const lAmountForUnstakeByInitial = new BN(lInitialLocked)
                 .mul(amount.toBN())
-                .div(currentFullStakeCost.value);
-
-              const rawInterestShareDelta = calcInterestShare(
-                lAmountForUnstakeByInitial,
-                fullLoanStake,
-                interestShareDecimals,
-              );
-
-              const interestShareDelta = `${formatBalance({
-                amountInBaseUnits: rawInterestShareDelta,
-                baseDecimals: interestShareDecimals,
-              })}%`;
+                .div(currentFullStakeCost.toBN());
 
               return t(tKeys.confirmMessage.getKey(), {
                 sourceAmount: amount.toFormattedString(),
-                interestShareDelta,
+                interestShareDelta: calcInterestShare(
+                  lAmountForUnstakeByInitial,
+                  fullLoanStake,
+                ).toFormattedString(),
               });
             }),
           )

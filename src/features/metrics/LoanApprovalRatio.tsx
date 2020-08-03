@@ -1,0 +1,19 @@
+import * as React from 'react';
+
+import { Metric, Label, FormattedAmount, BarChart } from 'components';
+import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
+import { percentAmount, barChartData } from 'utils/mock';
+
+const tKeys = tKeysAll.components.metrics;
+
+export function LoanApprovalRatio() {
+  const { t } = useTranslate();
+
+  return (
+    <Metric
+      title={<Label withComingSoon>{t(tKeys.loanApprovalRatio.getKey())}</Label>}
+      value={<FormattedAmount sum={percentAmount} />}
+      chart={<BarChart values={barChartData} />}
+    />
+  );
+}

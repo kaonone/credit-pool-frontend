@@ -2,6 +2,7 @@ import { Observable, BehaviorSubject, of, combineLatest, timer } from 'rxjs';
 import { map, first as firstOperator, switchMap } from 'rxjs/operators';
 import BN from 'bn.js';
 import * as R from 'ramda';
+import moment from 'moment';
 import { autobind } from 'core-decorators';
 import PromiEvent from 'web3/promiEvent';
 
@@ -18,29 +19,28 @@ import {
   PLEDGE_MARGIN_DIVIDER,
 } from 'env';
 import { RepaymentMethod } from 'model/types';
+import { LoanToLiquidate } from 'model/loans';
 import { calcWithdrawAmountBeforeFee } from 'model';
 import { TokenAmount, LiquidityAmount } from 'model/entities';
+import { getCurrentValueOrThrow } from 'utils/rxjs';
 
 import { Contracts, Web3ManagerModule } from '../types';
 import { TransactionsApi } from './TransactionsApi';
-import { TokensApi } from './TokensApi';
+import { Erc20Api } from './Erc20Api';
 import { FundsModuleApi } from './FundsModuleApi';
 import { SwarmApi } from './SwarmApi';
 import { CurveModuleApi } from './CurveModuleApi';
-
-function getCurrentValueOrThrow<T>(subject: BehaviorSubject<T | null>): NonNullable<T> {
-  const value = subject.getValue();
-
-  if (value === null || value === undefined) {
-    throw new Error('Subject is not contain non nullable value');
-  }
-
-  return value as NonNullable<T>;
-}
+import { SubgraphApi } from './SubgraphApi/SubgraphApi';
 
 function first<T>(input: Observable<T>): Promise<T> {
   return input.pipe(firstOperator()).toPromise();
 }
+
+function getPaymentDueDate(now: moment.Moment, debtRepayDeadlinePeriod: BN): string {
+  return new BN(now.subtract(debtRepayDeadlinePeriod.toNumber(), 'seconds').unix()).toString();
+}
+
+const RE_REQUEST_LOANS_TIMEOUT = 1000 * 60 * 30;
 
 export class LoanModuleApi {
   public readonlyContracts: {
@@ -57,11 +57,12 @@ export class LoanModuleApi {
 
   constructor(
     private web3Manager: Web3ManagerModule,
-    private tokensApi: TokensApi,
+    private erc20Api: Erc20Api,
     private transactionsApi: TransactionsApi,
     private fundsModuleApi: FundsModuleApi,
     private swarmApi: SwarmApi,
     private curveModuleApi: CurveModuleApi,
+    private subgraphApi: SubgraphApi,
   ) {
     this.readonlyContracts = {
       loan: createLoanModule(this.web3Manager.web3, ETH_NETWORK_CONFIG.contracts.loanModule),
@@ -233,7 +234,7 @@ export class LoanModuleApi {
     const pAmount = await first(
       this.fundsModuleApi.convertLiquidityToPtkExit$(sourceAmount.add(pledgeMargin)),
     );
-    const pBalance = await first(this.tokensApi.getPtkBalance$(fromAddress));
+    const pBalance = await first(this.erc20Api.getPtkBalance$(fromAddress));
 
     const promiEvent = txLoanModule.methods.addPledge(
       {
@@ -275,7 +276,9 @@ export class LoanModuleApi {
       ),
     );
 
-    const pAmount = new BN(pInitialLocked).mul(sourceAmount.value).div(currentFullStakeCost.value);
+    const pAmount = new BN(pInitialLocked)
+      .mul(sourceAmount.toBN())
+      .div(currentFullStakeCost.toBN());
 
     const promiEvent = txLoanModule.methods.withdrawPledge(
       {
@@ -333,12 +336,12 @@ export class LoanModuleApi {
 
     const minLCollateral = await first(this.getMinLoanCollateral$(sourceAmount));
     const pAmount = await first(this.fundsModuleApi.convertLiquidityToPtkExit$(minLCollateral));
-    const pBalance = await first(this.tokensApi.getPtkBalance$(fromAddress));
+    const pBalance = await first(this.erc20Api.getPtkBalance$(fromAddress));
 
     const promiEvent = txLoanModule.methods.createDebtProposal(
       {
         pAmountMax: min(pAmount.toBN(), pBalance),
-        debtLAmount: sourceAmount.value,
+        debtLAmount: sourceAmount.toBN(),
         interest: new BN(apr),
         descriptionHash: hash,
       },
@@ -445,25 +448,25 @@ export class LoanModuleApi {
       const pAmount = await first(
         this.fundsModuleApi.convertLiquidityToPtkExit$(totalWithdrawAmount),
       );
-      const pBalance = await first(this.tokensApi.getPtkBalance$(fromAddress));
+      const pBalance = await first(this.erc20Api.getPtkBalance$(fromAddress));
 
       promiEvent = txLoanModule.methods.repayPTK(
         {
           debt: bnToBn(debtId),
-          lAmountMin: tokenAmountAfterFee.value,
+          lAmountMin: tokenAmountAfterFee.toBN(),
           pAmount: min(pAmount.toBN(), pBalance),
         },
         { from: fromAddress },
       );
     } else {
-      await this.tokensApi.approve(
+      await this.erc20Api.approve(
         fromAddress,
         ETH_NETWORK_CONFIG.contracts.fundsModule,
         tokenAmountAfterFee,
       );
 
       promiEvent = txLoanModule.methods.repay(
-        { debt: bnToBn(debtId), lAmount: tokenAmountAfterFee.value },
+        { debt: bnToBn(debtId), lAmount: tokenAmountAfterFee.toBN() },
         { from: fromAddress },
       );
     }
@@ -471,19 +474,21 @@ export class LoanModuleApi {
     this.transactionsApi.pushToSubmittedTransactions$('loan.repay', promiEvent, {
       address: fromAddress,
       debtId,
-      amount: tokenAmountAfterFee.value,
+      amount: tokenAmountAfterFee.toBN(),
     });
 
     await promiEvent;
   }
 
   @memoize(R.identity)
-  public getMaxAvailableLoanSizeInDai$(address: string): Observable<BN> {
-    return this.tokensApi.getPtkBalance$(address).pipe(
-      switchMap(balance => {
-        return this.fundsModuleApi.getPtkToDaiExitInfo$(balance.toString());
-      }),
-      map(item => item.total.muln(100).divn(MIN_COLLATERAL_PERCENT_FOR_BORROWER)),
+  public getMaxAvailableLoanSize$(address: string): Observable<LiquidityAmount> {
+    return this.fundsModuleApi.toLiquidityAmount$(
+      this.erc20Api.getPtkBalance$(address).pipe(
+        switchMap(balance => {
+          return this.fundsModuleApi.getPtkToDaiExitInfo$(balance.toString());
+        }),
+        map(item => item.total.muln(100).divn(MIN_COLLATERAL_PERCENT_FOR_BORROWER)),
+      ),
     );
   }
 
@@ -567,7 +572,7 @@ export class LoanModuleApi {
   // TODO take MIN_COLLATERAL_PERCENT_FOR_BORROWER from contract
   public getMinLoanCollateral$(loanSize: TokenAmount): Observable<LiquidityAmount> {
     return this.fundsModuleApi.toLiquidityAmount$(
-      of(loanSize.muln(MIN_COLLATERAL_PERCENT_FOR_BORROWER).divn(100)),
+      of(loanSize.mul(MIN_COLLATERAL_PERCENT_FOR_BORROWER).div(100)),
     );
   }
 
@@ -632,5 +637,67 @@ export class LoanModuleApi {
           pWithdrawn,
         })),
       );
+  }
+
+  @memoize()
+  public getLoansAvailableForLiquidation$(): Observable<LoanToLiquidate[]> {
+    return timer(0, RE_REQUEST_LOANS_TIMEOUT).pipe(
+      map(() => moment()),
+      switchMap(now =>
+        combineLatest([this.getConfig$(), this.fundsModuleApi.getLiquidityCurrency$()]).pipe(
+          switchMap(([{ debtRepayDeadlinePeriod }, currency]) => {
+            return this.subgraphApi.loadLoansForLiquidation$(
+              currency,
+              debtRepayDeadlinePeriod,
+              getPaymentDueDate(now, debtRepayDeadlinePeriod),
+              new BN(0).toString(),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  @memoize()
+  public getLoansUpcomingForLiquidation$(): Observable<LoanToLiquidate[]> {
+    return timer(0, RE_REQUEST_LOANS_TIMEOUT).pipe(
+      map(() => moment()),
+      switchMap(now =>
+        combineLatest([this.getConfig$(), this.fundsModuleApi.getLiquidityCurrency$()]).pipe(
+          switchMap(([{ debtRepayDeadlinePeriod }, currency]) => {
+            const loansBecomeUpcomingFrom = new BN(now.subtract(85, 'days').unix()).toString();
+
+            return this.subgraphApi.loadLoansForLiquidation$(
+              currency,
+              debtRepayDeadlinePeriod,
+              loansBecomeUpcomingFrom,
+              getPaymentDueDate(now, debtRepayDeadlinePeriod),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  @memoize()
+  public hasLoansToLiquidate$(): Observable<boolean> {
+    return timer(0, RE_REQUEST_LOANS_TIMEOUT).pipe(
+      map(() => moment()),
+      switchMap(now =>
+        combineLatest([this.getConfig$(), this.fundsModuleApi.getLiquidityCurrency$()]).pipe(
+          switchMap(([{ debtRepayDeadlinePeriod }, currency]) => {
+            const loansFrom = new BN(now.subtract(85, 'days').unix()).toString();
+
+            return this.subgraphApi.loadLoansForLiquidation$(
+              currency,
+              debtRepayDeadlinePeriod,
+              loansFrom,
+              new BN(0).toString(),
+            );
+          }),
+          map(x => x.length > 0),
+        ),
+      ),
+    );
   }
 }

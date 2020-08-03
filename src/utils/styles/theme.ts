@@ -45,12 +45,30 @@ function getGradients(type: 'dark' | 'light') {
       colors.heliotrope2,
       colors.heliotrope,
     ]),
-    creditPoolIcon: makeGradient(
+    outlinedButton: makeGradient([
+      { color: colors.heliotrope, offset: '0%' },
+      { color: colors.royalBlue, offset: '33.3%' },
+      { color: colors.heliotrope, offset: '100%' },
+    ]),
+    spartaIcon: makeGradient(
       type === 'dark'
         ? [colors.northWesternPurple, colors.darkPurple]
         : [colors.lilac, colors.iris],
     ),
-    creditPoolText: makeGradient([colors.blueViolet, colors.lavenderBlue]),
+    spartaText: makeGradient([colors.blueViolet, colors.lavenderBlue]),
+    linearChart: [
+      makeGradient(['#fc87e2', '#f24cb6']),
+      makeGradient(['#63afdd', '#574cf2']),
+      makeGradient(['#c43ff0', '#574cf2']),
+    ] as const,
+    poolCompositionChart: [
+      makeGradient(['#63f8b3', '#dcff9c']),
+      makeGradient(['#e323ff', '#7517f8']),
+      makeGradient(['#639ff8', '#85f9e1']),
+      makeGradient(['#7d40ff', '#02a4ff']),
+      makeGradient(['#f985f5', '#f863dd']),
+    ] as const,
+    progressChart: makeGradient(['#7d40ff', '#02a4ff']),
   };
 }
 
@@ -74,7 +92,10 @@ const lightPalette = {
     main: colors.monza,
   },
   background: {
-    default: colors.white,
+    hint: colors.charade,
+    default: colors.athensGray,
+    paper: colors.white,
+    paperSecondary: colors.white,
   },
   type: 'light' as const,
 };
@@ -99,7 +120,10 @@ export const darkPalette = {
     main: colors.monza,
   },
   background: {
-    default: colors.charade,
+    hint: colors.darkSpace,
+    default: colors.obsidian,
+    paper: colors.foggyNight,
+    paperSecondary: colors.darkBlueMagenta,
   },
   type: 'dark' as const,
 };
@@ -152,6 +176,10 @@ function getTheme(type: 'light' | 'dark'): Theme {
     },
     typography: {
       fontFamily: ['Helvetica Neue', 'Arial', 'sans-serif'].join(','),
+      h6: {
+        fontSize: 16,
+        fontWeight: 400,
+      },
     },
     shape: {
       borderRadius: 4,
@@ -172,13 +200,11 @@ function getTheme(type: 'light' | 'dark'): Theme {
       },
       MuiLink: {
         underlineHover: {
-          borderWidth: '0 0 1px 0',
-          borderStyle: 'solid',
-          borderColor: type === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
+          textDecoration: 'underline',
+          textDecorationColor: type === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
 
           '&:hover': {
-            textDecoration: 'none',
-            borderColor: 'inherit',
+            textDecorationColor: 'inherit',
           },
         },
       },
@@ -212,6 +238,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
             margin: 0,
             fontSize: '1rem',
             transition: defaultTheme.transitions.create('background-color'),
+            overflow: 'hidden',
           },
 
           'html, body, #root': {
@@ -277,7 +304,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
           backgroundColor: '#fff',
         },
         message: {
-          color: colors.rhino,
+          color: colors.obsidian,
         },
       },
 
@@ -287,39 +314,120 @@ function getTheme(type: 'light' | 'dark'): Theme {
         },
       },
 
+      MuiFormGroup: {
+        row: {
+          '& .MuiFormControlLabel-root': {
+            marginRight: 20,
+          },
+        },
+      },
+
       MuiTabs: {
         root: {
+          position: 'relative',
           display: 'inline-flex',
           overflow: 'hidden',
           minHeight: tabsHeight,
           borderRadius: tabsHeight / 2,
           padding: tabsIndicatorSpace,
-          border: `${tabsBorderWidth}px solid ${colors.heliotrope}`,
+          background: 'linear-gradient(to left, #544cf2, #d93cef)',
+
+          '&::before': {
+            content: "''",
+            position: 'absolute',
+            top: 1,
+            left: 1,
+            right: 1,
+            bottom: 1,
+            borderRadius: tabsHeight / 2,
+            background: colors.foggyNight,
+          },
         },
 
         indicator: {
           top: 0,
-          height: tabsHeight - tabsIndicatorSpace * 2 - tabsBorderWidth * 2,
+          bottom: 0,
+          height: '100%',
           borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
           zIndex: -1,
           background: 'linear-gradient(to left, #544cf2, #d93cef)',
         },
 
         scroller: {
+          zIndex: 1,
           overflow: 'hidden',
           borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
+        },
+
+        flexContainer: {
+          height: '100%',
         },
       },
 
       MuiTab: {
         root: {
+          position: 'relative',
+          overflow: 'visible',
           minHeight: 'unset',
           padding: defaultTheme.spacing(0.2, 1.5),
           textTransform: 'unset',
+          fontSize: '1rem',
+          fontWeight: 300,
+          lineHeight: 1.5,
+          borderRadius: tabsHeight / 2 - tabsIndicatorSpace - tabsBorderWidth,
+
+          '&::after': {
+            content: "''",
+            position: 'absolute',
+            left: 0,
+            width: 1,
+            top: 3,
+            bottom: 3,
+            background: 'currentColor',
+            opacity: 0,
+            transition: defaultTheme.transitions.create('opacity'),
+          },
+
+          '&:not($selected)': {
+            '& + &::after': {
+              opacity: 0.2,
+            },
+          },
 
           '&$selected': {
             color: colors.white,
           },
+        },
+      },
+
+      MuiSvgIcon: {
+        root: {
+          display: 'block',
+          fontSize: '1.25rem',
+        },
+
+        fontSizeSmall: {
+          fontSize: '1rem',
+        },
+
+        fontSizeLarge: {
+          fontSize: '1.5rem',
+        },
+      },
+
+      // TODO: enable @material-ui/lab overrides
+      // @ts-ignore
+      MuiTabPanel: {
+        root: {
+          padding: 0,
+        },
+      },
+
+      MuiDialogTitle: {
+        root: {
+          fontSize: '1.375rem',
+          fontWeight: 300,
+          padding: 0,
         },
       },
     },
@@ -342,6 +450,7 @@ declare module '@material-ui/core/styles/createPalette' {
   interface TypeBackground {
     hint: string;
     tableHeader: string;
+    paperSecondary: string;
   }
 }
 

@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { GetProps } from '_helpers';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 // tslint:disable:max-line-length
-function MediumIcon(props: GetProps<typeof SvgIcon>) {
+function MediumIcon(props: React.ComponentProps<typeof SvgIcon>) {
   const { classes, ...rest } = props;
   return (
     <SvgIcon {...rest} viewBox="0 0 24 19" xmlSpace="preserve">

@@ -3,7 +3,6 @@ import React, { useState, useCallback, useMemo } from 'react';
 // eslint-disable-next-line no-restricted-imports
 import type { PaletteType } from '@material-ui/core';
 import { Theme, MuiThemeProvider } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { darkTheme, lightTheme } from 'utils/styles';
 
@@ -15,9 +14,8 @@ const themeByType: Record<PaletteType, Theme> = {
 };
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const defaultTheme: PaletteType = prefersDarkMode ? 'dark' : 'light';
-  const [currentTheme, setCurrentTheme] = useState(() => getSavedTheme() || defaultTheme);
+  const defaultTheme: PaletteType = 'dark';
+  const [currentTheme, setCurrentTheme] = useState<PaletteType>(defaultTheme);
 
   const changeTheme = useCallback((type: PaletteType) => {
     saveTheme(type);
@@ -37,7 +35,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 const SAVED_THEME_KEY = '__akro-theme__';
 
-function getSavedTheme(): PaletteType | null {
+// FIXME: remove export when 'light' theme is added
+export function getSavedTheme(): PaletteType | null {
   try {
     const formStorage = localStorage.getItem(SAVED_THEME_KEY);
     return isCorrectTheme(formStorage) ? formStorage : null;
