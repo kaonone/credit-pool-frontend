@@ -33,6 +33,9 @@ function BalanceChart<P extends IPoint>(props: IProps<P>) {
           lineColors={chartLineColors}
           period={period}
           showGrids
+          yAxisProps={{
+            domain: ['dataMin', 'dataMax'],
+          }}
         />
       </div>
       <PeriodSwitch period={period} onSelect={handlePeriodSwitchSelect} />
