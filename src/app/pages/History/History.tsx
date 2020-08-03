@@ -48,12 +48,6 @@ export function History() {
             value={routes.history.profit.getElementKey()}
             to={routes.history.profit.getRedirectPath()}
           />
-          <Tab
-            label={t(tKeys.tabs.liquidations.getKey())}
-            component={Link}
-            value={routes.history.liquidations.getElementKey()}
-            to={routes.history.liquidations.getRedirectPath()}
-          />
         </TabsList>
         <TabPanel value={routes.history.transaction.getElementKey()}>
           <div className={classes.comingSoon}>
@@ -62,11 +56,6 @@ export function History() {
         </TabPanel>
         <TabPanel value={routes.history.profit.getElementKey()}>
           <Profit />
-        </TabPanel>
-        <TabPanel value={routes.history.liquidations.getElementKey()}>
-          <div className={classes.comingSoon}>
-            <ComingSoon />
-          </div>
         </TabPanel>
       </TabContext>
     </Grid>
