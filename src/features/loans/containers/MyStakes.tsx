@@ -10,8 +10,8 @@ import {
   useMyPendingLoansQuery,
   MyIssuedLoansQuery,
 } from 'generated/gql/pool';
-import { Cat1 } from 'components/icons';
-import { Loading, NewTable, Hint, Typography, Button } from 'components';
+import { ChillCat } from 'components/icons';
+import { Loading, NewTable, Hint, Typography, Button, Grid } from 'components';
 import { useApi } from 'services/api';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { getLoanDuePaymentDate } from 'model';
@@ -96,8 +96,13 @@ export const MyStakes: React.FC<Props> = ({ title, filter, account }) => {
 
   function renderEmptyResultMessage(loanType: 'issued' | 'pending') {
     return loanType === 'issued' ? (
-      <Hint renderIcon={renderCatIcon}>
-        <Typography>{t(tKeys.noOutstandingLoans.getKey())}</Typography>
+      <Hint>
+        <Grid container className={classes.issuedLoan} spacing={4}>
+          <Grid item>{renderCatIcon()}</Grid>
+          <Grid xs item container alignItems="center">
+            <Typography align="left">{t(tKeys.noOutstandingLoans.getKey())}</Typography>
+          </Grid>
+        </Grid>
       </Hint>
     ) : (
       <Hint renderButton={renderLendButton}>
@@ -107,7 +112,7 @@ export const MyStakes: React.FC<Props> = ({ title, filter, account }) => {
   }
 
   function renderCatIcon() {
-    return <Cat1 className={classes.catIcon} />;
+    return <ChillCat className={classes.catIcon} />;
   }
 
   function renderLendButton() {
@@ -132,7 +137,11 @@ export const useStyles = makeStyles(
       marginBottom: 30,
     },
     catIcon: {
-      fontSize: 52,
+      fontSize: 180,
+      maxHeight: 146,
+    },
+    issuedLoan: {
+      backgroundColor: '#171722',
     },
   }),
   { name: 'MyStakes' },
