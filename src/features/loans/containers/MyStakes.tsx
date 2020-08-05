@@ -11,7 +11,7 @@ import {
   MyIssuedLoansQuery,
 } from 'generated/gql/pool';
 import { ChillCat } from 'components/icons';
-import { Loading, NewTable, Hint, Typography, Button, Grid } from 'components';
+import { Loading, NewTable, Hint, Typography, Button } from 'components';
 import { useApi } from 'services/api';
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
 import { getLoanDuePaymentDate } from 'model';
@@ -97,12 +97,10 @@ export const MyStakes: React.FC<Props> = ({ title, filter, account }) => {
   function renderEmptyResultMessage(loanType: 'issued' | 'pending') {
     return loanType === 'issued' ? (
       <Hint>
-        <Grid container className={classes.issuedLoan} spacing={4}>
-          <Grid item>{renderCatIcon()}</Grid>
-          <Grid xs item container alignItems="center">
-            <Typography align="left">{t(tKeys.noOutstandingLoans.getKey())}</Typography>
-          </Grid>
-        </Grid>
+        <div className={classes.issuedLoan}>
+          <div className={classes.iconContainer}>{renderCatIcon()}</div>
+          <Typography align="left">{t(tKeys.noOutstandingLoans.getKey())}</Typography>
+        </div>
       </Hint>
     ) : (
       <Hint renderButton={renderLendButton}>
@@ -142,6 +140,14 @@ export const useStyles = makeStyles(
     },
     issuedLoan: {
       backgroundColor: '#171722',
+      position: 'relative',
+      padding: '10px 0 10px 210px',
+      minHeight: 70,
+    },
+    iconContainer: {
+      position: 'absolute',
+      left: 0,
+      top: -25,
     },
   }),
   { name: 'MyStakes' },
