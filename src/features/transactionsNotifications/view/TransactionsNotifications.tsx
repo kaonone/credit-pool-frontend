@@ -71,6 +71,14 @@ function getTranslateParams(transaction: SubmittedTransaction): Record<string, s
       return {
         amount: transaction.payload.sourceAmount.toFormattedString(),
       };
+    case 'erc20.revertApprove':
+      return {
+        symbol: transaction.payload.value.currency.symbol,
+      };
+    case 'erc20.infiniteApprove':
+      return {
+        symbol: transaction.payload.value.currency.symbol,
+      };
     default:
       return {};
   }

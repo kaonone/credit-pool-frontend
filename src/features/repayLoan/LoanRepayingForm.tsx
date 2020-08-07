@@ -1,8 +1,13 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { FormSpy } from 'react-final-form';
+import { FormState } from 'final-form';
 import { empty } from 'rxjs';
 import { map } from 'rxjs/operators';
 import BN from 'bn.js';
 
+import { ETH_NETWORK_CONFIG } from 'env';
+import { Loading, Grid } from 'components';
+import { RadioButton } from 'components/inputs';
 import {
   FormWithConfirmation,
   FieldNames,
@@ -10,15 +15,15 @@ import {
   RadioGroupInputField,
   TokenAmountField,
 } from 'components/form';
-import { TokenAmount } from 'model/entities';
+import { RepaymentMethod, repaymentMethods } from 'model/types';
+import { TokenAmount, Token } from 'model/entities';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { useSubscribable, useValidateAmount } from 'utils/react';
-import { Loading, FormControlLabel, Radio } from 'components';
-import { RepaymentMethod, repaymentMethods } from 'model/types';
 import { lessThenOrEqual } from 'utils/validators';
 import { zeroAddress } from 'utils/mock';
 import { max, min } from 'utils/bn';
+import { InfiniteApproveSwitch } from 'features/infiniteApprove';
 
 interface FormData {
   amount: TokenAmount | null;
@@ -54,6 +59,8 @@ export function LoanRepayingForm({
 }: LoanRepayingFormProps) {
   const { t } = useTranslate();
   const api = useApi();
+
+  const [currentToken, setCurrentToken] = useState<Token | null>(null);
 
   const maxValue = useMemo(
     () =>
@@ -108,6 +115,15 @@ export function LoanRepayingForm({
     [availablePoolBalance.toString(), availableDaiBalance.toString()],
   );
 
+  const handleFormChange = useCallback(
+    ({ values: { amount } }: FormState<FormData>) => {
+      if (!currentToken || !amount || !currentToken.equals(amount.currency)) {
+        setCurrentToken(amount?.currency || null);
+      }
+    },
+    [currentToken],
+  );
+
   const handleFormSubmit = useCallback(
     ({ amount, repaymentMethod }: FormData) => {
       return amount ? api.loanModule.repay(account, debtId, amount, repaymentMethod) : undefined;
@@ -152,28 +168,42 @@ export function LoanRepayingForm({
       <Loading meta={[supportedTokensMeta, availablePoolBalanceMeta, availableDaiBalanceMeta]}>
         {supportedTokens && (
           <>
-            <TokenAmountField
-              name={fieldNames.amount}
-              currencies={supportedTokens}
-              placeholder={t(tKeys.placeholder.getKey())}
-              validate={validateAmount}
-              maxValue={maxValue}
-            />
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TokenAmountField
+                  name={fieldNames.amount}
+                  currencies={supportedTokens}
+                  placeholder={t(tKeys.placeholder.getKey())}
+                  validate={validateAmount}
+                  maxValue={maxValue}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <RadioGroupInputField name={fieldNames.repaymentMethod}>
+                  {repaymentMethods.map(value => (
+                    <RadioButton
+                      key={value}
+                      value={value}
+                      label={t(tKeys.fields.repaymentMethod[value].getKey())}
+                    />
+                  ))}
+                </RadioGroupInputField>
+              </Grid>
+              {currentToken && (
+                <Grid item xs={6} container justify="flex-end" alignItems="flex-start">
+                  <InfiniteApproveSwitch
+                    spender={ETH_NETWORK_CONFIG.contracts.fundsModule}
+                    tokens={currentToken}
+                  />
+                </Grid>
+              )}
+            </Grid>
+            <FormSpy<FormData> subscription={{ values: true }} onChange={handleFormChange} />
             <SpyField name="__" fieldValue={validateAmount} />
             <SpyField name="__" fieldValue={validateForm} />
           </>
         )}
       </Loading>
-      <RadioGroupInputField name={fieldNames.repaymentMethod}>
-        {repaymentMethods.map(value => (
-          <FormControlLabel
-            key={value}
-            value={value}
-            control={<Radio color="primary" />}
-            label={t(tKeys.fields.repaymentMethod[value].getKey())}
-          />
-        ))}
-      </RadioGroupInputField>
     </FormWithConfirmation>
   );
 }

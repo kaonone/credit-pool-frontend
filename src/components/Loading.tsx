@@ -15,7 +15,7 @@ interface IMeta {
   error?: string | null;
 }
 
-type MaybeArray<T> = T | T[];
+export type MaybeArray<T> = T | T[];
 type ProgressVariant = 'linear' | 'circle' | 'skeleton';
 
 type DefaultProgressVariant = SubSet<ProgressVariant, 'skeleton'>;
