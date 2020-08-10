@@ -1,6 +1,10 @@
 import { createMuiTheme, Theme } from '@material-ui/core/styles';
-
-import { colors } from 'utils/styles/colors';
+import {
+  getTheme as createTheme,
+  colors,
+  makeGradient,
+  generateGridSpacingOverrides,
+} from '@akropolis-web/styles';
 
 import {
   helveticaNeueBold,
@@ -18,8 +22,6 @@ import {
   helveticaNeueUltraLightItalic,
   helveticaNeue,
 } from './fonts';
-import { makeGradient } from './makeGradient';
-import { generateGridSpacingOverrides } from './generateGridSpacingOverrides';
 
 export { Theme };
 
@@ -136,7 +138,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
   const tabsIndicatorSpace = 3;
   const tabsBorderWidth = 1;
 
-  return createMuiTheme({
+  return createTheme(type, {
     colors,
     gradients: getGradients(type),
     palette: type === 'light' ? lightPalette : darkPalette,
@@ -432,18 +434,6 @@ function getTheme(type: 'light' | 'dark'): Theme {
       },
     },
   });
-}
-
-declare module '@material-ui/core/styles/createMuiTheme' {
-  interface Theme {
-    colors: typeof colors;
-    gradients: ReturnType<typeof getGradients>;
-  }
-
-  interface ThemeOptions {
-    colors: typeof colors;
-    gradients: ReturnType<typeof getGradients>;
-  }
 }
 
 declare module '@material-ui/core/styles/createPalette' {

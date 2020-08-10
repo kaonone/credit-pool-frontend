@@ -25,10 +25,9 @@ export { default as Skeleton } from '@material-ui/lab/Skeleton';
 export { default as TabsList } from '@material-ui/lab/TabList';
 export { default as TabPanel } from '@material-ui/lab/TabPanel';
 export { default as TabContext } from '@material-ui/lab/TabContext';
-
+export { Button, ButtonProps } from './Button/Button';
 export { NavMenuItem } from './NavMenuItem/NavMenuItem';
 export { AkropolisSocialLinks } from './AkropolisSocialLinks/AkropolisSocialLinks';
-export { Button, ButtonProps } from './Button/Button';
 export { Layout } from './Layout/Layout';
 export { Intro } from './Intro/Intro';
 export { Benefit, Benefits } from './Benefits/Benefits';
