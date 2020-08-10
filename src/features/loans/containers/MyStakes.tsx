@@ -139,6 +139,8 @@ export const useStyles = makeStyles(
       maxHeight: 146,
     },
     issuedLoan: {
+      display: 'flex',
+      alignItems: 'center',
       backgroundColor: '#171722',
       position: 'relative',
       padding: '10px 0 10px 210px',
