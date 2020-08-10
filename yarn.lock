@@ -2,6 +2,23 @@
 # yarn lockfile v1
 
 
+"@akropolis-web/components@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@akropolis-web/components/-/components-0.2.0.tgz#11cc61c066578e57353c8005b7961fb4cc1be448"
+  integrity sha512-Gi/lJi/wTAO7ayKEecVy3TGCBtnfyZ8dD2sNUv/HbfKa6iccmb9c9gqsNPdv7xqdyGenyCZAZcUa3b3BSqFCYA==
+  dependencies:
+    "@akropolis-web/styles" "^0.2.0"
+    "@types/classnames" "^2.2.9"
+    classnames "^2.0.0"
+
+"@akropolis-web/styles@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@akropolis-web/styles/-/styles-0.2.0.tgz#d960584605b344dca8569ed5df99c6414e1599ee"
+  integrity sha512-x+0zqcf5Sebku1qnclEPC9TQBDsPDsInS0E71NYMSHGyMsvSaK6Wuorb47rjT0IfrpuKnf0wdebp2CWXA6Bnbg==
+  dependencies:
+    "@types/ramda" "^0.26.43"
+    ramda "^0.27.0"
+
 "@apollo/react-common@^3.1.3":
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/@apollo/react-common/-/react-common-3.1.3.tgz#ddc34f6403f55d47c0da147fd4756dfd7c73dac5"
@@ -4287,7 +4304,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.2.5, classnames@^2.2.6:
+classnames@^2.0.0, classnames@^2.2.5, classnames@^2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
   integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==

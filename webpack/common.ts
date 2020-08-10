@@ -37,6 +37,7 @@ const config: webpack.Configuration = {
   resolve: {
     modules: ['node_modules', 'src'],
     extensions: ['.js', 'mjs', '.jsx', '.ts', '.tsx', '.json'],
+    symlinks: false,
   },
   module: {
     rules: [
