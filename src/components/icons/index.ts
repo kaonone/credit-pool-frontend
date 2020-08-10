@@ -32,3 +32,4 @@ export { Sun } from './Sun';
 export { Moon } from './Moon';
 export { ProfitArrow } from './ProfitArrow';
 export { Cat1 } from './cats/Cat1';
+export { ChillCat } from './ChillCat';
