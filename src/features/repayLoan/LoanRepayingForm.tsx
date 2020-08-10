@@ -61,6 +61,9 @@ export function LoanRepayingForm({
   const api = useApi();
 
   const [currentToken, setCurrentToken] = useState<Token | null>(null);
+  const [currentRepaymentMethod, setCurrentRepaymentMethod] = useState<RepaymentMethod | null>(
+    null,
+  );
 
   const maxValue = useMemo(
     () =>
@@ -116,10 +119,11 @@ export function LoanRepayingForm({
   );
 
   const handleFormChange = useCallback(
-    ({ values: { amount } }: FormState<FormData>) => {
+    ({ values: { amount, repaymentMethod } }: FormState<FormData>) => {
       if (!currentToken || !amount || !currentToken.equals(amount.currency)) {
         setCurrentToken(amount?.currency || null);
       }
+      setCurrentRepaymentMethod(repaymentMethod);
     },
     [currentToken],
   );
@@ -189,7 +193,7 @@ export function LoanRepayingForm({
                   ))}
                 </RadioGroupInputField>
               </Grid>
-              {currentToken && (
+              {currentToken && currentRepaymentMethod === 'fromOwnBalance' && (
                 <Grid item xs={6} container justify="flex-end" alignItems="flex-start">
                   <InfiniteApproveSwitch
                     spender={ETH_NETWORK_CONFIG.contracts.fundsModule}
