@@ -6,22 +6,7 @@ import {
   generateGridSpacingOverrides,
 } from '@akropolis-web/styles';
 
-import {
-  helveticaNeueBold,
-  helveticaNeueBoldItalic,
-  helveticaNeueCondensedBlack,
-  helveticaNeueCondensedBold,
-  helveticaNeueItalic,
-  helveticaNeueLight,
-  helveticaNeueLightItalic,
-  helveticaNeueMedium,
-  helveticaNeueMediumItalic,
-  helveticaNeueThin,
-  helveticaNeueThinItalic,
-  helveticaNeueUltraLight,
-  helveticaNeueUltraLightItalic,
-  helveticaNeue,
-} from './fonts';
+import './fonts';
 
 export { Theme };
 
@@ -212,22 +197,6 @@ function getTheme(type: 'light' | 'dark'): Theme {
       },
       MuiCssBaseline: {
         '@global': {
-          '@font-face': [
-            helveticaNeueBold,
-            helveticaNeueBoldItalic,
-            helveticaNeueCondensedBlack,
-            helveticaNeueCondensedBold,
-            helveticaNeueItalic,
-            helveticaNeueLight,
-            helveticaNeueLightItalic,
-            helveticaNeueMedium,
-            helveticaNeueMediumItalic,
-            helveticaNeueThin,
-            helveticaNeueThinItalic,
-            helveticaNeueUltraLight,
-            helveticaNeueUltraLightItalic,
-            helveticaNeue,
-          ],
           html: {
             boxSizing: 'border-box',
             WebkitFontSmoothing: 'antialiased',
