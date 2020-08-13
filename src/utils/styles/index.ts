@@ -6,7 +6,6 @@ export {
   lighten,
   darken,
   WithDarkTheme,
-  colors,
   rgba,
 } from '@akropolis-web/styles';
 

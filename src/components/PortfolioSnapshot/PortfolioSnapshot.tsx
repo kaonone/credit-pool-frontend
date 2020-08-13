@@ -2,7 +2,7 @@ import * as React from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import { tKeys as tKeysAll, useTranslate } from 'services/i18n';
-import { makeStyles, rgba, colors } from 'utils/styles';
+import { makeStyles, rgba } from 'utils/styles';
 import { Label } from 'components/Label/Label';
 
 import { DAIIcon, USDTIcon, USDCIcon, TUSDIcon } from '../icons';
@@ -99,7 +99,7 @@ function renderLoansIssued(
 }
 
 const useStyles = makeStyles(
-  () => ({
+  theme => ({
     root: {},
 
     table: {
@@ -125,7 +125,7 @@ const useStyles = makeStyles(
         paddingTop: 32,
       },
       '& tr:last-child': {
-        borderBottom: `1px solid ${rgba(colors.white, 0.1)}`,
+        borderBottom: `1px solid ${rgba(theme.colors.white, 0.1)}`,
         borderRadius: 6,
 
         '& td': {

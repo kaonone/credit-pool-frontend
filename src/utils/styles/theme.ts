@@ -1,22 +1,6 @@
 import { createMuiTheme, Theme } from '@material-ui/core/styles';
-import { getTheme as createTheme, colors, makeGradient } from '@akropolis-web/styles';
-
-import {
-  helveticaNeueBold,
-  helveticaNeueBoldItalic,
-  helveticaNeueCondensedBlack,
-  helveticaNeueCondensedBold,
-  helveticaNeueItalic,
-  helveticaNeueLight,
-  helveticaNeueLightItalic,
-  helveticaNeueMedium,
-  helveticaNeueMediumItalic,
-  helveticaNeueThin,
-  helveticaNeueThinItalic,
-  helveticaNeueUltraLight,
-  helveticaNeueUltraLightItalic,
-  helveticaNeue,
-} from './fonts';
+import { getTheme as createTheme, makeGradient, colors } from '@akropolis-web/styles';
+import '@akropolis-web/styles/assets/fonts/HelveticaNeue/stylesheet.css';
 
 export { Theme };
 
@@ -35,14 +19,6 @@ function getGradients(type: 'dark' | 'light') {
       makeGradient(['#63afdd', '#574cf2']),
       makeGradient(['#c43ff0', '#574cf2']),
     ] as const,
-    poolCompositionChart: [
-      makeGradient(['#63f8b3', '#dcff9c']),
-      makeGradient(['#e323ff', '#7517f8']),
-      makeGradient(['#639ff8', '#85f9e1']),
-      makeGradient(['#7d40ff', '#02a4ff']),
-      makeGradient(['#f985f5', '#f863dd']),
-    ] as const,
-    progressChart: makeGradient(['#7d40ff', '#02a4ff']),
   };
 }
 
@@ -55,7 +31,6 @@ function getTheme(type: 'light' | 'dark'): Theme {
   const tabsBorderWidth = 1;
 
   return createTheme(type, {
-    colors,
     gradients: getGradients(type),
     breakpoints: {
       keys: [
@@ -105,23 +80,6 @@ function getTheme(type: 'light' | 'dark'): Theme {
       },
       MuiCssBaseline: {
         '@global': {
-          '@font-face': [
-            helveticaNeueBold,
-            helveticaNeueBoldItalic,
-            helveticaNeueCondensedBlack,
-            helveticaNeueCondensedBold,
-            helveticaNeueItalic,
-            helveticaNeueLight,
-            helveticaNeueLightItalic,
-            helveticaNeueMedium,
-            helveticaNeueMediumItalic,
-            helveticaNeueThin,
-            helveticaNeueThinItalic,
-            helveticaNeueUltraLight,
-            helveticaNeueUltraLightItalic,
-            helveticaNeue,
-          ],
-
           '#root': {
             zIndex: 1,
             position: 'relative',
@@ -143,7 +101,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
         },
       },
 
-      //TODO: remove Tabs overrides after importing Tabs from @akropolis-web/components
+      // TODO: remove Tabs overrides after importing Tabs from @akropolis-web/components
       MuiTabs: {
         root: {
           position: 'relative',
@@ -231,14 +189,6 @@ function getTheme(type: 'light' | 'dark'): Theme {
       },
     },
   });
-}
-
-declare module '@material-ui/core/styles/createPalette' {
-  interface TypeBackground {
-    hint: string;
-    tableHeader: string;
-    paperSecondary: string;
-  }
 }
 
 declare module '@material-ui/core/styles/createBreakpoints' {
