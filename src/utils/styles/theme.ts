@@ -1,10 +1,5 @@
 import { createMuiTheme, Theme } from '@material-ui/core/styles';
-import {
-  getTheme as createTheme,
-  colors,
-  makeGradient,
-  generateGridSpacingOverrides,
-} from '@akropolis-web/styles';
+import { getTheme as createTheme, colors, makeGradient } from '@akropolis-web/styles';
 
 import {
   helveticaNeueBold,
@@ -29,29 +24,6 @@ const defaultTheme = createMuiTheme();
 
 function getGradients(type: 'dark' | 'light') {
   return {
-    main: makeGradient([colors.heliotrope, colors.royalBlue]),
-    products: [
-      makeGradient(
-        type === 'dark' ? [colors.jacarta, colors.blueZodiac] : [colors.zumthor2, colors.linkWater],
-      ),
-      makeGradient(
-        type === 'dark' ? [colors.jacarta2, colors.bunting] : [colors.whisper, colors.blueChalk],
-      ),
-      makeGradient(
-        type === 'dark' ? [colors.bossanova, colors.valhalla] : [colors.snuff, colors.amour],
-      ),
-    ] as const,
-    button: makeGradient([
-      colors.heliotrope,
-      colors.royalBlue,
-      colors.heliotrope2,
-      colors.heliotrope,
-    ]),
-    outlinedButton: makeGradient([
-      { color: colors.heliotrope, offset: '0%' },
-      { color: colors.royalBlue, offset: '33.3%' },
-      { color: colors.heliotrope, offset: '100%' },
-    ]),
     spartaIcon: makeGradient(
       type === 'dark'
         ? [colors.northWesternPurple, colors.darkPurple]
@@ -74,62 +46,6 @@ function getGradients(type: 'dark' | 'light') {
   };
 }
 
-const lightPalette = {
-  primary: {
-    main: colors.purpleHeart,
-    light: colors.heliotrope,
-    dark: colors.mediumPurple,
-    contrastText: colors.white,
-  },
-  secondary: {
-    main: colors.electricViolet,
-    light: colors.electricViolet,
-    dark: colors.electricViolet,
-    contrastText: colors.electricViolet,
-  },
-  text: {
-    primary: colors.black,
-  },
-  error: {
-    main: colors.monza,
-  },
-  background: {
-    hint: colors.charade,
-    default: colors.athensGray,
-    paper: colors.white,
-    paperSecondary: colors.white,
-  },
-  type: 'light' as const,
-};
-
-export const darkPalette = {
-  primary: {
-    main: colors.purpleHeart,
-    light: colors.heliotrope,
-    dark: colors.mediumPurple,
-    contrastText: colors.white,
-  },
-  secondary: {
-    main: colors.electricViolet,
-    light: colors.electricViolet,
-    dark: colors.electricViolet,
-    contrastText: colors.electricViolet,
-  },
-  text: {
-    primary: colors.white,
-  },
-  error: {
-    main: colors.monza,
-  },
-  background: {
-    hint: colors.darkSpace,
-    default: colors.obsidian,
-    paper: colors.foggyNight,
-    paperSecondary: colors.darkBlueMagenta,
-  },
-  type: 'dark' as const,
-};
-
 export const lightTheme = getTheme('light');
 export const darkTheme = getTheme('dark');
 
@@ -141,7 +57,6 @@ function getTheme(type: 'light' | 'dark'): Theme {
   return createTheme(type, {
     colors,
     gradients: getGradients(type),
-    palette: type === 'light' ? lightPalette : darkPalette,
     breakpoints: {
       keys: [
         'xs',
@@ -178,13 +93,6 @@ function getTheme(type: 'light' | 'dark'): Theme {
     },
     typography: {
       fontFamily: ['Helvetica Neue', 'Arial', 'sans-serif'].join(','),
-      h6: {
-        fontSize: 16,
-        fontWeight: 400,
-      },
-    },
-    shape: {
-      borderRadius: 4,
     },
     overrides: {
       MuiDrawer: {
@@ -193,21 +101,6 @@ function getTheme(type: 'light' | 'dark'): Theme {
           width: defaultTheme.spacing(60),
           padding: defaultTheme.spacing(4, 5),
           backgroundColor: type === 'dark' ? colors.blackCurrant : colors.white,
-        },
-      },
-      MuiPaper: {
-        root: {
-          transition: defaultTheme.transitions.create(['background-color', 'box-shadow']),
-        },
-      },
-      MuiLink: {
-        underlineHover: {
-          textDecoration: 'underline',
-          textDecorationColor: type === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
-
-          '&:hover': {
-            textDecorationColor: 'inherit',
-          },
         },
       },
       MuiCssBaseline: {
@@ -228,57 +121,10 @@ function getTheme(type: 'light' | 'dark'): Theme {
             helveticaNeueUltraLightItalic,
             helveticaNeue,
           ],
-          html: {
-            boxSizing: 'border-box',
-            WebkitFontSmoothing: 'antialiased',
-            MozOsxFontSmoothing: 'grayscale',
-            fontSize: 16,
-            fontFamily: 'helvetica, sans-serif',
-          },
-
-          body: {
-            margin: 0,
-            fontSize: '1rem',
-            transition: defaultTheme.transitions.create('background-color'),
-            overflow: 'hidden',
-          },
-
-          'html, body, #root': {
-            height: '100%',
-          },
 
           '#root': {
             zIndex: 1,
             position: 'relative',
-          },
-
-          '*, *::before, *::after': {
-            boxSizing: 'inherit',
-          },
-
-          '@media print': {
-            body: {
-              backgroundColor: '#fff',
-            },
-          },
-
-          '#walletconnect-wrapper': {
-            zIndex: defaultTheme.zIndex.modal,
-            position: 'relative',
-          },
-        },
-      },
-
-      MuiButton: {
-        endIcon: {
-          '&:empty': {
-            display: 'none',
-          },
-        },
-
-        startIcon: {
-          '&:empty': {
-            display: 'none',
           },
         },
       },
@@ -297,33 +143,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
         },
       },
 
-      MuiGrid: {
-        ...generateGridSpacingOverrides(defaultTheme.spacing),
-      },
-
-      MuiSnackbarContent: {
-        root: {
-          backgroundColor: '#fff',
-        },
-        message: {
-          color: colors.obsidian,
-        },
-      },
-
-      MuiFormControlLabel: {
-        root: {
-          marginRight: 0,
-        },
-      },
-
-      MuiFormGroup: {
-        row: {
-          '& .MuiFormControlLabel-root': {
-            marginRight: 20,
-          },
-        },
-      },
-
+      //TODO: remove Tabs overrides after importing Tabs from @akropolis-web/components
       MuiTabs: {
         root: {
           position: 'relative',
@@ -402,33 +222,10 @@ function getTheme(type: 'light' | 'dark'): Theme {
         },
       },
 
-      MuiSvgIcon: {
-        root: {
-          display: 'block',
-          fontSize: '1.25rem',
-        },
-
-        fontSizeSmall: {
-          fontSize: '1rem',
-        },
-
-        fontSizeLarge: {
-          fontSize: '1.5rem',
-        },
-      },
-
       // TODO: enable @material-ui/lab overrides
       // @ts-ignore
       MuiTabPanel: {
         root: {
-          padding: 0,
-        },
-      },
-
-      MuiDialogTitle: {
-        root: {
-          fontSize: '1.375rem',
-          fontWeight: 300,
           padding: 0,
         },
       },

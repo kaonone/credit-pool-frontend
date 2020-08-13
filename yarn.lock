@@ -2,19 +2,23 @@
 # yarn lockfile v1
 
 
-"@akropolis-web/components@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@akropolis-web/components/-/components-0.2.0.tgz#11cc61c066578e57353c8005b7961fb4cc1be448"
-  integrity sha512-Gi/lJi/wTAO7ayKEecVy3TGCBtnfyZ8dD2sNUv/HbfKa6iccmb9c9gqsNPdv7xqdyGenyCZAZcUa3b3BSqFCYA==
+"@akropolis-web/components@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@akropolis-web/components/-/components-0.5.0.tgz#8584d4648bf76c3f0c034ed4aef1196246e2f344"
+  integrity sha512-G49EumVN1TP2sYKL5HjyBqDiQ64cDt73nhw4QRcJ5knsvymiQqzL+zJD5FYu8SgJ8zscvIDm2jAW7SATMxAfVQ==
   dependencies:
-    "@akropolis-web/styles" "^0.2.0"
-    "@types/classnames" "^2.2.9"
-    classnames "^2.0.0"
+    "@akropolis-web/styles" "^0.7.0"
+    "@types/color" "^3.0.1"
+    "@types/mersenne-twister" "^1.1.2"
+    "@types/react-copy-to-clipboard" "^4.3.0"
+    color "^3.1.2"
+    mersenne-twister "^1.1.0"
+    react-copy-to-clipboard "^5.0.2"
 
-"@akropolis-web/styles@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@akropolis-web/styles/-/styles-0.2.0.tgz#d960584605b344dca8569ed5df99c6414e1599ee"
-  integrity sha512-x+0zqcf5Sebku1qnclEPC9TQBDsPDsInS0E71NYMSHGyMsvSaK6Wuorb47rjT0IfrpuKnf0wdebp2CWXA6Bnbg==
+"@akropolis-web/styles@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@akropolis-web/styles/-/styles-0.7.0.tgz#f45c2d2040c3050a86e5728dbd374b666acd9ce9"
+  integrity sha512-EucBJSTx7QZYLA82pg7elFcBveQhL5d/SAEL/X88c3oThSmBDu4qsERU0Zv66E2iGS/bIRI0m1Q19pUS+7FYRA==
   dependencies:
     "@types/ramda" "^0.26.43"
     ramda "^0.27.0"
@@ -1485,10 +1489,24 @@
   dependencies:
     "@types/node" "*"
 
-"@types/color-name@^1.1.1":
+"@types/color-convert@*":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@types/color-convert/-/color-convert-1.9.0.tgz#bfa8203e41e7c65471e9841d7e306a7cd8b5172d"
+  integrity sha512-OKGEfULrvSL2VRbkl/gnjjgbbF7ycIlpSsX7Nkab4MOWi5XxmgBYvuiQ7lcCFY5cPDz7MUNaKgxte2VRmtr4Fg==
+  dependencies:
+    "@types/color-name" "*"
+
+"@types/color-name@*", "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
   integrity sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
+
+"@types/color@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@types/color/-/color-3.0.1.tgz#2900490ed04da8116c5058cd5dba3572d5a25071"
+  integrity sha512-oeUWVaAwI+xINDUx+3F2vJkl/vVB03VChFF/Gl3iQCdbcakjuoJyMOba+3BXRtnBhxZ7uBYqQBi9EpLnvSoztA==
+  dependencies:
+    "@types/color-convert" "*"
 
 "@types/connect-history-api-fallback@*":
   version "1.3.3"
@@ -1667,6 +1685,11 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
+
+"@types/mersenne-twister@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@types/mersenne-twister/-/mersenne-twister-1.1.2.tgz#ed62ec352ec8cde5a3499ccd12ea4c67cf8a0cec"
+  integrity sha512-7KMIfSkMpaVExbzJRLUXHMO4hkFWbbspHPREk8I6pBxiNN+3+l6eAEClMCIPIo2KjCkR0rjYfXppr6+wKdTwpA==
 
 "@types/mime@*":
   version "2.0.1"
@@ -4304,7 +4327,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.0.0, classnames@^2.2.5, classnames@^2.2.6:
+classnames@^2.2.5, classnames@^2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
   integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
@@ -4447,7 +4470,7 @@ collection-visit@^1.0.0:
     map-visit "^1.0.0"
     object-visit "^1.0.0"
 
-color-convert@^1.3.0, color-convert@^1.9.0:
+color-convert@^1.3.0, color-convert@^1.9.0, color-convert@^1.9.1:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.3.tgz#bb71850690e1f136567de629d2d5471deda4c1e8"
   integrity sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==
@@ -4478,6 +4501,14 @@ color-string@^0.3.0:
   dependencies:
     color-name "^1.0.0"
 
+color-string@^1.5.2:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/color-string/-/color-string-1.5.3.tgz#c9bbc5f01b58b5492f3d6857459cb6590ce204cc"
+  integrity sha512-dC2C5qeWoYkxki5UAXapdjqO672AM4vZuPGRQfO8b5HKuKGBbKWpITyDYN7TOFKvRW7kOgAn3746clDBMDJyQw==
+  dependencies:
+    color-name "^1.0.0"
+    simple-swizzle "^0.2.2"
+
 color@^0.11.0:
   version "0.11.4"
   resolved "https://registry.yarnpkg.com/color/-/color-0.11.4.tgz#6d7b5c74fb65e841cd48792ad1ed5e07b904d764"
@@ -4486,6 +4517,14 @@ color@^0.11.0:
     clone "^1.0.2"
     color-convert "^1.3.0"
     color-string "^0.3.0"
+
+color@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/color/-/color-3.1.2.tgz#68148e7f85d41ad7649c5fa8c8106f098d229e10"
+  integrity sha512-vXTJhHebByxZn3lDvDJYw4lR5+uB3vuoHsuYA5AKuxRVn5wzzIfQKGLBmgdVRHKTJYeK5rvJcHnrd0Li49CFpg==
+  dependencies:
+    color-convert "^1.9.1"
+    color-string "^1.5.2"
 
 colors@^1.1.2:
   version "1.4.0"
@@ -8259,6 +8298,11 @@ is-arrayish@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.2.1.tgz#77c99840527aa8ecb1a8ba697b80645a7a926a9d"
   integrity sha1-d8mYQFJ6qOyxqLppe4BkWnqSap0=
+
+is-arrayish@^0.3.1:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.3.2.tgz#4574a2ae56f7ab206896fb431eaeed066fdf8f03"
+  integrity sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==
 
 is-binary-path@^1.0.0:
   version "1.0.1"
@@ -13001,6 +13045,13 @@ simple-git@2.12.0:
     "@kwsites/file-exists" "^1.1.1"
     "@kwsites/promise-deferred" "^1.0.1"
     debug "^4.1.1"
+
+simple-swizzle@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/simple-swizzle/-/simple-swizzle-0.2.2.tgz#a4da6b635ffcccca33f70d17cb92592de95e557a"
+  integrity sha1-pNprY1/8zMoz9w0Xy5JZLeleVXo=
+  dependencies:
+    is-arrayish "^0.3.1"
 
 sisteransi@^1.0.3:
   version "1.0.3"
