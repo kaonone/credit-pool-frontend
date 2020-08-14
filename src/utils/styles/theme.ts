@@ -1,6 +1,10 @@
 import { createMuiTheme, Theme } from '@material-ui/core/styles';
-import { getTheme as createTheme, makeGradient, colors } from '@akropolis-web/styles';
-import '@akropolis-web/styles/assets/fonts/HelveticaNeue/stylesheet.css';
+import {
+  getTheme as createTheme,
+  makeGradient,
+  colors,
+  generateGridSpacingOverrides,
+} from '@akropolis-web/styles';
 
 export { Theme };
 
@@ -68,6 +72,18 @@ function getTheme(type: 'light' | 'dark'): Theme {
       },
     },
     overrides: {
+      MuiDrawer: {
+        paper: {
+          display: 'block',
+          width: defaultTheme.spacing(60),
+          padding: defaultTheme.spacing(4, 5),
+        },
+      },
+
+      MuiGrid: {
+        ...generateGridSpacingOverrides(defaultTheme.spacing),
+      },
+
       // TODO: remove Tabs overrides after importing Tabs from @akropolis-web/components
       MuiTabs: {
         root: {
@@ -87,7 +103,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
             right: 1,
             bottom: 1,
             borderRadius: tabsHeight / 2,
-            background: colors.foggyNight,
+            background: colors.cinder,
           },
         },
 
