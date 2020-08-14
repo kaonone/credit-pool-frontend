@@ -1,5 +1,9 @@
 import { createMuiTheme, Theme } from '@material-ui/core/styles';
-import { getTheme as createTheme, makeGradient, colors } from '@akropolis-web/styles';
+import {
+  getTheme as createTheme,
+  makeGradient,
+  colors,
+} from '@akropolis-web/styles';
 import '@akropolis-web/styles/assets/fonts/HelveticaNeue/stylesheet.css';
 
 export { Theme };
@@ -31,7 +35,8 @@ function getTheme(type: 'light' | 'dark'): Theme {
   const tabsBorderWidth = 1;
 
   return createTheme(type, {
-    gradients: getGradients(type),
+    // TODO: Package theme options are not merged with ThemeOptionsOverrides properly. Fix this TS issue in @akropolis-web/styles
+    gradients: getGradients(type) as any,
     breakpoints: {
       keys: [
         'xs',
@@ -66,41 +71,7 @@ function getTheme(type: 'light' | 'dark'): Theme {
         mobileXS: 0,
       },
     },
-    typography: {
-      fontFamily: ['Helvetica Neue', 'Arial', 'sans-serif'].join(','),
-    },
     overrides: {
-      MuiDrawer: {
-        paper: {
-          display: 'block',
-          width: defaultTheme.spacing(60),
-          padding: defaultTheme.spacing(4, 5),
-          backgroundColor: type === 'dark' ? colors.blackCurrant : colors.white,
-        },
-      },
-      MuiCssBaseline: {
-        '@global': {
-          '#root': {
-            zIndex: 1,
-            position: 'relative',
-          },
-        },
-      },
-
-      MuiExpansionPanelSummary: {
-        root: {
-          '&$expanded': {
-            minHeight: defaultTheme.spacing(6),
-          },
-        },
-
-        content: {
-          '&$expanded': {
-            margin: defaultTheme.spacing(1.5, 0),
-          },
-        },
-      },
-
       // TODO: remove Tabs overrides after importing Tabs from @akropolis-web/components
       MuiTabs: {
         root: {
@@ -189,6 +160,16 @@ function getTheme(type: 'light' | 'dark'): Theme {
       },
     },
   });
+}
+
+declare module '@akropolis-web/styles/dist/theme' {
+  interface ThemeOverrides {
+    gradients: ReturnType<typeof getGradients>;
+  }
+
+  interface ThemeOptionsOverrides {
+    gradients: ReturnType<typeof getGradients>;
+  }
 }
 
 declare module '@material-ui/core/styles/createBreakpoints' {
