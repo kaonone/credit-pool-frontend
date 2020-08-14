@@ -1,9 +1,5 @@
 import { createMuiTheme, Theme } from '@material-ui/core/styles';
-import {
-  getTheme as createTheme,
-  makeGradient,
-  colors,
-} from '@akropolis-web/styles';
+import { getTheme as createTheme, makeGradient, colors } from '@akropolis-web/styles';
 import '@akropolis-web/styles/assets/fonts/HelveticaNeue/stylesheet.css';
 
 export { Theme };
