@@ -1,3 +1,5 @@
+import '@akropolis-web/styles/assets/fonts/HelveticaNeue/stylesheet.css';
+
 export {
   CSSProperties,
   StyleRules,
@@ -6,7 +8,6 @@ export {
   lighten,
   darken,
   WithDarkTheme,
-  colors,
   rgba,
 } from '@akropolis-web/styles';
 
