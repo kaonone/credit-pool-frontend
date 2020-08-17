@@ -4,13 +4,15 @@ import { FormSpy } from 'react-final-form';
 import { FormState } from 'final-form';
 import { empty } from 'rxjs';
 
+import { ETH_NETWORK_CONFIG } from 'env';
+import { Loading, Typography, Grid } from 'components';
 import { FormWithConfirmation, TokenAmountField, FieldNames, SpyField } from 'components/form';
 import { TokenAmount, Token } from 'model/entities';
 import { useTranslate, tKeys as tKeysAll } from 'services/i18n';
 import { useApi } from 'services/api';
 import { makeStyles } from 'utils/styles';
 import { useSubscribable, useValidateAmount } from 'utils/react';
-import { Loading, Typography } from 'components';
+import { InfiniteApproveSwitch } from 'features/infiniteApprove';
 
 interface FormData {
   amount: TokenAmount | null;
@@ -102,14 +104,26 @@ export function BuyingShareForm({ onCancel, account, note }: BuyingShareFormProp
       <Loading meta={supportedTokensMeta}>
         {supportedTokens && (
           <>
-            {note && <Typography className={classes.note}>{note}</Typography>}
-            <TokenAmountField
-              name={fieldNames.amount}
-              currencies={supportedTokens}
-              placeholder={amountPlaceholder}
-              validate={validateAmount}
-              maxValue={maxValue$}
-            />
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                {note && <Typography className={classes.note}>{note}</Typography>}
+                <TokenAmountField
+                  name={fieldNames.amount}
+                  currencies={supportedTokens}
+                  placeholder={amountPlaceholder}
+                  validate={validateAmount}
+                  maxValue={maxValue$}
+                />
+              </Grid>
+              {currentToken && (
+                <Grid item container justify="flex-end">
+                  <InfiniteApproveSwitch
+                    spender={ETH_NETWORK_CONFIG.contracts.fundsModule}
+                    tokens={currentToken}
+                  />
+                </Grid>
+              )}
+            </Grid>
             <FormSpy<FormData> subscription={{ values: true }} onChange={handleFormChange} />
             <SpyField name="__" fieldValue={validateAmount} />
           </>
