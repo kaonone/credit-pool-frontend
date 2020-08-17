@@ -7,7 +7,7 @@ import { useCommunication } from 'utils/react';
 import { ButtonBase, Loading, Typography, Box, ShortAddress, Grid, Button } from 'components';
 import { WalletType } from 'services/api';
 import { tKeys, useTranslate } from 'services/i18n';
-import { makeStyles, useTheme, Theme, darken, lighten } from 'utils/styles';
+import { makeStyles, useTheme, Theme } from 'utils/styles';
 import { zeroAddress } from 'utils/mock';
 import { Bitski, Fortmatic, Metamask, Portis, WalletConnect } from 'components/icons/wallets';
 
@@ -81,7 +81,6 @@ export function ProviderButton({
             <Box clone alignSelf="stretch">
               <Grid item>
                 <Button
-                  className={classes.actionName}
                   variant="outlined"
                   color="primary"
                   size="small"
@@ -128,14 +127,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
   fullWidth: {
     width: '100%',
-  },
-
-  actionName: {
-    border: `1px solid ${
-      theme.palette.type === 'dark'
-        ? lighten(theme.palette.background.paper, 0.2)
-        : darken(theme.palette.background.paper, 0.2)
-    }`,
   },
 
   loading: {
