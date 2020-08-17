@@ -1,4 +1,5 @@
 import React from 'react';
+import { AncestorBackgroundHackProvider, useTheme } from '@akropolis-web/styles';
 
 import { useApi } from 'services/api';
 import { useSubscribable } from 'utils/react';
@@ -14,6 +15,7 @@ type Props = {
 
 export const MainLayout: React.FC<Props> = props => {
   const classes = useStyles();
+  const theme = useTheme();
 
   const api = useApi();
   const [account] = useSubscribable(() => api.web3Manager.account$, [], null);
@@ -22,12 +24,16 @@ export const MainLayout: React.FC<Props> = props => {
     <div className={classes.root}>
       {account && <Sidebar />}
       <div className={classes.headerAndContent}>
-        <div className={classes.header}>
-          <NewHeader />
-        </div>
-        <div className={classes.content}>
-          <props.Content />
-        </div>
+        <AncestorBackgroundHackProvider backgroundColor={theme.palette.background.paper}>
+          <div className={classes.header}>
+            <NewHeader />
+          </div>
+        </AncestorBackgroundHackProvider>
+        <AncestorBackgroundHackProvider backgroundColor={theme.palette.background.paper}>
+          <div className={classes.content}>
+            <props.Content />
+          </div>
+        </AncestorBackgroundHackProvider>
         <div className={classes.footer}>
           <AppFooter />
         </div>
