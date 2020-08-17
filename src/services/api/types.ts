@@ -35,6 +35,14 @@ export type SubmittedTransaction =
       { spender: string; fromAddress: string; value: TokenAmount }
     >
   | IGenericSubmittedTransaction<
+      'erc20.revertApprove',
+      { spender: string; fromAddress: string; value: TokenAmount }
+    >
+  | IGenericSubmittedTransaction<
+      'erc20.infiniteApprove',
+      { spender: string; fromAddress: string; value: TokenAmount }
+    >
+  | IGenericSubmittedTransaction<
       'liquidity.sellPtk',
       { address: string; sourceAmount: TokenAmount }
     >
