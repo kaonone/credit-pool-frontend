@@ -3,11 +3,10 @@ import LinearProgress, { LinearProgressProps } from '@material-ui/core/LinearPro
 import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
 import Skeleton, { SkeletonProps } from '@material-ui/lab/Skeleton';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { SubscriptionResult } from '@apollo/react-common';
 import { SubSet } from '_helpers';
 
+import { makeStyles } from 'utils/styles';
 import { CommunicationState } from 'utils/react';
 
 interface IMeta {
