@@ -98,6 +98,16 @@ const en = {
         success: 'Approving %{amount} transfer. Successful',
         error: 'Approving %{amount} transfer. Failed',
       },
+      'erc20.revertApprove': {
+        pending: 'Reverting approve for infinite transfers %{symbol}. Pending',
+        success: 'Reverting approve for infinite transfers %{symbol}. Successful',
+        error: 'Reverting approve for infinite transfers %{symbol}. Failed',
+      },
+      'erc20.infiniteApprove': {
+        pending: 'Approving infinite transfers %{symbol}. Pending',
+        success: 'Approving infinite transfers %{symbol}. Successful',
+        error: 'Approving infinite transfers %{symbol}. Failed',
+      },
       'ptk.claimDistributions': {
         pending: 'Withdrawing distributions. Pending',
         success: 'Withdrawing distributions. Successful',
@@ -336,6 +346,10 @@ const en = {
           "You don't have any pending loans at the moment. If you wish to make a loan request — be prepared to stake 50% of collateral",
         borrowButton: 'Borrow',
       },
+    },
+    infiniteApprove: {
+      text:
+        'Preapprove the contract to be able to spend any amount of your coins. You will not need to approve again & sign additional transactions each time.',
     },
   },
   utils: {
