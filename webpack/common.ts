@@ -37,9 +37,14 @@ const config: webpack.Configuration = {
   resolve: {
     modules: ['node_modules', 'src'],
     extensions: ['.js', 'mjs', '.jsx', '.ts', '.tsx', '.json'],
+    symlinks: false,
   },
   module: {
     rules: [
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
       {
         test: /\.mjs$/,
         include: /node_modules/,
@@ -55,7 +60,7 @@ const config: webpack.Configuration = {
         },
       },
       {
-        test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
+        test: /\.(ttf|eot|otf|woff(2)?)(\?[a-z0-9]+)?$/,
         use: 'file-loader?name=fonts/[hash].[ext]',
       },
       {

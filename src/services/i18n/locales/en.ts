@@ -238,8 +238,8 @@ const en = {
       },
       exchangingConfirmation: {
         title: 'Confirm action',
-        no: 'no',
-        yes: 'yes',
+        no: 'No',
+        yes: 'Yes',
       },
     },
     distributions: {

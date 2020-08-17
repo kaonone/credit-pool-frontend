@@ -1,13 +1,13 @@
-import { makeStyles, colors } from 'utils/styles';
+import { makeStyles } from 'utils/styles';
 
-export const useStyles = makeStyles(() => ({
+export const useStyles = makeStyles(theme => ({
   root: {
     '&$increase': {
-      color: colors.shamrock,
+      color: theme.colors.shamrock,
     },
 
     '&$decrease': {
-      color: colors.geraldine,
+      color: theme.colors.geraldine,
     },
   },
 
