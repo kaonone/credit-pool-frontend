@@ -78,7 +78,7 @@ export function FormTemplate<FormValues extends AnyObject>(props: FormTemplatePr
                 fullWidth
                 disabled={submitting}
               >
-                {submitting ? <CircularProgress size={24} /> : submitButton || 'Submit'}
+                {submitting ? <CircularProgress size={16} /> : submitButton || 'Submit'}
               </Button>
             </Grid>
           </Grid>
