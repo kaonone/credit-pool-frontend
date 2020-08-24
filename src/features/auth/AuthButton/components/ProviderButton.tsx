@@ -7,7 +7,7 @@ import { useCommunication } from 'utils/react';
 import { ButtonBase, Loading, Typography, Box, ShortAddress, Grid, Button } from 'components';
 import { WalletType } from 'services/api';
 import { tKeys, useTranslate } from 'services/i18n';
-import { makeStyles, useTheme, Theme } from 'utils/styles';
+import { makeStyles, Theme } from 'utils/styles';
 import { zeroAddress } from 'utils/mock';
 import { Bitski, Fortmatic, Metamask, Portis, WalletConnect } from 'components/icons/wallets';
 
@@ -43,7 +43,6 @@ export function ProviderButton({
   fullWidth,
 }: ProviderButtonProps) {
   const classes = useStyles();
-  const theme = useTheme();
   const connecting = useCommunication(connect, [connect]);
   const Icon = iconByWallet[type];
 
@@ -80,13 +79,7 @@ export function ProviderButton({
             </Grid>
             <Box clone alignSelf="stretch">
               <Grid item>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                  backgroundColor={theme.palette.background.paper}
-                  fullWidth
-                >
+                <Button variant="outlined" color="primary" size="small" component="div" fullWidth>
                   {t(tKeys.features.auth.modalTitle.disconnect.getKey())}
                 </Button>
               </Grid>
