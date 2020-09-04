@@ -52,10 +52,7 @@ function AdditionalInfoContent(props: Pick<LoanProposal, 'descriptionHash'>) {
   );
 }
 
-const makeColumns = (
-  isStakingAllowed: boolean,
-  backgroundColor: string,
-): Array<NewTable.models.Column<LoanProposal>> => [
+const makeColumns = (isStakingAllowed: boolean): Array<NewTable.models.Column<LoanProposal>> => [
   {
     renderTitle: () => 'Borrower',
     cellContent: {
@@ -106,7 +103,6 @@ const makeColumns = (
               variant="outlined"
               color="primary"
               size="small"
-              backgroundColor={backgroundColor}
               loanSize={x.loanRequested.toString()}
               proposalId={x.proposalId}
               borrower={x.borrower}
@@ -135,10 +131,7 @@ export function LoanProposalsTable(props: Props) {
   const classes = useStyles();
   const theme = useTheme();
 
-  const columns = useMemo(() => makeColumns(isStakingAllowed, theme.palette.background.paper), [
-    isStakingAllowed,
-    theme,
-  ]);
+  const columns = useMemo(() => makeColumns(isStakingAllowed), [isStakingAllowed, theme]);
 
   function renderTableHeader() {
     return (
