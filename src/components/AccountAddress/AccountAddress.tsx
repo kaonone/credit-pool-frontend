@@ -1,11 +1,10 @@
 import * as React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
-import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 
-import {} from 'components';
 import { makeStyles } from 'utils/styles';
 
+import { AddressIcon } from '../AddressIcon';
 import { ShortAddress } from '../ShortAddress/ShortAddress';
 
 type Props = { address: string; size: 'big' | 'small' };
@@ -18,7 +17,7 @@ export function AccountAddress(props: Props) {
     <Grid container alignItems="center" spacing={1}>
       <Grid item>
         <Avatar classes={classes}>
-          <Jazzicon diameter={40} seed={jsNumberForAddress(address)} />
+          <AddressIcon address={address} />
         </Avatar>
       </Grid>
       <Grid item>
